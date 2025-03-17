@@ -1,12 +1,12 @@
-
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Calendar, Users, FileText, ArrowRight, Clock, LogOut } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Activity {
   id: number;
@@ -22,12 +22,19 @@ interface SignupData {
 }
 
 const Dashboard = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [timeFrame, setTimeFrame] = useState<"1year" | "2years">("1year");
   const [signupData, setSignupData] = useState<SignupData[]>([]);
   
   useEffect(() => {
-    // Simulating fetching user's recent login activities
+    if (!user) {
+      navigate('/signin');
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
     const mockActivities: Activity[] = [
       {
         id: 1,
@@ -54,10 +61,28 @@ const Dashboard = () => {
     
     setActivities(mockActivities);
 
-    // Generate mock signup data
+    const generateSignupData = (period: "1year" | "2years") => {
+      const data: SignupData[] = [];
+      const weeksCount = period === "1year" ? 52 : 104;
+      const baselineUsers = 10;
+      
+      for (let i = 0; i < weeksCount; i++) {
+        const weekNumber = i + 1;
+        const trendFactor = Math.min(1.8, 1 + (i / weeksCount));
+        const randomVariation = Math.random() * 10 - 5;
+        const count = Math.max(0, Math.round(baselineUsers * trendFactor + randomVariation));
+        
+        data.push({
+          name: `S${weekNumber}`,
+          count,
+        });
+      }
+      
+      setSignupData(data);
+    };
+    
     generateSignupData(timeFrame);
     
-    // Create floating particles for the background effect
     const createParticles = () => {
       const container = document.querySelector('.particles-container');
       if (!container) return;
@@ -66,16 +91,13 @@ const Dashboard = () => {
         const particle = document.createElement('div');
         particle.classList.add('star');
         
-        // Random size
         const size = Math.random() * 2 + 1;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
         
-        // Random position
         particle.style.top = `${Math.random() * 100}%`;
         particle.style.left = `${Math.random() * 100}%`;
         
-        // Random animation delay
         particle.style.animationDelay = `${Math.random() * 5}s`;
         
         container.appendChild(particle);
@@ -85,32 +107,19 @@ const Dashboard = () => {
     createParticles();
   }, [timeFrame]);
 
-  const generateSignupData = (period: "1year" | "2years") => {
-    const data: SignupData[] = [];
-    const weeksCount = period === "1year" ? 52 : 104;
-    const baselineUsers = 10;
-    
-    for (let i = 0; i < weeksCount; i++) {
-      // Generate random signup counts with an upward trend
-      const weekNumber = i + 1;
-      const trendFactor = Math.min(1.8, 1 + (i / weeksCount)); // Linear growth factor
-      const randomVariation = Math.random() * 10 - 5; // Random fluctuation
-      const count = Math.max(0, Math.round(baselineUsers * trendFactor + randomVariation));
-      
-      data.push({
-        name: `S${weekNumber}`,
-        count,
-      });
-    }
-    
-    setSignupData(data);
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
   };
+
+  if (!user) return null;
+
+  const userName = user.user_metadata?.full_name || 'Utilisateur';
 
   return (
     <div className="min-h-screen bg-background">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none"></div>
       
-      {/* Dashboard Header */}
       <header className="bg-background/20 backdrop-blur-md border-b border-white/5 py-6 px-6 md:px-10 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center">
@@ -121,7 +130,7 @@ const Dashboard = () => {
           
           <div className="flex items-center space-x-4">
             <span className="text-sm text-muted-foreground hidden md:inline-block">
-              Bonjour, Jean Dupont
+              Bonjour, {userName}
             </span>
             <Button 
               variant="outline" 
@@ -138,12 +147,10 @@ const Dashboard = () => {
               variant="outline" 
               size="sm" 
               className="hover-button border-white/10 bg-white/5 hover:bg-white/10"
-              asChild
+              onClick={handleSignOut}
             >
-              <Link to="/">
-                <LogOut className="h-4 w-4 mr-2" />
-                Déconnexion
-              </Link>
+              <LogOut className="h-4 w-4 mr-2" />
+              Déconnexion
             </Button>
           </div>
         </div>
@@ -152,11 +159,10 @@ const Dashboard = () => {
       <main className="max-w-7xl mx-auto py-12 px-6 md:px-10">
         <h1 className="text-3xl font-bold mb-8 fade-up visible">Tableau de bord</h1>
         
-        {/* Welcome Card */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <Card className="cosmic-card md:col-span-2 fade-up visible">
             <CardHeader>
-              <CardTitle>Bienvenue, Jean Dupont</CardTitle>
+              <CardTitle>Bienvenue, {userName}</CardTitle>
               <CardDescription>
                 Voici un aperçu de votre activité sur AI Writer
               </CardDescription>
@@ -225,7 +231,6 @@ const Dashboard = () => {
           </Card>
         </div>
         
-        {/* Signup Chart */}
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4 fade-up visible">Inscriptions hebdomadaires</h2>
           <Card className="cosmic-card fade-up visible">
@@ -272,7 +277,6 @@ const Dashboard = () => {
                       dataKey="name" 
                       tick={{ fill: "#94a3b8" }}
                       tickFormatter={(value) => {
-                        // Show fewer ticks for readability
                         const weekNum = parseInt(value.substring(1));
                         return weekNum % (timeFrame === "1year" ? 4 : 8) === 0 ? value : "";
                       }}
@@ -307,7 +311,6 @@ const Dashboard = () => {
           </Card>
         </div>
         
-        {/* Recent Logins */}
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4 fade-up visible">Connexions récentes</h2>
           <Card className="cosmic-card fade-up visible">
