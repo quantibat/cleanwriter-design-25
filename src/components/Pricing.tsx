@@ -12,27 +12,27 @@ interface PricingCardProps {
 }
 
 const PricingCard = ({ title, price, description, features, popular = false }: PricingCardProps) => (
-  <div className={`rounded-xl p-8 ${popular ? 'bg-brand-purple/5 border-brand-purple' : 'bg-white border-gray-200'} border-2 flex flex-col h-full relative`}>
+  <div className={`cosmic-card p-8 flex flex-col h-full relative ${popular ? 'border-blue-500/30' : 'border-white/5'} transition-all duration-300 hover:shadow-blue-500/10 hover:shadow-lg`}>
     {popular && (
-      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-brand-purple text-white px-4 py-1 rounded-full text-sm font-medium">
+      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
         Le plus populaire
       </div>
     )}
-    <h3 className="text-xl font-semibold mb-2">{title}</h3>
+    <h3 className="text-xl font-semibold mb-2 text-white">{title}</h3>
     <div className="mb-4">
-      <span className="text-3xl font-bold">{price}</span>
-      {price !== 'Gratuit' && <span className="text-muted-foreground">/mois</span>}
+      <span className="text-3xl font-bold text-white">{price}</span>
+      {price !== 'Gratuit' && <span className="text-blue-100/70">/mois</span>}
     </div>
-    <p className="text-muted-foreground mb-6">{description}</p>
+    <p className="text-blue-100/70 mb-6">{description}</p>
     <ul className="space-y-3 mb-8 flex-grow">
       {features.map((feature, index) => (
-        <li key={index} className="flex items-start">
-          <Check className="h-5 w-5 text-brand-purple mr-2 flex-shrink-0 mt-0.5" />
+        <li key={index} className="flex items-start text-blue-100/90">
+          <Check className="h-5 w-5 text-blue-400 mr-2 flex-shrink-0 mt-0.5" />
           <span>{feature}</span>
         </li>
       ))}
     </ul>
-    <Button className={`w-full ${popular ? 'bg-brand-purple hover:bg-brand-purple-dark text-white' : 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-200'} hover-button`}>
+    <Button className={`w-full hover-button ${popular ? 'bg-blue-500 hover:bg-blue-600 text-white' : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}>
       {popular ? "Commencer maintenant" : "Essayer gratuitement"}
     </Button>
   </div>
@@ -40,11 +40,11 @@ const PricingCard = ({ title, price, description, features, popular = false }: P
 
 const Pricing = () => {
   return (
-    <section id="pricing" className="py-20 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section id="pricing" className="py-20 px-6 relative">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Tarifs simples et transparents</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">Tarifs simples et transparents</h2>
+          <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
             Choisissez l'offre qui correspond à vos besoins
           </p>
         </div>

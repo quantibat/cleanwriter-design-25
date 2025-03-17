@@ -9,22 +9,25 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ title, description, icon }: FeatureCardProps) => (
-  <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 hover:border-brand-purple/20">
-    <div className="h-12 w-12 bg-brand-purple/10 rounded-lg flex items-center justify-center mb-6">
-      <div className="text-brand-purple">{icon}</div>
+  <div className="cosmic-card p-8 transition-all duration-300 hover:border-blue-500/20 hover:shadow-blue-500/10 hover:shadow-lg">
+    <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
+      <div className="text-blue-400">{icon}</div>
     </div>
-    <h3 className="text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-muted-foreground">{description}</p>
+    <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
+    <p className="text-blue-100/70">{description}</p>
   </div>
 );
 
 const Features = () => {
   return (
-    <section id="features" className="py-20 bg-gray-50 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section id="features" className="py-20 px-6 relative">
+      {/* Background dots */}
+      <div className="absolute inset-0 cosmic-dots opacity-20"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Fonctionnalités principales</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">Fonctionnalités principales</h2>
+          <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
             Des outils puissants pour créer du contenu exceptionnel
           </p>
         </div>
