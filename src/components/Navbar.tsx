@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserCircle } from "lucide-react";
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
@@ -27,6 +27,9 @@ const Navbar = () => {
           <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400">
             Tarifs
           </a>
+          <Link to="/account" className="text-sm font-medium transition-colors hover:text-blue-400">
+            <UserCircle className="h-5 w-5" />
+          </Link>
           <Button variant="outline" className="hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10 hover:text-blue-400" asChild>
             <Link to="/signin">Connexion</Link>
           </Button>
@@ -57,6 +60,10 @@ const Navbar = () => {
             <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
               Tarifs
             </a>
+            <Link to="/account" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
+              <UserCircle className="h-5 w-5 mr-2" />
+              Mon compte
+            </Link>
             <div className="flex flex-col space-y-3 pt-2">
               <Button variant="outline" className="w-full hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10" asChild>
                 <Link to="/signin">Connexion</Link>

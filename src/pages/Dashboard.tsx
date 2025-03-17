@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Calendar, Users, FileText, ArrowRight, Clock, LogOut } from 'lucide-react';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 interface Activity {
   id: number;
@@ -14,8 +16,15 @@ interface Activity {
   location: string;
 }
 
+interface SignupData {
+  name: string;
+  count: number;
+}
+
 const Dashboard = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [timeFrame, setTimeFrame] = useState<"1year" | "2years">("1year");
+  const [signupData, setSignupData] = useState<SignupData[]>([]);
   
   useEffect(() => {
     // Simulating fetching user's recent login activities
@@ -44,6 +53,9 @@ const Dashboard = () => {
     ];
     
     setActivities(mockActivities);
+
+    // Generate mock signup data
+    generateSignupData(timeFrame);
     
     // Create floating particles for the background effect
     const createParticles = () => {
@@ -71,7 +83,28 @@ const Dashboard = () => {
     };
     
     createParticles();
-  }, []);
+  }, [timeFrame]);
+
+  const generateSignupData = (period: "1year" | "2years") => {
+    const data: SignupData[] = [];
+    const weeksCount = period === "1year" ? 52 : 104;
+    const baselineUsers = 10;
+    
+    for (let i = 0; i < weeksCount; i++) {
+      // Generate random signup counts with an upward trend
+      const weekNumber = i + 1;
+      const trendFactor = Math.min(1.8, 1 + (i / weeksCount)); // Linear growth factor
+      const randomVariation = Math.random() * 10 - 5; // Random fluctuation
+      const count = Math.max(0, Math.round(baselineUsers * trendFactor + randomVariation));
+      
+      data.push({
+        name: `S${weekNumber}`,
+        count,
+      });
+    }
+    
+    setSignupData(data);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -90,6 +123,17 @@ const Dashboard = () => {
             <span className="text-sm text-muted-foreground hidden md:inline-block">
               Bonjour, Jean Dupont
             </span>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="hover-button border-white/10 bg-white/5 hover:bg-white/10"
+              asChild
+            >
+              <Link to="/account">
+                <Users className="h-4 w-4 mr-2" />
+                Mon compte
+              </Link>
+            </Button>
             <Button 
               variant="outline" 
               size="sm" 
@@ -177,6 +221,88 @@ const Dashboard = () => {
               <Button className="w-full hover-button bg-blue-500 hover:bg-blue-600 text-white font-medium mt-4">
                 Nouveau document <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* Signup Chart */}
+        <div className="mb-8">
+          <h2 className="text-xl font-bold mb-4 fade-up visible">Inscriptions hebdomadaires</h2>
+          <Card className="cosmic-card fade-up visible">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Évolution des inscriptions</CardTitle>
+                <CardDescription>Nombre d'utilisateurs inscrits par semaine</CardDescription>
+              </div>
+              <div className="flex space-x-2">
+                <Button
+                  variant={timeFrame === "1year" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setTimeFrame("1year")}
+                  className={timeFrame === "1year" ? "bg-blue-500 hover:bg-blue-600" : ""}
+                >
+                  1 an
+                </Button>
+                <Button
+                  variant={timeFrame === "2years" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setTimeFrame("2years")}
+                  className={timeFrame === "2years" ? "bg-blue-500 hover:bg-blue-600" : ""}
+                >
+                  2 ans
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] w-full">
+                <ChartContainer
+                  config={{
+                    inscriptions: {
+                      label: "Inscriptions",
+                      theme: {
+                        light: "#3b82f6",
+                        dark: "#60a5fa"
+                      }
+                    }
+                  }}
+                >
+                  <BarChart data={signupData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                    <XAxis 
+                      dataKey="name" 
+                      tick={{ fill: "#94a3b8" }}
+                      tickFormatter={(value) => {
+                        // Show fewer ticks for readability
+                        const weekNum = parseInt(value.substring(1));
+                        return weekNum % (timeFrame === "1year" ? 4 : 8) === 0 ? value : "";
+                      }}
+                    />
+                    <YAxis tick={{ fill: "#94a3b8" }} />
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-background/90 backdrop-blur-sm border border-white/10 p-2 rounded shadow-md">
+                              <p className="font-medium">Semaine {payload[0].payload.name.substring(1)}</p>
+                              <p className="text-blue-400">
+                                {payload[0].value} inscriptions
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Legend />
+                    <Bar 
+                      dataKey="count" 
+                      name="Inscriptions" 
+                      fill="var(--color-inscriptions)" 
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ChartContainer>
+              </div>
             </CardContent>
           </Card>
         </div>
