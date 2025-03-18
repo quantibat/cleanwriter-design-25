@@ -26,19 +26,19 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center space-y-8 max-w-3xl mx-auto relative z-10">
           <div className="flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400 animate-fade-in">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animated-text">
               Transformez Votre Contenu<br />Avec <span className="text-white">l'IA</span>
             </h1>
-            {/* Decorative line */}
-            <div className="mt-3 h-1 w-40 bg-gradient-to-r from-blue-500 via-violet-500 to-blue-400 rounded-full"></div>
+            {/* Decorative angled line */}
+            <div className="mt-3 h-1 w-40 oblique-line"></div>
           </div>
           
           <p className="text-lg md:text-xl text-blue-100/80 max-w-2xl mx-auto">
-            AI Writer utilise l'intelligence artificiale pour générer des textes de qualité en quelques secondes. Idéal pour les blogs, réseaux sociaux et plus encore.
+            AI Writer utilise l'intelligence artificielle pour générer des textes de qualité en quelques secondes. Idéal pour les blogs, réseaux sociaux et plus encore.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Button className="w-full sm:w-auto blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg">
+            <Button className="w-full sm:w-auto glowing-button bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg">
               Commencer gratuitement
             </Button>
             <Button variant="outline" className="w-full sm:w-auto hover-button font-medium px-8 py-6 text-lg group border-white/10 bg-white/5 hover:bg-white/10">
@@ -53,7 +53,7 @@ const Hero = () => {
         </div>
         
         {/* Demo Screen Preview */}
-        <div className="mt-16 max-w-4xl mx-auto cosmic-glow">
+        <div className="mt-16 max-w-4xl mx-auto animated-border-glow">
           <div className="relative rounded-xl overflow-hidden border border-white/10 bg-card shadow-2xl">
             <div className="absolute top-0 left-0 right-0 h-8 bg-card flex items-center px-4">
               <div className="flex space-x-2">
