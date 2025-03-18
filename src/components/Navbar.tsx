@@ -16,13 +16,14 @@ const Navbar = () => {
   return (
     <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Logo (Left) */}
         <div className="flex items-center">
           <Link to="/" className="text-xl font-bold text-foreground flex items-center">
             <span className="text-blue-400">AI</span>Writer
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Navigation Menu (Center) */}
         <div className="hidden md:flex items-center space-x-8">
           <a href="#home" className="text-sm font-medium transition-colors hover:text-blue-400">
             Accueil
@@ -33,6 +34,10 @@ const Navbar = () => {
           <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400">
             Tarifs
           </a>
+        </div>
+
+        {/* Action Buttons (Right) */}
+        <div className="hidden md:flex items-center space-x-4">
           <Link to="/account" className="text-sm font-medium transition-colors hover:text-blue-400 relative">
             <UserCircle className="h-5 w-5" />
             {user && (
@@ -54,7 +59,7 @@ const Navbar = () => {
               <Button variant="outline" className="hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10 hover:text-blue-400" asChild>
                 <Link to="/signin">Connexion</Link>
               </Button>
-              <Button className="hover-button bg-blue-500 hover:bg-blue-600 text-white font-medium" asChild>
+              <Button className="blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" asChild>
                 <Link to="/signup">Essayer gratuitement</Link>
               </Button>
             </>
@@ -105,7 +110,7 @@ const Navbar = () => {
                   <Button variant="outline" className="w-full hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10" asChild>
                     <Link to="/signin">Connexion</Link>
                   </Button>
-                  <Button className="w-full hover-button bg-blue-500 hover:bg-blue-600 text-white font-medium" asChild>
+                  <Button className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" asChild>
                     <Link to="/signup">Essayer gratuitement</Link>
                   </Button>
                 </>

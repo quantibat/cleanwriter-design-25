@@ -155,7 +155,71 @@
   animation: twinkle 4s infinite ease-in-out;
 }
 
+/* Blue button shimmer animation */
+.blue-shimmer-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.blue-shimmer-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6, #3B82F6);
+  background-size: 200% 100%;
+  z-index: -1;
+  animation: shimmer 3s linear infinite;
+}
+
+.blue-shimmer-button::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 9999px;
+  background: inherit;
+  z-index: -1;
+}
+
+/* Border animation for popular plan */
+.popular-plan {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  z-index: 0;
+}
+
+.popular-plan::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(45deg, #3B82F6, #8B5CF6, #3B82F6, #8B5CF6);
+  background-size: 200% 200%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin 4s linear infinite;
+  z-index: -1;
+}
+
 @keyframes twinkle {
   0%, 100% { opacity: 0.2; }
   50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 200%; }
 }
