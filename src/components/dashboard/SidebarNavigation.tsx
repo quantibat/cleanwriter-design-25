@@ -28,13 +28,14 @@ const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) =
 
   return (
     <Sidebar>
-      <SidebarHeader className="flex items-center justify-between px-4 py-2">
+      <SidebarHeader className="flex items-center justify-between px-4 py-4">
         <div className="flex items-center">
           <span className="text-lg font-semibold">
-            <span className="text-blue-400">DCE</span>Manager
+            <span className="text-brand-blue">DCE</span>Manager
           </span>
         </div>
       </SidebarHeader>
+      
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>

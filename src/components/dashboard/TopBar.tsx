@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Sun, Moon, Search, LogOut, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface TopBarProps {
   onThemeToggle: () => void;
@@ -16,6 +17,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { toggleSidebar } = useSidebar();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,11 +31,22 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
   };
 
   return (
-    <div className="w-full bg-sidebar/95 backdrop-blur-md py-3 px-4 md:px-6 border-b border-sidebar-border flex items-center justify-between h-16">
-      {/* Logo (Left) - Hidden on large screens as it's in the sidebar */}
+    <div className="w-full bg-sidebar/95 backdrop-blur-md px-4 md:px-6 border-b border-sidebar-border flex items-center justify-between h-16">
+      {/* Menu toggle button for mobile */}
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="md:hidden"
+        onClick={toggleSidebar}
+      >
+        <Menu className="h-5 w-5" />
+        <span className="sr-only">Toggle menu</span>
+      </Button>
+
+      {/* Logo - Hidden on larger screens as it's in the sidebar */}
       <div className="md:hidden flex items-center">
-        <span className="text-lg font-semibold">
-          <span className="text-blue-400">DCE</span>Manager
+        <span className="text-lg font-semibold ml-2">
+          <span className="text-brand-blue">DCE</span>Manager
         </span>
       </div>
 
