@@ -51,26 +51,26 @@ const Pricing = () => {
         
         <div className="grid md:grid-cols-3 gap-8">
           <PricingCard 
-            title="Débutant" 
+            title="Basique" 
             price="Gratuit" 
-            description="Parfait pour découvrir l'outil"
+            description="Pour commencer à gérer vos DCE"
             features={[
-              "5 000 mots par mois",
-              "Accès aux modèles de base",
-              "Génération d'idées de contenu",
-              "Support email"
+              "10 DCE maximum",
+              "Stockage limité à 500 Mo",
+              "Partage avec 2 collaborateurs",
+              "Support par email"
             ]}
           />
           
           <PricingCard 
             title="Professionnel" 
-            price="19 €" 
-            description="Idéal pour les créateurs de contenu"
+            price="29 €" 
+            description="Pour les équipes de taille moyenne"
             features={[
-              "50 000 mots par mois",
-              "Accès à tous les modèles",
-              "Correcteur orthographique avancé",
-              "Pas de filigrane",
+              "DCE illimités",
+              "Stockage de 10 Go",
+              "Partage avec 10 collaborateurs",
+              "Suivi des versions avancé",
               "Support prioritaire"
             ]}
             popular
@@ -78,13 +78,13 @@ const Pricing = () => {
           
           <PricingCard 
             title="Entreprise" 
-            price="49 €" 
-            description="Pour les équipes et agences"
+            price="79 €" 
+            description="Pour les grandes organisations"
             features={[
-              "Usage illimité",
-              "Utilisateurs multiples",
+              "DCE illimités",
+              "Stockage illimité",
+              "Utilisateurs illimités",
               "API d'intégration",
-              "Contenu personnalisé selon votre marque",
               "Support dédié 24/7"
             ]}
           />

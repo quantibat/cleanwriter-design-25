@@ -7,24 +7,24 @@ import { FolderPlus, Calendar, Clock, Users, MoreHorizontal } from "lucide-react
 const projects = [
   {
     id: 1,
-    title: "Article sur l'IA générative",
-    description: "Analyse des dernières avancées en IA générative et leur impact sur l'industrie.",
+    title: "DCE Rénovation Mairie",
+    description: "Dossier de consultation pour la rénovation de la mairie du 5ème arrondissement.",
     date: "15 juin 2023",
     progress: 75,
     collaborators: 3
   },
   {
     id: 2,
-    title: "Campagne marketing Q3",
-    description: "Planification de la stratégie marketing pour le troisième trimestre 2023.",
+    title: "Construction École Primaire",
+    description: "Appel d'offres pour la construction d'une nouvelle école primaire.",
     date: "22 juin 2023",
     progress: 30,
     collaborators: 5
   },
   {
     id: 3,
-    title: "Rapport annuel 2022",
-    description: "Compilation et analyse des résultats financiers de l'année 2022.",
+    title: "Réfection Voirie",
+    description: "Consultation des entreprises pour la réfection des voiries communales.",
     date: "10 mai 2023",
     progress: 100,
     collaborators: 2
@@ -36,12 +36,12 @@ const ProjectsTab = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Vos projets</h2>
-          <p className="text-muted-foreground">Gérez et suivez l'avancement de vos projets</p>
+          <h2 className="text-2xl font-bold">Vos dossiers</h2>
+          <p className="text-muted-foreground">Gérez et suivez l'avancement de vos dossiers de consultation</p>
         </div>
         <Button className="bg-blue-500 hover:bg-blue-600">
           <FolderPlus className="h-4 w-4 mr-2" />
-          Nouveau projet
+          Nouveau dossier
         </Button>
       </div>
       

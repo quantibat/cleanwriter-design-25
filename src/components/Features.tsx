@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Wand2, Zap, BarChart, MessageSquare } from "lucide-react";
+import { FolderArchive, Share2, FileSearch, FileCheck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface FeatureCardProps {
@@ -58,42 +58,42 @@ const Features = () => {
         <div className="text-center mb-32">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">Fonctionnalités principales</h2>
           <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
-            Des outils puissants pour créer du contenu exceptionnel
+            Des outils efficaces pour gérer vos dossiers de consultation
           </p>
         </div>
         
         <div className="flex flex-col space-y-32">
           <FeatureCard 
-            title="Génération de texte IA" 
-            description="Créez des articles, des posts et des descriptions optimisés pour le SEO en quelques clics. Notre technologie avancée analyse les tendances et génère du contenu pertinent."
-            icon={<Wand2 size={24} />}
+            title="Organisation des DCE" 
+            description="Classez et organisez vos dossiers de consultation des entreprises selon vos besoins. Notre système de classement permet une recherche rapide et efficace."
+            icon={<FolderArchive size={24} />}
             image={featureImages[0]}
-            alt="IA Text Generation"
+            alt="Organisation DCE"
           />
           
           <FeatureCard 
-            title="Rédaction rapide" 
-            description="Obtenez du contenu de qualité en quelques secondes, peu importe le sujet ou la longueur. Gagnez du temps et augmentez votre productivité avec notre outil de rédaction rapide."
-            icon={<Zap size={24} />}
+            title="Partage sécurisé" 
+            description="Partagez vos documents avec vos collaborateurs ou partenaires en toute sécurité. Définissez des permissions d'accès précises pour chaque utilisateur."
+            icon={<Share2 size={24} />}
             image={featureImages[1]}
-            alt="Fast Writing"
+            alt="Partage sécurisé"
             reverse={true}
           />
           
           <FeatureCard 
-            title="Analyse de performance" 
-            description="Suivez l'engagement et l'efficacité de votre contenu avec des statistiques détaillées. Obtenez des insights précieux pour améliorer votre stratégie de contenu."
-            icon={<BarChart size={24} />}
+            title="Recherche avancée" 
+            description="Retrouvez rapidement vos documents grâce à notre moteur de recherche puissant. Filtrez par type, date, statut ou mots-clés pour gagner un temps précieux."
+            icon={<FileSearch size={24} />}
             image={featureImages[2]}
-            alt="Performance Analysis"
+            alt="Recherche avancée"
           />
           
           <FeatureCard 
-            title="Multilinguisme" 
-            description="Générez et traduisez du contenu dans plus de 20 langues différentes. Étendez votre audience et touchez des marchés internationaux sans barrière linguistique."
-            icon={<MessageSquare size={24} />}
+            title="Suivi des versions" 
+            description="Suivez l'évolution de vos documents avec un historique complet des versions. Comparez les modifications et restaurez les versions antérieures si nécessaire."
+            icon={<FileCheck size={24} />}
             image={featureImages[3]}
-            alt="Multilingual Support"
+            alt="Suivi des versions"
             reverse={true}
           />
         </div>

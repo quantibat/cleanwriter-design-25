@@ -8,10 +8,10 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <a href="#" className="text-xl font-bold text-foreground inline-block mb-4">
-              <span className="text-blue-400">AI</span>Writer
+              <span className="text-blue-400">DCE</span>Manager
             </a>
             <p className="text-blue-100/70 mb-4">
-              Une solution d'IA pour créer du contenu de qualité en quelques secondes.
+              La solution complète pour la gestion de vos dossiers de consultation des entreprises.
             </p>
           </div>
           
@@ -47,7 +47,7 @@ const Footer = () => {
         
         <div className="border-t border-white/5 pt-8 mt-8 text-center">
           <p className="text-blue-100/50 text-sm">
-            © {new Date().getFullYear()} AI Writer. Tous droits réservés.
+            © {new Date().getFullYear()} DCE Manager. Tous droits réservés.
           </p>
         </div>
       </div>

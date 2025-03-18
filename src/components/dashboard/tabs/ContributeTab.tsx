@@ -8,18 +8,18 @@ const ContributeTab = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Contribuer à la communauté</h2>
-        <p className="text-muted-foreground">Participez au développement de notre communauté et partagez votre expertise</p>
+        <h2 className="text-2xl font-bold">Collaborer sur les DCE</h2>
+        <p className="text-muted-foreground">Travaillez en équipe sur vos dossiers de consultation et partagez votre expertise</p>
       </div>
       
       <Card className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/20">
         <CardHeader>
           <CardTitle className="flex items-center">
             <HandHeart className="h-5 w-5 mr-2 text-blue-400" />
-            Pourquoi contribuer?
+            Pourquoi collaborer?
           </CardTitle>
           <CardDescription className="text-base">
-            En contribuant à la communauté, vous participez à l'amélioration de l'outil tout en développant votre réseau et vos compétences.
+            La collaboration sur vos DCE permet d'améliorer la qualité des dossiers, d'accélérer leur traitement et de centraliser les informations importantes.
           </CardDescription>
         </CardHeader>
       </Card>
@@ -30,12 +30,12 @@ const ContributeTab = () => {
             <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
               <Users className="h-5 w-5 text-blue-400" />
             </div>
-            <CardTitle>Rejoindre la communauté</CardTitle>
-            <CardDescription>Échangez avec d'autres utilisateurs passionnés et partagez vos expériences</CardDescription>
+            <CardTitle>Inviter des collaborateurs</CardTitle>
+            <CardDescription>Ajoutez des membres à votre équipe pour travailler ensemble sur vos dossiers</CardDescription>
           </CardHeader>
           <CardContent>
             <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Rejoindre le forum
+              Inviter des membres
             </Button>
           </CardContent>
         </Card>
@@ -45,12 +45,12 @@ const ContributeTab = () => {
             <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
               <MessageSquare className="h-5 w-5 text-blue-400" />
             </div>
-            <CardTitle>Soumettre des retours</CardTitle>
-            <CardDescription>Partagez vos idées et suggestions pour améliorer l'expérience utilisateur</CardDescription>
+            <CardTitle>Commentaires sur les documents</CardTitle>
+            <CardDescription>Discutez et annotez les documents pour améliorer la qualité de vos dossiers</CardDescription>
           </CardHeader>
           <CardContent>
             <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Donner mon avis
+              Voir les commentaires
             </Button>
           </CardContent>
         </Card>
@@ -60,12 +60,12 @@ const ContributeTab = () => {
             <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
               <Lightbulb className="h-5 w-5 text-blue-400" />
             </div>
-            <CardTitle>Proposer des idées</CardTitle>
-            <CardDescription>Soumettez vos idées de fonctionnalités ou d'améliorations pour nos outils</CardDescription>
+            <CardTitle>Modèles de documents</CardTitle>
+            <CardDescription>Accédez à des modèles de documents standardisés pour vos dossiers de consultation</CardDescription>
           </CardHeader>
           <CardContent>
             <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Soumettre une idée
+              Explorer les modèles
             </Button>
           </CardContent>
         </Card>
@@ -75,12 +75,12 @@ const ContributeTab = () => {
             <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
               <Share2 className="h-5 w-5 text-blue-400" />
             </div>
-            <CardTitle>Partager l'outil</CardTitle>
-            <CardDescription>Aidez-nous à développer notre communauté en partageant l'outil sur vos réseaux</CardDescription>
+            <CardTitle>Partage externe</CardTitle>
+            <CardDescription>Partagez vos dossiers avec des intervenants externes de manière sécurisée</CardDescription>
           </CardHeader>
           <CardContent>
             <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Partager
+              Configurer le partage
             </Button>
           </CardContent>
         </Card>

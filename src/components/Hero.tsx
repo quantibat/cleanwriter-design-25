@@ -27,14 +27,14 @@ const Hero = () => {
         <div className="text-center space-y-8 max-w-3xl mx-auto relative z-10">
           <div className="flex flex-col items-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600">
-              Transformez Votre Contenu<br />Avec <span className="text-white">l'IA</span>
+              Simplifiez la Gestion<br />de vos <span className="text-white">DCE</span>
             </h1>
             {/* Decorative angled line */}
             <div className="mt-3 h-1 w-40 oblique-line"></div>
           </div>
           
           <p className="text-lg md:text-xl text-blue-100/80 max-w-2xl mx-auto">
-            AI Writer utilise l'intelligence artificielle pour générer des textes de qualité en quelques secondes. Idéal pour les blogs, réseaux sociaux et plus encore.
+            DCE Manager optimise la gestion de vos dossiers de consultation des entreprises. Organisez, partagez et suivez vos documents en toute simplicité.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -48,7 +48,7 @@ const Hero = () => {
           </div>
           
           <div className="pt-10 text-sm text-blue-100/60">
-            <p>Aucune inscription • Aucun paiement requis</p>
+            <p>Interface intuitive • Organisation optimale</p>
           </div>
         </div>
         
@@ -61,12 +61,12 @@ const Hero = () => {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/70"></div>
                 <div className="w-3 h-3 rounded-full bg-green-500/70"></div>
               </div>
-              <div className="text-xs mx-auto text-white/50">AI Writer</div>
+              <div className="text-xs mx-auto text-white/50">DCE Manager</div>
             </div>
             <div className="pt-8 p-4">
               <img 
                 src="/lovable-uploads/0012ad36-938f-49c5-99e9-142f99106b74.png" 
-                alt="AI Writer Interface" 
+                alt="DCE Manager Interface" 
                 className="rounded w-full object-cover"
                 style={{ maxHeight: "350px" }}
               />
