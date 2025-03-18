@@ -1,28 +1,34 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Sparkles, FileText, FileCheck, FolderOpen, LayoutList } from 'lucide-react';
+import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, FolderOpen, LayoutList, PlusCircle } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { useForm } from "react-hook-form";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 
 const CreateDCE = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [generatingDocument, setGeneratingDocument] = useState(false);
+  const { toast } = useToast();
   
   // Formulaire avec React Hook Form
   const form = useForm({
     defaultValues: {
       title: '',
-      project: '',
-      description: '',
-      type: '',
-      documents: ''
+      sourceMaterials: '',
+      category: '',
+      subcategory: '',
+      language: 'french',
+      format: 'pdf',
+      additionalNotes: ''
     }
   });
 
@@ -32,11 +38,42 @@ const CreateDCE = () => {
     // Simulation d'un délai de traitement
     setTimeout(() => {
       setIsLoading(false);
+      toast({
+        title: "Document créé avec succès",
+        description: "Le document technique a été ajouté au DCE",
+      });
       navigate('/dashboard');
     }, 1500);
   };
 
+  const generateWithAI = () => {
+    setGeneratingDocument(true);
+    const formData = form.getValues();
+    console.log("Génération IA basée sur:", formData);
+    
+    // Simulation de génération IA
+    setTimeout(() => {
+      setGeneratingDocument(false);
+      form.setValue('additionalNotes', 'Document généré automatiquement en utilisant les paramètres spécifiés. Ce document contient des spécifications techniques conformes aux normes en vigueur.');
+      toast({
+        title: "Document généré par IA",
+        description: "Un document a été généré en fonction de vos paramètres",
+      });
+    }, 2000);
+  };
+
   const watchedValues = form.watch();
+
+  // Catégories et sous-catégories pour les documents techniques
+  const categories = {
+    "technique": ["CCTP", "Mémoire technique", "Notes de calcul", "Spécifications"],
+    "administratif": ["CCAP", "RC", "AE", "Annexes administratives"],
+    "planning": ["Planning général", "Phasage", "Jalons", "Délais d'exécution"],
+    "financier": ["Bordereau de prix", "Détail quantitatif", "Estimation", "Budget prévisionnel"]
+  };
+
+  // Options disponibles pour la sous-catégorie en fonction de la catégorie sélectionnée
+  const subcategoryOptions = watchedValues.category ? categories[watchedValues.category as keyof typeof categories] : [];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -52,7 +89,7 @@ const CreateDCE = () => {
             <ArrowLeft size={16} />
             Retour
           </Button>
-          <h1 className="text-xl font-semibold">Créer un nouveau DCE</h1>
+          <h1 className="text-xl font-semibold">Créer un document technique</h1>
           <div></div> {/* Spacer pour centrer le titre */}
         </div>
       </header>
@@ -71,12 +108,12 @@ const CreateDCE = () => {
                 <div className="bg-card/20 backdrop-blur-sm border border-white/5 rounded-lg p-8 shadow-lg">
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      {/* Section informations générales */}
+                      {/* Section informations du document */}
                       <div className="space-y-6">
                         <div className="border-b border-white/10 pb-4">
-                          <h2 className="text-lg font-medium">Informations générales</h2>
+                          <h2 className="text-lg font-medium">Informations du document</h2>
                           <p className="text-sm text-muted-foreground mt-1">
-                            Informations de base pour votre dossier de consultation
+                            Définissez les informations de base du document technique
                           </p>
                         </div>
                         
@@ -85,10 +122,10 @@ const CreateDCE = () => {
                           name="title"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Titre du DCE</FormLabel>
+                              <FormLabel>Nom du document</FormLabel>
                               <FormControl>
                                 <Input 
-                                  placeholder="Ex: Construction d'un bâtiment commercial" 
+                                  placeholder="Ex: Cahier des charges techniques - Lot 01" 
                                   {...field} 
                                   className="bg-card/30"
                                 />
@@ -99,38 +136,191 @@ const CreateDCE = () => {
                         
                         <FormField
                           control={form.control}
-                          name="project"
+                          name="sourceMaterials"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Projet associé</FormLabel>
+                              <FormLabel>Liens ou fichiers sources</FormLabel>
                               <FormControl>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <SelectTrigger className="bg-card/30">
-                                    <SelectValue placeholder="Sélectionner un projet" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="project1">Projet Centre Commercial</SelectItem>
-                                    <SelectItem value="project2">Rénovation Bureaux Paris</SelectItem>
-                                    <SelectItem value="project3">Construction Logements Lyon</SelectItem>
-                                  </SelectContent>
-                                </Select>
+                                <div className="space-y-2">
+                                  <Textarea 
+                                    placeholder="Liens vers documents ou ressources existants (un par ligne)" 
+                                    className="bg-card/30 min-h-[80px]" 
+                                    {...field}
+                                  />
+                                  <div className="flex gap-2">
+                                    <Button 
+                                      type="button" 
+                                      variant="outline" 
+                                      size="sm" 
+                                      className="text-xs"
+                                      onClick={() => toast({
+                                        title: "Fonctionnalité à venir",
+                                        description: "L'import de fichiers sera disponible prochainement",
+                                      })}
+                                    >
+                                      <Upload size={14} className="mr-1" />
+                                      Importer un fichier
+                                    </Button>
+                                    <Button 
+                                      type="button" 
+                                      variant="outline" 
+                                      size="sm" 
+                                      className="text-xs"
+                                      onClick={() => toast({
+                                        title: "Fonctionnalité à venir",
+                                        description: "L'ajout de liens externes sera disponible prochainement",
+                                      })}
+                                    >
+                                      <LinkIcon size={14} className="mr-1" />
+                                      Ajouter un lien
+                                    </Button>
+                                  </div>
+                                </div>
                               </FormControl>
                             </FormItem>
                           )}
                         />
+                      </div>
+                      
+                      {/* Section catégorisation */}
+                      <div className="space-y-6 pt-4">
+                        <div className="border-b border-white/10 pb-4">
+                          <h2 className="text-lg font-medium">Catégorisation</h2>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Classez votre document pour une meilleure organisation
+                          </p>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="category"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Catégorie</FormLabel>
+                                <FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                  >
+                                    <SelectTrigger className="bg-card/30">
+                                      <SelectValue placeholder="Sélectionner une catégorie" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="technique">Document technique</SelectItem>
+                                      <SelectItem value="administratif">Document administratif</SelectItem>
+                                      <SelectItem value="planning">Planning et délais</SelectItem>
+                                      <SelectItem value="financier">Document financier</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="subcategory"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Sous-catégorie</FormLabel>
+                                <FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                    disabled={!watchedValues.category}
+                                  >
+                                    <SelectTrigger className="bg-card/30">
+                                      <SelectValue placeholder={watchedValues.category ? "Sélectionner une sous-catégorie" : "Choisissez d'abord une catégorie"} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {subcategoryOptions.map((option) => (
+                                        <SelectItem key={option} value={option}>{option}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                      
+                      {/* Section format et options */}
+                      <div className="space-y-6 pt-4">
+                        <div className="border-b border-white/10 pb-4">
+                          <h2 className="text-lg font-medium">Format et options</h2>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Définissez le format et les options du document
+                          </p>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="language"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Langue du document</FormLabel>
+                                <FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                  >
+                                    <SelectTrigger className="bg-card/30">
+                                      <SelectValue placeholder="Sélectionner une langue" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="french">Français</SelectItem>
+                                      <SelectItem value="english">Anglais</SelectItem>
+                                      <SelectItem value="german">Allemand</SelectItem>
+                                      <SelectItem value="spanish">Espagnol</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="format"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Format du document</FormLabel>
+                                <FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                  >
+                                    <SelectTrigger className="bg-card/30">
+                                      <SelectValue placeholder="Sélectionner un format" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="pdf">PDF</SelectItem>
+                                      <SelectItem value="docx">Microsoft Word (.docx)</SelectItem>
+                                      <SelectItem value="xlsx">Microsoft Excel (.xlsx)</SelectItem>
+                                      <SelectItem value="md">Markdown (.md)</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                         
                         <FormField
                           control={form.control}
-                          name="description"
+                          name="additionalNotes"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Description</FormLabel>
+                              <FormLabel>Notes additionnelles</FormLabel>
+                              <FormDescription>
+                                Ajoutez des informations spécifiques ou instructions pour ce document
+                              </FormDescription>
                               <FormControl>
                                 <Textarea 
-                                  placeholder="Décrivez brièvement l'objet de ce DCE..." 
+                                  placeholder="Informations complémentaires, consignes spécifiques..." 
                                   className="bg-card/30 min-h-[120px]" 
                                   {...field}
                                 />
@@ -138,66 +328,25 @@ const CreateDCE = () => {
                             </FormItem>
                           )}
                         />
-                      </div>
-                      
-                      {/* Section spécifications */}
-                      <div className="space-y-6 pt-4">
-                        <div className="border-b border-white/10 pb-4">
-                          <h2 className="text-lg font-medium">Spécifications</h2>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Détails techniques du dossier de consultation
-                          </p>
+                        
+                        <div className="pt-4">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full mb-4 border-blue-400/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
+                            onClick={generateWithAI}
+                            disabled={generatingDocument}
+                          >
+                            {generatingDocument ? (
+                              <>Génération en cours...</>
+                            ) : (
+                              <>
+                                <Sparkles size={16} className="mr-2" />
+                                Générer avec IA
+                              </>
+                            )}
+                          </Button>
                         </div>
-                        
-                        <FormField
-                          control={form.control}
-                          name="type"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Type de dossier</FormLabel>
-                              <FormControl>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <SelectTrigger className="bg-card/30">
-                                    <SelectValue placeholder="Sélectionner un type" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="public">Marché public</SelectItem>
-                                    <SelectItem value="private">Marché privé</SelectItem>
-                                    <SelectItem value="mixed">Mixte</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="documents"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Documents requis</FormLabel>
-                              <FormControl>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <SelectTrigger className="bg-card/30">
-                                    <SelectValue placeholder="Sélectionner les documents" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="standard">Pack standard (CCTP, CCAP, RC)</SelectItem>
-                                    <SelectItem value="full">Pack complet (CCTP, CCAP, RC, AE, plans)</SelectItem>
-                                    <SelectItem value="custom">Personnalisé</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
                       </div>
                       
                       {/* Actions */}
@@ -208,11 +357,11 @@ const CreateDCE = () => {
                           disabled={isLoading}
                         >
                           {isLoading ? (
-                            <>Création en cours...</>
+                            <>Enregistrement en cours...</>
                           ) : (
                             <>
-                              <Sparkles size={16} />
-                              Créer le dossier
+                              <PlusCircle size={16} />
+                              Créer le document
                             </>
                           )}
                         </Button>
@@ -241,172 +390,175 @@ const CreateDCE = () => {
               <div className="h-full p-4 overflow-auto">
                 <div className="bg-card/20 backdrop-blur-sm border border-white/5 rounded-lg p-8 shadow-lg h-full">
                   <div className="border-b border-white/10 pb-4 mb-6">
-                    <h2 className="text-lg font-medium">Prévisualisation du dossier</h2>
+                    <h2 className="text-lg font-medium">Prévisualisation du document</h2>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Aperçu des documents et de la structure de votre DCE
+                      Aperçu du document technique en cours de création
                     </p>
                   </div>
                   
-                  {!watchedValues.title && !watchedValues.project && !watchedValues.type ? (
+                  {!watchedValues.title && !watchedValues.category ? (
                     <div className="flex flex-col items-center justify-center h-[calc(100%-100px)] text-center">
-                      <FolderOpen className="h-16 w-16 text-muted-foreground mb-4 opacity-30" />
+                      <FileText className="h-16 w-16 text-muted-foreground mb-4 opacity-30" />
                       <p className="text-muted-foreground">
-                        Remplissez le formulaire pour voir la prévisualisation du dossier
+                        Remplissez le formulaire pour voir la prévisualisation du document
                       </p>
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      {/* Informations du dossier */}
+                      {/* En-tête du document */}
                       <Card className="bg-card/30 border border-white/10 overflow-hidden">
                         <CardContent className="p-6">
-                          <div className="flex items-start gap-4">
-                            <div className="bg-blue-500/20 p-3 rounded-md">
-                              <LayoutList className="h-6 w-6 text-blue-400" />
-                            </div>
-                            <div className="space-y-1 flex-1">
-                              <h3 className="font-medium text-lg">
-                                {watchedValues.title || "Titre du DCE"}
-                              </h3>
-                              <p className="text-sm text-muted-foreground line-clamp-2">
-                                {watchedValues.description || "Description du projet..."}
-                              </p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">
-                                  {watchedValues.project === 'project1' && "Projet Centre Commercial"}
-                                  {watchedValues.project === 'project2' && "Rénovation Bureaux Paris"}
-                                  {watchedValues.project === 'project3' && "Construction Logements Lyon"}
-                                  {!watchedValues.project && "Projet non spécifié"}
-                                </span>
-                                <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">
-                                  {watchedValues.type === 'public' && "Marché public"}
-                                  {watchedValues.type === 'private' && "Marché privé"}
-                                  {watchedValues.type === 'mixed' && "Mixte"}
-                                  {!watchedValues.type && "Type non spécifié"}
-                                </span>
+                          <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                              <div className="bg-blue-500/10 p-2 rounded-md">
+                                <FileText className="h-6 w-6 text-blue-400" />
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="font-medium text-lg line-clamp-1">
+                                  {watchedValues.title || "Titre du document"}
+                                </h3>
+                                <div className="flex flex-wrap items-center gap-2 mt-2">
+                                  {watchedValues.category && (
+                                    <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">
+                                      {watchedValues.category === 'technique' && "Document technique"}
+                                      {watchedValues.category === 'administratif' && "Document administratif"}
+                                      {watchedValues.category === 'planning' && "Planning et délais"}
+                                      {watchedValues.category === 'financier' && "Document financier"}
+                                    </span>
+                                  )}
+                                  {watchedValues.subcategory && (
+                                    <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-full">
+                                      {watchedValues.subcategory}
+                                    </span>
+                                  )}
+                                  {watchedValues.format && (
+                                    <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full flex items-center gap-1">
+                                      <FileCheck className="h-3 w-3" />
+                                      {watchedValues.format === 'pdf' && "PDF"}
+                                      {watchedValues.format === 'docx' && "Word"}
+                                      {watchedValues.format === 'xlsx' && "Excel"}
+                                      {watchedValues.format === 'md' && "Markdown"}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
+                            
+                            {watchedValues.language && (
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Globe className="h-4 w-4" />
+                                <span>
+                                  {watchedValues.language === 'french' && "Français"}
+                                  {watchedValues.language === 'english' && "Anglais"}
+                                  {watchedValues.language === 'german' && "Allemand"}
+                                  {watchedValues.language === 'spanish' && "Espagnol"}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         </CardContent>
                       </Card>
                       
-                      {/* Documents */}
+                      {/* Contenu du document */}
                       <div className="space-y-4">
-                        <h3 className="text-sm font-medium text-muted-foreground">Documents inclus</h3>
+                        <h3 className="text-sm font-medium text-muted-foreground">Aperçu du contenu</h3>
                         
-                        {watchedValues.documents && (
-                          <div className="space-y-3">
-                            {/* CCTP */}
-                            <Card className="bg-card/30 border border-white/10">
-                              <CardContent className="p-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="bg-blue-500/10 p-2 rounded-md">
-                                    <FileText className="h-4 w-4 text-blue-400" />
-                                  </div>
-                                  <div>
-                                    <h4 className="text-sm font-medium">CCTP</h4>
-                                    <p className="text-xs text-muted-foreground">
-                                      Cahier des Clauses Techniques Particulières
-                                    </p>
-                                  </div>
-                                  <div className="ml-auto">
-                                    <FileCheck className="h-4 w-4 text-green-400" />
+                        <Card className="bg-card/30 border border-white/10">
+                          <CardContent className="p-6">
+                            <div className="space-y-4">
+                              {watchedValues.title && (
+                                <div className="border-b border-white/10 pb-3">
+                                  <h4 className="text-lg font-bold">{watchedValues.title}</h4>
+                                </div>
+                              )}
+                              
+                              {watchedValues.subcategory && (
+                                <div className="space-y-2">
+                                  <h5 className="font-medium">1. Introduction</h5>
+                                  <p className="text-sm text-muted-foreground">
+                                    Ce document détaille les spécifications techniques pour {watchedValues.subcategory.toLowerCase()}. 
+                                    Il fait partie intégrante du dossier de consultation des entreprises.
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {watchedValues.sourceMaterials && (
+                                <div className="space-y-2">
+                                  <h5 className="font-medium">2. Documents de référence</h5>
+                                  <div className="text-sm text-muted-foreground">
+                                    {watchedValues.sourceMaterials.split('\n').map((link, index) => (
+                                      <div key={index} className="flex items-center gap-2 ml-2">
+                                        <LinkIcon className="h-3 w-3" />
+                                        <span className="text-blue-400 underline">{link}</span>
+                                      </div>
+                                    ))}
                                   </div>
                                 </div>
-                              </CardContent>
-                            </Card>
-                            
-                            {/* CCAP */}
-                            <Card className="bg-card/30 border border-white/10">
-                              <CardContent className="p-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="bg-blue-500/10 p-2 rounded-md">
-                                    <FileText className="h-4 w-4 text-blue-400" />
-                                  </div>
-                                  <div>
-                                    <h4 className="text-sm font-medium">CCAP</h4>
-                                    <p className="text-xs text-muted-foreground">
-                                      Cahier des Clauses Administratives Particulières
-                                    </p>
-                                  </div>
-                                  <div className="ml-auto">
-                                    <FileCheck className="h-4 w-4 text-green-400" />
-                                  </div>
+                              )}
+                              
+                              {watchedValues.additionalNotes && (
+                                <div className="space-y-2">
+                                  <h5 className="font-medium">3. Informations complémentaires</h5>
+                                  <p className="text-sm text-muted-foreground">
+                                    {watchedValues.additionalNotes}
+                                  </p>
                                 </div>
-                              </CardContent>
-                            </Card>
+                              )}
+                              
+                              {(!watchedValues.additionalNotes && !watchedValues.sourceMaterials) && (
+                                <p className="text-sm text-muted-foreground italic">
+                                  Complétez le formulaire pour générer un aperçu du contenu du document...
+                                </p>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                        
+                        {/* Informations sur le format */}
+                        <div className="bg-card/20 border border-white/10 rounded-lg p-4">
+                          <h5 className="text-sm font-medium mb-2">Informations sur le format</h5>
+                          
+                          <div className="space-y-2 text-xs text-muted-foreground">
+                            <div className="flex justify-between">
+                              <span>Type de fichier:</span>
+                              <span className="font-medium">
+                                {watchedValues.format === 'pdf' && "Document PDF"}
+                                {watchedValues.format === 'docx' && "Document Microsoft Word"}
+                                {watchedValues.format === 'xlsx' && "Feuille de calcul Microsoft Excel"}
+                                {watchedValues.format === 'md' && "Document Markdown"}
+                              </span>
+                            </div>
                             
-                            {/* RC */}
-                            <Card className="bg-card/30 border border-white/10">
-                              <CardContent className="p-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="bg-blue-500/10 p-2 rounded-md">
-                                    <FileText className="h-4 w-4 text-blue-400" />
-                                  </div>
-                                  <div>
-                                    <h4 className="text-sm font-medium">RC</h4>
-                                    <p className="text-xs text-muted-foreground">
-                                      Règlement de Consultation
-                                    </p>
-                                  </div>
-                                  <div className="ml-auto">
-                                    <FileCheck className="h-4 w-4 text-green-400" />
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
+                            <div className="flex justify-between">
+                              <span>Langue:</span>
+                              <span className="font-medium">
+                                {watchedValues.language === 'french' && "Français"}
+                                {watchedValues.language === 'english' && "Anglais"}
+                                {watchedValues.language === 'german' && "Allemand"}
+                                {watchedValues.language === 'spanish' && "Espagnol"}
+                              </span>
+                            </div>
                             
-                            {/* Documents supplémentaires pour le pack complet */}
-                            {watchedValues.documents === 'full' && (
-                              <>
-                                {/* AE */}
-                                <Card className="bg-card/30 border border-white/10">
-                                  <CardContent className="p-4">
-                                    <div className="flex items-center gap-3">
-                                      <div className="bg-blue-500/10 p-2 rounded-md">
-                                        <FileText className="h-4 w-4 text-blue-400" />
-                                      </div>
-                                      <div>
-                                        <h4 className="text-sm font-medium">AE</h4>
-                                        <p className="text-xs text-muted-foreground">
-                                          Acte d'Engagement
-                                        </p>
-                                      </div>
-                                      <div className="ml-auto">
-                                        <FileCheck className="h-4 w-4 text-green-400" />
-                                      </div>
-                                    </div>
-                                  </CardContent>
-                                </Card>
-                                
-                                {/* Plans */}
-                                <Card className="bg-card/30 border border-white/10">
-                                  <CardContent className="p-4">
-                                    <div className="flex items-center gap-3">
-                                      <div className="bg-blue-500/10 p-2 rounded-md">
-                                        <FileText className="h-4 w-4 text-blue-400" />
-                                      </div>
-                                      <div>
-                                        <h4 className="text-sm font-medium">Plans</h4>
-                                        <p className="text-xs text-muted-foreground">
-                                          Plans techniques du projet
-                                        </p>
-                                      </div>
-                                      <div className="ml-auto">
-                                        <FileCheck className="h-4 w-4 text-green-400" />
-                                      </div>
-                                    </div>
-                                  </CardContent>
-                                </Card>
-                              </>
+                            {watchedValues.category && (
+                              <div className="flex justify-between">
+                                <span>Catégorie:</span>
+                                <span className="font-medium">
+                                  {watchedValues.category === 'technique' && "Document technique"}
+                                  {watchedValues.category === 'administratif' && "Document administratif"}
+                                  {watchedValues.category === 'planning' && "Planning et délais"}
+                                  {watchedValues.category === 'financier' && "Document financier"}
+                                </span>
+                              </div>
+                            )}
+                            
+                            {watchedValues.subcategory && (
+                              <div className="flex justify-between">
+                                <span>Type de document:</span>
+                                <span className="font-medium">{watchedValues.subcategory}</span>
+                              </div>
                             )}
                           </div>
-                        )}
-                        
-                        {!watchedValues.documents && (
-                          <div className="py-6 text-center text-muted-foreground">
-                            <p>Sélectionnez le type de documents pour voir l'aperçu</p>
-                          </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                   )}
