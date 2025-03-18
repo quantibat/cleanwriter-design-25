@@ -30,17 +30,13 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Action Buttons (Right) */}
+        {/* Action Buttons (Right) - Removed signin/signup buttons */}
         <div className="hidden md:flex items-center space-x-4">
           <Button 
-            variant="outline" 
-            className="border-white/10 bg-white/5 hover:bg-white/10" 
+            className="bg-blue-500 hover:bg-blue-600" 
             asChild
           >
-            <Link to="/signin">Se connecter</Link>
-          </Button>
-          <Button className="bg-blue-500 hover:bg-blue-600" asChild>
-            <Link to="/signup">S'inscrire</Link>
+            <Link to="/dashboard">Tableau de bord</Link>
           </Button>
         </div>
 
@@ -66,11 +62,8 @@ const Navbar = () => {
             <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
               Tarifs
             </a>
-            <Link to="/signin" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              Se connecter
-            </Link>
-            <Link to="/signup" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              S'inscrire
+            <Link to="/dashboard" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
+              Tableau de bord
             </Link>
           </div>
         </div>
