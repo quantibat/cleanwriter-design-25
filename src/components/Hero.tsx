@@ -4,6 +4,18 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, PlayCircle } from "lucide-react";
 
 const Hero = () => {
+  // Create an array of letters for the animated text
+  const transformezText = "Transformez";
+  const letterElements = transformezText.split('').map((letter, index) => (
+    <span 
+      key={index} 
+      className="inline-block floating-letter"
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
+      {letter}
+    </span>
+  ));
+
   return (
     <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
       {/* Background stars */}
@@ -26,8 +38,11 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center space-y-8 max-w-3xl mx-auto relative z-10">
           <div className="flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600">
-              Transformez Votre Contenu<br />Avec <span className="text-white">l'IA</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600">
+                {letterElements}
+              </span>
+              <br />Votre Contenu<br />Avec <span className="text-white">l'IA</span>
             </h1>
             {/* Decorative angled line */}
             <div className="mt-3 h-1 w-40 oblique-line"></div>
