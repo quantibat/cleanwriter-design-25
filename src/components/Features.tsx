@@ -13,9 +13,9 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ title, description, icon, image, alt, reverse = false }: FeatureCardProps) => (
-  <div className={`relative flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-8 mb-16`}>
+  <div className={`relative flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-16 mb-32`}>
     {/* Separate card for image, positioned higher */}
-    <div className={`md:w-1/2 relative z-10 ${reverse ? 'md:-ml-8' : 'md:-mr-8'} md:-mt-6`}>
+    <div className={`md:w-2/5 relative z-10 ${reverse ? 'md:-ml-12' : 'md:-mr-12'} md:-mt-6`}>
       <Card className="overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl">
         <div className="h-64 overflow-hidden">
           <img 
@@ -28,8 +28,8 @@ const FeatureCard = ({ title, description, icon, image, alt, reverse = false }: 
     </div>
     
     {/* Card for text content */}
-    <Card className={`cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60 md:w-1/2 z-0`}>
-      <CardContent className={`p-8`}>
+    <Card className={`cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60 md:w-2/5 z-0`}>
+      <CardContent className={`p-10`}>
         <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
           <div className="text-blue-400">{icon}</div>
         </div>
@@ -50,19 +50,19 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-20 px-6 relative">
+    <section id="features" className="py-28 px-10 md:px-16 relative">
       {/* Background dots */}
       <div className="absolute inset-0 cosmic-dots opacity-20"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-32">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">Fonctionnalités principales</h2>
           <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
             Des outils puissants pour créer du contenu exceptionnel
           </p>
         </div>
         
-        <div className="flex flex-col space-y-16">
+        <div className="flex flex-col space-y-32">
           <FeatureCard 
             title="Génération de texte IA" 
             description="Créez des articles, des posts et des descriptions optimisés pour le SEO en quelques clics. Notre technologie avancée analyse les tendances et génère du contenu pertinent."
