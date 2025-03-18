@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Sun, Moon, Search, LogOut } from "lucide-react";
+import { Sun, Moon, Search, LogOut, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -29,12 +29,12 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
   };
 
   return (
-    <div className="w-full bg-background/20 backdrop-blur-md py-3 px-4 md:px-6 border-b border-white/5 flex items-center justify-between">
-      {/* Logo (Left) */}
-      <div className="flex items-center">
-        <Link to="/" className="text-xl font-bold text-foreground flex items-center">
-          <span className="text-blue-400">AI</span>Writer
-        </Link>
+    <div className="w-full bg-sidebar/95 backdrop-blur-md py-3 px-4 md:px-6 border-b border-sidebar-border flex items-center justify-between h-16">
+      {/* Logo (Left) - Hidden on large screens as it's in the sidebar */}
+      <div className="md:hidden flex items-center">
+        <span className="text-lg font-semibold">
+          <span className="text-blue-400">DCE</span>Manager
+        </span>
       </div>
 
       {/* Search (Center) */}
@@ -44,7 +44,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
           <Input
             type="search"
             placeholder="Rechercher..."
-            className="w-full pl-10 bg-white/5 border-white/10 focus-visible:ring-blue-400 focus-visible:border-blue-400 transition-all"
+            className="w-full pl-10 bg-sidebar-accent/30 border-sidebar-border focus-visible:ring-sidebar-primary focus-visible:border-sidebar-primary transition-all"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -52,7 +52,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
       </form>
 
       {/* Actions (Right) */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 ml-auto">
         {/* Theme Toggle */}
         <div className="flex items-center space-x-2">
           <Sun className="h-4 w-4 text-muted-foreground" />
@@ -68,7 +68,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
           <Button 
             variant="ghost" 
             size="sm"
-            className="hover:bg-white/10"
+            className="hover:bg-sidebar-accent/30 text-sidebar-foreground"
             onClick={handleSignOut}
           >
             <LogOut className="h-4 w-4 mr-2" />
@@ -78,7 +78,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
           <Button 
             variant="ghost" 
             size="sm"
-            className="hover:bg-white/10"
+            className="hover:bg-sidebar-accent/30 text-sidebar-foreground"
             asChild
           >
             <Link to="/signin">Se connecter</Link>
