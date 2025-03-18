@@ -1,8 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { TabsContent } from "@/components/ui/tabs";
-import { useAuth } from '@/contexts/AuthContext';
 import TopBar from '@/components/dashboard/TopBar';
 import TabNavigation from '@/components/dashboard/TabNavigation';
 import ToolsTab from '@/components/dashboard/tabs/ToolsTab';
@@ -12,23 +10,12 @@ import ContributeTab from '@/components/dashboard/tabs/ContributeTab';
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('tools');
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    if (!user) {
-      navigate('/signin');
-    }
-  }, [user, navigate]);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     // Ici on pourrait ajouter du code pour changer le thème au niveau du document
     document.documentElement.classList.toggle('dark-theme');
   };
-
-  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-background">
