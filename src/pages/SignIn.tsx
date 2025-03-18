@@ -73,7 +73,7 @@ const SignIn = () => {
           <p className="mt-2 text-white/60">Connectez-vous à votre compte</p>
         </div>
         
-        <div className="bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
+        <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-white mb-6">Bienvenue sur AIWriter</h1>
           
           <div className="mb-8">
@@ -109,7 +109,7 @@ const SignIn = () => {
                   <FormItem>
                     <FormLabel className="text-white/70">Email</FormLabel>
                     <FormControl>
-                      <div className="relative">
+                      <div className="relative form-input-animated">
                         <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
                         <Input 
                           className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
@@ -128,14 +128,21 @@ const SignIn = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white/70">Mot de passe</FormLabel>
+                    <div className="flex justify-between items-center">
+                      <FormLabel className="text-white/70">Mot de passe</FormLabel>
+                      <Link to="/forgot-password" className="text-xs text-blue-400 hover:underline">
+                        Mot de passe oublié ?
+                      </Link>
+                    </div>
                     <FormControl>
-                      <Input 
-                        type="password" 
-                        className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
-                        placeholder="••••••••" 
-                        {...field}
-                      />
+                      <div className="relative form-input-animated">
+                        <Input 
+                          type="password" 
+                          className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                          placeholder="••••••••" 
+                          {...field}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -144,7 +151,7 @@ const SignIn = () => {
               
               <Button 
                 type="submit" 
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium"
+                className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium"
                 disabled={isLoading}
               >
                 {isLoading ? "Connexion en cours..." : "Se connecter"} 
