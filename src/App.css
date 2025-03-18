@@ -75,6 +75,24 @@
   animation: border-rotate 8s linear infinite;
 }
 
+/* New animated white border for feature cards */
+.animated-border-white {
+  position: relative;
+  height: 100%;
+  padding: 2px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #fff, #f3f3f3, #eee, #ffffff, #f1f1f1);
+  background-size: 400% 100%;
+  animation: border-rotate 8s linear infinite;
+}
+
+.animated-border-white > * {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+
 /* Form input animations */
 .form-input-animated {
   position: relative;

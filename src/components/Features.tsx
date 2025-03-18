@@ -20,27 +20,31 @@ const FeatureCard = ({
   alt,
   reverse = false
 }: FeatureCardProps) => (
-  <div className="w-full flex flex-col md:flex-row items-center gap-8">
+  <div className="w-full flex flex-col md:flex-row items-stretch gap-8">
     {/* Image section - 50% width on desktop */}
     <div className={`w-full md:w-1/2 order-1 ${reverse ? 'md:order-2' : 'md:order-1'}`}>
-      <Card className="overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl h-full">
-        <div className="h-64 md:h-full overflow-hidden">
-          <img src={image} alt={alt} className="w-full h-full object-cover object-center" />
-        </div>
-      </Card>
+      <div className="h-full animated-border-white">
+        <Card className="overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl h-full">
+          <div className="h-full overflow-hidden">
+            <img src={image} alt={alt} className="w-full h-full object-cover object-center" />
+          </div>
+        </Card>
+      </div>
     </div>
     
     {/* Text content section - 50% width on desktop */}
-    <div className={`w-full md:w-1/2 order-2 ${reverse ? 'md:order-1' : 'md:order-2'}`}>
-      <Card className="cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60 h-full">
-        <CardContent className="p-10">
-          <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
-            <div className="text-blue-400">{icon}</div>
-          </div>
-          <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
-          <p className="text-blue-100/70">{description}</p>
-        </CardContent>
-      </Card>
+    <div className={`w-full md:w-1/2 order-2 ${reverse ? 'md:order-1' : 'md:order-2'} h-full`}>
+      <div className="h-full animated-border-white">
+        <Card className="cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60 h-full">
+          <CardContent className="p-10 h-full flex flex-col justify-center">
+            <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
+              <div className="text-blue-400">{icon}</div>
+            </div>
+            <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
+            <p className="text-blue-100/70">{description}</p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   </div>
 );
