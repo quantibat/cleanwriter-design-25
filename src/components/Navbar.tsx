@@ -1,17 +1,13 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, UserCircle, LogOut } from "lucide-react";
+import { Menu, X, UserCircle } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, signOut } = useAuth();
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
+  const { user } = useAuth();
 
   return (
     <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
@@ -38,31 +34,11 @@ const Navbar = () => {
 
         {/* Action Buttons (Right) */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link to="/account" className="text-sm font-medium transition-colors hover:text-blue-400 relative">
-            <UserCircle className="h-5 w-5" />
-            {user && (
+          {user && (
+            <Link to="/account" className="text-sm font-medium transition-colors hover:text-blue-400 relative">
+              <UserCircle className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 h-2.5 w-2.5 bg-green-500 rounded-full border-2 border-background"></span>
-            )}
-          </Link>
-          
-          {user ? (
-            <Button 
-              variant="outline" 
-              className="hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10 hover:text-red-400"
-              onClick={handleSignOut}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Déconnexion
-            </Button>
-          ) : (
-            <>
-              <Button variant="outline" className="hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10 hover:text-blue-400" asChild>
-                <Link to="/signin">Connexion</Link>
-              </Button>
-              <Button className="blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" asChild>
-                <Link to="/signup">Essayer gratuitement</Link>
-              </Button>
-            </>
+            </Link>
           )}
         </div>
 
@@ -88,34 +64,13 @@ const Navbar = () => {
             <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
               Tarifs
             </a>
-            <Link to="/account" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center relative">
-              <UserCircle className="h-5 w-5 mr-2" />
-              Mon compte
-              {user && (
+            {user && (
+              <Link to="/account" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center relative">
+                <UserCircle className="h-5 w-5 mr-2" />
+                Mon compte
                 <span className="absolute left-1 top-2 h-2.5 w-2.5 bg-green-500 rounded-full border-2 border-background"></span>
-              )}
-            </Link>
-            <div className="flex flex-col space-y-3 pt-2">
-              {user ? (
-                <Button 
-                  variant="outline" 
-                  className="w-full hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10"
-                  onClick={handleSignOut}
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Déconnexion
-                </Button>
-              ) : (
-                <>
-                  <Button variant="outline" className="w-full hover-button font-medium border-white/10 bg-white/5 hover:bg-white/10" asChild>
-                    <Link to="/signin">Connexion</Link>
-                  </Button>
-                  <Button className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" asChild>
-                    <Link to="/signup">Essayer gratuitement</Link>
-                  </Button>
-                </>
-              )}
-            </div>
+              </Link>
+            )}
           </div>
         </div>
       )}

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, PlayCircle } from "lucide-react";
+import { PlayCircle } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -39,7 +39,7 @@ const Hero = () => {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Button className="w-full sm:w-auto glowing-button bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg">
-              Commencer gratuitement
+              Commencer maintenant
             </Button>
             <Button variant="outline" className="w-full sm:w-auto hover-button font-medium px-8 py-6 text-lg group border-white/10 bg-white/5 hover:bg-white/10">
               Voir la démo
@@ -48,7 +48,7 @@ const Hero = () => {
           </div>
           
           <div className="pt-10 text-sm text-blue-100/60">
-            <p>Aucune carte de crédit requise • Annulez à tout moment</p>
+            <p>Aucune inscription • Aucun paiement requis</p>
           </div>
         </div>
         
