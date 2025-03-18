@@ -17,8 +17,8 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Navigation Menu (Center) */}
-        <div className="hidden md:flex items-center space-x-8">
+        {/* Navigation Menu (Center) - Updated to be centered */}
+        <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
           <a href="#home" className="text-sm font-medium transition-colors hover:text-blue-400">
             Accueil
           </a>
@@ -30,8 +30,8 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Action Buttons (Right) - Removed signin/signup buttons */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* Action Buttons (Right) */}
+        <div className="hidden md:flex items-center">
           <Button 
             className="bg-blue-500 hover:bg-blue-600" 
             asChild
