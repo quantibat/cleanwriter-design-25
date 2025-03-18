@@ -75,6 +75,21 @@
   animation: border-rotate 8s linear infinite;
 }
 
+/* Floating letter animation */
+.floating-letter {
+  display: inline-block;
+  animation: float-letter 3s ease-in-out infinite;
+}
+
+@keyframes float-letter {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @keyframes gradient-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
