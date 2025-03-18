@@ -13,24 +13,31 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ title, description, icon, image, alt, reverse = false }: FeatureCardProps) => (
-  <Card className={`cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60`}>
-    <div className={`flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center`}>
-      <div className="md:w-1/2 h-64 overflow-hidden">
-        <img 
-          src={image} 
-          alt={alt} 
-          className="w-full h-full object-cover object-center" 
-        />
-      </div>
-      <CardContent className={`p-8 md:w-1/2`}>
+  <div className={`relative flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-4 mb-8`}>
+    {/* Separate card for image, positioned higher */}
+    <div className={`md:w-1/2 relative z-10 ${reverse ? 'md:-ml-8' : 'md:-mr-8'} md:-mt-6`}>
+      <Card className="overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl">
+        <div className="h-64 overflow-hidden">
+          <img 
+            src={image} 
+            alt={alt} 
+            className="w-full h-full object-cover object-center" 
+          />
+        </div>
+      </Card>
+    </div>
+    
+    {/* Card for text content */}
+    <Card className={`cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60 md:w-1/2 z-0`}>
+      <CardContent className={`p-8`}>
         <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
           <div className="text-blue-400">{icon}</div>
         </div>
         <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
         <p className="text-blue-100/70">{description}</p>
       </CardContent>
-    </div>
-  </Card>
+    </Card>
+  </div>
 );
 
 const Features = () => {
@@ -55,7 +62,7 @@ const Features = () => {
           </p>
         </div>
         
-        <div className="flex flex-col space-y-8">
+        <div className="flex flex-col space-y-16">
           <FeatureCard 
             title="Génération de texte IA" 
             description="Créez des articles, des posts et des descriptions optimisés pour le SEO en quelques clics. Notre technologie avancée analyse les tendances et génère du contenu pertinent."
