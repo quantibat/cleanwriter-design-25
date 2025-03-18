@@ -2,10 +2,11 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
@@ -33,7 +34,7 @@ const Navbar = () => {
         {/* Action Buttons (Right) */}
         <div className="hidden md:flex items-center">
           <Button 
-            className="bg-blue-500 hover:bg-blue-600" 
+            className={`${location.pathname.includes('/dashboard') ? 'bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'}`}
             asChild
           >
             <Link to="/dashboard">Tableau de bord</Link>

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FolderPlus, ArrowRight, FileSearch, FileEdit, Share2 } from "lucide-react";
@@ -20,8 +21,13 @@ const ToolsTab = () => {
             <CardDescription>Créez un nouveau dossier de consultation avec tous les documents nécessaires</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Créer <ArrowRight className="ml-2 h-4 w-4" />
+            <Button 
+              className="w-full bg-blue-500 hover:bg-blue-600 mt-4"
+              asChild
+            >
+              <Link to="/create-dce">
+                Créer <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -35,8 +41,13 @@ const ToolsTab = () => {
             <CardDescription>Retrouvez rapidement les documents dont vous avez besoin</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Rechercher <ArrowRight className="ml-2 h-4 w-4" />
+            <Button 
+              className="w-full bg-blue-500 hover:bg-blue-600 mt-4"
+              asChild
+            >
+              <Link to="/search-documents">
+                Rechercher <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -50,8 +61,13 @@ const ToolsTab = () => {
             <CardDescription>Modifiez les informations et documents d'un dossier existant</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Modifier <ArrowRight className="ml-2 h-4 w-4" />
+            <Button 
+              className="w-full bg-blue-500 hover:bg-blue-600 mt-4"
+              asChild
+            >
+              <Link to="/edit-dce">
+                Modifier <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -65,8 +81,13 @@ const ToolsTab = () => {
             <CardDescription>Partagez vos dossiers avec vos collaborateurs ou partenaires</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Partager <ArrowRight className="ml-2 h-4 w-4" />
+            <Button 
+              className="w-full bg-blue-500 hover:bg-blue-600 mt-4"
+              asChild
+            >
+              <Link to="/share-dce">
+                Partager <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </CardContent>
         </Card>
