@@ -12,6 +12,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import CreateDCE from "./pages/CreateDCE";
+import EditDCE from "./pages/EditDCE";
+import ViewDCE from "./pages/ViewDCE";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/create-dce" element={<CreateDCE />} />
+            <Route path="/edit-dce/:id" element={<EditDCE />} />
+            <Route path="/view-dce/:id" element={<ViewDCE />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

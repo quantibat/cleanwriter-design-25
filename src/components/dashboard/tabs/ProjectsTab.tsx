@@ -1,13 +1,9 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
-import { FolderPlus, Calendar, Clock, Users, MoreHorizontal, Edit, Eye } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { FolderPlus, Calendar, Clock, Users, Edit, Eye } from "lucide-react";
 
 const projects = [
   {
@@ -41,69 +37,19 @@ const projects = [
 
 type Project = typeof projects[0];
 
-type ProjectFormData = {
-  title: string;
-  description: string;
-  details: string;
-};
-
 const ProjectsTab = () => {
-  const [viewingProject, setViewingProject] = useState<Project | null>(null);
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [isCreating, setIsCreating] = useState(false);
-  
-  const form = useForm<ProjectFormData>({
-    defaultValues: {
-      title: '',
-      description: '',
-      details: ''
-    }
-  });
+  const navigate = useNavigate();
 
   const handleOpenView = (project: Project) => {
-    setViewingProject(project);
-  };
-
-  const handleCloseView = () => {
-    setViewingProject(null);
+    navigate(`/view-dce/${project.id}`, { state: { project } });
   };
 
   const handleOpenEdit = (project: Project) => {
-    setEditingProject(project);
-    form.reset({
-      title: project.title,
-      description: project.description,
-      details: project.details
-    });
-  };
-
-  const handleCloseEdit = () => {
-    setEditingProject(null);
+    navigate(`/edit-dce/${project.id}`, { state: { project } });
   };
 
   const handleOpenCreate = () => {
-    setIsCreating(true);
-    form.reset({
-      title: '',
-      description: '',
-      details: ''
-    });
-  };
-
-  const handleCloseCreate = () => {
-    setIsCreating(false);
-  };
-
-  const onSubmitEdit = (data: ProjectFormData) => {
-    // In a real application, this would update the project in the database
-    console.log('Edited project data:', data);
-    handleCloseEdit();
-  };
-
-  const onSubmitCreate = (data: ProjectFormData) => {
-    // In a real application, this would create a new project in the database
-    console.log('New project data:', data);
-    handleCloseCreate();
+    navigate('/create-dce');
   };
 
   return (
@@ -175,159 +121,6 @@ const ProjectsTab = () => {
           </Card>
         ))}
       </div>
-
-      {/* View Project Dialog */}
-      <Dialog open={viewingProject !== null} onOpenChange={handleCloseView}>
-        <DialogContent className="sm:max-w-[625px]">
-          <DialogHeader>
-            <DialogTitle>{viewingProject?.title}</DialogTitle>
-            <DialogDescription>{viewingProject?.description}</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 my-4">
-            <div className="text-sm space-y-1">
-              <div className="font-medium">Date de création:</div>
-              <div>{viewingProject?.date}</div>
-            </div>
-            <div className="text-sm space-y-1">
-              <div className="font-medium">Avancement:</div>
-              <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-blue-500 rounded-full" 
-                  style={{ width: `${viewingProject?.progress}%` }}
-                ></div>
-              </div>
-              <div>{viewingProject?.progress}% terminé</div>
-            </div>
-            <div className="text-sm space-y-1">
-              <div className="font-medium">Collaborateurs:</div>
-              <div>{viewingProject?.collaborators} personnes assignées</div>
-            </div>
-            <div className="text-sm space-y-1">
-              <div className="font-medium">Description détaillée:</div>
-              <div className="whitespace-pre-line">{viewingProject?.details}</div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={handleCloseView}>Fermer</Button>
-            <Button onClick={() => {
-              handleCloseView();
-              if (viewingProject) handleOpenEdit(viewingProject);
-            }}>Modifier</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Project Dialog */}
-      <Dialog open={editingProject !== null} onOpenChange={handleCloseEdit}>
-        <DialogContent className="sm:max-w-[625px]">
-          <DialogHeader>
-            <DialogTitle>Modifier le dossier</DialogTitle>
-            <DialogDescription>Modifiez les détails du dossier. Cliquez sur sauvegarder une fois terminé.</DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmitEdit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Titre</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="details"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description détaillée</FormLabel>
-                    <FormControl>
-                      <Textarea rows={5} {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={handleCloseEdit}>Annuler</Button>
-                <Button type="submit">Sauvegarder</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Create Project Dialog */}
-      <Dialog open={isCreating} onOpenChange={handleCloseCreate}>
-        <DialogContent className="sm:max-w-[625px]">
-          <DialogHeader>
-            <DialogTitle>Créer un nouveau dossier</DialogTitle>
-            <DialogDescription>Ajoutez les détails de votre nouveau dossier de consultation.</DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmitCreate)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Titre</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: Rénovation École Jules Ferry" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Brève description du dossier" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="details"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description détaillée</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Description complète du projet, exigences, contraintes, etc." 
-                        rows={5} 
-                        {...field} 
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={handleCloseCreate}>Annuler</Button>
-                <Button type="submit">Créer le dossier</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
