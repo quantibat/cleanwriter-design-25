@@ -19,18 +19,18 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <SidebarProvider defaultOpen={true}>
-        <div className="flex flex-col h-screen">
-          <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
+        <div className="flex h-screen overflow-hidden">
+          <SidebarNavigation activeTab={activeTab} onTabChange={setActiveTab} />
           
-          <div className="flex flex-1 overflow-hidden">
-            <SidebarNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+          <main className="flex-1 flex flex-col overflow-hidden">
+            <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
             
-            <main className="flex-1 overflow-auto p-6">
+            <div className="flex-1 overflow-auto p-4 md:p-6">
               {activeTab === 'tools' && <ToolsTab />}
               {activeTab === 'projects' && <ProjectsTab />}
               {activeTab === 'contribute' && <ContributeTab />}
-            </main>
-          </div>
+            </div>
+          </main>
         </div>
       </SidebarProvider>
     </div>
