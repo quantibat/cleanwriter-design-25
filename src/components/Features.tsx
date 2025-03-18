@@ -13,7 +13,7 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ title, description, icon, image, alt, reverse = false }: FeatureCardProps) => (
-  <div className={`relative flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-4 mb-8`}>
+  <div className={`relative flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-8 mb-16`}>
     {/* Separate card for image, positioned higher */}
     <div className={`md:w-1/2 relative z-10 ${reverse ? 'md:-ml-8' : 'md:-mr-8'} md:-mt-6`}>
       <Card className="overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl">

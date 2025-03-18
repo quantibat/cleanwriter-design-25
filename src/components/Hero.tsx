@@ -26,7 +26,7 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center space-y-8 max-w-3xl mx-auto relative z-10">
           <div className="flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animated-text">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600">
               Transformez Votre Contenu<br />Avec <span className="text-white">l'IA</span>
             </h1>
             {/* Decorative angled line */}
