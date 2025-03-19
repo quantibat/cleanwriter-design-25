@@ -1,12 +1,21 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   return (
     <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
@@ -32,13 +41,41 @@ const Navbar = () => {
         </div>
 
         {/* Action Buttons (Right) */}
-        <div className="hidden md:flex items-center">
-          <Button 
-            className={`${location.pathname.includes('/dashboard') ? 'bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'}`}
-            asChild
-          >
-            <Link to="/dashboard">Tableau de bord</Link>
-          </Button>
+        <div className="hidden md:flex items-center space-x-4">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-foreground">
+                {user.user_metadata?.full_name || user.email}
+              </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.user_metadata?.avatar_url} />
+                      <AvatarFallback className="bg-blue-500 text-white">
+                        {(user.user_metadata?.full_name || user.email || "U")[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard">Tableau de bord</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    Déconnexion
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <Button 
+              className={`${location.pathname.includes('/dashboard') ? 'bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'}`}
+              asChild
+            >
+              <Link to="/dashboard">Tableau de bord</Link>
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -63,9 +100,31 @@ const Navbar = () => {
             <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
               Tarifs
             </a>
-            <Link to="/dashboard" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              Tableau de bord
-            </Link>
+            {user ? (
+              <>
+                <div className="py-2 flex items-center gap-2">
+                  <Avatar className="h-6 w-6">
+                    <AvatarFallback className="bg-blue-500 text-white text-xs">
+                      {(user.user_metadata?.full_name || user.email || "U")[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm">{user.user_metadata?.full_name || user.email}</span>
+                </div>
+                <Link to="/dashboard" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
+                  Tableau de bord
+                </Link>
+                <button 
+                  onClick={() => signOut()} 
+                  className="py-2 text-base font-medium transition-colors hover:text-blue-400 text-left"
+                >
+                  Déconnexion
+                </button>
+              </>
+            ) : (
+              <Link to="/dashboard" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
+                Tableau de bord
+              </Link>
+            )}
           </div>
         </div>
       )}
