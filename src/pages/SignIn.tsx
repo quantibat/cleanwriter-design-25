@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { supabase } from '../integrations/supabase/client';
@@ -13,98 +12,96 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-
 const formSchema = z.object({
-  email: z.string().email({ message: "Adresse e-mail invalide." }),
-  password: z.string().min(6, { message: "Le mot de passe doit contenir au moins 6 caractères." }),
+  email: z.string().email({
+    message: "Adresse e-mail invalide."
+  }),
+  password: z.string().min(6, {
+    message: "Le mot de passe doit contenir au moins 6 caractères."
+  })
 });
-
 const SignIn = () => {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
   useEffect(() => {
     if (user) {
       const origin = location.state?.from?.pathname || '/dashboard';
-      navigate(origin, { replace: true });
+      navigate(origin, {
+        replace: true
+      });
     }
   }, [user, navigate, location]);
-  
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDemoLoading, setIsDemoLoading] = useState(false);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "",
-    },
+      password: ""
+    }
   });
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const {
+        data,
+        error
+      } = await supabase.auth.signInWithPassword({
         email: values.email,
-        password: values.password,
+        password: values.password
       });
-
       if (error) {
         throw error;
       }
-
       toast({
         title: "Connexion réussie",
-        description: "Vous êtes maintenant connecté.",
+        description: "Vous êtes maintenant connecté."
       });
-      
     } catch (error: any) {
       toast({
         title: "Erreur de connexion",
         description: error.message || "Une erreur est survenue lors de la connexion.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsLoading(false);
     }
   }
-
   async function loginWithDemoAccount() {
     setIsDemoLoading(true);
-    
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const {
+        data,
+        error
+      } = await supabase.auth.signInWithPassword({
         email: "test@exemple.com",
-        password: "Test1234!",
+        password: "Test1234!"
       });
-
       if (error) {
         throw error;
       }
-
       toast({
         title: "Connexion démo réussie",
-        description: "Vous êtes connecté avec le compte de démonstration.",
+        description: "Vous êtes connecté avec le compte de démonstration."
       });
-      
       navigate('/dashboard');
-      
     } catch (error: any) {
       toast({
         title: "Erreur de connexion démo",
         description: error.message || "Une erreur est survenue avec le compte de démonstration.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsDemoLoading(false);
     }
   }
-
-  return (
-    <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
+  return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
         {/* Les particules d'arrière-plan seront ajoutés ici avec du CSS */}
       </div>
@@ -120,28 +117,20 @@ const SignIn = () => {
         </div>
         
         <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
-          <h1 className="text-2xl font-bold text-white mb-6">Bienvenue sur AIWriter</h1>
+          <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur AIWriter</h1>
           
-          <Button 
-            variant="outline" 
-            className="w-full mb-4 bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center"
-            onClick={loginWithDemoAccount}
-            disabled={isDemoLoading}
-          >
+          <Button variant="outline" className="w-full mb-4 bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center" onClick={loginWithDemoAccount} disabled={isDemoLoading}>
             <Zap className="w-5 h-5 mr-2" />
             {isDemoLoading ? "Connexion en cours..." : "Connexion rapide (Compte test)"}
           </Button>
           
           <div className="mb-8">
-            <Button 
-              variant="outline" 
-              className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5"
-            >
+            <Button variant="outline" className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5">
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"/>
-                <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z"/>
-                <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z"/>
-                <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z"/>
+                <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
+                <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z" />
+                <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z" />
+                <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z" />
               </svg>
               Se connecter avec Google
             </Button>
@@ -158,32 +147,22 @@ const SignIn = () => {
           
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="email" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-white/70">Email</FormLabel>
                     <FormControl>
                       <div className="relative form-input-animated">
                         <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                        <Input 
-                          className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
-                          placeholder="votre@email.com" 
-                          {...field}
-                        />
+                        <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="votre@email.com" {...field} />
                       </div>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
               
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="password" render={({
+              field
+            }) => <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel className="text-white/70">Mot de passe</FormLabel>
                       <Link to="/forgot-password" className="text-xs text-blue-400 hover:underline">
@@ -192,24 +171,13 @@ const SignIn = () => {
                     </div>
                     <FormControl>
                       <div className="relative form-input-animated">
-                        <Input 
-                          type="password" 
-                          className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
-                          placeholder="••••••••" 
-                          {...field}
-                        />
+                        <Input type="password" className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="••••••••" {...field} />
                       </div>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
               
-              <Button 
-                type="submit" 
-                className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" disabled={isLoading}>
                 {isLoading ? "Connexion en cours..." : "Se connecter"} 
                 {!isLoading && <LogIn className="ml-2 h-4 w-4" />}
               </Button>
@@ -225,8 +193,6 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default SignIn;
