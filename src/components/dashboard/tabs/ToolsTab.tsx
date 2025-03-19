@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FolderPlus, ArrowRight, FileSearch } from "lucide-react";
+import { FolderPlus, ArrowRight } from "lucide-react";
 
 const ToolsTab = () => {
   return (
@@ -27,26 +27,6 @@ const ToolsTab = () => {
             >
               <Link to="/create-dce">
                 Créer <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
-          <CardHeader>
-            <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
-              <FileSearch className="h-5 w-5 text-blue-400" />
-            </div>
-            <CardTitle>Recherche de documents</CardTitle>
-            <CardDescription>Retrouvez rapidement les documents dont vous avez besoin</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              className="w-full bg-blue-500 hover:bg-blue-600 mt-4"
-              asChild
-            >
-              <Link to="/search-documents">
-                Rechercher <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>
