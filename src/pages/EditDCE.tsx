@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Sparkles, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,12 +11,16 @@ import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const EditDCE = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
   const { toast } = useToast();
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
   
   // Get project from location state or redirect if not available
   const project = location.state?.project;
@@ -64,6 +69,64 @@ const EditDCE = () => {
       [name]: value,
     }));
   };
+
+  const generateWithAI = async () => {
+    setIsGenerating(true);
+    try {
+      // Simulation d'un appel API à un modèle IA
+      // Dans une implémentation réelle, vous appelleriez une API comme OpenAI
+      setTimeout(() => {
+        // On génère du contenu basé sur le prompt et le contenu existant
+        const promptInfo = aiPrompt.trim() ? aiPrompt : `Améliorer le dossier ${formData.title}`;
+        
+        const generatedContent = {
+          description: formData.description || 'Projet de rénovation optimisé pour l\'efficacité énergétique',
+          details: formData.details + '\n\n' + 
+                   'Éléments supplémentaires générés par IA:\n\n' +
+                   '- Utilisation de matériaux écologiques et durables\n' +
+                   '- Optimisation du budget par phases de travaux\n' +
+                   '- Planification détaillée avec jalons intermédiaires\n' +
+                   '- Intégration de solutions numériques pour le suivi du chantier',
+        };
+        
+        setFormData({
+          ...formData,
+          ...generatedContent
+        });
+        
+        setIsGenerating(false);
+        setIsAIDialogOpen(false);
+        
+        toast({
+          title: "Contenu enrichi",
+          description: "Le contenu a été enrichi avec succès par l'IA.",
+        });
+      }, 1500);
+    } catch (error) {
+      console.error('Erreur lors de la génération:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la génération du contenu.",
+        variant: "destructive"
+      });
+      setIsGenerating(false);
+    }
+  };
+
+  const exportToPDF = () => {
+    toast({
+      title: "Export en cours",
+      description: "Votre DCE est en cours d'exportation au format PDF.",
+    });
+
+    // Simulation de l'export
+    setTimeout(() => {
+      toast({
+        title: "Export terminé",
+        description: "Votre DCE a été exporté avec succès.",
+      });
+    }, 2000);
+  };
   
   return (
     <DashboardLayout>
@@ -87,14 +150,34 @@ const EditDCE = () => {
               Annuler
             </Button>
             <h1 className="text-xl font-semibold">Modifier le DCE</h1>
-            <Button 
-              className="gap-1 bg-blue-500 hover:bg-blue-600"
-              size="sm" 
-              onClick={handleSave}
-            >
-              <Save size={16} />
-              Enregistrer
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline"
+                size="sm" 
+                className="gap-1"
+                onClick={() => setIsAIDialogOpen(true)}
+              >
+                <Sparkles size={16} className="text-yellow-400" />
+                Enrichir avec IA
+              </Button>
+              <Button 
+                variant="outline"
+                size="sm" 
+                className="gap-1"
+                onClick={exportToPDF}
+              >
+                <Download size={16} />
+                Exporter
+              </Button>
+              <Button 
+                className="gap-1 bg-blue-500 hover:bg-blue-600"
+                size="sm" 
+                onClick={handleSave}
+              >
+                <Save size={16} />
+                Enregistrer
+              </Button>
+            </div>
           </div>
         </header>
         
@@ -237,6 +320,40 @@ const EditDCE = () => {
           </div>
         </main>
       </div>
+
+      {/* AI Generation Dialog */}
+      <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Enrichir avec l'IA</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="ai-prompt">Instructions pour l'IA</Label>
+              <Textarea
+                id="ai-prompt"
+                placeholder="Ex: Ajouter des détails sur l'efficacité énergétique et développer la section budget..."
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                className="min-h-32"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setIsAIDialogOpen(false)}>
+              Annuler
+            </Button>
+            <Button 
+              type="submit" 
+              onClick={generateWithAI}
+              disabled={isGenerating}
+              className="bg-blue-500 hover:bg-blue-600"
+            >
+              {isGenerating ? 'Génération en cours...' : 'Enrichir'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 };

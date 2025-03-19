@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Sparkles, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,10 +11,14 @@ import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const CreateDCE = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -38,6 +43,60 @@ const CreateDCE = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const generateWithAI = async () => {
+    setIsGenerating(true);
+    try {
+      // Simulation d'un appel API à un modèle IA
+      // Dans une implémentation réelle, vous appelleriez une API comme OpenAI
+      setTimeout(() => {
+        const generatedContent = {
+          title: 'Rénovation du bâtiment municipal',
+          description: 'Projet de rénovation énergétique et accessibilité',
+          details: 'Ce projet comprend la rénovation complète du bâtiment municipal avec:\n\n- Isolation thermique des murs et toiture\n- Remplacement des fenêtres par du double vitrage\n- Installation d\'un système de chauffage à faible consommation\n- Mise aux normes d\'accessibilité PMR\n- Réfection des systèmes électriques\n\nLe projet s\'inscrit dans le cadre du plan de rénovation énergétique des bâtiments publics.',
+          date: new Date().toLocaleDateString('fr-FR'),
+          progress: 10,
+          collaborators: 3,
+        };
+        
+        setFormData({
+          ...formData,
+          ...generatedContent
+        });
+        
+        setIsGenerating(false);
+        setIsAIDialogOpen(false);
+        
+        toast({
+          title: "Contenu généré",
+          description: "Le contenu a été généré avec succès par l'IA.",
+        });
+      }, 1500);
+    } catch (error) {
+      console.error('Erreur lors de la génération:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la génération du contenu.",
+        variant: "destructive"
+      });
+      setIsGenerating(false);
+    }
+  };
+
+  const exportToPDF = () => {
+    toast({
+      title: "Export en cours",
+      description: "Votre DCE est en cours d'exportation au format PDF.",
+    });
+
+    // Simulation de l'export
+    setTimeout(() => {
+      toast({
+        title: "Export terminé",
+        description: "Votre DCE a été exporté avec succès.",
+      });
+    }, 2000);
+  };
   
   return (
     <DashboardLayout>
@@ -61,14 +120,34 @@ const CreateDCE = () => {
               Annuler
             </Button>
             <h1 className="text-xl font-semibold">Créer un nouveau DCE</h1>
-            <Button 
-              className="gap-1 bg-blue-500 hover:bg-blue-600"
-              size="sm" 
-              onClick={handleSave}
-            >
-              <Save size={16} />
-              Enregistrer
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline"
+                size="sm" 
+                className="gap-1"
+                onClick={() => setIsAIDialogOpen(true)}
+              >
+                <Sparkles size={16} className="text-yellow-400" />
+                Générer avec IA
+              </Button>
+              <Button 
+                variant="outline"
+                size="sm" 
+                className="gap-1"
+                onClick={exportToPDF}
+              >
+                <Download size={16} />
+                Exporter
+              </Button>
+              <Button 
+                className="gap-1 bg-blue-500 hover:bg-blue-600"
+                size="sm" 
+                onClick={handleSave}
+              >
+                <Save size={16} />
+                Enregistrer
+              </Button>
+            </div>
           </div>
         </header>
         
@@ -211,6 +290,40 @@ const CreateDCE = () => {
           </div>
         </main>
       </div>
+
+      {/* AI Generation Dialog */}
+      <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Générer avec l'IA</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="ai-prompt">Décrivez votre projet</Label>
+              <Textarea
+                id="ai-prompt"
+                placeholder="Ex: Projet de rénovation d'une mairie incluant isolation thermique et mise aux normes d'accessibilité..."
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                className="min-h-32"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setIsAIDialogOpen(false)}>
+              Annuler
+            </Button>
+            <Button 
+              type="submit" 
+              onClick={generateWithAI}
+              disabled={isGenerating}
+              className="bg-blue-500 hover:bg-blue-600"
+            >
+              {isGenerating ? 'Génération en cours...' : 'Générer'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 };
