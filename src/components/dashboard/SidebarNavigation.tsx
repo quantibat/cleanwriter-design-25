@@ -94,7 +94,6 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
               )}
-              onClick={() => handleTabChange('projects')}
             >
               <PlusCircle className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Nouveau DCE</span>
@@ -110,7 +109,6 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
               )}
-              onClick={() => handleTabChange('projects')}
             >
               <Briefcase className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Projets</span>

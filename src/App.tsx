@@ -14,6 +14,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Notifications from "./pages/Notifications";
+import Projects from "./pages/Projects";
 import CreateDCE from "./pages/CreateDCE";
 import EditDCE from "./pages/EditDCE";
 import ViewDCE from "./pages/ViewDCE";
@@ -45,6 +46,11 @@ const App = () => (
               <Route path="/notifications" element={
                 <AuthGuard>
                   <Notifications />
+                </AuthGuard>
+              } />
+              <Route path="/projects" element={
+                <AuthGuard>
+                  <Projects />
                 </AuthGuard>
               } />
               <Route path="/create-dce" element={
