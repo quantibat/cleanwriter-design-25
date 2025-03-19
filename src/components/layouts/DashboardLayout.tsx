@@ -57,7 +57,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               </Breadcrumb>
             </div>
             
-            <div className="flex-1 w-full p-6">
+            <div className="flex-1 w-full p-6 overflow-auto">
               {children}
             </div>
           </main>
