@@ -1,16 +1,13 @@
-
 import React from 'react';
 import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { cn } from '@/lib/utils';
-
 interface SidebarNavigationProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
 }
-
 const SidebarNavigation = ({
   activeTab = 'tools',
   onTabChange
@@ -22,11 +19,9 @@ const SidebarNavigation = ({
   const {
     unreadCount
   } = useNotifications();
-
   const handleTabChange = (tab: string) => {
     onTabChange?.(tab);
   };
-
   return <div className={cn("h-screen border-r border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md", "transition-all duration-300 ease-in-out flex flex-col", open ? "w-64" : "w-16")}>
       {/* Brand logo */}
       <div className="flex items-center justify-center h-16 border-b border-sidebar-border shrink-0">
@@ -48,22 +43,11 @@ const SidebarNavigation = ({
           </li>
           
           <li>
-            <Link to="/notifications" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/notifications' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
-              <BellIcon className="h-5 w-5" />
-              <span className={open ? "ml-3" : "hidden"}>Notifications</span>
-              {unreadCount > 0 && (
-                <span className="ml-auto bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {unreadCount}
-                </span>
-              )}
-            </Link>
+            
           </li>
           
           <li>
-            <Link to="/create-dce" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/create-dce' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
-              <PlusCircle className="h-5 w-5" />
-              <span className={open ? "ml-3" : "hidden"}>Créer un DCE</span>
-            </Link>
+            
           </li>
           <li>
             <Link to="/projects" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
@@ -94,5 +78,4 @@ const SidebarNavigation = ({
       </div>
     </div>;
 };
-
 export default SidebarNavigation;
