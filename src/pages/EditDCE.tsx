@@ -7,10 +7,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
+import { ResizablePanelGroup, ResizablePanel } from "@/components/ui/resizable";
 import { useForm } from "react-hook-form";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
 
 const EditDCE = () => {
   const navigate = useNavigate();
@@ -103,22 +103,25 @@ const EditDCE = () => {
   }
 
   return (
-    <DashboardLayout>
-      <div className="py-6 px-6 md:px-10">
+    <div className="min-h-screen bg-background flex flex-col">
+      <header className="border-b border-white/5 bg-background/20 backdrop-blur-md py-4 px-6 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="gap-1"
+            onClick={() => navigate('/dashboard')}
+          >
+            <ArrowLeft size={16} />
+            Retour
+          </Button>
+          <h1 className="text-xl font-semibold">Modifier le dossier</h1>
+          <div></div>
+        </div>
+      </header>
+      
+      <main className="flex-1 py-8 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-6">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="gap-1"
-              onClick={() => navigate('/dashboard')}
-            >
-              <ArrowLeft size={16} />
-              Retour
-            </Button>
-            <h1 className="text-xl font-semibold mt-4">Modifier le dossier</h1>
-          </div>
-          
           <div className="flex flex-col md:flex-row gap-4 w-full">
             <div className="w-full md:w-1/2 p-4 overflow-auto border border-white/20 rounded-lg">
               <Form {...form}>
@@ -522,8 +525,8 @@ const EditDCE = () => {
             </div>
           </div>
         </div>
-      </div>
-    </DashboardLayout>
+      </main>
+    </div>
   );
 };
 
