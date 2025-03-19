@@ -87,7 +87,7 @@ const CreateDCE = () => {
         </div>
       </header>
       
-      <main className="flex-1 py-8 px-6 md:px-10">
+      <main className="flex-1 py-8 px-6 md:px-10 space-y-6">
         <div className="max-w-7xl mx-auto">
           <ResizablePanelGroup
             direction="horizontal"
