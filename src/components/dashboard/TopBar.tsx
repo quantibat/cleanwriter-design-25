@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Sun, Moon, Search, LogOut, Menu, Globe } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/components/ui/sidebar';
+import NotificationBell from './NotificationBell';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -134,6 +136,9 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
 
       {/* Actions (Right) */}
       <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+        {/* Notification Bell - Added */}
+        <NotificationBell />
+        
         {/* Language Selector */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

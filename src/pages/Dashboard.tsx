@@ -1,12 +1,30 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import ToolsTab from '@/components/dashboard/tabs/ToolsTab';
 import ProjectsTab from '@/components/dashboard/tabs/ProjectsTab';
 import ContributeTab from '@/components/dashboard/tabs/ContributeTab';
+import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('tools');
+  const { notifySuccess } = useNotificationsManager();
+  
+  // Exemple de notification de bienvenue
+  useEffect(() => {
+    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
+    
+    if (!hasSeenWelcome) {
+      setTimeout(() => {
+        notifySuccess(
+          'Bienvenue sur votre tableau de bord',
+          'Utilisez les outils disponibles pour gérer vos DCE efficacement.',
+          true
+        );
+        localStorage.setItem('hasSeenWelcome', 'true');
+      }, 1500);
+    }
+  }, [notifySuccess]);
 
   const renderTabContent = () => {
     switch (activeTab) {
