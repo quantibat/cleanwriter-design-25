@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, FolderOpen, LayoutList, PlusCircle } from 'lucide-react';
@@ -94,7 +95,7 @@ const CreateDCE = () => {
             className="min-h-[calc(100vh-180px)]"
           >
             <ResizablePanel defaultSize={50} minSize={40}>
-              <div className="h-full p-4 overflow-auto">
+              <div className="h-full p-4 overflow-auto border border-white/20 rounded-lg">
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-6">
