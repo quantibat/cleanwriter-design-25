@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -6,7 +5,6 @@ import { Check } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Link } from "react-router-dom";
-
 interface PricingCardProps {
   title: string;
   price: string;
@@ -17,121 +15,64 @@ interface PricingCardProps {
   credits?: string;
   popular?: boolean;
 }
-
-const PricingCard = ({ 
-  title, 
-  price, 
-  period, 
-  yearlyPrice, 
-  description, 
-  features, 
-  credits, 
-  popular = false 
+const PricingCard = ({
+  title,
+  price,
+  period,
+  yearlyPrice,
+  description,
+  features,
+  credits,
+  popular = false
 }: PricingCardProps) => {
-  return (
-    <div className={`cosmic-card p-8 flex flex-col h-full ${popular ? 'border-blue-400/30' : 'border-white/5'}`}>
+  return <div className={`cosmic-card p-8 flex flex-col h-full ${popular ? 'border-blue-400/30' : 'border-white/5'}`}>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <div className="mb-4">
         <span className="text-3xl font-bold">{price}</span>
         <span className="text-blue-100/70">/{period}</span>
-        {yearlyPrice && (
-          <div className="text-sm text-muted-foreground mt-1">
+        {yearlyPrice && <div className="text-sm text-muted-foreground mt-1">
             {yearlyPrice} billed yearly
-          </div>
-        )}
+          </div>}
       </div>
       <p className="text-blue-100/70 mb-4">{description}</p>
       
-      {credits && (
-        <div className="mb-4 p-2 bg-blue-500/10 rounded-md text-center">
+      {credits && <div className="mb-4 p-2 bg-blue-500/10 rounded-md text-center">
           <span className="text-blue-400">{credits}</span>
-        </div>
-      )}
+        </div>}
       
       <Button className={`w-full mb-6 ${popular ? 'bg-blue-500 hover:bg-blue-600' : 'bg-white/10 hover:bg-white/20'}`}>
         Start Free Trial
       </Button>
       
       <ul className="space-y-3 flex-grow">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-start">
+        {features.map((feature, index) => <li key={index} className="flex items-start">
             <Check className="h-5 w-5 text-blue-400 mr-2 flex-shrink-0 mt-0.5" />
             <span>{feature}</span>
-          </li>
-        ))}
+          </li>)}
       </ul>
-    </div>
-  );
+    </div>;
 };
-
 const CustomPricing = () => {
   const [faqOpen, setFaqOpen] = useState("item-1");
-  
   const handleFaqChange = (value: string) => {
     setFaqOpen(value);
   };
-
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
+  return <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
       <main className="flex-1">
-        <section className="py-20 px-6 relative">
+        <section className="px-6 relative py-[130px]">
           <div className="max-w-7xl mx-auto text-center mb-16">
             <h1 className="text-3xl md:text-5xl font-bold mb-4">Plans & Pricing</h1>
             <p className="text-xl text-blue-100/80">Start Your Free Trial To Get Started!</p>
           </div>
           
           <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8 mb-20">
-            <PricingCard 
-              title="Discover"
-              price="$0"
-              period="mo"
-              yearlyPrice="(then $144 billed yearly)"
-              description="7-Day Free Trial"
-              features={[
-                "Generate contents in seconds",
-                "AI-powered content generation",
-                "Multilingual support",
-                "Dedicated customer support",
-                "Access to new features"
-              ]}
-            />
+            <PricingCard title="Discover" price="$0" period="mo" yearlyPrice="(then $144 billed yearly)" description="7-Day Free Trial" features={["Generate contents in seconds", "AI-powered content generation", "Multilingual support", "Dedicated customer support", "Access to new features"]} />
             
-            <PricingCard 
-              title="Premium"
-              price="$29"
-              period="mo"
-              yearlyPrice="$348 billed yearly"
-              description="Generate 100+ pieces of content per month (on average)"
-              credits="250,000 credits"
-              features={[
-                "Better Results with GPT4",
-                "Generate contents in seconds",
-                "AI-powered content generation",
-                "Multilingual support",
-                "Dedicated customer support",
-                "Access to new features"
-              ]}
-              popular
-            />
+            <PricingCard title="Premium" price="$29" period="mo" yearlyPrice="$348 billed yearly" description="Generate 100+ pieces of content per month (on average)" credits="250,000 credits" features={["Better Results with GPT4", "Generate contents in seconds", "AI-powered content generation", "Multilingual support", "Dedicated customer support", "Access to new features"]} popular />
             
-            <PricingCard 
-              title="Pro"
-              price="$79"
-              period="mo"
-              yearlyPrice="$948 billed yearly"
-              description="Generate 400+ pieces of content per month (on average)"
-              credits="1,000,000 credits"
-              features={[
-                "Better Results with GPT4",
-                "Generate contents in seconds",
-                "AI-powered content generation",
-                "Multilingual support",
-                "Dedicated customer support",
-                "Access to new features"
-              ]}
-            />
+            <PricingCard title="Pro" price="$79" period="mo" yearlyPrice="$948 billed yearly" description="Generate 400+ pieces of content per month (on average)" credits="1,000,000 credits" features={["Better Results with GPT4", "Generate contents in seconds", "AI-powered content generation", "Multilingual support", "Dedicated customer support", "Access to new features"]} />
           </div>
           
           <div className="cosmic-card p-12 max-w-4xl mx-auto text-center mb-20">
@@ -206,8 +147,6 @@ const CustomPricing = () => {
       </main>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default CustomPricing;
