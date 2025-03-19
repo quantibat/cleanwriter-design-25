@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -97,7 +98,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
   };
 
   return (
-    <div className="w-full bg-sidebar/95 backdrop-blur-md px-2 sm:px-4 md:px-6 border-b border-sidebar-border flex items-center h-16 sticky top-0">
+    <div className="w-full bg-sidebar/95 backdrop-blur-md px-2 sm:px-4 md:px-6 border-b border-sidebar-border flex items-center h-16 sticky top-0 z-10">
       {/* Menu toggle button for mobile */}
       <Button 
         variant="ghost" 
