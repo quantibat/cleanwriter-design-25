@@ -11,7 +11,7 @@ interface TabNavigationProps {
 const TabNavigation = ({ activeTab, onTabChange }: TabNavigationProps) => {
   return (
     <div className="border-b border-white/5 bg-background/20 backdrop-blur-md">
-      <Tabs value={activeTab} onValueChange={onTabChange}>
+      <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
         <TabsList className="justify-start bg-transparent h-14 p-0 space-x-2">
           <TabsTrigger 
             value="tools" 

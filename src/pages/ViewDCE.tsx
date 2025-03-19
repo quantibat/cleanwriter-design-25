@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Users, Edit, FileText } from 'lucide-react';
@@ -31,6 +32,10 @@ const ViewDCE = () => {
     );
   }
 
+  const handleEdit = () => {
+    navigate(`/edit-dce/${id}`, { state: { project } });
+  };
+
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-background flex flex-col">
@@ -56,7 +61,7 @@ const ViewDCE = () => {
             <Button 
               variant="outline" 
               size="sm" 
-              onClick={() => navigate(`/edit-dce/${id}`, { state: { project } })}
+              onClick={handleEdit}
             >
               <Edit size={16} className="mr-2" />
               Modifier
@@ -118,7 +123,7 @@ const ViewDCE = () => {
                 <h2 className="text-xl font-semibold mb-4">Documents associés</h2>
                 <div className="text-center py-8 text-muted-foreground">
                   <p>Aucun document n'a encore été ajouté à ce dossier.</p>
-                  <Button className="mt-4" variant="outline" onClick={() => navigate(`/edit-dce/${id}`, { state: { project } })}>
+                  <Button className="mt-4" variant="outline" onClick={handleEdit}>
                     Modifier ce dossier
                   </Button>
                 </div>
@@ -130,7 +135,7 @@ const ViewDCE = () => {
               <Button variant="outline" onClick={() => navigate('/dashboard')}>
                 Retour au tableau de bord
               </Button>
-              <Button onClick={() => navigate(`/edit-dce/${id}`, { state: { project } })} className="bg-blue-500 hover:bg-blue-600">
+              <Button onClick={handleEdit} className="bg-blue-500 hover:bg-blue-600">
                 <Edit className="h-4 w-4 mr-2" />
                 Modifier ce dossier
               </Button>
