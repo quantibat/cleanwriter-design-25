@@ -13,7 +13,9 @@ const Projects = () => {
       activeTab="projects" 
       breadcrumbs={breadcrumbs}
     >
-      <ProjectsTab />
+      <div className="w-full">
+        <ProjectsTab />
+      </div>
     </DashboardLayout>
   );
 };

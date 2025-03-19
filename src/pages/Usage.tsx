@@ -36,45 +36,45 @@ const Usage = () => {
   const { user } = useAuth();
   
   return (
-    <DashboardLayout>
-      <div className="w-full max-w-5xl mx-auto">
+    <DashboardLayout activeTab="usage" breadcrumbs={[{ label: 'Utilisation' }]}>
+      <div className="w-full">
         <h1 className="text-2xl font-bold mb-6">Utilisation</h1>
         
-        <Tabs defaultValue="overview" className="mb-6">
-          <TabsList>
+        <Tabs defaultValue="overview" className="mb-6 w-full">
+          <TabsList className="w-full sm:w-auto">
             <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
             <TabsTrigger value="daily">Utilisation quotidienne</TabsTrigger>
             <TabsTrigger value="features">Par fonctionnalité</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="overview">
-            <Card className="mb-6">
+          <TabsContent value="overview" className="w-full">
+            <Card className="mb-6 w-full">
               <CardHeader>
                 <CardTitle>Utilisation globale</CardTitle>
                 <CardDescription>
                   Résumé de votre utilisation sur la période actuelle
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
+              <CardContent className="w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                  <div className="w-full">
                     <h3 className="font-medium mb-4">Limites par fonctionnalité</h3>
-                    <div className="space-y-4">
+                    <div className="space-y-4 w-full">
                       {Object.entries(FEATURE_LIMITS).map(([key, feature]) => (
-                        <div key={key}>
+                        <div key={key} className="w-full">
                           <div className="flex justify-between mb-1">
                             <span className="text-sm">{feature.label}</span>
                             <span className="text-sm font-medium">{feature.used}/{feature.max}</span>
                           </div>
-                          <Progress value={(feature.used / feature.max) * 100} className="h-2" />
+                          <Progress value={(feature.used / feature.max) * 100} className="h-2 w-full" />
                         </div>
                       ))}
                     </div>
                   </div>
                   
-                  <div>
+                  <div className="w-full">
                     <h3 className="font-medium mb-4">Tendance d'utilisation</h3>
-                    <div className="h-64">
+                    <div className="h-64 w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={mockUsageData}>
                           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
@@ -91,16 +91,16 @@ const Usage = () => {
             </Card>
           </TabsContent>
           
-          <TabsContent value="daily">
-            <Card>
+          <TabsContent value="daily" className="w-full">
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Utilisation quotidienne</CardTitle>
                 <CardDescription>
                   Analyse détaillée de votre consommation de ressources par jour
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="h-80">
+              <CardContent className="w-full">
+                <div className="h-80 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={mockUsageData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#444" />
@@ -115,18 +115,18 @@ const Usage = () => {
             </Card>
           </TabsContent>
           
-          <TabsContent value="features">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <TabsContent value="features" className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
               {Object.entries(FEATURE_LIMITS).map(([key, feature]) => (
-                <Card key={key}>
+                <Card key={key} className="w-full">
                   <CardHeader>
                     <CardTitle className="text-lg">{feature.label}</CardTitle>
                     <CardDescription>
                       {feature.used}/{feature.max} utilisés
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <Progress value={(feature.used / feature.max) * 100} className="h-2 mb-4" />
+                  <CardContent className="w-full">
+                    <Progress value={(feature.used / feature.max) * 100} className="h-2 mb-4 w-full" />
                     <p className="text-sm text-muted-foreground">
                       {feature.max - feature.used} {feature.label.toLowerCase()} restants dans votre plan actuel
                     </p>

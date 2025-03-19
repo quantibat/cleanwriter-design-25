@@ -37,12 +37,12 @@ const Billing = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="w-full max-w-4xl mx-auto">
+    <DashboardLayout activeTab="billing" breadcrumbs={[{ label: 'Facturation' }]}>
+      <div className="w-full">
         <h1 className="text-2xl font-bold mb-6">Facturation</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full">
+          <Card className="w-full">
             <CardHeader>
               <CardTitle className="text-lg">
                 <div className="flex items-center">
@@ -76,7 +76,7 @@ const Billing = () => {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <CardTitle className="text-lg">Crédits disponibles</CardTitle>
             </CardHeader>
@@ -85,7 +85,7 @@ const Billing = () => {
                 <span className="text-sm text-muted-foreground">Utilisés: {billing.usedCredits}</span>
                 <span className="text-sm font-medium">{billing.usedCredits}/{billing.credits}</span>
               </div>
-              <Progress value={(billing.usedCredits / billing.credits) * 100} className="h-2 mb-4" />
+              <Progress value={(billing.usedCredits / billing.credits) * 100} className="h-2 mb-4 w-full" />
               <div className="text-3xl font-bold mb-4">
                 {billing.credits - billing.usedCredits} crédits
               </div>
@@ -95,7 +95,7 @@ const Billing = () => {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="w-full">
             <CardHeader>
               <CardTitle className="text-lg">Méthode de paiement</CardTitle>
             </CardHeader>
@@ -123,16 +123,16 @@ const Billing = () => {
           </Card>
         </div>
         
-        <Card>
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Historique des factures</CardTitle>
             <CardDescription>Vos factures des 12 derniers mois</CardDescription>
           </CardHeader>
           <CardContent>
             {billing.invoices && billing.invoices.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-4 w-full">
                 {billing.invoices.map((invoice, i) => (
-                  <div key={i} className="flex justify-between items-center">
+                  <div key={i} className="flex justify-between items-center w-full">
                     <div>Date de facture</div>
                     <div>Montant</div>
                     <Button variant="ghost" size="sm">
@@ -142,7 +142,7 @@ const Billing = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="flex flex-col items-center justify-center py-8 text-center w-full">
                 <div className="rounded-full bg-muted w-12 h-12 flex items-center justify-center mb-4">
                   <AlertCircle className="h-6 w-6 text-muted-foreground" />
                 </div>

@@ -59,7 +59,7 @@ const Account = () => {
 
   return (
     <DashboardLayout activeTab="account" breadcrumbs={[{ label: 'Mon Compte' }]}>
-      <div className="w-full max-w-full mx-auto">
+      <div className="w-full">
         <h1 className="text-2xl font-bold mb-6">Mon Compte</h1>
         
         <Card className="mb-8 w-full">
@@ -69,7 +69,7 @@ const Account = () => {
               Gérez vos informations personnelles et votre adresse
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="w-full">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
@@ -131,7 +131,7 @@ const Account = () => {
                 />
                 
                 <div className="w-full flex justify-end">
-                  <Button type="submit">
+                  <Button type="submit" className="w-full md:w-auto">
                     Enregistrer les modifications
                   </Button>
                 </div>
@@ -147,7 +147,7 @@ const Account = () => {
               Gérez votre mot de passe et la sécurité de votre compte
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 w-full">
             <div className="w-full">
               <Label htmlFor="current-password">Mot de passe actuel</Label>
               <Input id="current-password" type="password" className="w-full" />
@@ -161,7 +161,7 @@ const Account = () => {
               <Input id="confirm-password" type="password" className="w-full" />
             </div>
             <div className="flex justify-end w-full">
-              <Button>Modifier le mot de passe</Button>
+              <Button className="w-full md:w-auto">Modifier le mot de passe</Button>
             </div>
           </CardContent>
         </Card>
