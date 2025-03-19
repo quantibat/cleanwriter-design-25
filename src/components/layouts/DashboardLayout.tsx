@@ -38,7 +38,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 <BreadcrumbList>
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                      <Link to="/dashboard" className="w-full">
+                      <Link to="/dashboard" className="flex justfiy-center align-center">
                         <Home className="h-4 w-4 mr-1" />
                         Dashboard
                       </Link>
