@@ -12,7 +12,7 @@ const TabNavigation = ({ activeTab, onTabChange }: TabNavigationProps) => {
   return (
     <div className="w-full border-b border-white/5 bg-background/20 backdrop-blur-md">
       <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-        <TabsList className="w-full justify-start bg-transparent h-14 p-0 space-x-2">
+        <TabsList className="justify-start bg-transparent h-14 p-0 space-x-2">
           <TabsTrigger 
             value="tools" 
             className="flex items-center data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:border-b-2 data-[state=active]:border-blue-400 rounded-none px-4 h-full"
