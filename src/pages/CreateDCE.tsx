@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, FolderOpen, LayoutList, PlusCircle } from 'lucide-react';
@@ -371,7 +370,7 @@ const CreateDCE = () => {
             
             <ResizablePanel defaultSize={50} minSize={30}>
               <div className="h-full p-4 overflow-auto">
-                <div className="bg-card/20 backdrop-blur-sm border border-white/5 rounded-lg p-8 shadow-lg h-full">
+                <div className="bg-card/20 backdrop-blur-sm border border-white/5 rounded-lg p-8 shadow-lg h-full overflow-auto">
                   <div className="border-b border-white/10 pb-4 mb-6">
                     <h2 className="text-lg font-medium">Prévisualisation du document</h2>
                     <p className="text-sm text-muted-foreground mt-1">
