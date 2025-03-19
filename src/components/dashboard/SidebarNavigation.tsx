@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -11,7 +12,7 @@ interface SidebarNavigationProps {
 }
 
 const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigationProps) => {
-  const { isOpen } = useSidebar();
+  const { open } = useSidebar();
   const location = useLocation();
   const { unreadCount } = useNotifications();
 
@@ -24,7 +25,7 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
       className={cn(
         "h-screen border-r border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md",
         "transition-all duration-300 ease-in-out flex flex-col",
-        isOpen ? "w-64" : "w-16"
+        open ? "w-64" : "w-16"
       )}
     >
       {/* Brand logo */}
@@ -52,7 +53,7 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
               onClick={() => handleTabChange('tools')}
             >
               <Home className="h-5 w-5" />
-              <span className={isOpen ? "ml-3" : "hidden"}>Tableau de bord</span>
+              <span className={open ? "ml-3" : "hidden"}>Tableau de bord</span>
             </Link>
           </li>
           
@@ -69,11 +70,11 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
               onClick={() => handleTabChange('notifications')}
             >
               <BellIcon className="h-5 w-5" />
-              <span className={isOpen ? "ml-3" : "hidden"}>Notifications</span>
+              <span className={open ? "ml-3" : "hidden"}>Notifications</span>
               {unreadCount > 0 && (
                 <span className={cn(
                   "absolute bg-red-500 text-white text-xs font-bold rounded-full",
-                  isOpen 
+                  open 
                     ? "right-2 top-2.5 h-5 w-5 flex items-center justify-center"
                     : "right-2 top-2 h-4 w-4 flex items-center justify-center"
                 )}>
@@ -96,7 +97,7 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
               onClick={() => handleTabChange('projects')}
             >
               <PlusCircle className="h-5 w-5" />
-              <span className={isOpen ? "ml-3" : "hidden"}>Nouveau DCE</span>
+              <span className={open ? "ml-3" : "hidden"}>Nouveau DCE</span>
             </Link>
           </li>
           <li>
@@ -112,7 +113,7 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
               onClick={() => handleTabChange('projects')}
             >
               <Briefcase className="h-5 w-5" />
-              <span className={isOpen ? "ml-3" : "hidden"}>Projets</span>
+              <span className={open ? "ml-3" : "hidden"}>Projets</span>
             </Link>
           </li>
           <li>
@@ -128,7 +129,7 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
               onClick={() => handleTabChange('contribute')}
             >
               <Gift className="h-5 w-5" />
-              <span className={isOpen ? "ml-3" : "hidden"}>Contribuer</span>
+              <span className={open ? "ml-3" : "hidden"}>Contribuer</span>
             </Link>
           </li>
           <li>
@@ -144,7 +145,7 @@ const SidebarNavigation = ({ activeTab = 'tools', onTabChange }: SidebarNavigati
               onClick={() => handleTabChange('settings')}
             >
               <Settings className="h-5 w-5" />
-              <span className={isOpen ? "ml-3" : "hidden"}>Paramètres</span>
+              <span className={open ? "ml-3" : "hidden"}>Paramètres</span>
             </Link>
           </li>
         </ul>
