@@ -31,6 +31,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       app_metadata: {
         role: 'user',
       },
+      // Ajout des propriétés manquantes pour satisfaire le type User
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+      confirmed_at: new Date().toISOString(),
+      last_sign_in_at: new Date().toISOString(),
+      role: '',
+      updated_at: new Date().toISOString(),
     } as User;
 
     const testSession = {
