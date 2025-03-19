@@ -1,6 +1,5 @@
 
 import React, { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Features from '@/components/Features';
 import Pricing from '@/components/Pricing';
@@ -60,11 +59,12 @@ const Index = () => {
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none"></div>
-      <Navbar />
-      <Hero />
-      <Features />
-      <Pricing />
-      <Footer />
+      <div className="pt-20"> {/* Added top padding to compensate for removed navbar */}
+        <Hero />
+        <Features />
+        <Pricing />
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -55,11 +54,11 @@
 
   body {
     @apply bg-background text-foreground font-inter;
+    background-color: #101834; /* New dark blue background color */
     background-image: 
-      radial-gradient(circle at 50% 0%, rgba(21, 101, 192, 0.1) 0%, transparent 70%),
-      radial-gradient(circle at 80% 20%, rgba(79, 70, 229, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 20% 60%, rgba(139, 92, 246, 0.1) 0%, transparent 60%);
-    background-color: hsl(230 30% 8%);
+      radial-gradient(circle at 50% 0%, rgba(21, 101, 192, 0.05) 0%, transparent 70%),
+      radial-gradient(circle at 80% 20%, rgba(79, 70, 229, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 20% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 60%);
   }
 }
 
