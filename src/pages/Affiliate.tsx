@@ -15,7 +15,7 @@ const Affiliate = () => {
       <main className="flex-1">
         <section className="px-6 relative text-center py-[130px]">
           <div className="max-w-5xl mx-auto relative z-10">
-            <h1 className="text-3xl md:text-5xl font-bold mb-6">
+            <h1 className="text-3xl font-bold mb-6 md:text-4xl">
               Recevez jusqu'à <span className="text-blue-400">2 000 $</span> par mois grâce au marché à la croissance la plus rapide au monde
             </h1>
             
@@ -26,7 +26,7 @@ const Affiliate = () => {
             </div>
             
             <div className="mb-16">
-              <h2 className="text-2xl md:text-3xl font-bold mb-10">
+              <h2 className="text-2xl font-bold mb-10 md:text-2xl">
                 Pourquoi est-ce le meilleur moment pour promouvoir DCEManager ?
               </h2>
               
@@ -103,17 +103,11 @@ const Affiliate = () => {
             
             <div className="mb-16">
               <div className="flex items-center justify-center mb-6">
-                <div className="bg-blue-400/20 p-3 rounded-lg">
-                  <Check className="h-6 w-6 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-semibold ml-3">
-                  Oh, et j'ai presque oublié, nous avons préparé 3 vidéos de formation et des tonnes de ressources pour vous aider à promouvoir DCEManager !
-                </h3>
+                
+                
               </div>
               
-              <Button variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400/20">
-                Obtenir des ressources d'affiliation maintenant !
-              </Button>
+              
             </div>
           </div>
         </section>
