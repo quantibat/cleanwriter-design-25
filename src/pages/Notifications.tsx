@@ -87,7 +87,7 @@ const Notifications = () => {
       activeTab="notifications" 
       breadcrumbs={[{ label: 'Notifications' }]}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Centre de notifications</h1>
           <div className="flex gap-2">
@@ -114,16 +114,16 @@ const Notifications = () => {
           </div>
         </div>
         
-        <Tabs defaultValue="all" onValueChange={(v) => setActiveTab(v as "all" | "settings")}>
+        <Tabs defaultValue="all" onValueChange={(v) => setActiveTab(v as "all" | "settings")} className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-2">
             <TabsTrigger value="all">Notifications</TabsTrigger>
             <TabsTrigger value="settings">Paramètres</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="all" className="py-4">
-            <Card>
+          <TabsContent value="all" className="py-4 w-full">
+            <Card className="w-full">
               <CardHeader>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center flex-wrap gap-4">
                   <CardTitle>Vos notifications</CardTitle>
                   <ToggleGroup 
                     type="single" 
@@ -225,8 +225,8 @@ const Notifications = () => {
             </Card>
           </TabsContent>
           
-          <TabsContent value="settings" className="py-4">
-            <Card>
+          <TabsContent value="settings" className="py-4 w-full">
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Paramètres de notifications</CardTitle>
                 <CardDescription>
