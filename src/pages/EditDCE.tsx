@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, FolderOpen, LayoutList, Save } from 'lucide-react';
@@ -131,7 +130,7 @@ const EditDCE = () => {
       </header>
       
       {/* Main content */}
-      <main className="flex-1 py-8 px-6 md:px-10">
+      <main className="flex-1 py-8 px-6 md:px-10 space-y-6">
         <div className="max-w-7xl mx-auto">
           <ResizablePanelGroup
             direction="horizontal"
@@ -139,282 +138,280 @@ const EditDCE = () => {
           >
             {/* Panneau du formulaire (gauche) */}
             <ResizablePanel defaultSize={60} minSize={40}>
-              <div className="h-full p-4 overflow-auto">
+              <div className="h-full p-4 overflow-auto border border-white/20 rounded-lg">
                 {/* Formulaire */}
-                <div className="bg-card/20 backdrop-blur-sm border border-white/5 rounded-lg p-8 shadow-lg">
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      {/* Section informations du document */}
-                      <div className="space-y-6">
-                        <div className="border-b border-white/10 pb-4">
-                          <h2 className="text-lg font-medium">Informations du document</h2>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Modifiez les informations de base du document technique
-                          </p>
-                        </div>
-                        
-                        <FormField
-                          control={form.control}
-                          name="title"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Nom du document</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="Ex: Cahier des charges techniques - Lot 01" 
-                                  {...field} 
-                                  className="bg-card/30"
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="sourceMaterials"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Liens ou fichiers sources</FormLabel>
-                              <FormControl>
-                                <div className="space-y-2">
-                                  <Textarea 
-                                    placeholder="Liens vers documents ou ressources existants (un par ligne)" 
-                                    className="bg-card/30 min-h-[80px]" 
-                                    {...field}
-                                  />
-                                  <div className="flex gap-2">
-                                    <Button 
-                                      type="button" 
-                                      variant="outline" 
-                                      size="sm" 
-                                      className="text-xs"
-                                      onClick={() => toast({
-                                        title: "Fonctionnalité à venir",
-                                        description: "L'import de fichiers sera disponible prochainement",
-                                      })}
-                                    >
-                                      <Upload size={14} className="mr-1" />
-                                      Importer un fichier
-                                    </Button>
-                                    <Button 
-                                      type="button" 
-                                      variant="outline" 
-                                      size="sm" 
-                                      className="text-xs"
-                                      onClick={() => toast({
-                                        title: "Fonctionnalité à venir",
-                                        description: "L'ajout de liens externes sera disponible prochainement",
-                                      })}
-                                    >
-                                      <LinkIcon size={14} className="mr-1" />
-                                      Ajouter un lien
-                                    </Button>
-                                  </div>
-                                </div>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    {/* Section informations du document */}
+                    <div className="space-y-6">
+                      <div className="border-b border-white/10 pb-4">
+                        <h2 className="text-lg font-medium">Informations du document</h2>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Modifiez les informations de base du document technique
+                        </p>
                       </div>
                       
-                      {/* Section catégorisation */}
-                      <div className="space-y-6 pt-4">
-                        <div className="border-b border-white/10 pb-4">
-                          <h2 className="text-lg font-medium">Catégorisation</h2>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Classez votre document pour une meilleure organisation
-                          </p>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <FormField
-                            control={form.control}
-                            name="category"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Catégorie</FormLabel>
-                                <FormControl>
-                                  <Select 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                  >
-                                    <SelectTrigger className="bg-card/30">
-                                      <SelectValue placeholder="Sélectionner une catégorie" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="technique">Document technique</SelectItem>
-                                      <SelectItem value="administratif">Document administratif</SelectItem>
-                                      <SelectItem value="planning">Planning et délais</SelectItem>
-                                      <SelectItem value="financier">Document financier</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <FormField
-                            control={form.control}
-                            name="subcategory"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Sous-catégorie</FormLabel>
-                                <FormControl>
-                                  <Select 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                    disabled={!watchedValues.category}
-                                  >
-                                    <SelectTrigger className="bg-card/30">
-                                      <SelectValue placeholder={watchedValues.category ? "Sélectionner une sous-catégorie" : "Choisissez d'abord une catégorie"} />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {subcategoryOptions.map((option) => (
-                                        <SelectItem key={option} value={option}>{option}</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </div>
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nom du document</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="Ex: Cahier des charges techniques - Lot 01" 
+                                {...field} 
+                                className="bg-card/30"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
                       
-                      {/* Section format et options */}
-                      <div className="space-y-6 pt-4">
-                        <div className="border-b border-white/10 pb-4">
-                          <h2 className="text-lg font-medium">Format et options</h2>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Définissez le format et les options du document
-                          </p>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <FormField
-                            control={form.control}
-                            name="language"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Langue du document</FormLabel>
-                                <FormControl>
-                                  <Select 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                  >
-                                    <SelectTrigger className="bg-card/30">
-                                      <SelectValue placeholder="Sélectionner une langue" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="french">Français</SelectItem>
-                                      <SelectItem value="english">Anglais</SelectItem>
-                                      <SelectItem value="german">Allemand</SelectItem>
-                                      <SelectItem value="spanish">Espagnol</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <FormField
-                            control={form.control}
-                            name="format"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Format du document</FormLabel>
-                                <FormControl>
-                                  <Select 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                  >
-                                    <SelectTrigger className="bg-card/30">
-                                      <SelectValue placeholder="Sélectionner un format" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="pdf">PDF</SelectItem>
-                                      <SelectItem value="docx">Microsoft Word (.docx)</SelectItem>
-                                      <SelectItem value="xlsx">Microsoft Excel (.xlsx)</SelectItem>
-                                      <SelectItem value="md">Markdown (.md)</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        
-                        <FormField
-                          control={form.control}
-                          name="additionalNotes"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Description détaillée</FormLabel>
-                              <FormDescription>
-                                Modifiez la description détaillée de ce dossier
-                              </FormDescription>
-                              <FormControl>
+                      <FormField
+                        control={form.control}
+                        name="sourceMaterials"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Liens ou fichiers sources</FormLabel>
+                            <FormControl>
+                              <div className="space-y-2">
                                 <Textarea 
-                                  placeholder="Informations détaillées sur ce dossier" 
-                                  className="bg-card/30 min-h-[120px]" 
+                                  placeholder="Liens vers documents ou ressources existants (un par ligne)" 
+                                  className="bg-card/30 min-h-[80px]" 
                                   {...field}
                                 />
+                                <div className="flex gap-2">
+                                  <Button 
+                                    type="button" 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="text-xs"
+                                    onClick={() => toast({
+                                      title: "Fonctionnalité à venir",
+                                      description: "L'import de fichiers sera disponible prochainement",
+                                    })}
+                                  >
+                                    <Upload size={14} className="mr-1" />
+                                    Importer un fichier
+                                  </Button>
+                                  <Button 
+                                    type="button" 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="text-xs"
+                                    onClick={() => toast({
+                                      title: "Fonctionnalité à venir",
+                                      description: "L'ajout de liens externes sera disponible prochainement",
+                                    })}
+                                  >
+                                    <LinkIcon size={14} className="mr-1" />
+                                    Ajouter un lien
+                                  </Button>
+                                </div>
+                              </div>
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    
+                    {/* Section catégorisation */}
+                    <div className="space-y-6 pt-4">
+                      <div className="border-b border-white/10 pb-4">
+                        <h2 className="text-lg font-medium">Catégorisation</h2>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Classez votre document pour une meilleure organisation
+                        </p>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="category"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Catégorie</FormLabel>
+                              <FormControl>
+                                <Select 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="bg-card/30">
+                                    <SelectValue placeholder="Sélectionner une catégorie" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="technique">Document technique</SelectItem>
+                                    <SelectItem value="administratif">Document administratif</SelectItem>
+                                    <SelectItem value="planning">Planning et délais</SelectItem>
+                                    <SelectItem value="financier">Document financier</SelectItem>
+                                  </SelectContent>
+                                </Select>
                               </FormControl>
                             </FormItem>
                           )}
                         />
                         
-                        <div className="pt-4">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="w-full mb-4 border-blue-400/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
-                            onClick={generateWithAI}
-                            disabled={generatingDocument}
-                          >
-                            {generatingDocument ? (
-                              <>Génération en cours...</>
-                            ) : (
-                              <>
-                                <Sparkles size={16} className="mr-2" />
-                                Générer avec IA
-                              </>
-                            )}
-                          </Button>
-                        </div>
+                        <FormField
+                          control={form.control}
+                          name="subcategory"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Sous-catégorie</FormLabel>
+                              <FormControl>
+                                <Select 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                  disabled={!watchedValues.category}
+                                >
+                                  <SelectTrigger className="bg-card/30">
+                                    <SelectValue placeholder={watchedValues.category ? "Sélectionner une sous-catégorie" : "Choisissez d'abord une catégorie"} />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {subcategoryOptions.map((option) => (
+                                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Section format et options */}
+                    <div className="space-y-6 pt-4">
+                      <div className="border-b border-white/10 pb-4">
+                        <h2 className="text-lg font-medium">Format et options</h2>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Définissez le format et les options du document
+                        </p>
                       </div>
                       
-                      {/* Actions */}
-                      <div className="pt-6 space-y-4">
-                        <Button 
-                          type="submit" 
-                          className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-                          disabled={isLoading}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="language"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Langue du document</FormLabel>
+                              <FormControl>
+                                <Select 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="bg-card/30">
+                                    <SelectValue placeholder="Sélectionner une langue" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="french">Français</SelectItem>
+                                    <SelectItem value="english">Anglais</SelectItem>
+                                    <SelectItem value="german">Allemand</SelectItem>
+                                    <SelectItem value="spanish">Espagnol</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="format"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Format du document</FormLabel>
+                              <FormControl>
+                                <Select 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="bg-card/30">
+                                    <SelectValue placeholder="Sélectionner un format" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="pdf">PDF</SelectItem>
+                                    <SelectItem value="docx">Microsoft Word (.docx)</SelectItem>
+                                    <SelectItem value="xlsx">Microsoft Excel (.xlsx)</SelectItem>
+                                    <SelectItem value="md">Markdown (.md)</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="additionalNotes"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Description détaillée</FormLabel>
+                            <FormDescription>
+                              Modifiez la description détaillée de ce dossier
+                            </FormDescription>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="Informations détaillées sur ce dossier" 
+                                className="bg-card/30 min-h-[120px]" 
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="pt-4">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full mb-4 border-blue-400/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
+                          onClick={generateWithAI}
+                          disabled={generatingDocument}
                         >
-                          {isLoading ? (
-                            <>Enregistrement en cours...</>
+                          {generatingDocument ? (
+                            <>Génération en cours...</>
                           ) : (
                             <>
-                              <Save size={16} className="mr-2" />
-                              Enregistrer les modifications
+                              <Sparkles size={16} className="mr-2" />
+                              Générer avec IA
                             </>
                           )}
                         </Button>
-                        
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          className="w-full" 
-                          onClick={() => navigate('/dashboard')}
-                          disabled={isLoading}
-                        >
-                          Annuler
-                        </Button>
                       </div>
-                    </form>
-                  </Form>
-                </div>
+                    </div>
+                    
+                    {/* Actions */}
+                    <div className="pt-6 space-y-4">
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <>Enregistrement en cours...</>
+                        ) : (
+                          <>
+                            <Save size={16} className="mr-2" />
+                            Enregistrer les modifications
+                          </>
+                        )}
+                      </Button>
+                      
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className="w-full" 
+                        onClick={() => navigate('/dashboard')}
+                        disabled={isLoading}
+                      >
+                        Annuler
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
               </div>
             </ResizablePanel>
             
@@ -423,8 +420,8 @@ const EditDCE = () => {
             
             {/* Panneau de prévisualisation (droite) */}
             <ResizablePanel defaultSize={40} minSize={30}>
-              <div className="h-full p-4 overflow-auto">
-                <div className="bg-card/20 backdrop-blur-sm border border-white/5 rounded-lg p-8 shadow-lg h-full">
+              <div className="h-full p-4 overflow-auto border border-white/20 rounded-lg">
+                <div className="bg-card/20 backdrop-blur-sm rounded-lg p-8 shadow-lg h-full">
                   <div className="border-b border-white/10 pb-4 mb-6">
                     <h2 className="text-lg font-medium">Prévisualisation du document</h2>
                     <p className="text-sm text-muted-foreground mt-1">
