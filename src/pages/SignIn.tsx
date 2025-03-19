@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { supabase } from '../integrations/supabase/client';
@@ -12,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+
 const formSchema = z.object({
   email: z.string().email({
     message: "Adresse e-mail invalide."
@@ -20,12 +22,12 @@ const formSchema = z.object({
     message: "Le mot de passe doit contenir au moins 6 caractères."
   })
 });
+
 const SignIn = () => {
-  const {
-    user
-  } = useAuth();
+  const { user, signInWithTestAccount } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
   useEffect(() => {
     if (user) {
       const origin = location.state?.from?.pathname || '/dashboard';
@@ -34,11 +36,11 @@ const SignIn = () => {
       });
     }
   }, [user, navigate, location]);
-  const {
-    toast
-  } = useToast();
+
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDemoLoading, setIsDemoLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,8 +48,19 @@ const SignIn = () => {
       password: ""
     }
   });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+    
+    // Vérifier si c'est le compte test
+    if (values.email === "test@exemple.com" && values.password === "Test1234!") {
+      // Si c'est le compte test, utiliser la fonction spéciale
+      signInWithTestAccount();
+      setIsLoading(false);
+      navigate('/dashboard');
+      return;
+    }
+    
     try {
       const {
         data,
@@ -73,35 +86,25 @@ const SignIn = () => {
       setIsLoading(false);
     }
   }
+
   async function loginWithDemoAccount() {
     setIsDemoLoading(true);
-    try {
-      const {
-        data,
-        error
-      } = await supabase.auth.signInWithPassword({
-        email: "test@exemple.com",
-        password: "Test1234!"
-      });
-      if (error) {
-        throw error;
-      }
-      toast({
-        title: "Connexion démo réussie",
-        description: "Vous êtes connecté avec le compte de démonstration."
-      });
+    
+    // Remplir automatiquement le formulaire
+    form.setValue("email", "test@exemple.com");
+    form.setValue("password", "Test1234!");
+    
+    // Utiliser le compte de test
+    signInWithTestAccount();
+    
+    setTimeout(() => {
       navigate('/dashboard');
-    } catch (error: any) {
-      toast({
-        title: "Erreur de connexion démo",
-        description: error.message || "Une erreur est survenue avec le compte de démonstration.",
-        variant: "destructive"
-      });
-    } finally {
       setIsDemoLoading(false);
-    }
+    }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
   }
-  return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
+
+  return (
+    <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
         {/* Les particules d'arrière-plan seront ajoutés ici avec du CSS */}
       </div>
@@ -119,7 +122,12 @@ const SignIn = () => {
         <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur AIWriter</h1>
           
-          <Button variant="outline" className="w-full mb-4 bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center" onClick={loginWithDemoAccount} disabled={isDemoLoading}>
+          <Button 
+            variant="outline" 
+            className="w-full mb-4 bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center" 
+            onClick={loginWithDemoAccount} 
+            disabled={isDemoLoading}
+          >
             <Zap className="w-5 h-5 mr-2" />
             {isDemoLoading ? "Connexion en cours..." : "Connexion rapide (Compte test)"}
           </Button>
@@ -147,9 +155,11 @@ const SignIn = () => {
           
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField control={form.control} name="email" render={({
-              field
-            }) => <FormItem>
+              <FormField 
+                control={form.control} 
+                name="email" 
+                render={({ field }) => (
+                  <FormItem>
                     <FormLabel className="text-white/70">Email</FormLabel>
                     <FormControl>
                       <div className="relative form-input-animated">
@@ -158,11 +168,15 @@ const SignIn = () => {
                       </div>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>} />
+                  </FormItem>
+                )} 
+              />
               
-              <FormField control={form.control} name="password" render={({
-              field
-            }) => <FormItem>
+              <FormField 
+                control={form.control} 
+                name="password" 
+                render={({ field }) => (
+                  <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel className="text-white/70">Mot de passe</FormLabel>
                       <Link to="/forgot-password" className="text-xs text-blue-400 hover:underline">
@@ -175,7 +189,9 @@ const SignIn = () => {
                       </div>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>} />
+                  </FormItem>
+                )} 
+              />
               
               <Button type="submit" className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" disabled={isLoading}>
                 {isLoading ? "Connexion en cours..." : "Se connecter"} 
@@ -193,6 +209,8 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default SignIn;

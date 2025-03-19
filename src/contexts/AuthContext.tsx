@@ -9,6 +9,7 @@ type AuthContextType = {
   session: Session | null;
   isLoading: boolean;
   signOut: () => Promise<void>;
+  signInWithTestAccount: () => void; // Nouvelle méthode pour le compte test
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +18,56 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Fonction pour connexion avec compte test
+  const signInWithTestAccount = () => {
+    // Créer un faux utilisateur et une fausse session
+    const testUser = {
+      id: 'test-user-id',
+      email: 'test@exemple.com',
+      user_metadata: {
+        full_name: 'Utilisateur Test',
+      },
+      app_metadata: {
+        role: 'user',
+      },
+    } as User;
+
+    const testSession = {
+      access_token: 'fake-token',
+      refresh_token: 'fake-refresh-token',
+      expires_in: 3600,
+      user: testUser,
+    } as Session;
+
+    // Mettre à jour l'état
+    setUser(testUser);
+    setSession(testSession);
+    setIsLoading(false);
+
+    // Afficher une notification
+    toast({
+      title: "Connexion test réussie",
+      description: "Vous êtes connecté avec le compte de démonstration",
+      variant: "default",
+    });
+
+    // Notification dans le contexte de notification
+    setTimeout(() => {
+      try {
+        const notificationContext = window._getNotificationContext?.();
+        if (notificationContext?.addNotification) {
+          notificationContext.addNotification({
+            title: "Connexion test réussie",
+            message: "Bienvenue sur la démo!",
+            type: "auth",
+          });
+        }
+      } catch (e) {
+        console.error("Impossible d'accéder au contexte de notification:", e);
+      }
+    }, 500);
+  };
 
   useEffect(() => {
     // Get initial session
@@ -98,7 +149,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, signOut }}>
+    <AuthContext.Provider value={{ user, session, isLoading, signOut, signInWithTestAccount }}>
       {children}
     </AuthContext.Provider>
   );
