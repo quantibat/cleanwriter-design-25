@@ -48,11 +48,22 @@ const SidebarNavigation = ({
           </li>
           
           <li>
-            
+            <Link to="/notifications" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/notifications' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
+              <BellIcon className="h-5 w-5" />
+              <span className={open ? "ml-3" : "hidden"}>Notifications</span>
+              {unreadCount > 0 && (
+                <span className="ml-auto bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
+            </Link>
           </li>
           
           <li>
-            
+            <Link to="/create-dce" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/create-dce' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
+              <PlusCircle className="h-5 w-5" />
+              <span className={open ? "ml-3" : "hidden"}>Créer un DCE</span>
+            </Link>
           </li>
           <li>
             <Link to="/projects" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>

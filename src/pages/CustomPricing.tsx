@@ -7,6 +7,17 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Link } from "react-router-dom";
 
+interface PricingCardProps {
+  title: string;
+  price: string;
+  period: string;
+  yearlyPrice?: string;
+  description: string;
+  features: string[];
+  credits?: string;
+  popular?: boolean;
+}
+
 const PricingCard = ({ 
   title, 
   price, 
@@ -16,7 +27,7 @@ const PricingCard = ({
   features, 
   credits, 
   popular = false 
-}) => {
+}: PricingCardProps) => {
   return (
     <div className={`cosmic-card p-8 flex flex-col h-full ${popular ? 'border-blue-400/30' : 'border-white/5'}`}>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
@@ -56,7 +67,7 @@ const PricingCard = ({
 const CustomPricing = () => {
   const [faqOpen, setFaqOpen] = useState("item-1");
   
-  const handleFaqChange = (value) => {
+  const handleFaqChange = (value: string) => {
     setFaqOpen(value);
   };
 
