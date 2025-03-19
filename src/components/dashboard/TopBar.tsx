@@ -39,17 +39,49 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
 
   const handleThemeChange = () => {
     if (isDarkMode) {
-      // Apply light theme
+      // Apply light theme - make everything white
       document.documentElement.classList.add('light-theme');
       document.documentElement.classList.remove('dark-theme');
+      
+      // Set white background and black text for the entire application
       document.documentElement.style.setProperty('--background', '#FFFFFF');
       document.documentElement.style.setProperty('--foreground', '#000000');
+      document.documentElement.style.setProperty('--card', '#FFFFFF');
+      document.documentElement.style.setProperty('--card-foreground', '#000000');
+      document.documentElement.style.setProperty('--popover', '#FFFFFF');
+      document.documentElement.style.setProperty('--popover-foreground', '#000000');
+      document.documentElement.style.setProperty('--sidebar-background', '#FFFFFF');
+      document.documentElement.style.setProperty('--sidebar-foreground', '#000000');
+      document.documentElement.style.setProperty('--muted', '#F9FAFB');
+      document.documentElement.style.setProperty('--muted-foreground', '#71717A');
+      document.documentElement.style.setProperty('--accent', '#F9FAFB');
+      document.documentElement.style.setProperty('--accent-foreground', '#000000');
+      document.documentElement.style.setProperty('--sidebar-accent', '#F9FAFB');
+      document.documentElement.style.setProperty('--sidebar-accent-foreground', '#000000');
+      document.documentElement.style.setProperty('--border', '#E4E4E7');
+      document.documentElement.style.setProperty('--sidebar-border', '#E4E4E7');
     } else {
       // Maintain dark theme (current theme)
       document.documentElement.classList.add('dark-theme');
       document.documentElement.classList.remove('light-theme');
+      
+      // Reset to default dark theme values
       document.documentElement.style.removeProperty('--background');
       document.documentElement.style.removeProperty('--foreground');
+      document.documentElement.style.removeProperty('--card');
+      document.documentElement.style.removeProperty('--card-foreground');
+      document.documentElement.style.removeProperty('--popover');
+      document.documentElement.style.removeProperty('--popover-foreground');
+      document.documentElement.style.removeProperty('--sidebar-background');
+      document.documentElement.style.removeProperty('--sidebar-foreground');
+      document.documentElement.style.removeProperty('--muted');
+      document.documentElement.style.removeProperty('--muted-foreground');
+      document.documentElement.style.removeProperty('--accent');
+      document.documentElement.style.removeProperty('--accent-foreground');
+      document.documentElement.style.removeProperty('--sidebar-accent');
+      document.documentElement.style.removeProperty('--sidebar-accent-foreground');
+      document.documentElement.style.removeProperty('--border');
+      document.documentElement.style.removeProperty('--sidebar-border');
     }
     
     onThemeToggle();
