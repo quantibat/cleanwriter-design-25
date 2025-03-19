@@ -58,11 +58,11 @@ const Account = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="w-full max-w-4xl mx-auto">
+    <DashboardLayout activeTab="account" breadcrumbs={[{ label: 'Mon Compte' }]}>
+      <div className="w-full max-w-full mx-auto">
         <h1 className="text-2xl font-bold mb-6">Mon Compte</h1>
         
-        <Card className="mb-8">
+        <Card className="mb-8 w-full">
           <CardHeader>
             <CardTitle>Informations personnelles</CardTitle>
             <CardDescription>
@@ -71,16 +71,16 @@ const Account = () => {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                   <FormField
                     control={form.control}
                     name="firstName"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="w-full">
                         <FormLabel>Prénom</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="w-full" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -91,10 +91,10 @@ const Account = () => {
                     control={form.control}
                     name="lastName"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="w-full">
                         <FormLabel>Nom</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="w-full" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -106,10 +106,10 @@ const Account = () => {
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="w-full">
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="w-full" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -120,25 +120,27 @@ const Account = () => {
                   control={form.control}
                   name="address"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="w-full">
                       <FormLabel>Adresse</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="w-full" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 
-                <Button type="submit" className="w-full md:w-auto">
-                  Enregistrer les modifications
-                </Button>
+                <div className="w-full flex justify-end">
+                  <Button type="submit">
+                    Enregistrer les modifications
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Sécurité</CardTitle>
             <CardDescription>
@@ -146,19 +148,21 @@ const Account = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
+            <div className="w-full">
               <Label htmlFor="current-password">Mot de passe actuel</Label>
-              <Input id="current-password" type="password" />
+              <Input id="current-password" type="password" className="w-full" />
             </div>
-            <div>
+            <div className="w-full">
               <Label htmlFor="new-password">Nouveau mot de passe</Label>
-              <Input id="new-password" type="password" />
+              <Input id="new-password" type="password" className="w-full" />
             </div>
-            <div>
+            <div className="w-full">
               <Label htmlFor="confirm-password">Confirmer le mot de passe</Label>
-              <Input id="confirm-password" type="password" />
+              <Input id="confirm-password" type="password" className="w-full" />
             </div>
-            <Button>Modifier le mot de passe</Button>
+            <div className="flex justify-end w-full">
+              <Button>Modifier le mot de passe</Button>
+            </div>
           </CardContent>
         </Card>
       </div>
