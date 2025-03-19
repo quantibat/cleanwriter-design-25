@@ -30,6 +30,24 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
     navigate('/');
   };
 
+  const handleThemeChange = () => {
+    if (isDarkMode) {
+      // Apply light theme
+      document.documentElement.classList.add('light-theme');
+      document.documentElement.classList.remove('dark-theme');
+      document.documentElement.style.setProperty('--background', '#FFFFFF');
+      document.documentElement.style.setProperty('--foreground', '#000000');
+    } else {
+      // Maintain dark theme (current theme)
+      document.documentElement.classList.add('dark-theme');
+      document.documentElement.classList.remove('light-theme');
+      document.documentElement.style.removeProperty('--background');
+      document.documentElement.style.removeProperty('--foreground');
+    }
+    
+    onThemeToggle();
+  };
+
   return (
     <div className="w-full bg-sidebar/95 backdrop-blur-md px-2 sm:px-4 md:px-6 border-b border-sidebar-border flex items-center h-16 sticky top-0">
       {/* Menu toggle button for mobile */}
@@ -73,7 +91,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
           <Sun className="h-4 w-4 text-muted-foreground" />
           <Switch 
             checked={isDarkMode}
-            onCheckedChange={onThemeToggle}
+            onCheckedChange={handleThemeChange}
           />
           <Moon className="h-4 w-4 text-muted-foreground" />
         </div>
