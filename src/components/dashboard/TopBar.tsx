@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,11 +38,11 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
 
   const handleThemeChange = () => {
     if (isDarkMode) {
-      // Apply light theme - make everything white
+      // Apply light theme - make everything white (without transparency)
       document.documentElement.classList.add('light-theme');
       document.documentElement.classList.remove('dark-theme');
       
-      // Set white background and black text for the entire application
+      // Set pure white background (no transparency) and black text for the entire application
       document.documentElement.style.setProperty('--background', '#FFFFFF');
       document.documentElement.style.setProperty('--foreground', '#000000');
       document.documentElement.style.setProperty('--card', '#FFFFFF');
@@ -60,6 +59,10 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
       document.documentElement.style.setProperty('--sidebar-accent-foreground', '#000000');
       document.documentElement.style.setProperty('--border', '#E4E4E7');
       document.documentElement.style.setProperty('--sidebar-border', '#E4E4E7');
+      
+      // Remove background image and transparency effects
+      document.body.style.backgroundImage = 'none';
+      document.body.style.backgroundColor = '#FFFFFF';
     } else {
       // Maintain dark theme (current theme)
       document.documentElement.classList.add('dark-theme');
