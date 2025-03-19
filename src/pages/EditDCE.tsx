@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { ArrowLeft, Save, Sparkles, Download } from "lucide-react";
+import { ArrowLeft, Save, Sparkles, Download, FileSpreadsheet, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const EditDCE = () => {
   const navigate = useNavigate();
@@ -113,19 +114,78 @@ const EditDCE = () => {
     }
   };
 
-  const exportToPDF = () => {
+  const exportToExcel = () => {
     toast({
       title: "Export en cours",
-      description: "Votre DCE est en cours d'exportation au format PDF.",
+      description: "Votre DCE est en cours d'exportation au format Excel.",
     });
 
-    // Simulation de l'export
+    // Simulation de l'export - création d'un faux fichier à télécharger
     setTimeout(() => {
+      // Création d'un blob qui simule un fichier Excel
+      const data = JSON.stringify(formData, null, 2);
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      
+      // Création d'un lien de téléchargement et déclenchement du clic
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `DCE_${formData.title.replace(/\s+/g, '_')}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
       toast({
         title: "Export terminé",
-        description: "Votre DCE a été exporté avec succès.",
+        description: "Votre DCE a été exporté en Excel avec succès.",
       });
-    }, 2000);
+    }, 1000);
+  };
+
+  const exportToWord = () => {
+    toast({
+      title: "Export en cours",
+      description: "Votre DCE est en cours d'exportation au format Word.",
+    });
+
+    // Simulation de l'export - création d'un faux fichier à télécharger
+    setTimeout(() => {
+      // Création d'un contenu HTML formaté pour Word
+      let content = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+        <head>
+          <meta charset="utf-8">
+          <title>DCE ${formData.title}</title>
+        </head>
+        <body>
+          <h1>${formData.title}</h1>
+          <p><strong>Description:</strong> ${formData.description}</p>
+          <p><strong>Date:</strong> ${formData.date}</p>
+          <p><strong>Progression:</strong> ${formData.progress}%</p>
+          <p><strong>Collaborateurs:</strong> ${formData.collaborators}</p>
+          <h2>Détails</h2>
+          <p>${formData.details.replace(/\n/g, '<br>')}</p>
+        </body>
+        </html>
+      `;
+      
+      // Création d'un blob qui simule un fichier Word
+      const blob = new Blob([content], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      
+      // Création d'un lien de téléchargement et déclenchement du clic
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `DCE_${formData.title.replace(/\s+/g, '_')}.doc`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      toast({
+        title: "Export terminé",
+        description: "Votre DCE a été exporté en Word avec succès.",
+      });
+    }, 1000);
   };
   
   return (
@@ -160,15 +220,26 @@ const EditDCE = () => {
                 <Sparkles size={16} className="text-yellow-400" />
                 Enrichir avec IA
               </Button>
-              <Button 
-                variant="outline"
-                size="sm" 
-                className="gap-1"
-                onClick={exportToPDF}
-              >
-                <Download size={16} />
-                Exporter
-              </Button>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-1">
+                    <Download size={16} />
+                    Exporter
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={exportToExcel}>
+                    <FileSpreadsheet className="mr-2 h-4 w-4" />
+                    <span>Exporter en Excel</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={exportToWord}>
+                    <FileText className="mr-2 h-4 w-4" />
+                    <span>Exporter en Word</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
               <Button 
                 className="gap-1 bg-blue-500 hover:bg-blue-600"
                 size="sm" 
