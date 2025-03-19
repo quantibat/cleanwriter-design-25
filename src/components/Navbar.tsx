@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut } from "lucide-react";
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,6 +10,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
@@ -59,10 +61,35 @@ const Navbar = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  <div className="p-2 text-sm">
+                    <p className="font-medium">{user.user_metadata?.full_name || user.email}</p>
+                    <p className="text-muted-foreground">{user.email}</p>
+                  </div>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/dashboard">Tableau de bord</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/account" className="cursor-pointer flex items-center w-full">
+                      <User className="h-4 w-4 mr-2" />
+                      Mon compte
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/billing" className="cursor-pointer flex items-center w-full">
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      Facturation
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/help" className="cursor-pointer flex items-center w-full">
+                      <HelpCircle className="h-4 w-4 mr-2" />
+                      Aide
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => signOut()}>
+                    <LogOut className="h-4 w-4 mr-2" />
                     Déconnexion
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -113,10 +140,23 @@ const Navbar = () => {
                 <Link to="/dashboard" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
                   Tableau de bord
                 </Link>
+                <Link to="/account" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
+                  <User className="h-4 w-4 mr-2" />
+                  Mon compte
+                </Link>
+                <Link to="/billing" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Facturation
+                </Link>
+                <Link to="/help" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  Aide
+                </Link>
                 <button 
                   onClick={() => signOut()} 
-                  className="py-2 text-base font-medium transition-colors hover:text-blue-400 text-left"
+                  className="py-2 text-base font-medium transition-colors hover:text-blue-400 text-left flex items-center"
                 >
+                  <LogOut className="h-4 w-4 mr-2" />
                   Déconnexion
                 </button>
               </>

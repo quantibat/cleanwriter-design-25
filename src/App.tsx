@@ -19,6 +19,10 @@ import CreateDCE from "./pages/CreateDCE";
 import EditDCE from "./pages/EditDCE";
 import ViewDCE from "./pages/ViewDCE";
 import NotFound from "./pages/NotFound";
+import Account from "./pages/Account";
+import Billing from "./pages/Billing";
+import Usage from "./pages/Usage";
+import Help from "./pages/Help";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +70,26 @@ const App = () => (
               <Route path="/view-dce/:id" element={
                 <AuthGuard>
                   <ViewDCE />
+                </AuthGuard>
+              } />
+              <Route path="/account" element={
+                <AuthGuard>
+                  <Account />
+                </AuthGuard>
+              } />
+              <Route path="/billing" element={
+                <AuthGuard>
+                  <Billing />
+                </AuthGuard>
+              } />
+              <Route path="/usage" element={
+                <AuthGuard>
+                  <Usage />
+                </AuthGuard>
+              } />
+              <Route path="/help" element={
+                <AuthGuard>
+                  <Help />
                 </AuthGuard>
               } />
               

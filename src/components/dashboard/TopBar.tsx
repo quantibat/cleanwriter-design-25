@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Sun, Moon, Search, LogOut, Menu, Globe, User, CreditCard, Settings } from "lucide-react";
+import { Sun, Moon, Search, LogOut, Menu, Globe, User, CreditCard, Settings, HelpCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/components/ui/sidebar';
@@ -17,11 +16,6 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 
 interface TopBarProps {
   onThemeToggle: () => void;
@@ -34,15 +28,6 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
-  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
-
-  // User profile form schema
-  const profileFormSchema = z.object({
-    firstName: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
-    lastName: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
-    email: z.string().email({ message: "Adresse email invalide" }),
-    address: z.string().optional(),
-  });
 
   // Mock user data - in a real app, this would come from the user object or a separate API call
   const userData = {
@@ -50,21 +35,7 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
     lastName: user?.user_metadata?.full_name?.split(' ')[1] || "Doe",
     email: user?.email || "john.doe@example.com",
     address: user?.user_metadata?.address || "123 Rue de Paris, 75000 Paris",
-    plan: "Gratuit", // Mock plan data
-    hasPaidPlan: false,
-    planExpiry: "", 
-    amountPaid: "",
   };
-
-  const form = useForm<z.infer<typeof profileFormSchema>>({
-    resolver: zodResolver(profileFormSchema),
-    defaultValues: {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      address: userData.address,
-    },
-  });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,18 +106,6 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
     setLanguage(newLanguage);
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
-  };
-
-  const handleProfileEdit = (data: z.infer<typeof profileFormSchema>) => {
-    console.log('Profile updated:', data);
-    // Here you would implement the actual profile update logic
-    setIsProfileDialogOpen(false);
-  };
-
-  const handleUpgradePlan = () => {
-    console.log('Upgrade plan clicked');
-    // Here you would implement the plan upgrade logic
-    navigate('/pricing');
   };
 
   return (
@@ -242,45 +201,40 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-64 bg-popover">
-              <DropdownMenuLabel className="font-semibold">Mon Compte</DropdownMenuLabel>
-              <div className="px-2 py-2">
-                <div className="text-sm"><span className="font-medium">Nom:</span> {userData.lastName}</div>
-                <div className="text-sm"><span className="font-medium">Prénom:</span> {userData.firstName}</div>
-                <div className="text-sm"><span className="font-medium">Email:</span> {userData.email}</div>
-                <div className="text-sm"><span className="font-medium">Adresse:</span> {userData.address}</div>
-                <Button 
-                  size="sm" 
-                  variant="outline" 
-                  className="mt-2 w-full"
-                  onClick={() => setIsProfileDialogOpen(true)}
-                >
-                  <Settings className="h-4 w-4 mr-2" />
-                  Modifier
-                </Button>
+              <div className="p-2 text-sm">
+                <p className="font-medium">{userData.firstName} {userData.lastName}</p>
+                <p className="text-muted-foreground">{userData.email}</p>
               </div>
               
               <DropdownMenuSeparator />
               
-              <DropdownMenuLabel className="font-semibold">Facturation</DropdownMenuLabel>
-              <div className="px-2 py-2">
-                {userData.hasPaidPlan ? (
-                  <>
-                    <div className="text-sm"><span className="font-medium">Plan:</span> {userData.plan}</div>
-                    <div className="text-sm"><span className="font-medium">Expiration:</span> {userData.planExpiry}</div>
-                    <div className="text-sm"><span className="font-medium">Montant payé:</span> {userData.amountPaid}</div>
-                  </>
-                ) : (
-                  <Button 
-                    size="sm" 
-                    variant="default"
-                    className="w-full"
-                    onClick={handleUpgradePlan}
-                  >
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Mettre à niveau mon plan
-                  </Button>
-                )}
-              </div>
+              <DropdownMenuItem asChild>
+                <Link to="/account" className="cursor-pointer flex items-center w-full">
+                  <User className="h-4 w-4 mr-2" />
+                  Mon compte
+                </Link>
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem asChild>
+                <Link to="/billing" className="cursor-pointer flex items-center w-full">
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Facturation
+                </Link>
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem asChild>
+                <Link to="/usage" className="cursor-pointer flex items-center w-full">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Utilisation
+                </Link>
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem asChild>
+                <Link to="/help" className="cursor-pointer flex items-center w-full">
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  Aide
+                </Link>
+              </DropdownMenuItem>
               
               <DropdownMenuSeparator />
               
@@ -295,75 +249,6 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
           </DropdownMenu>
         )}
       </div>
-
-      {/* Profile Edit Dialog */}
-      <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Modifier mon profil</DialogTitle>
-          </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleProfileEdit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Prénom</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nom</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Adresse</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button 
-                  type="submit"
-                  className="w-full sm:w-auto"
-                >
-                  Enregistrer
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
