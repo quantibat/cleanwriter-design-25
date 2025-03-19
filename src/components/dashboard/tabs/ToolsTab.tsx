@@ -1,13 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FolderPlus, ArrowRight } from "lucide-react";
-
 const ToolsTab = () => {
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6 px-6">
       <h2 className="text-2xl font-bold">Outils de gestion</h2>
       <p className="text-muted-foreground">Utilisez nos outils pour gérer efficacement vos dossiers de consultation.</p>
       
@@ -21,10 +18,7 @@ const ToolsTab = () => {
             <CardDescription>Créez un nouveau dossier de consultation avec tous les documents nécessaires</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button 
-              className="w-full bg-blue-500 hover:bg-blue-600 mt-4"
-              asChild
-            >
+            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4" asChild>
               <Link to="/create-dce">
                 Créer <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -32,8 +26,6 @@ const ToolsTab = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ToolsTab;
