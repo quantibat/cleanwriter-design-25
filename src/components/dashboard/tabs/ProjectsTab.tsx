@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FolderPlus, Calendar, Clock, Users, Edit, Eye } from "lucide-react";
+import { FolderPlus, Edit, Eye, Trash2 } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 
 const projects = [
   {
@@ -39,6 +40,8 @@ type Project = typeof projects[0];
 
 const ProjectsTab = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [projectsList, setProjectsList] = useState<Project[]>(projects);
 
   const handleOpenView = (project: Project) => {
     navigate(`/view-dce/${project.id}`, { state: { project } });
@@ -50,6 +53,17 @@ const ProjectsTab = () => {
 
   const handleOpenCreate = () => {
     navigate('/create-dce');
+  };
+
+  const handleDelete = (projectId: number) => {
+    // Filtrer la liste pour supprimer le projet avec l'ID spécifié
+    const updatedProjects = projectsList.filter(project => project.id !== projectId);
+    setProjectsList(updatedProjects);
+    
+    toast({
+      title: "Projet supprimé",
+      description: "Le dossier a été supprimé avec succès.",
+    });
   };
 
   return (
@@ -65,61 +79,67 @@ const ProjectsTab = () => {
         </Button>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {projects.map((project) => (
-          <Card key={project.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-start">
-                <CardTitle className="text-lg">{project.title}</CardTitle>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8"
-                  onClick={() => handleOpenEdit(project)}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-              </div>
-              <CardDescription>{project.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="pb-2">
-              <div className="space-y-4">
-                <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-blue-500 rounded-full" 
-                    style={{ width: `${project.progress}%` }}
-                  ></div>
-                </div>
-                
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <div className="flex items-center">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    {project.date}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Titre</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Avancement</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {projectsList.map((project) => (
+              <TableRow key={project.id}>
+                <TableCell className="font-medium">{project.title}</TableCell>
+                <TableCell>{project.description}</TableCell>
+                <TableCell>{project.date}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <div className="w-full max-w-24 bg-white/10 h-2 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-blue-500 rounded-full" 
+                        style={{ width: `${project.progress}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs">{project.progress}%</span>
                   </div>
-                  <div className="flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    {project.progress}% terminé
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => handleOpenView(project)}
+                      title="Voir le dossier"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => handleOpenEdit(project)}
+                      title="Modifier le dossier"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => handleDelete(project.id)}
+                      title="Supprimer le dossier"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-100/10"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <div className="flex items-center">
-                <Users className="h-4 w-4 mr-1" />
-                <span className="text-sm text-muted-foreground">{project.collaborators} collaborateurs</span>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="border-white/10 hover:bg-white/10"
-                onClick={() => handleOpenView(project)}
-              >
-                <Eye className="h-4 w-4 mr-1" />
-                Ouvrir
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
