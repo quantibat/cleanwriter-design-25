@@ -40,7 +40,7 @@ const Breadcrumbs = ({ items = [] }: BreadcrumbsProps) => {
   });
   
   return (
-    <Breadcrumb className="px-6 py-2">
+    <Breadcrumb className="py-2">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>

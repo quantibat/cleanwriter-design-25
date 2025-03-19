@@ -32,13 +32,13 @@ const Dashboard = () => {
             onThemeToggle={handleThemeToggle} 
             isDarkMode={isDarkMode} 
           />
-          <main className="flex-1 p-6">
+          <main className="flex-1">
             <TabNavigation 
               activeTab={activeTab} 
               onTabChange={handleTabChange} 
             />
             
-            <div className="mt-6">
+            <div className="mt-6 px-6">
               {activeTab === "tools" && <ToolsTab />}
               {activeTab === "projects" && <ProjectsTab />}
               {activeTab === "contribute" && <ContributeTab />}
