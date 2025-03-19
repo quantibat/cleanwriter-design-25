@@ -1,15 +1,12 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-
 const TermsOfService = () => {
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
+  return <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
       
-      <main className="flex-1 py-20 px-6">
+      <main className="flex-1 px-6 py-[130px]">
         <div className="max-w-4xl mx-auto prose prose-invert prose-blue">
           <h1 className="text-3xl md:text-4xl font-bold mb-8">Conditions d'Utilisation</h1>
           
@@ -131,8 +128,6 @@ const TermsOfService = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default TermsOfService;
