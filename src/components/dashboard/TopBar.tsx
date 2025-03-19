@@ -3,10 +3,16 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Sun, Moon, Search, LogOut, Menu } from "lucide-react";
+import { Sun, Moon, Search, LogOut, Menu, Globe } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/components/ui/sidebar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface TopBarProps {
   onThemeToggle: () => void;
@@ -15,6 +21,7 @@ interface TopBarProps {
 
 const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [language, setLanguage] = useState<'fr' | 'en'>('fr');
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
@@ -46,6 +53,12 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
     }
     
     onThemeToggle();
+  };
+
+  const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
+    setLanguage(newLanguage);
+    console.log(`Language changed to: ${newLanguage}`);
+    // Here you would implement the actual language change logic
   };
 
   return (
@@ -86,6 +99,30 @@ const TopBar = ({ onThemeToggle, isDarkMode }: TopBarProps) => {
 
       {/* Actions (Right) */}
       <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+        {/* Language Selector */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="hover:bg-sidebar-accent/30">
+              <Globe className="h-4 w-4 text-muted-foreground" />
+              <span className="sr-only">Select language</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-popover">
+            <DropdownMenuItem 
+              onClick={() => handleLanguageChange('fr')}
+              className={language === 'fr' ? "bg-accent/50" : ""}
+            >
+              Français
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={() => handleLanguageChange('en')}
+              className={language === 'en' ? "bg-accent/50" : ""}
+            >
+              English
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         {/* Theme Toggle */}
         <div className="flex items-center gap-1 sm:gap-2">
           <Sun className="h-4 w-4 text-muted-foreground" />
