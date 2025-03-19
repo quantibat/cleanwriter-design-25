@@ -4,6 +4,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Users, Edit, FileText } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import DashboardLayout from '@/components/dashboard/DashboardLayout';
 
 const ViewDCE = () => {
   const navigate = useNavigate();
@@ -16,15 +17,17 @@ const ViewDCE = () => {
   // If project not found, handle it
   if (!project) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Dossier non trouvé</h1>
-          <p className="mb-6">Le dossier que vous cherchez n'existe pas ou a été supprimé.</p>
-          <Button onClick={() => navigate('/dashboard')}>
-            Retour au tableau de bord
-          </Button>
+      <DashboardLayout>
+        <div className="min-h-full flex flex-col items-center justify-center py-10">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Dossier non trouvé</h1>
+            <p className="mb-6">Le dossier que vous cherchez n'existe pas ou a été supprimé.</p>
+            <Button onClick={() => navigate('/dashboard')}>
+              Retour au tableau de bord
+            </Button>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
@@ -33,34 +36,32 @@ const ViewDCE = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="border-b border-white/5 bg-background/20 backdrop-blur-md py-4 px-6 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-1"
-            onClick={() => navigate('/dashboard')}
-          >
-            <ArrowLeft size={16} />
-            Retour
-          </Button>
-          <h1 className="text-xl font-semibold">Détails du dossier</h1>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={handleEdit}
-          >
-            <Edit size={16} className="mr-2" />
-            Modifier
-          </Button>
-        </div>
-      </header>
-      
-      {/* Main content */}
-      <main className="flex-1 py-8 px-6 md:px-10">
+    <DashboardLayout>
+      <div className="py-6 px-6 md:px-10">
         <div className="max-w-4xl mx-auto">
+          <div className="mb-6">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-1"
+              onClick={() => navigate('/dashboard')}
+            >
+              <ArrowLeft size={16} />
+              Retour
+            </Button>
+            <div className="flex items-center justify-between mt-4">
+              <h1 className="text-xl font-semibold">Détails du dossier</h1>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleEdit}
+              >
+                <Edit size={16} className="mr-2" />
+                Modifier
+              </Button>
+            </div>
+          </div>
+          
           <div className="space-y-8">
             {/* Document header */}
             <div className="bg-card/20 backdrop-blur-sm border border-white/5 rounded-lg p-8 shadow-lg">
@@ -132,8 +133,8 @@ const ViewDCE = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
