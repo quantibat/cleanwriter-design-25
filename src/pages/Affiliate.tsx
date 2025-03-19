@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,18 +5,15 @@ import { Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-
 const Affiliate = () => {
   const [references, setReferences] = useState(7);
   const monthlyEarnings = 1243;
   const monthlyBonus = 104;
-
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
+  return <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
       <main className="flex-1">
-        <section className="py-20 px-6 relative text-center">
+        <section className="px-6 relative text-center py-[130px]">
           <div className="max-w-5xl mx-auto relative z-10">
             <h1 className="text-3xl md:text-5xl font-bold mb-6">
               Recevez jusqu'à <span className="text-blue-400">2 000 $</span> par mois grâce au marché à la croissance la plus rapide au monde
@@ -80,13 +76,7 @@ const Affiliate = () => {
                   Nombre de références
                 </label>
                 <div className="flex items-center">
-                  <Input 
-                    id="references"
-                    type="number" 
-                    value={references}
-                    onChange={(e) => setReferences(parseInt(e.target.value) || 0)}
-                    className="w-full rounded-r-none"
-                  />
+                  <Input id="references" type="number" value={references} onChange={e => setReferences(parseInt(e.target.value) || 0)} className="w-full rounded-r-none" />
                   <Button className="rounded-l-none bg-blue-500">
                     =
                   </Button>
@@ -130,8 +120,6 @@ const Affiliate = () => {
       </main>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Affiliate;
