@@ -1,532 +1,243 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, FolderOpen, LayoutList, Save } from 'lucide-react';
-import { Input } from "@/components/ui/input";
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { ArrowLeft, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { ResizablePanelGroup, ResizablePanel } from "@/components/ui/resizable";
-import { useForm } from "react-hook-form";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
+import DashboardLayout from '@/components/layouts/DashboardLayout';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 const EditDCE = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [generatingDocument, setGeneratingDocument] = useState(false);
+  const location = useLocation();
   const { toast } = useToast();
   
-  const projectData = location.state?.project || null;
+  // Get project from location state or redirect if not available
+  const project = location.state?.project;
   
-  useEffect(() => {
-    if (!projectData) {
-      toast({
-        title: "Erreur",
-        description: "Impossible de trouver le dossier demandé",
-        variant: "destructive"
-      });
-      navigate('/dashboard');
-    }
-  }, [projectData, navigate, toast]);
-
-  const getInitialFormValues = () => {
-    if (!projectData) return {
-      title: '',
-      sourceMaterials: '',
-      category: '',
-      subcategory: '',
-      language: 'french',
-      format: 'pdf',
-      additionalNotes: ''
-    };
-
-    return {
-      title: projectData.title || '',
-      sourceMaterials: '',  
-      category: 'technique',
-      subcategory: 'CCTP',
-      language: 'french',
-      format: 'pdf',
-      additionalNotes: projectData.details || ''
-    };
-  };
-  
-  const form = useForm({
-    defaultValues: getInitialFormValues()
-  });
-
-  const onSubmit = async (data: any) => {
-    setIsLoading(true);
-    console.log("Données du formulaire:", data);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Document mis à jour avec succès",
-        description: "Les modifications ont été enregistrées",
-      });
-      navigate('/dashboard');
-    }, 1500);
-  };
-
-  const generateWithAI = () => {
-    setGeneratingDocument(true);
-    const formData = form.getValues();
-    console.log("Génération IA basée sur:", formData);
-    
-    setTimeout(() => {
-      setGeneratingDocument(false);
-      form.setValue('additionalNotes', 'Document généré automatiquement en utilisant les paramètres spécifiés. Ce document contient des spécifications techniques conformes aux normes en vigueur.');
-      toast({
-        title: "Document généré par IA",
-        description: "Un document a été généré en fonction de vos paramètres",
-      });
-    }, 2000);
-  };
-
-  const watchedValues = form.watch();
-
-  const categories = {
-    "technique": ["CCTP", "Mémoire technique", "Notes de calcul", "Spécifications"],
-    "administratif": ["CCAP", "RC", "AE", "Annexes administratives"],
-    "planning": ["Planning général", "Phasage", "Jalons", "Délais d'exécution"],
-    "financier": ["Bordereau de prix", "Détail quantitatif", "Estimation", "Budget prévisionnel"]
-  };
-
-  const subcategoryOptions = watchedValues.category ? categories[watchedValues.category as keyof typeof categories] : [];
-
-  if (!projectData) {
+  // Redirect if project is not found
+  if (!project) {
+    navigate('/dashboard');
     return null;
   }
+  
+  const [formData, setFormData] = useState({
+    title: project.title || '',
+    description: project.description || '',
+    details: project.details || '',
+    date: project.date || '',
+    progress: project.progress || 0,
+    collaborators: project.collaborators || 0,
+  });
 
+  useEffect(() => {
+    // Update form data when the project prop changes
+    setFormData({
+      title: project.title || '',
+      description: project.description || '',
+      details: project.details || '',
+      date: project.date || '',
+      progress: project.progress || 0,
+      collaborators: project.collaborators || 0,
+    });
+  }, [project]);
+
+  const handleSave = () => {
+    // Implement save functionality here (e.g., API call)
+    console.log('Saving data:', formData);
+    toast({
+      title: "DCE mis à jour",
+      description: "Les informations du dossier ont été mises à jour avec succès.",
+    });
+    navigate('/dashboard'); // Redirect to dashboard after save
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-white/5 bg-background/20 backdrop-blur-md py-4 px-6 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-1"
-            onClick={() => navigate('/dashboard')}
-          >
-            <ArrowLeft size={16} />
-            Retour
-          </Button>
-          <h1 className="text-xl font-semibold">Modifier le dossier</h1>
-          <div></div>
-        </div>
-      </header>
-      
-      <main className="flex-1 py-8 px-6 md:px-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-4 w-full">
-            <div className="w-full md:w-1/2 p-4 overflow-auto border border-white/20 rounded-lg">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <DashboardLayout>
+      <div className="min-h-screen bg-background flex flex-col">
+        {/* Breadcrumbs */}
+        <Breadcrumbs items={[
+          { label: 'Tableau de bord', link: '/dashboard' },
+          { label: 'Modifier le DCE' }
+        ]} />
+        
+        {/* Header */}
+        <header className="border-b border-white/5 bg-background/20 backdrop-blur-md py-4 px-6">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-1"
+              onClick={() => navigate('/dashboard')}
+            >
+              <ArrowLeft size={16} />
+              Annuler
+            </Button>
+            <h1 className="text-xl font-semibold">Modifier le DCE</h1>
+            <Button 
+              className="gap-1 bg-blue-500 hover:bg-blue-600"
+              size="sm" 
+              onClick={handleSave}
+            >
+              <Save size={16} />
+              Enregistrer
+            </Button>
+          </div>
+        </header>
+        
+        {/* Main content */}
+        <main className="flex-1 py-8 px-6">
+          <div className="max-w-7xl mx-auto flex gap-6">
+            {/* Form section - 50% width */}
+            <div className="w-1/2">
+              <Card className="bg-card/20 shadow-md">
+                <CardContent className="p-6">
                   <div className="space-y-6">
-                    <div className="border-b border-white/10 pb-4">
-                      <h2 className="text-lg font-medium">Informations du document</h2>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Modifiez les informations de base du document technique
-                      </p>
-                    </div>
-                    
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Nom du document</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Ex: Cahier des charges techniques - Lot 01" 
-                              {...field} 
-                              className="bg-card/30"
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="sourceMaterials"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Liens ou fichiers sources</FormLabel>
-                          <FormControl>
-                            <div className="space-y-2">
-                              <Textarea 
-                                placeholder="Liens vers documents ou ressources existants (un par ligne)" 
-                                className="bg-card/30 min-h-[80px]" 
-                                {...field}
-                              />
-                              <div className="flex gap-2">
-                                <Button 
-                                  type="button" 
-                                  variant="outline" 
-                                  size="sm" 
-                                  className="text-xs"
-                                  onClick={() => toast({
-                                    title: "Fonctionnalité à venir",
-                                    description: "L'import de fichiers sera disponible prochainement",
-                                  })}
-                                >
-                                  <Upload size={14} className="mr-1" />
-                                  Importer un fichier
-                                </Button>
-                                <Button 
-                                  type="button" 
-                                  variant="outline" 
-                                  size="sm" 
-                                  className="text-xs"
-                                  onClick={() => toast({
-                                    title: "Fonctionnalité à venir",
-                                    description: "L'ajout de liens externes sera disponible prochainement",
-                                  })}
-                                >
-                                  <LinkIcon size={14} className="mr-1" />
-                                  Ajouter un lien
-                                </Button>
-                              </div>
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <div className="space-y-6 pt-4">
-                    <div className="border-b border-white/10 pb-4">
-                      <h2 className="text-lg font-medium">Catégorisation</h2>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Classez votre document pour une meilleure organisation
-                      </p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Catégorie</FormLabel>
-                            <FormControl>
-                              <Select 
-                                onValueChange={field.onChange} 
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="bg-card/30">
-                                  <SelectValue placeholder="Sélectionner une catégorie" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="technique">Document technique</SelectItem>
-                                  <SelectItem value="administratif">Document administratif</SelectItem>
-                                  <SelectItem value="planning">Planning et délais</SelectItem>
-                                  <SelectItem value="financier">Document financier</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="subcategory"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Sous-catégorie</FormLabel>
-                            <FormControl>
-                              <Select 
-                                onValueChange={field.onChange} 
-                                defaultValue={field.value}
-                                disabled={!watchedValues.category}
-                              >
-                                <SelectTrigger className="bg-card/30">
-                                  <SelectValue placeholder={watchedValues.category ? "Sélectionner une sous-catégorie" : "Choisissez d'abord une catégorie"} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {subcategoryOptions.map((option) => (
-                                    <SelectItem key={option} value={option}>{option}</SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-6 pt-4">
-                    <div className="border-b border-white/10 pb-4">
-                      <h2 className="text-lg font-medium">Format et options</h2>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Définissez le format et les options du document
-                      </p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="language"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Langue du document</FormLabel>
-                            <FormControl>
-                              <Select 
-                                onValueChange={field.onChange} 
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="bg-card/30">
-                                  <SelectValue placeholder="Sélectionner une langue" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="french">Français</SelectItem>
-                                  <SelectItem value="english">Anglais</SelectItem>
-                                  <SelectItem value="german">Allemand</SelectItem>
-                                  <SelectItem value="spanish">Espagnol</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="format"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Format du document</FormLabel>
-                            <FormControl>
-                              <Select 
-                                onValueChange={field.onChange} 
-                                defaultValue={field.value}
-                              >
-                                <SelectTrigger className="bg-card/30">
-                                  <SelectValue placeholder="Sélectionner un format" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="pdf">PDF</SelectItem>
-                                  <SelectItem value="docx">Microsoft Word (.docx)</SelectItem>
-                                  <SelectItem value="xlsx">Microsoft Excel (.xlsx)</SelectItem>
-                                  <SelectItem value="md">Markdown (.md)</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                          </FormItem>
-                        )}
+                    {/* Title input */}
+                    <div className="space-y-2">
+                      <Label htmlFor="title">Titre du DCE</Label>
+                      <Input 
+                        id="title" 
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        placeholder="Ex: Rénovation Mairie" 
+                        className="bg-background/50"
                       />
                     </div>
                     
-                    <FormField
-                      control={form.control}
-                      name="additionalNotes"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description détaillée</FormLabel>
-                          <FormDescription>
-                            Modifiez la description détaillée de ce dossier
-                          </FormDescription>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="Informations détaillées sur ce dossier" 
-                              className="bg-card/30 min-h-[120px]" 
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
+                    {/* Description input */}
+                    <div className="space-y-2">
+                      <Label htmlFor="description">Description courte</Label>
+                      <Input 
+                        id="description" 
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        placeholder="Résumé du projet en quelques mots" 
+                        className="bg-background/50"
+                      />
+                    </div>
                     
-                    <div className="pt-4">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full mb-4 border-blue-400/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
-                        onClick={generateWithAI}
-                        disabled={generatingDocument}
-                      >
-                        {generatingDocument ? (
-                          <>Génération en cours...</>
-                        ) : (
-                          <>
-                            <Sparkles size={16} className="mr-2" />
-                            Générer avec IA
-                          </>
-                        )}
-                      </Button>
+                    {/* Detailed description */}
+                    <div className="space-y-2">
+                      <Label htmlFor="details">Description détaillée</Label>
+                      <Textarea 
+                        id="details" 
+                        name="details"
+                        value={formData.details}
+                        onChange={handleChange}
+                        placeholder="Entrez les détails du projet..." 
+                        className="min-h-32 bg-background/50"
+                      />
+                    </div>
+                    
+                    {/* Date */}
+                    <div className="space-y-2">
+                      <Label htmlFor="date">Date de création</Label>
+                      <Input 
+                        id="date" 
+                        name="date"
+                        value={formData.date}
+                        onChange={handleChange}
+                        placeholder="JJ/MM/AAAA" 
+                        className="bg-background/50"
+                      />
+                    </div>
+                    
+                    {/* Progression slider */}
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <Label htmlFor="progress">Progression</Label>
+                        <span className="text-sm text-muted-foreground">{formData.progress}%</span>
+                      </div>
+                      <Slider
+                        id="progress"
+                        defaultValue={[formData.progress]}
+                        max={100}
+                        step={5}
+                        className="w-full"
+                        onValueChange={(value) => setFormData({ ...formData, progress: value[0] })}
+                      />
+                    </div>
+                    
+                    {/* Collaborators */}
+                    <div className="space-y-2">
+                      <Label htmlFor="collaborators">Nombre de collaborateurs</Label>
+                      <Input 
+                        id="collaborators" 
+                        name="collaborators"
+                        type="number"
+                        value={formData.collaborators}
+                        onChange={handleChange}
+                        className="bg-background/50"
+                      />
                     </div>
                   </div>
-                  
-                  <div className="pt-6 space-y-4">
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <>Enregistrement en cours...</>
-                      ) : (
-                        <>
-                          <Save size={16} className="mr-2" />
-                          Enregistrer les modifications
-                        </>
-                      )}
-                    </Button>
-                    
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      className="w-full" 
-                      onClick={() => navigate('/dashboard')}
-                      disabled={isLoading}
-                    >
-                      Annuler
-                    </Button>
-                  </div>
-                </form>
-              </Form>
+                </CardContent>
+              </Card>
             </div>
             
-            <div className="w-full md:w-1/2 p-4 overflow-auto border border-white/20 rounded-lg">
-              <div className="bg-card/20 backdrop-blur-sm rounded-lg p-8 shadow-lg h-full">
-                <div className="border-b border-white/10 pb-4 mb-6">
-                  <h2 className="text-lg font-medium">Prévisualisation du document</h2>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Aperçu du document technique en cours de modification
-                  </p>
-                </div>
-                
-                {!watchedValues.title && !watchedValues.category ? (
-                  <div className="flex flex-col items-center justify-center h-[calc(100%-100px)] text-center">
-                    <FileText className="h-16 w-16 text-muted-foreground mb-4 opacity-30" />
-                    <p className="text-muted-foreground">
-                      Remplissez le formulaire pour voir la prévisualisation du document
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <Card className="bg-card/30 border border-white/10 overflow-hidden">
-                      <CardContent className="p-6">
-                        <div className="space-y-4">
-                          <div className="flex items-center gap-3">
-                            <div className="bg-blue-500/10 p-2 rounded-md">
-                              <FileText className="h-6 w-6 text-blue-400" />
-                            </div>
-                            <div className="flex-1">
-                              <h3 className="font-medium text-lg line-clamp-1">
-                                {watchedValues.title || "Titre du document"}
-                              </h3>
-                              <div className="flex flex-wrap items-center gap-2 mt-2">
-                                {watchedValues.category && (
-                                  <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">
-                                    {watchedValues.category === 'technique' && "Document technique"}
-                                    {watchedValues.category === 'administratif' && "Document administratif"}
-                                    {watchedValues.category === 'planning' && "Planning et délais"}
-                                    {watchedValues.category === 'financier' && "Document financier"}
-                                  </span>
-                                )}
-                                {watchedValues.subcategory && (
-                                  <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-full">
-                                    {watchedValues.subcategory}
-                                  </span>
-                                )}
-                                {watchedValues.format && (
-                                  <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full flex items-center gap-1">
-                                    <FileCheck className="h-3 w-3" />
-                                    {watchedValues.format === 'pdf' && "PDF"}
-                                    {watchedValues.format === 'docx' && "Word"}
-                                    {watchedValues.format === 'xlsx' && "Excel"}
-                                    {watchedValues.format === 'md' && "Markdown"}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {watchedValues.language && (
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Globe className="h-4 w-4" />
-                              <span>
-                                {watchedValues.language === 'french' && "Français"}
-                                {watchedValues.language === 'english' && "Anglais"}
-                                {watchedValues.language === 'german' && "Allemand"}
-                                {watchedValues.language === 'spanish' && "Espagnol"}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-muted-foreground">Aperçu du contenu</h3>
+            {/* Preview section - 50% width */}
+            <div className="w-1/2">
+              <Card className="bg-card/20 shadow-md">
+                <CardContent className="p-6">
+                  <h2 className="text-xl font-semibold mb-4">Aperçu du DCE</h2>
+                  
+                  {formData.title ? (
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-lg font-semibold">{formData.title}</h3>
+                        <p className="text-muted-foreground mt-1">{formData.description}</p>
+                      </div>
                       
-                      <Card className="bg-card/30 border border-white/10">
-                        <CardContent className="p-6">
-                          <div className="space-y-4">
-                            {watchedValues.title && (
-                              <div className="border-b border-white/10 pb-3">
-                                <h4 className="text-lg font-bold">{watchedValues.title}</h4>
-                              </div>
-                            )}
-                            
-                            {watchedValues.subcategory && (
-                              <div className="space-y-2">
-                                <h5 className="font-medium">1. Introduction</h5>
-                                <p className="text-sm text-muted-foreground">
-                                  Ce document détaille les spécifications techniques pour {watchedValues.subcategory.toLowerCase()}. 
-                                  Il fait partie intégrante du dossier de consultation des entreprises.
-                                </p>
-                              </div>
-                            )}
-                            
-                            {watchedValues.sourceMaterials && (
-                              <div className="space-y-2">
-                                <h5 className="font-medium">2. Documents de référence</h5>
-                                <div className="text-sm text-muted-foreground">
-                                  {watchedValues.sourceMaterials.split('\n').map((link, index) => (
-                                    <div key={index} className="flex items-center gap-2 ml-2">
-                                      <LinkIcon className="h-3 w-3" />
-                                      <span className="text-blue-400 underline">{link}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            
-                            {watchedValues.additionalNotes && (
-                              <div className="space-y-2">
-                                <h5 className="font-medium">3. Informations complémentaires</h5>
-                                <p className="text-sm text-muted-foreground">
-                                  {watchedValues.additionalNotes}
-                                </p>
-                              </div>
-                            )}
-                            
-                            {(!watchedValues.additionalNotes && !watchedValues.sourceMaterials) && (
-                              <p className="text-sm text-muted-foreground italic">
-                                Complétez le formulaire pour générer un aperçu du contenu du document...
-                              </p>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <div className="bg-card/30 p-4 rounded-md">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm text-muted-foreground">Date:</span>
+                          <span>{formData.date || 'Non spécifiée'}</span>
+                        </div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm text-muted-foreground">Progression:</span>
+                          <span>{formData.progress}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Collaborateurs:</span>
+                          <span>{formData.collaborators}</span>
+                        </div>
+                      </div>
+                      
+                      {formData.details && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Description détaillée:</h4>
+                          <p className="text-sm text-muted-foreground whitespace-pre-line">{formData.details}</p>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
-              </div>
+                  ) : (
+                    <div className="text-center py-12 text-muted-foreground">
+                      <p>Veuillez remplir le formulaire pour voir l'aperçu.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </DashboardLayout>
   );
 };
 
