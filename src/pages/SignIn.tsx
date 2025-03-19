@@ -1,15 +1,16 @@
-
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { supabase } from '../integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import Navbar from '@/components/Navbar';
 import { z } from "zod";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, LogIn } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
-import { supabase } from '@/integrations/supabase/client';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Adresse e-mail invalide." }),
@@ -17,6 +18,17 @@ const formSchema = z.object({
 });
 
 const SignIn = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (user) {
+      const origin = location.state?.from?.pathname || '/dashboard';
+      navigate(origin, { replace: true });
+    }
+  }, [user, navigate, location]);
+  
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 

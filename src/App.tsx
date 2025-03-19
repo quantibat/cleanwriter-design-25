@@ -3,8 +3,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import AuthGuard from "./components/AuthGuard";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -31,11 +32,30 @@ const App = () => (
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/create-dce" element={<CreateDCE />} />
-            <Route path="/edit-dce/:id" element={<EditDCE />} />
-            <Route path="/view-dce/:id" element={<ViewDCE />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            
+            {/* Routes protégées */}
+            <Route path="/dashboard" element={
+              <AuthGuard>
+                <Dashboard />
+              </AuthGuard>
+            } />
+            <Route path="/create-dce" element={
+              <AuthGuard>
+                <CreateDCE />
+              </AuthGuard>
+            } />
+            <Route path="/edit-dce/:id" element={
+              <AuthGuard>
+                <EditDCE />
+              </AuthGuard>
+            } />
+            <Route path="/view-dce/:id" element={
+              <AuthGuard>
+                <ViewDCE />
+              </AuthGuard>
+            } />
+            
+            {/* Redirection par défaut vers le dashboard si authentifié */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
