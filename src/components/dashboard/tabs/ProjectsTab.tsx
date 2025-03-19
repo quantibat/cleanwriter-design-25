@@ -102,7 +102,7 @@ const ProjectsTab = () => {
       <div className="flex items-center justify-between gap-y-4">
         <div>
           <h2 className="text-2xl font-bold">Tous vos projets</h2>
-          <p className="text-muted-foreground">Liste complète des dossiers et projets associés à votre compte</p>
+          <p className="text-muted-foreground py-[10px]">Liste complète des dossiers et projets associés à votre compte</p>
         </div>
         <Button className="bg-blue-500 hover:bg-blue-600" onClick={handleOpenCreate}>
           <FolderPlus className="h-4 w-4 mr-2" />
