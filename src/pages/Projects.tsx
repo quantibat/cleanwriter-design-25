@@ -13,7 +13,7 @@ const Projects = () => {
       activeTab="projects" 
       breadcrumbs={breadcrumbs}
     >
-      <div className="w-full">
+      <div className="w-full max-w-full">
         <ProjectsTab />
       </div>
     </DashboardLayout>
