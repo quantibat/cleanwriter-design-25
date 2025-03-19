@@ -1,13 +1,16 @@
+
 import React from 'react';
-import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon } from 'lucide-react';
+import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { cn } from '@/lib/utils';
+
 interface SidebarNavigationProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
 }
+
 const SidebarNavigation = ({
   activeTab = 'tools',
   onTabChange
@@ -19,9 +22,11 @@ const SidebarNavigation = ({
   const {
     unreadCount
   } = useNotifications();
+
   const handleTabChange = (tab: string) => {
     onTabChange?.(tab);
   };
+
   return <div className={cn("h-screen border-r border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md", "transition-all duration-300 ease-in-out flex flex-col", open ? "w-64" : "w-16")}>
       {/* Brand logo */}
       <div className="flex items-center justify-center h-16 border-b border-sidebar-border shrink-0">
@@ -62,7 +67,10 @@ const SidebarNavigation = ({
             </Link>
           </li>
           <li>
-            
+            <Link to="/affiliate" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/affiliate' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
+              <Users className="h-5 w-5" />
+              <span className={open ? "ml-3" : "hidden"}>Affiliation</span>
+            </Link>
           </li>
         </ul>
       </div>
@@ -75,4 +83,5 @@ const SidebarNavigation = ({
       </div>
     </div>;
 };
+
 export default SidebarNavigation;

@@ -23,6 +23,12 @@ import Account from "./pages/Account";
 import Billing from "./pages/Billing";
 import Usage from "./pages/Usage";
 import Help from "./pages/Help";
+import Affiliate from "./pages/Affiliate";
+import CustomPricing from "./pages/CustomPricing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import Onboarding from "./pages/Onboarding";
+import Contribute from "./pages/Contribute";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +46,11 @@ const App = () => (
               <Route path="/signup" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/affiliate" element={<Affiliate />} />
+              <Route path="/pricing" element={<CustomPricing />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/onboarding" element={<Onboarding />} />
               
               {/* Routes protégées */}
               <Route path="/dashboard" element={
@@ -55,6 +66,11 @@ const App = () => (
               <Route path="/projects" element={
                 <AuthGuard>
                   <Projects />
+                </AuthGuard>
+              } />
+              <Route path="/contribute" element={
+                <AuthGuard>
+                  <Contribute />
                 </AuthGuard>
               } />
               <Route path="/create-dce" element={
