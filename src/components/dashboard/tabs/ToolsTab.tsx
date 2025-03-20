@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FolderPlus, ArrowRight } from "lucide-react";
+import { FolderPlus, ArrowRight, Youtube, Twitter, Linkedin, Mail, Globe, Facebook, Instagram } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 
@@ -12,8 +12,6 @@ const ToolsTab = () => {
   const navigate = useNavigate();
 
   const handleCreateClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Si l'utilisateur n'est pas premium, on empêche la navigation par défaut
-    // et on redirige vers la page d'upgrade plan
     if (!isPremiumUser) {
       e.preventDefault();
       toast({
@@ -26,28 +24,336 @@ const ToolsTab = () => {
   };
 
   return (
-    <div className="space-y-6 w-full">
-      <h2 className="text-2xl font-bold">Outils de gestion</h2>
-      <p className="text-muted-foreground">Utilisez nos outils pour gérer efficacement vos dossiers de consultation.</p>
+    <div className="space-y-12 w-full">
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <Youtube className="h-5 w-5 text-white bg-red-600 rounded-md p-1" />
+          YouTube vers ce que vous souhaitez
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-red-600 p-1.5 rounded-md">
+                  <Youtube className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Twitter className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Convertissez l'audience YouTube en abonnés Twitter</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-red-600 p-1.5 rounded-md">
+                  <Youtube className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Linkedin className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Transformez des vues YouTube en leads LinkedIn</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-red-600 p-1.5 rounded-md">
+                  <Youtube className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Globe className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Dirigez le trafic YouTube vers votre site web</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-red-600 p-1.5 rounded-md">
+                  <Youtube className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Collectez des emails depuis vos vidéos YouTube</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-        <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors w-full">
-          <CardHeader>
-            <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
-              <FolderPlus className="h-5 w-5 text-blue-400" />
-            </div>
-            <CardTitle>Créer un DCE</CardTitle>
-            <CardDescription>Créez un nouveau dossier de consultation avec tous les documents nécessaires</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4" asChild>
-              <Link to="/create-dce" onClick={handleCreateClick}>
-                Créer <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <Mail className="h-5 w-5 text-white bg-blue-500 rounded-md p-1" />
+          Dynamisez votre newsletter
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-400 p-1.5 rounded-md">
+                  <Twitter className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Convertissez des abonnés en followers Twitter</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-700 p-1.5 rounded-md">
+                  <Linkedin className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Augmentez vos connexions LinkedIn</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+      
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <Twitter className="h-5 w-5 text-white bg-blue-400 rounded-md p-1" />
+          Développez votre compte Twitter
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-400 p-1.5 rounded-md">
+                  <Twitter className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-700 p-1.5 rounded-md">
+                  <Linkedin className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Convertissez des followers en connexions pro</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-400 p-1.5 rounded-md">
+                  <Twitter className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Collectez des emails depuis Twitter</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+      
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <Mail className="h-5 w-5 text-white bg-blue-500 rounded-md p-1" />
+          Vendez via email
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-pink-500 p-1.5 rounded-md">
+                  <Instagram className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">De l'email au follow Instagram pour plus de ventes</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-gray-500 p-1.5 rounded-md">
+                  <Globe className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Email automation pour convertir et vendre</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+      
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <Linkedin className="h-5 w-5 text-white bg-blue-700 rounded-md p-1" />
+          Brillez sur LinkedIn
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-700 p-1.5 rounded-md">
+                  <Linkedin className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Convertissez des contacts en abonnés</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-700 p-1.5 rounded-md">
+                  <Linkedin className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <Globe className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Générez du trafic qualifié vers votre site</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <FolderPlus className="h-5 w-5 text-white bg-blue-500 rounded-md p-1" />
+          Création de projets
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-500 p-1.5 rounded-md">
+                  <FolderPlus className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Créez un nouveau dossier de consultation</p>
+              <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4" asChild>
+                <Link to="/create-dce" onClick={handleCreateClick}>
+                  Créer <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+      
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
+          <Globe className="h-5 w-5 text-white bg-blue-500 rounded-md p-1" />
+          Shine on Social Media
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-red-600 p-1.5 rounded-md">
+                  <Youtube className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-pink-600 p-1.5 rounded-md">
+                  <Instagram className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">De YouTube à Instagram en un clic</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-400 p-1.5 rounded-md">
+                  <Twitter className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-red-500 p-1.5 rounded-md">
+                  <Youtube className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Transformez vos tweets en contenu vidéo</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-red-600 p-1.5 rounded-md">
+                  <Youtube className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-600 p-1.5 rounded-md">
+                  <Facebook className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Maximisez l'impact de vos vidéos sur Facebook</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+            <CardHeader className="pb-2">
+              <div className="flex space-x-2">
+                <div className="bg-blue-400 p-1.5 rounded-md">
+                  <Twitter className="h-4 w-4 text-white" />
+                </div>
+                <div className="bg-blue-600 p-1.5 rounded-md">
+                  <Facebook className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300">Synchronisez vos campagnes Twitter et Facebook</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
     </div>
   );
 };
