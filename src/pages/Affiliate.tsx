@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check, Copy, TrendingUp, Users, Link, ListChecks, Receipt, Settings } from "lucide-react";
+import { Check, Copy, TrendingUp, Users, Link, ListChecks, Receipt, Settings, Zap } from "lucide-react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -12,6 +12,7 @@ import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { useAuth } from '@/contexts/AuthContext';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+
 const Affiliate = () => {
   const [references, setReferences] = useState(7);
   const monthlyEarnings = Math.round(references * 37 * 0.4);
@@ -20,7 +21,8 @@ const Affiliate = () => {
     user,
     isPremiumUser,
     isAffiliate,
-    registerAsAffiliate
+    registerAsAffiliate,
+    quickAffiliateSignup
   } = useAuth();
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({
@@ -31,7 +33,6 @@ const Affiliate = () => {
   });
   const navigate = useNavigate();
 
-  // Affiliate dashboard data
   const [activeTab, setActiveTab] = useState('overview');
   const [affiliateStats, setAffiliateStats] = useState({
     totalEarnings: 0,
@@ -81,10 +82,9 @@ const Affiliate = () => {
     status: 'Payé',
     method: 'PayPal'
   }]);
+
   useEffect(() => {
     if (isPremiumUser && isAffiliate) {
-      // Fetch affiliate data if the user is already an affiliate
-      // This would normally be an API call to get the latest stats
       setAffiliateStats({
         totalEarnings: 240.50,
         pendingPayment: 86.00,
@@ -96,6 +96,7 @@ const Affiliate = () => {
       });
     }
   }, [isPremiumUser, isAffiliate]);
+
   const handleInputChange = e => {
     const {
       name,
@@ -106,12 +107,14 @@ const Affiliate = () => {
       [name]: value
     });
   };
+
   const handleCheckboxChange = checked => {
     setFormData({
       ...formData,
       agreeTerms: checked
     });
   };
+
   const handleSubmit = async e => {
     e.preventDefault();
     if (!formData.agreeTerms) {
@@ -124,15 +127,12 @@ const Affiliate = () => {
     }
     setIsRegistering(true);
     try {
-      // In a real implementation, this would be an API call to register the user as an affiliate
       await registerAsAffiliate(formData);
       toast({
         title: "Inscription réussie !",
         description: "Vous êtes maintenant un affilié DCEManager",
         variant: "default"
       });
-
-      // Refresh the page to show the dashboard
       window.location.reload();
     } catch (error) {
       toast({
@@ -144,6 +144,7 @@ const Affiliate = () => {
       setIsRegistering(false);
     }
   };
+
   const copyToClipboard = text => {
     navigator.clipboard.writeText(text).then(() => {
       toast({
@@ -159,6 +160,7 @@ const Affiliate = () => {
       });
     });
   };
+
   const toggleCouponStatus = id => {
     setCoupons(coupons.map(coupon => coupon.id === id ? {
       ...coupon,
@@ -171,7 +173,15 @@ const Affiliate = () => {
     });
   };
 
-  // If the user is not premium, show a premium required message
+  const handleQuickSignup = async () => {
+    try {
+      await quickAffiliateSignup();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error in quick signup:", error);
+    }
+  };
+
   if (!isPremiumUser) {
     return <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
@@ -194,7 +204,6 @@ const Affiliate = () => {
       </div>;
   }
 
-  // If the user is premium but not an affiliate yet, show the registration form
   if (isPremiumUser && !isAffiliate) {
     return <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
@@ -207,8 +216,8 @@ const Affiliate = () => {
               </p>
             </div>
             
-            <div className="grid gap-8">
-              <Card className="p-6 w-full\n">
+            <div className="grid md:grid-cols-[1fr_300px] gap-8">
+              <Card className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Créer votre compte affilié</h2>
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-4">
@@ -242,9 +251,27 @@ const Affiliate = () => {
               </Card>
               
               <div>
-                
-                
-                
+                <Card className="p-6">
+                  <CardHeader className="px-0 pt-0">
+                    <CardTitle className="text-lg">Inscription rapide</CardTitle>
+                    <CardDescription>
+                      Essayez le programme d'affiliation sans remplir le formulaire
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="px-0 pb-0">
+                    <Button 
+                      onClick={handleQuickSignup} 
+                      variant="outline" 
+                      className="w-full flex items-center"
+                    >
+                      <Zap className="mr-2 h-4 w-4" />
+                      Devenir affilié instantanément
+                    </Button>
+                    <p className="text-xs text-muted-foreground mt-3">
+                      Un compte affilié de test sera créé avec vos informations actuelles.
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
@@ -253,7 +280,6 @@ const Affiliate = () => {
       </div>;
   }
 
-  // If the user is premium and already an affiliate, show the affiliate dashboard
   return <DashboardLayout breadcrumbs={[{
     label: 'Affiliation'
   }]}>
@@ -481,4 +507,6 @@ const Affiliate = () => {
       </div>
     </DashboardLayout>;
 };
-export default Affiliate;
+
+
+

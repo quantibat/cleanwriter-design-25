@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -14,6 +13,7 @@ type AuthContextType = {
   isPremiumUser: boolean; // Indicateur de statut premium
   isAffiliate: boolean; // Indicateur de statut d'affilié
   registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>; // Inscription comme affilié
+  quickAffiliateSignup: () => Promise<void>; // Inscription rapide comme affilié
 };
 
 type AffiliateRegistrationData = {
@@ -32,9 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
   const [isAffiliate, setIsAffiliate] = useState<boolean>(false);
 
-  // Fonction pour connexion avec compte test premium
   const signInWithTestAccount = () => {
-    // Créer un faux utilisateur et une fausse session
     const testUser = {
       id: 'test-user-id',
       email: 'test@exemple.com',
@@ -46,7 +44,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       app_metadata: {
         role: 'user',
       },
-      // Ajout des propriétés manquantes pour satisfaire le type User
       aud: 'authenticated',
       created_at: new Date().toISOString(),
       confirmed_at: new Date().toISOString(),
@@ -62,21 +59,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user: testUser,
     } as Session;
 
-    // Mettre à jour l'état
     setUser(testUser);
     setSession(testSession);
     setIsPremiumUser(true);
     setIsAffiliate(false);
     setIsLoading(false);
 
-    // Afficher une notification
     toast({
       title: "Connexion test réussie",
       description: "Vous êtes connecté avec le compte de démonstration premium",
       variant: "default",
     });
 
-    // Notification dans le contexte de notification
     setTimeout(() => {
       try {
         const notificationContext = window._getNotificationContext?.();
@@ -93,9 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, 500);
   };
 
-  // Fonction pour connexion avec compte test basique (sans premium)
   const signInWithBasicTestAccount = () => {
-    // Créer un faux utilisateur et une fausse session (sans premium)
     const testUser = {
       id: 'test-basic-user-id',
       email: 'test-basic@exemple.com',
@@ -107,7 +99,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       app_metadata: {
         role: 'user',
       },
-      // Ajout des propriétés manquantes pour satisfaire le type User
       aud: 'authenticated',
       created_at: new Date().toISOString(),
       confirmed_at: new Date().toISOString(),
@@ -123,21 +114,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user: testUser,
     } as Session;
 
-    // Mettre à jour l'état
     setUser(testUser);
     setSession(testSession);
     setIsPremiumUser(false);
     setIsAffiliate(false);
     setIsLoading(false);
 
-    // Afficher une notification
     toast({
       title: "Connexion test réussie",
       description: "Vous êtes connecté avec le compte de démonstration basique (sans abonnement)",
       variant: "default",
     });
 
-    // Notification dans le contexte de notification
     setTimeout(() => {
       try {
         const notificationContext = window._getNotificationContext?.();
@@ -154,15 +142,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, 500);
   };
 
-  // Fonction pour enregistrer un utilisateur comme affilié
   const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
     return new Promise((resolve, reject) => {
       try {
-        // Simulation d'une requête au serveur
         setTimeout(() => {
-          // Dans une implémentation réelle, ce serait une requête API pour enregistrer l'utilisateur comme affilié
           if (user) {
-            // Mise à jour des métadonnées utilisateur pour inclure le statut d'affilié
             const updatedUser = {
               ...user,
               user_metadata: {
@@ -192,8 +176,66 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const quickAffiliateSignup = async (): Promise<void> => {
+    try {
+      if (!user || !isPremiumUser) {
+        toast({
+          title: "Accès refusé",
+          description: "Vous devez être un utilisateur premium pour devenir affilié",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const updatedUser = {
+        ...user,
+        user_metadata: {
+          ...user.user_metadata,
+          affiliate: true
+        }
+      } as User;
+      
+      setUser(updatedUser);
+      setIsAffiliate(true);
+      
+      if (session) {
+        setSession({
+          ...session,
+          user: updatedUser
+        });
+      }
+      
+      toast({
+        title: "Félicitations!",
+        description: "Vous êtes maintenant un affilié DCEManager",
+        variant: "default"
+      });
+
+      setTimeout(() => {
+        try {
+          const notificationContext = window._getNotificationContext?.();
+          if (notificationContext?.addNotification) {
+            notificationContext.addNotification({
+              title: "Bienvenue dans le programme d'affiliation",
+              message: "Votre compte affilié est prêt à l'emploi!",
+              type: "success",
+            });
+          }
+        } catch (e) {
+          console.error("Impossible d'accéder au contexte de notification:", e);
+        }
+      }, 500);
+      
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message || "Une erreur est survenue lors de l'inscription rapide",
+        variant: "destructive"
+      });
+    }
+  };
+
   useEffect(() => {
-    // Get initial session
     const getInitialSession = async () => {
       setIsLoading(true);
       
@@ -202,9 +244,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!error && data.session) {
         setSession(data.session);
         setUser(data.session.user);
-        // Vérifier si l'utilisateur est premium
         setIsPremiumUser(!!data.session.user?.user_metadata?.premium);
-        // Vérifier si l'utilisateur est affilié
         setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
       }
       
@@ -213,19 +253,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     getInitialSession();
 
-    // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
         console.log(`Auth event: ${event}`);
         setSession(newSession);
         setUser(newSession?.user ?? null);
-        // Mettre à jour le statut premium
         setIsPremiumUser(!!newSession?.user?.user_metadata?.premium);
-        // Mettre à jour le statut d'affilié
         setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
         setIsLoading(false);
         
-        // Afficher les notifications appropriées pour les événements d'authentification
         if (event === 'SIGNED_IN') {
           toast({
             title: "Connexion réussie",
@@ -233,8 +269,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             variant: "default",
           });
           
-          // Simulation de notification dans le contexte de notification
-          // Notez: ce sera disponible uniquement après que le contexte soit complètement initialisé
           setTimeout(() => {
             try {
               const notificationContext = window._getNotificationContext?.();
@@ -289,7 +323,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       signInWithBasicTestAccount,
       isPremiumUser,
       isAffiliate,
-      registerAsAffiliate
+      registerAsAffiliate,
+      quickAffiliateSignup
     }}>
       {children}
     </AuthContext.Provider>
@@ -304,13 +339,9 @@ export const useAuth = () => {
   return context;
 };
 
-// Expose notification context to window for auth events
-// This is a hack to get around circular dependencies
-// between AuthContext and NotificationContext
 if (typeof window !== 'undefined') {
   window._getNotificationContext = () => {
     try {
-      // @ts-ignore
       return document.querySelector('#__root')?.__NOTIFICATION_CONTEXT__;
     } catch (e) {
       return null;
