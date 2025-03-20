@@ -82,10 +82,10 @@ const CustomPricing = () => {
               </h2>
               
               <div className="mb-6">
-                <Button className="bg-blue-500 hover:bg-blue-600 px-6 py-6 text-lg h-auto">
+                <Button className="bg-blue-500 hover:bg-blue-600 px-6 h-auto py-[10px] text-base">
                   Start Free Trial
                 </Button>
-                <p className="text-sm text-muted-foreground mt-2">Cancel anytime</p>
+                
               </div>
               
               <div className="flex flex-wrap justify-center gap-4">
