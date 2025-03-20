@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -207,6 +206,10 @@
   mask-composite: exclude;
   animation: spin 4s linear infinite;
   z-index: -1;
+}
+
+.progress-blue-gradient {
+  background: linear-gradient(90deg, #00a2ff, #0077cc);
 }
 
 @keyframes twinkle {
