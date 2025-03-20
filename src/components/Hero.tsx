@@ -1,20 +1,9 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { PlayCircle } from "lucide-react";
 
-interface HeroProps {
-  onLearnMoreClick?: () => void;
-}
-
-const Hero = ({ onLearnMoreClick }: HeroProps) => {
-  const navigate = useNavigate();
-  
-  const handleCTAClick = () => {
-    navigate('/dashboard');
-  };
-  
+const Hero = () => {
   return (
     <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
       {/* Background stars */}
@@ -35,37 +24,51 @@ const Hero = ({ onLearnMoreClick }: HeroProps) => {
       </div>
       
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
+        <div className="text-center space-y-8 max-w-3xl mx-auto relative z-10">
+          <div className="flex flex-col items-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600">
-              Gérez vos DCE facilement et rapidement
+              Simplifiez la Gestion<br />de vos <span className="text-white">DCE</span>
             </h1>
-            <p className="text-lg md:text-xl text-blue-100/80 max-w-2xl">
-              Une plateforme intuitive pour créer, partager et gérer vos Dossiers de Consultation des Entreprises en toute sécurité.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Button 
-                onClick={handleCTAClick}
-                className="w-full sm:w-auto glowing-button bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg"
-              >
-                Accéder à mes DCE
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={onLearnMoreClick}
-                className="w-full sm:w-auto hover-button font-medium px-8 py-6 text-lg group border-white/10 bg-white/5 hover:bg-white/10"
-              >
-                En savoir plus
-                <ChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </div>
+            {/* Decorative angled line */}
+            <div className="mt-3 h-1 w-40 oblique-line"></div>
           </div>
-          <div className="relative animated-border-glow">
-            <div className="rounded-xl overflow-hidden border border-white/10 bg-card shadow-2xl">
+          
+          <p className="text-lg md:text-xl text-blue-100/80 max-w-2xl mx-auto">
+            DCE Manager optimise la gestion de vos dossiers de consultation des entreprises. Organisez, partagez et suivez vos documents en toute simplicité.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Button className="w-full sm:w-auto glowing-button bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg">
+              Commencer maintenant
+            </Button>
+            <Button variant="outline" className="w-full sm:w-auto hover-button font-medium px-8 py-6 text-lg group border-white/10 bg-white/5 hover:bg-white/10">
+              Voir la démo
+              <PlayCircle className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+          
+          <div className="pt-10 text-sm text-blue-100/60">
+            <p>Interface intuitive • Organisation optimale</p>
+          </div>
+        </div>
+        
+        {/* Demo Screen Preview */}
+        <div className="mt-16 max-w-4xl mx-auto animated-border-glow">
+          <div className="relative rounded-xl overflow-hidden border border-white/10 bg-card shadow-2xl">
+            <div className="absolute top-0 left-0 right-0 h-8 bg-card flex items-center px-4">
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 rounded-full bg-red-500/70"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500/70"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500/70"></div>
+              </div>
+              <div className="text-xs mx-auto text-white/50">DCE Manager</div>
+            </div>
+            <div className="pt-8 p-4">
               <img 
                 src="/lovable-uploads/0012ad36-938f-49c5-99e9-142f99106b74.png" 
                 alt="DCE Manager Interface" 
-                className="w-full object-cover rounded"
+                className="rounded w-full object-cover"
+                style={{ maxHeight: "350px" }}
               />
             </div>
           </div>

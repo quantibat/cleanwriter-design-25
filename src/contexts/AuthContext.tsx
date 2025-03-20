@@ -196,11 +196,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       } as User;
       
-      // Set isAffiliate to true immediately to update UI
-      setIsAffiliate(true);
-      
-      // Then update user and session objects
       setUser(updatedUser);
+      setIsAffiliate(true);
       
       if (session) {
         setSession({
