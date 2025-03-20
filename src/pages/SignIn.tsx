@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { supabase } from '../integrations/supabase/client';
@@ -114,6 +113,7 @@ const SignIn = () => {
     // Utiliser le compte de test basique
     signInWithBasicTestAccount();
     
+    // Naviguer directement vers le tableau de bord
     setTimeout(() => {
       navigate('/dashboard');
       setIsBasicDemoLoading(false);
