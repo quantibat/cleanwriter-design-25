@@ -40,9 +40,7 @@ const Hero = () => {
             </Button>
           </div>
           
-          <div className="pt-10 text-sm text-blue-100/60">
-            <p>Interface intuitive • Organisation optimale</p>
-          </div>
+          
         </div>
         
         {/* Demo Screen Preview */}
