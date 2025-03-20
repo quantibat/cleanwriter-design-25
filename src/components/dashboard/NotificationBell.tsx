@@ -50,15 +50,7 @@ const NotificationBell = () => {
   };
   return <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative hover:bg-sidebar-accent/30">
-          {unreadCount > 0 ? <>
-              <BellDotIcon className="h-5 w-5" />
-              <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center translate-x-1 -translate-y-1">
-                {unreadCount > 9 ? '9+' : unreadCount}
-              </span>
-            </> : <BellIcon className="h-5 w-5" />}
-          <span className="sr-only">Notifications</span>
-        </Button>
+        
       </DropdownMenuTrigger>
       
     </DropdownMenu>;
