@@ -121,7 +121,7 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div> : <Button variant="blue" onClick={handleTrialButtonClick}>
+            </div> : <Button variant="outline" onClick={handleTrialButtonClick}>
               Démarrer un essai
             </Button>}
         </div>
