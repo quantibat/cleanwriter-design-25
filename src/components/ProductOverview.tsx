@@ -1,12 +1,12 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Check, ArrowUpRight } from "lucide-react";
 import { motion, Variants } from "framer-motion";
-
 const ProductOverview = () => {
   const container: Variants = {
-    hidden: { opacity: 0 },
+    hidden: {
+      opacity: 0
+    },
     show: {
       opacity: 1,
       transition: {
@@ -15,40 +15,39 @@ const ProductOverview = () => {
       }
     }
   };
-
   const item: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    hidden: {
+      opacity: 0,
+      y: 20
+    },
+    show: {
+      opacity: 1,
+      y: 0
+    }
   };
-
-  return (
-    <section id="product" className="py-28 px-6 bg-[#06071b]">
+  return <section id="product" className="py-28 px-6 bg-[#06071b]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           {/* Left column - Image */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="rounded-2xl overflow-hidden relative order-2 md:order-1"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          x: -30
+        }} whileInView={{
+          opacity: 1,
+          x: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.8
+        }} className="rounded-2xl overflow-hidden relative order-2 md:order-1">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-50"></div>
-            <img 
-              src="https://framerusercontent.com/images/AX9CZ2I24YK31pBfKrdXgFLrto.png" 
-              alt="Interface de DCE Manager" 
-              className="w-full h-full object-cover rounded-2xl relative z-10 border border-white/10"
-            />
+            <img alt="Interface de DCE Manager" src="/lovable-uploads/f41edebb-4664-4fe8-b966-cdca746d440f.png" className="w-full h-full rounded-2xl relative z-10 border border-white/10 object-cover" />
           </motion.div>
           
           {/* Right column - Text content */}
-          <motion.div 
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="space-y-8 order-1 md:order-2"
-          >
+          <motion.div variants={container} initial="hidden" whileInView="show" viewport={{
+          once: true
+        }} className="space-y-8 order-1 md:order-2">
             <motion.div variants={item}>
               <span className="px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium">
                 Gestion documentaire simplifiée
@@ -64,19 +63,12 @@ const ProductOverview = () => {
             </motion.p>
             
             <motion.ul variants={container} className="space-y-4">
-              {[
-                "Organisation intuitive par projet et catégorie",
-                "Suivi des versions et des modifications en temps réel",
-                "Partage sécurisé avec contrôle d'accès personnalisable",
-                "Collaboration en temps réel entre les équipes"
-              ].map((feature, index) => (
-                <motion.li key={index} variants={item} className="flex gap-3 items-start">
+              {["Organisation intuitive par projet et catégorie", "Suivi des versions et des modifications en temps réel", "Partage sécurisé avec contrôle d'accès personnalisable", "Collaboration en temps réel entre les équipes"].map((feature, index) => <motion.li key={index} variants={item} className="flex gap-3 items-start">
                   <span className="h-5 w-5 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Check className="h-3 w-3 text-blue-400" />
                   </span>
                   <span className="text-blue-100/80">{feature}</span>
-                </motion.li>
-              ))}
+                </motion.li>)}
             </motion.ul>
             
             <motion.div variants={item}>
@@ -88,8 +80,6 @@ const ProductOverview = () => {
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ProductOverview;
