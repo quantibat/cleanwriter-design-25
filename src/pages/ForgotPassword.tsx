@@ -85,7 +85,7 @@ const ForgotPassword = () => {
                         <FormMessage />
                       </FormItem>} />
                   
-                  <Button type="submit" className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" disabled={isLoading}>
+                  <Button type="submit" disabled={isLoading} className="w-full blue-shimmer-button text-white font-medium bg-transparent">
                     {isLoading ? "Envoi en cours..." : "Envoyer le lien"}
                   </Button>
                 </form>
