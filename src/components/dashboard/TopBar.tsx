@@ -102,90 +102,125 @@ const TopBar = ({
   };
 
   return (
-    <div className="flex items-center justify-between w-full px-6 py-2 border-b border-[#2A3047] bg-[#121520]">
-      <div className="flex flex-1">
-        {/* Left section: Credits */}
+    <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
+      {/* Top div with logo and user controls */}
+      <div className="flex items-center justify-between w-full px-6 py-3">
+        {/* Left: Logo */}
         <div className="flex items-center">
-          <div className="ml-2 text-sm mr-8">
-            <div className="text-gray-400 font-medium">Crédits restants</div>
-            <div className="flex items-center space-x-2">
-              <Progress value={65} className="w-24 h-2" />
-              <span className="text-white font-semibold">65%</span>
+          <Link to="/dashboard" className="flex items-center gap-2">
+            <div className="bg-[#00a2ff] w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">
+              <span className="text-xl">D</span>
             </div>
-          </div>
+            <div className="text-white font-semibold text-xl">
+              DCE<span className="text-[#00a2ff]">Manager</span>
+            </div>
+          </Link>
+        </div>
+
+        {/* Right: User controls */}
+        <div className="flex items-center space-x-4">
+          {/* Theme Toggle */}
+          <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
+            {isDarkMode ? <Sun className="h-5 w-5 text-gray-400" /> : <Moon className="h-5 w-5 text-gray-400" />}
+          </Button>
+
+          {/* Language Selector */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Globe className="h-5 w-5 text-gray-400" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? 'bg-accent' : ''}>
+                Français
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? 'bg-accent' : ''}>
+                English
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Avatar + Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative rounded-full h-8 w-8 p-0">
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" alt={userData.firstName} />
+                  <AvatarFallback>{userData.firstName.charAt(0)}{userData.lastName.charAt(0)}</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{userData.firstName} {userData.lastName}</p>
+                  <p className="text-xs leading-none text-muted-foreground">{userData.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <Link to="/account">Mon compte</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <CreditCard className="mr-2 h-4 w-4" />
+                <Link to="/billing">Facturation</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                <Link to="/settings">Paramètres</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                <Link to="/help">Aide</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Déconnexion
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      {/* Right section: Theme Toggle & Profile */}
-      <div className="flex items-center space-x-4">
-        {/* Theme Toggle */}
-        <div className="flex items-center space-x-2">
-          <Sun className="h-4 w-4 text-gray-400" />
-          <Switch 
-            checked={isDarkMode}
-            onCheckedChange={handleThemeChange}
-          />
-          <Moon className="h-4 w-4 text-gray-400" />
+      {/* Bottom div with navigation and credits */}
+      <div className="flex items-center justify-between w-full px-6 py-3 bg-[#1a1f2b]">
+        {/* Left: Navigation Links */}
+        <div className="flex items-center space-x-8">
+          <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-white border-b-2 border-[#00a2ff]">
+            <span className="text-white">Outils</span>
+          </Link>
+          
+          <Link to="/projects" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+            <span>Projets</span>
+          </Link>
+          
+          <Link to="/contribute" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+            <span>Contribuer</span>
+          </Link>
+          
+          <Link to="/affiliate" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+            <span>Affiliation</span>
+          </Link>
         </div>
 
-        {/* Language Selector */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Globe className="h-5 w-5 text-gray-400" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? 'bg-accent' : ''}>
-              Français
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? 'bg-accent' : ''}>
-              English
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Avatar + Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative rounded-full h-8 w-8 p-0">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" alt={userData.firstName} />
-                <AvatarFallback>{userData.firstName.charAt(0)}{userData.lastName.charAt(0)}</AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{userData.firstName} {userData.lastName}</p>
-                <p className="text-xs leading-none text-muted-foreground">{userData.email}</p>
+        {/* Right: Credits Info and Upgrade Button */}
+        <div className="flex items-center space-x-4">
+          <div className="bg-[#1e2333] rounded-lg p-3">
+            <div className="flex flex-col">
+              <div className="text-sm text-gray-400 mb-1">Besoin de crédits?</div>
+              <div className="flex items-center space-x-2">
+                <Progress value={65} className="w-24 h-2" />
+                <span className="text-white text-xs">65% de vos crédits utilisés</span>
               </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <Link to="/account">Mon compte</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              <Link to="/billing">Facturation</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <Link to="/settings">Paramètres</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <HelpCircle className="mr-2 h-4 w-4" />
-              <Link to="/help">Aide</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Déconnexion
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <Button size="sm" variant="blue" className="mt-2 text-xs py-1 h-8">
+                Mettre à niveau
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
