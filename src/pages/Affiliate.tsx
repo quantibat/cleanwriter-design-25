@@ -208,7 +208,7 @@ const Affiliate = () => {
             </div>
             
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="p-6">
+              <Card className="p-6 w-full\n">
                 <h2 className="text-xl font-semibold mb-4">Créer votre compte affilié</h2>
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-4">
@@ -242,55 +242,9 @@ const Affiliate = () => {
               </Card>
               
               <div>
-                <Card className="p-6 mb-6">
-                  <h3 className="text-lg font-semibold mb-3">Pourquoi devenir affilié ?</h3>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      <span>Commissions de 40% récurrentes à vie</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      <span>Paiements mensuels rapides et fiables</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      <span>Outils marketing et support dédiés</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      <span>Tableau de bord intuitif pour suivre vos performances</span>
-                    </li>
-                  </ul>
-                </Card>
                 
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-3">Estimez vos revenus</h3>
-                  <div className="mb-4">
-                    <label htmlFor="references" className="block text-sm font-medium mb-2">
-                      Nombre de références
-                    </label>
-                    <div className="flex items-center">
-                      <Input id="references" type="number" value={references} onChange={e => setReferences(parseInt(e.target.value) || 0)} className="w-full rounded-r-none" min="0" />
-                      <Button className="rounded-l-none bg-blue-500">
-                        =
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">
-                      {monthlyEarnings} €
-                      <span className="text-sm font-normal text-muted-foreground ml-2">/ mois</span>
-                    </div>
-                    <div className="text-blue-400 font-medium mb-4">
-                      + {monthlyBonus} € <span className="text-sm font-normal">bonus mensuel</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      *résultat sur l'abonnement mensuel de 37€ (taux de commission de 40%)
-                    </p>
-                  </div>
-                </Card>
+                
+                
               </div>
             </div>
           </div>
