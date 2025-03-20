@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { FolderPlus, ArrowRight, Youtube, Twitter, Linkedin, Mail, Globe, Facebook, Instagram } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-
 const ToolsTab = () => {
-  const { isPremiumUser } = useAuth();
+  const {
+    isPremiumUser
+  } = useAuth();
   const navigate = useNavigate();
-
   const handleCreateClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isPremiumUser) {
       e.preventDefault();
@@ -22,9 +21,7 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
-
-  return (
-    <div className="space-y-12 w-full">
+  return <div className="space-y-12 w-full">
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Youtube className="h-5 w-5 text-white bg-red-600 rounded-md p-1" />
@@ -263,23 +260,7 @@ const ToolsTab = () => {
           Création de projets
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
-            <CardHeader className="pb-2">
-              <div className="flex space-x-2">
-                <div className="bg-blue-500 p-1.5 rounded-md">
-                  <FolderPlus className="h-4 w-4 text-white" />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-300">Créez un nouveau dossier de consultation</p>
-              <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4" asChild>
-                <Link to="/create-dce" onClick={handleCreateClick}>
-                  Créer <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+          
         </div>
       </section>
       
@@ -354,8 +335,6 @@ const ToolsTab = () => {
           </Card>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default ToolsTab;
