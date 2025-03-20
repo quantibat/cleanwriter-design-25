@@ -46,9 +46,7 @@ const Navbar = () => {
                 </Link>}
               <span className="text-sm text-foreground">
                 {user.user_metadata?.full_name || user.email}
-                {isPremiumUser && <span className="ml-2 bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded-full">
-                    Premium
-                  </span>}
+                {isPremiumUser}
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
