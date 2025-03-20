@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user_metadata: {
         full_name: 'Utilisateur Test',
         premium: true,
-        affiliate: true
+        affiliate: false
       },
       app_metadata: {
         role: 'user',
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(testUser);
     setSession(testSession);
     setIsPremiumUser(true);
-    setIsAffiliate(false);
+    setIsAffiliate(true);
     setIsLoading(false);
 
     toast({
