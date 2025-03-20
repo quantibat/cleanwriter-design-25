@@ -207,7 +207,7 @@ const Affiliate = () => {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid gap-8">
               <Card className="p-6 w-full\n">
                 <h2 className="text-xl font-semibold mb-4">Créer votre compte affilié</h2>
                 <form onSubmit={handleSubmit}>
