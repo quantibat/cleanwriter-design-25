@@ -12,6 +12,15 @@ type AuthContextType = {
   signInWithTestAccount: () => void; // Compte test standard (premium)
   signInWithBasicTestAccount: () => void; // Compte test sans abonnement
   isPremiumUser: boolean; // Indicateur de statut premium
+  isAffiliate: boolean; // Indicateur de statut d'affilié
+  registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>; // Inscription comme affilié
+};
+
+type AffiliateRegistrationData = {
+  fullName: string;
+  email: string;
+  password: string;
+  agreeTerms: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,6 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
+  const [isAffiliate, setIsAffiliate] = useState<boolean>(false);
 
   // Fonction pour connexion avec compte test premium
   const signInWithTestAccount = () => {
@@ -30,7 +40,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: 'test@exemple.com',
       user_metadata: {
         full_name: 'Utilisateur Test',
-        premium: true
+        premium: true,
+        affiliate: false
       },
       app_metadata: {
         role: 'user',
@@ -55,6 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(testUser);
     setSession(testSession);
     setIsPremiumUser(true);
+    setIsAffiliate(false);
     setIsLoading(false);
 
     // Afficher une notification
@@ -89,7 +101,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: 'test-basic@exemple.com',
       user_metadata: {
         full_name: 'Utilisateur Test Basic',
-        premium: false
+        premium: false,
+        affiliate: false
       },
       app_metadata: {
         role: 'user',
@@ -114,6 +127,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(testUser);
     setSession(testSession);
     setIsPremiumUser(false);
+    setIsAffiliate(false);
     setIsLoading(false);
 
     // Afficher une notification
@@ -140,6 +154,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, 500);
   };
 
+  // Fonction pour enregistrer un utilisateur comme affilié
+  const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      try {
+        // Simulation d'une requête au serveur
+        setTimeout(() => {
+          // Dans une implémentation réelle, ce serait une requête API pour enregistrer l'utilisateur comme affilié
+          if (user) {
+            // Mise à jour des métadonnées utilisateur pour inclure le statut d'affilié
+            const updatedUser = {
+              ...user,
+              user_metadata: {
+                ...user.user_metadata,
+                affiliate: true
+              }
+            } as User;
+            
+            setUser(updatedUser);
+            setIsAffiliate(true);
+            
+            if (session) {
+              setSession({
+                ...session,
+                user: updatedUser
+              });
+            }
+            
+            resolve();
+          } else {
+            reject(new Error("Utilisateur non connecté"));
+          }
+        }, 1000);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
@@ -152,6 +204,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(data.session.user);
         // Vérifier si l'utilisateur est premium
         setIsPremiumUser(!!data.session.user?.user_metadata?.premium);
+        // Vérifier si l'utilisateur est affilié
+        setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
       }
       
       setIsLoading(false);
@@ -167,6 +221,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(newSession?.user ?? null);
         // Mettre à jour le statut premium
         setIsPremiumUser(!!newSession?.user?.user_metadata?.premium);
+        // Mettre à jour le statut d'affilié
+        setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
         setIsLoading(false);
         
         // Afficher les notifications appropriées pour les événements d'authentification
@@ -231,7 +287,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       signOut, 
       signInWithTestAccount, 
       signInWithBasicTestAccount,
-      isPremiumUser
+      isPremiumUser,
+      isAffiliate,
+      registerAsAffiliate
     }}>
       {children}
     </AuthContext.Provider>

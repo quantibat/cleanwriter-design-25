@@ -1,11 +1,13 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut, Zap } from "lucide-react";
+import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut, Zap, Gift, Users } from "lucide-react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { toast } from '@/hooks/use-toast';
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -13,14 +15,16 @@ const Navbar = () => {
   const {
     user,
     signOut,
-    isPremiumUser
+    isPremiumUser,
+    isAffiliate
   } = useAuth();
+  
   const handleTrialButtonClick = e => {
     e.preventDefault();
     if (!user) {
       navigate('/dashboard');
     } else if (!isPremiumUser) {
-      navigate('/free-trial');
+      navigate('/upgrade-plan');
       toast({
         title: "Accès limité",
         description: "Cette fonctionnalité nécessite un abonnement premium",
@@ -30,7 +34,9 @@ const Navbar = () => {
       navigate('/dashboard');
     }
   };
-  return <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
+  
+  return (
+    <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo (Left) */}
         <div className="flex items-center">
@@ -51,8 +57,6 @@ const Navbar = () => {
           <Link to="/affiliate" className="text-sm font-medium transition-colors hover:text-blue-400">
             Affiliation
           </Link>
-          
-          
         </div>
 
         {/* Action Buttons (Right) */}
@@ -63,7 +67,8 @@ const Navbar = () => {
                 </Link>}
               <span className="text-sm text-foreground">
                 {user.user_metadata?.full_name || user.email}
-                {isPremiumUser}
+                {isPremiumUser && <span className="ml-2 text-amber-400 text-xs">(Premium)</span>}
+                {isAffiliate && <span className="ml-2 text-green-400 text-xs">(Affilié)</span>}
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -81,6 +86,7 @@ const Navbar = () => {
                     <p className="font-medium">{user.user_metadata?.full_name || user.email}</p>
                     <p className="text-muted-foreground">{user.email}</p>
                     {isPremiumUser ? <p className="mt-1 text-xs text-amber-400">Compte Premium</p> : <p className="mt-1 text-xs text-gray-400">Compte Gratuit</p>}
+                    {isAffiliate && <p className="mt-1 text-xs text-green-400">Affilié</p>}
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -104,8 +110,14 @@ const Navbar = () => {
                       Aide
                     </Link>
                   </DropdownMenuItem>
+                  {isPremiumUser && <DropdownMenuItem asChild>
+                      <Link to="/affiliate" className="cursor-pointer flex items-center w-full">
+                        <Users className="h-4 w-4 mr-2" />
+                        Affiliation
+                      </Link>
+                    </DropdownMenuItem>}
                   {!isPremiumUser && <DropdownMenuItem asChild>
-                      <Link to="/free-trial" className="cursor-pointer flex items-center w-full">
+                      <Link to="/upgrade-plan" className="cursor-pointer flex items-center w-full">
                         <Zap className="h-4 w-4 mr-2" />
                         Essai gratuit
                       </Link>
@@ -158,11 +170,18 @@ const Navbar = () => {
                     {isPremiumUser && <span className="ml-2 bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded-full">
                         Premium
                       </span>}
+                    {isAffiliate && <span className="ml-2 bg-green-500/20 text-green-300 text-xs px-2 py-0.5 rounded-full">
+                        Affilié
+                      </span>}
                   </span>
                 </div>
-                {!isPremiumUser && <Link to="/free-trial" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
+                {!isPremiumUser && <Link to="/upgrade-plan" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
                     <Zap className="h-4 w-4 mr-2" />
                     Essai gratuit
+                  </Link>}
+                {isPremiumUser && <Link to="/affiliate" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
+                    <Users className="h-4 w-4 mr-2" />
+                    Affiliation
                   </Link>}
                 <Link to="/dashboard" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
                   Tableau de bord
@@ -188,6 +207,8 @@ const Navbar = () => {
               </Link>}
           </div>
         </div>}
-    </nav>;
+    </nav>
+  );
 };
+
 export default Navbar;
