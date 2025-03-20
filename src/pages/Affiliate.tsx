@@ -20,9 +20,7 @@ const Affiliate = () => {
             </h1>
             
             <div className="mb-12 flex justify-center">
-              <Button className="blue-shimmer-button bg-blue-500 hover:bg-blue-600 px-8 py-6 text-lg h-auto">
-                Devenez un partenaire affilié maintenant !
-              </Button>
+              <Button className="blue-shimmer-button text-lg h-auto px-[29px] py-[12px] bg-transparent">Devenez un partenaire </Button>
             </div>
             
             <div className="mb-16">
