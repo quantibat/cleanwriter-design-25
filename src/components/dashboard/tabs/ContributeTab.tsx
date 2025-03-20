@@ -22,14 +22,7 @@ const ContributeTab = () => {
       </Card>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors w-full">
-          
-          <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Inviter des membres
-            </Button>
-          </CardContent>
-        </Card>
+        
         
         
         
