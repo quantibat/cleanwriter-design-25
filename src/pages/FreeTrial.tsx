@@ -91,7 +91,7 @@ const FreeTrial = () => {
                 Explorez toutes nos fonctionnalités avancées pendant 7 jours, sans engagement.
                 Annulez à tout moment avant la fin de l'essai.
               </p>
-              <Button variant="blue" className="w-full text-lg py-6" size="lg" onClick={handleStartTrial}>
+              <Button variant="blue" size="lg" onClick={handleStartTrial} className="w-full text-lg py-6 bg-transparent">
                 Commencer l'essai gratuit
                 <ArrowRight className="ml-2" />
               </Button>
