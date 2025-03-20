@@ -185,20 +185,26 @@ const Affiliate = () => {
         return;
       }
 
-      await quickAffiliateSignup();
+      // Appel de la fonction d'inscription rapide et capture du résultat
+      const success = await quickAffiliateSignup();
       
-      // Après avoir créé le compte affilié, notifier l'utilisateur et rediriger
-      toast({
-        title: "Félicitations!",
-        description: "Votre compte affilié a été créé. Redirection vers le tableau de bord...",
-        variant: "default"
-      });
-      
-      // Forcer un rechargement complet de la page pour que les changements d'état soient reflétés
-      setTimeout(() => {
-        window.location.href = '/affiliate';
-      }, 500);
-      
+      if (success) {
+        // Après avoir créé le compte affilié, notifier l'utilisateur et rediriger
+        toast({
+          title: "Redirection...",
+          description: "Accès au tableau de bord des affiliés",
+          variant: "default"
+        });
+        
+        // Redirection optimisée : utilise le router React si possible
+        // sinon force un rechargement complet de la page
+        if (isAffiliate) {
+          navigate('/affiliate');
+        } else {
+          // Force le rechargement si l'état n'est pas encore mis à jour
+          window.location.href = '/affiliate';
+        }
+      }
     } catch (error: any) {
       toast({
         title: "Erreur",

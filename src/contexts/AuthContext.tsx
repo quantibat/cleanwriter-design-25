@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -13,7 +14,7 @@ type AuthContextType = {
   isPremiumUser: boolean; // Indicateur de statut premium
   isAffiliate: boolean; // Indicateur de statut d'affilié
   registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>; // Inscription comme affilié
-  quickAffiliateSignup: () => Promise<void>; // Inscription rapide comme affilié
+  quickAffiliateSignup: () => Promise<boolean>; // Inscription rapide comme affilié, retourne true si réussi
 };
 
 type AffiliateRegistrationData = {
@@ -176,7 +177,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const quickAffiliateSignup = async (): Promise<void> => {
+  const quickAffiliateSignup = async (): Promise<boolean> => {
     try {
       if (!user || !isPremiumUser) {
         toast({
@@ -184,7 +185,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: "Vous devez être un utilisateur premium pour devenir affilié",
           variant: "destructive"
         });
-        return;
+        return false;
       }
 
       const updatedUser = {
@@ -226,12 +227,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }, 500);
       
+      return true;
     } catch (error: any) {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de l'inscription rapide",
         variant: "destructive"
       });
+      return false;
     }
   };
 
