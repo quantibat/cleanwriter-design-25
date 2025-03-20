@@ -508,5 +508,4 @@ const Affiliate = () => {
     </DashboardLayout>;
 };
 
-
-
+export default Affiliate;

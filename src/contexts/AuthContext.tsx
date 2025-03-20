@@ -342,7 +342,8 @@ export const useAuth = () => {
 if (typeof window !== 'undefined') {
   window._getNotificationContext = () => {
     try {
-      return document.querySelector('#__root')?.__NOTIFICATION_CONTEXT__;
+      const element = document.querySelector('#__root');
+      return (element as any)?.__NOTIFICATION_CONTEXT__;
     } catch (e) {
       return null;
     }
