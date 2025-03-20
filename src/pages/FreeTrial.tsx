@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, Moon, Sun, Cpu, Globe, Headphones, Zap } from "lucide-react";
@@ -8,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+
 const FreeTrial = () => {
   const [isDarkMode, setIsDarkMode] = React.useState(true);
   const {
@@ -15,10 +17,12 @@ const FreeTrial = () => {
     isPremiumUser
   } = useAuth();
   const navigate = useNavigate();
+
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     // Dans une implémentation réelle, cela basculerait une classe de mode sombre sur l'élément racine
   };
+
   const handleStartTrial = () => {
     if (!user) {
       // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
@@ -50,11 +54,20 @@ const FreeTrial = () => {
     // Rediriger vers le tableau de bord après un court délai
     setTimeout(() => navigate('/dashboard'), 1500);
   };
+
+  const handleReturnToDashboard = () => {
+    navigate('/dashboard');
+  };
+
   return <div className="min-h-screen bg-[#121824] text-white">
       <Navbar />
       
       <main className="pt-24 pb-20 px-4 max-w-5xl mx-auto">
-        
+        <div className="mb-6 text-right">
+          <Button variant="ghost" onClick={handleReturnToDashboard} className="text-blue-400 hover:text-blue-300">
+            Retour au tableau de bord
+          </Button>
+        </div>
         
         <section className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
@@ -148,4 +161,5 @@ const FreeTrial = () => {
       <Footer />
     </div>;
 };
+
 export default FreeTrial;

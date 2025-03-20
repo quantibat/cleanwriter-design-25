@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon, Users } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -28,7 +27,8 @@ const SidebarNavigation = ({
   };
   
   const handlePremiumLink = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
-    if (!isPremiumUser) {
+    // Vérifier si le lien concerne une fonctionnalité premium et si l'utilisateur n'est pas premium
+    if (!isPremiumUser && (path === '/projects' || path === '/dashboard')) {
       e.preventDefault();
       toast({
         title: "Fonctionnalité premium",
@@ -78,11 +78,41 @@ const SidebarNavigation = ({
           </li>
           
           <li>
-            
+            <Link 
+              to="/create-dce" 
+              className={cn(
+                "block py-2.5 px-4 rounded-lg transition-colors", 
+                "flex items-center", 
+                location.pathname === '/create-dce' 
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                  : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
+              )}
+              onClick={() => handleTabChange('create-dce')}
+            >
+              <PlusCircle className="h-5 w-5" />
+              <span className={open ? "ml-3" : "hidden"}>Nouveau DCE</span>
+            </Link>
           </li>
           
           <li>
-            
+            <Link 
+              to="/notifications" 
+              className={cn(
+                "block py-2.5 px-4 rounded-lg transition-colors", 
+                "flex items-center", 
+                location.pathname === '/notifications' 
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                  : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
+              )}
+            >
+              <BellIcon className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="ml-1 w-5 h-5 flex items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                  {unreadCount}
+                </span>
+              )}
+              <span className={open ? "ml-3" : "hidden"}>Notifications</span>
+            </Link>
           </li>
           <li>
             <Link 

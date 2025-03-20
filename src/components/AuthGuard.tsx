@@ -9,17 +9,9 @@ interface AuthGuardProps {
 }
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
-  const { user, isLoading, isPremiumUser } = useAuth();
+  const { user, isLoading } = useAuth();
   const location = useLocation();
   
-  // Liste des routes qui nécessitent un abonnement premium
-  const premiumRoutes = ['/dashboard', '/projects', '/create-dce', '/edit-dce', '/view-dce'];
-  const requiresPremium = premiumRoutes.some(route => 
-    location.pathname === route || 
-    (route.includes('/edit-dce') && location.pathname.startsWith('/edit-dce/')) ||
-    (route.includes('/view-dce') && location.pathname.startsWith('/view-dce/'))
-  );
-
   // Si nous sommes en train de charger, afficher un indicateur de chargement
   if (isLoading) {
     return (
@@ -34,17 +26,6 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
   
-  // Si la route nécessite un abonnement premium et que l'utilisateur n'est pas premium,
-  // rediriger vers la page d'essai gratuit
-  if (requiresPremium && !isPremiumUser) {
-    toast({
-      title: "Fonctionnalité premium",
-      description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
-      variant: "default",
-    });
-    return <Navigate to="/free-trial" state={{ from: location }} replace />;
-  }
-
   // Si tout est en ordre, afficher l'enfant (la page protégée)
   return <>{children}</>;
 };
