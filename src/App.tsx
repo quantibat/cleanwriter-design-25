@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,6 +29,7 @@ import TermsOfService from "./pages/TermsOfService";
 import Onboarding from "./pages/Onboarding";
 import Contribute from "./pages/Contribute";
 import FreeTrial from "./pages/FreeTrial";
+import UpgradePlan from './pages/UpgradePlan';
 
 const queryClient = new QueryClient();
 
@@ -110,6 +110,14 @@ const App = () => (
                   <Help />
                 </AuthGuard>
               } />
+              <Route
+                path="/upgrade-plan"
+                element={
+                  <AuthGuard>
+                    <UpgradePlan />
+                  </AuthGuard>
+                }
+              />
               
               {/* Redirection par défaut vers le dashboard si authentifié */}
               <Route path="*" element={<NotFound />} />

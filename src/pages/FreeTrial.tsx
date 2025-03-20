@@ -1,24 +1,21 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check, Moon, Sun, Cpu, Globe, Headphones, Zap } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Toggle } from "@/components/ui/toggle";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+
 const FreeTrial = () => {
-  const [isDarkMode, setIsDarkMode] = React.useState(true);
   const {
     user,
     isPremiumUser
   } = useAuth();
   const navigate = useNavigate();
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    // Dans une implémentation réelle, cela basculerait une classe de mode sombre sur l'élément racine
-  };
+
   const handleStartTrial = () => {
     if (!user) {
       // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
@@ -50,17 +47,12 @@ const FreeTrial = () => {
     // Rediriger vers le tableau de bord après un court délai
     setTimeout(() => navigate('/dashboard'), 1500);
   };
-  const handleReturnToDashboard = () => {
-    navigate('/dashboard');
-  };
-  return <div className="min-h-screen bg-[#121824] text-white">
-      <Navbar />
+
+  return (
+    <div className="min-h-screen bg-[#121824] text-white">
+      {window.location.pathname !== '/upgrade-plan' && <Navbar />}
       
-      <main className="pt-24 pb-20 px-4 max-w-5xl mx-auto">
-        <div className="mb-6 text-right">
-          
-        </div>
-        
+      <main className={`pt-${window.location.pathname !== '/upgrade-plan' ? '24' : '6'} pb-20 px-4 max-w-5xl mx-auto`}>
         <section className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
             Commencez votre essai gratuit de 7 jours maintenant
@@ -150,7 +142,9 @@ const FreeTrial = () => {
         </div>
       </main>
       
-      <Footer />
-    </div>;
+      {window.location.pathname !== '/upgrade-plan' && <Footer />}
+    </div>
+  );
 };
+
 export default FreeTrial;
