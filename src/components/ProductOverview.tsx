@@ -29,7 +29,7 @@ const ProductOverview = () => {
     }
   };
 
-  return <section id="product" className="py-28 px-6 bg-[#06071b]">
+  return <section id="product" className="py-28 px-6 bg-[#0c101b]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           {/* Left column - Image */}
