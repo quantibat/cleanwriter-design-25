@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut } from "lucide-react";
@@ -40,6 +39,12 @@ const Navbar = () => {
           <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400">
             Tarifs
           </a>
+          <Link to="/affiliate" className="text-sm font-medium transition-colors hover:text-blue-400">
+            Affiliation
+          </Link>
+          <Link to="/privacy-policy" className="text-sm font-medium transition-colors hover:text-blue-400">
+            Politique de confidentialité
+          </Link>
         </div>
 
         {/* Action Buttons (Right) */}
@@ -127,6 +132,12 @@ const Navbar = () => {
             <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
               Tarifs
             </a>
+            <Link to="/affiliate" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
+              Affiliation
+            </Link>
+            <Link to="/privacy-policy" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
+              Politique de confidentialité
+            </Link>
             {user ? (
               <>
                 <div className="py-2 flex items-center gap-2">
