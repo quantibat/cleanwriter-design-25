@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Check } from "lucide-react";
@@ -7,15 +6,15 @@ import { Card } from "@/components/ui/card";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-
 const UpgradePlan = () => {
-  const { user, isPremiumUser } = useAuth();
+  const {
+    user,
+    isPremiumUser
+  } = useAuth();
   const navigate = useNavigate();
-  
-  const breadcrumbs = [
-    { label: 'Upgrader son plan' }
-  ];
-
+  const breadcrumbs = [{
+    label: 'Upgrader son plan'
+  }];
   const handleStartTrial = () => {
     if (isPremiumUser) {
       toast({
@@ -36,9 +35,7 @@ const UpgradePlan = () => {
     // Rediriger vers le tableau de bord après un court délai
     setTimeout(() => navigate('/dashboard'), 1500);
   };
-
-  return (
-    <DashboardLayout breadcrumbs={breadcrumbs}>
+  return <DashboardLayout breadcrumbs={breadcrumbs}>
       <div className="w-full max-w-5xl mx-auto">
         <section className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
@@ -70,7 +67,7 @@ const UpgradePlan = () => {
                 Explorez toutes nos fonctionnalités avancées pendant 7 jours, sans engagement.
                 Annulez à tout moment avant la fin de l'essai.
               </p>
-              <Button variant="blue" size="lg" onClick={handleStartTrial} className="w-full text-lg py-6">
+              <Button variant="blue" size="lg" onClick={handleStartTrial} className="w-full text-lg py-6 bg-transparent">
                 Commencer l'essai gratuit
                 <ArrowRight className="ml-2" />
               </Button>
@@ -128,8 +125,6 @@ const UpgradePlan = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    </DashboardLayout>;
 };
-
 export default UpgradePlan;
