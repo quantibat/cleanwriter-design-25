@@ -1,15 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, FolderOpen, LayoutList, Save } from 'lucide-react';
+import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, Save } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { ResizablePanelGroup, ResizablePanel } from "@/components/ui/resizable";
 import { useForm } from "react-hook-form";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 
 const EditDCE = () => {
@@ -103,33 +102,33 @@ const EditDCE = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-white/5 bg-background/20 backdrop-blur-md py-4 px-6 sticky top-0 z-10">
+    <div className="min-h-screen bg-[#0d1117] flex flex-col">
+      <header className="border-b border-[#1f2937]/20 bg-[#0d1117]/80 backdrop-blur-md py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Button 
             variant="outline" 
             size="sm" 
-            className="gap-1"
+            className="gap-1 border-[#30363d] bg-transparent text-gray-300 hover:bg-[#30363d]/30"
             onClick={() => navigate('/dashboard')}
           >
             <ArrowLeft size={16} />
             Retour
           </Button>
-          <h1 className="text-xl font-semibold">Modifier le dossier</h1>
+          <h1 className="text-xl font-semibold text-white">Modifier le dossier</h1>
           <div></div>
         </div>
       </header>
       
-      <main className="flex-1 py-8 px-6 md:px-10">
+      <main className="flex-1 py-8 px-6 md:px-10 bg-[#0d1117]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row gap-4 w-full">
-            <div className="w-full md:w-1/2 p-4 overflow-auto border border-white/20 rounded-lg">
+            <div className="w-full md:w-1/2 p-4 overflow-auto border border-[#30363d] rounded-lg bg-[#161b22]/50">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <div className="space-y-6">
-                    <div className="border-b border-white/10 pb-4">
-                      <h2 className="text-lg font-medium">Informations du document</h2>
-                      <p className="text-sm text-muted-foreground mt-1">
+                    <div className="border-b border-[#30363d]/80 pb-4">
+                      <h2 className="text-lg font-medium text-white">Informations du document</h2>
+                      <p className="text-sm text-gray-400 mt-1">
                         Modifiez les informations de base du document technique
                       </p>
                     </div>
@@ -139,12 +138,12 @@ const EditDCE = () => {
                       name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nom du document</FormLabel>
+                          <FormLabel className="text-gray-300">Nom du document</FormLabel>
                           <FormControl>
                             <Input 
                               placeholder="Ex: Cahier des charges techniques - Lot 01" 
                               {...field} 
-                              className="bg-card/30"
+                              className="bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40"
                             />
                           </FormControl>
                         </FormItem>
@@ -156,12 +155,12 @@ const EditDCE = () => {
                       name="sourceMaterials"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Liens ou fichiers sources</FormLabel>
+                          <FormLabel className="text-gray-300">Liens ou fichiers sources</FormLabel>
                           <FormControl>
                             <div className="space-y-2">
                               <Textarea 
                                 placeholder="Liens vers documents ou ressources existants (un par ligne)" 
-                                className="bg-card/30 min-h-[80px]" 
+                                className="bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40 min-h-[80px]" 
                                 {...field}
                               />
                               <div className="flex gap-2">
@@ -169,7 +168,7 @@ const EditDCE = () => {
                                   type="button" 
                                   variant="outline" 
                                   size="sm" 
-                                  className="text-xs"
+                                  className="text-xs border-[#30363d] text-gray-300 hover:bg-[#30363d]/30"
                                   onClick={() => toast({
                                     title: "Fonctionnalité à venir",
                                     description: "L'import de fichiers sera disponible prochainement",
@@ -182,7 +181,7 @@ const EditDCE = () => {
                                   type="button" 
                                   variant="outline" 
                                   size="sm" 
-                                  className="text-xs"
+                                  className="text-xs border-[#30363d] text-gray-300 hover:bg-[#30363d]/30"
                                   onClick={() => toast({
                                     title: "Fonctionnalité à venir",
                                     description: "L'ajout de liens externes sera disponible prochainement",
@@ -200,9 +199,9 @@ const EditDCE = () => {
                   </div>
                   
                   <div className="space-y-6 pt-4">
-                    <div className="border-b border-white/10 pb-4">
-                      <h2 className="text-lg font-medium">Catégorisation</h2>
-                      <p className="text-sm text-muted-foreground mt-1">
+                    <div className="border-b border-[#30363d]/80 pb-4">
+                      <h2 className="text-lg font-medium text-white">Catégorisation</h2>
+                      <p className="text-sm text-gray-400 mt-1">
                         Classez votre document pour une meilleure organisation
                       </p>
                     </div>
@@ -213,16 +212,16 @@ const EditDCE = () => {
                         name="category"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Catégorie</FormLabel>
+                            <FormLabel className="text-gray-300">Catégorie</FormLabel>
                             <FormControl>
                               <Select 
                                 onValueChange={field.onChange} 
                                 defaultValue={field.value}
                               >
-                                <SelectTrigger className="bg-card/30">
+                                <SelectTrigger className="bg-[#0d1117] border-[#30363d] text-gray-200">
                                   <SelectValue placeholder="Sélectionner une catégorie" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-[#161b22] border-[#30363d] text-gray-200">
                                   <SelectItem value="technique">Document technique</SelectItem>
                                   <SelectItem value="administratif">Document administratif</SelectItem>
                                   <SelectItem value="planning">Planning et délais</SelectItem>
@@ -239,17 +238,17 @@ const EditDCE = () => {
                         name="subcategory"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Sous-catégorie</FormLabel>
+                            <FormLabel className="text-gray-300">Sous-catégorie</FormLabel>
                             <FormControl>
                               <Select 
                                 onValueChange={field.onChange} 
                                 defaultValue={field.value}
                                 disabled={!watchedValues.category}
                               >
-                                <SelectTrigger className="bg-card/30">
+                                <SelectTrigger className="bg-[#0d1117] border-[#30363d] text-gray-200">
                                   <SelectValue placeholder={watchedValues.category ? "Sélectionner une sous-catégorie" : "Choisissez d'abord une catégorie"} />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-[#161b22] border-[#30363d] text-gray-200">
                                   {subcategoryOptions.map((option) => (
                                     <SelectItem key={option} value={option}>{option}</SelectItem>
                                   ))}
@@ -263,9 +262,9 @@ const EditDCE = () => {
                   </div>
                   
                   <div className="space-y-6 pt-4">
-                    <div className="border-b border-white/10 pb-4">
-                      <h2 className="text-lg font-medium">Format et options</h2>
-                      <p className="text-sm text-muted-foreground mt-1">
+                    <div className="border-b border-[#30363d]/80 pb-4">
+                      <h2 className="text-lg font-medium text-white">Format et options</h2>
+                      <p className="text-sm text-gray-400 mt-1">
                         Définissez le format et les options du document
                       </p>
                     </div>
@@ -276,16 +275,16 @@ const EditDCE = () => {
                         name="language"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Langue du document</FormLabel>
+                            <FormLabel className="text-gray-300">Langue du document</FormLabel>
                             <FormControl>
                               <Select 
                                 onValueChange={field.onChange} 
                                 defaultValue={field.value}
                               >
-                                <SelectTrigger className="bg-card/30">
+                                <SelectTrigger className="bg-[#0d1117] border-[#30363d] text-gray-200">
                                   <SelectValue placeholder="Sélectionner une langue" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-[#161b22] border-[#30363d] text-gray-200">
                                   <SelectItem value="french">Français</SelectItem>
                                   <SelectItem value="english">Anglais</SelectItem>
                                   <SelectItem value="german">Allemand</SelectItem>
@@ -302,16 +301,16 @@ const EditDCE = () => {
                         name="format"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Format du document</FormLabel>
+                            <FormLabel className="text-gray-300">Format du document</FormLabel>
                             <FormControl>
                               <Select 
                                 onValueChange={field.onChange} 
                                 defaultValue={field.value}
                               >
-                                <SelectTrigger className="bg-card/30">
+                                <SelectTrigger className="bg-[#0d1117] border-[#30363d] text-gray-200">
                                   <SelectValue placeholder="Sélectionner un format" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-[#161b22] border-[#30363d] text-gray-200">
                                   <SelectItem value="pdf">PDF</SelectItem>
                                   <SelectItem value="docx">Microsoft Word (.docx)</SelectItem>
                                   <SelectItem value="xlsx">Microsoft Excel (.xlsx)</SelectItem>
@@ -329,14 +328,14 @@ const EditDCE = () => {
                       name="additionalNotes"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description détaillée</FormLabel>
-                          <FormDescription>
+                          <FormLabel className="text-gray-300">Description détaillée</FormLabel>
+                          <FormDescription className="text-gray-500">
                             Modifiez la description détaillée de ce dossier
                           </FormDescription>
                           <FormControl>
                             <Textarea 
                               placeholder="Informations détaillées sur ce dossier" 
-                              className="bg-card/30 min-h-[120px]" 
+                              className="bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40 min-h-[120px]" 
                               {...field}
                             />
                           </FormControl>
@@ -348,7 +347,7 @@ const EditDCE = () => {
                       <Button
                         type="button"
                         variant="outline"
-                        className="w-full mb-4 border-blue-400/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
+                        className="w-full mb-4 border-[#0ea5e9]/30 bg-[#0ea5e9]/10 text-[#38bdf8] hover:bg-[#0ea5e9]/20"
                         onClick={generateWithAI}
                         disabled={generatingDocument}
                       >
@@ -367,7 +366,7 @@ const EditDCE = () => {
                   <div className="pt-6 space-y-4">
                     <Button 
                       type="submit" 
-                      className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+                      className="w-full bg-[#0ea5e9] hover:bg-[#0284c7] text-white"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -383,7 +382,7 @@ const EditDCE = () => {
                     <Button 
                       type="button" 
                       variant="outline" 
-                      className="w-full" 
+                      className="w-full border-[#30363d] text-gray-300 hover:bg-[#30363d]/30" 
                       onClick={() => navigate('/dashboard')}
                       disabled={isLoading}
                     >
@@ -394,38 +393,38 @@ const EditDCE = () => {
               </Form>
             </div>
             
-            <div className="w-full md:w-1/2 p-4 overflow-auto border border-white/20 rounded-lg">
-              <div className="bg-card/20 backdrop-blur-sm rounded-lg p-8 shadow-lg h-full">
-                <div className="border-b border-white/10 pb-4 mb-6">
-                  <h2 className="text-lg font-medium">Prévisualisation du document</h2>
-                  <p className="text-sm text-muted-foreground mt-1">
+            <div className="w-full md:w-1/2 p-4 overflow-auto border border-[#30363d] rounded-lg bg-[#161b22]/50">
+              <div className="rounded-lg p-8 h-full overflow-hidden">
+                <div className="border-b border-[#30363d]/80 pb-4 mb-6">
+                  <h2 className="text-lg font-medium text-white">Prévisualisation du document</h2>
+                  <p className="text-sm text-gray-400 mt-1">
                     Aperçu du document technique en cours de modification
                   </p>
                 </div>
                 
                 {!watchedValues.title && !watchedValues.category ? (
                   <div className="flex flex-col items-center justify-center h-[calc(100%-100px)] text-center">
-                    <FileText className="h-16 w-16 text-muted-foreground mb-4 opacity-30" />
-                    <p className="text-muted-foreground">
+                    <FileText className="h-16 w-16 text-gray-500 mb-4 opacity-30" />
+                    <p className="text-gray-400">
                       Remplissez le formulaire pour voir la prévisualisation du document
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-6">
-                    <Card className="bg-card/30 border border-white/10 overflow-hidden">
+                    <Card className="bg-[#0d1117] border border-[#30363d] overflow-hidden">
                       <CardContent className="p-6">
                         <div className="space-y-4">
                           <div className="flex items-center gap-3">
-                            <div className="bg-blue-500/10 p-2 rounded-md">
-                              <FileText className="h-6 w-6 text-blue-400" />
+                            <div className="bg-[#0ea5e9]/10 p-2 rounded-md">
+                              <FileText className="h-6 w-6 text-[#38bdf8]" />
                             </div>
                             <div className="flex-1">
-                              <h3 className="font-medium text-lg line-clamp-1">
+                              <h3 className="font-medium text-lg line-clamp-1 text-white">
                                 {watchedValues.title || "Titre du document"}
                               </h3>
                               <div className="flex flex-wrap items-center gap-2 mt-2">
                                 {watchedValues.category && (
-                                  <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">
+                                  <span className="text-xs bg-[#0ea5e9]/20 text-[#38bdf8] px-2 py-1 rounded-full">
                                     {watchedValues.category === 'technique' && "Document technique"}
                                     {watchedValues.category === 'administratif' && "Document administratif"}
                                     {watchedValues.category === 'planning' && "Planning et délais"}
@@ -451,7 +450,7 @@ const EditDCE = () => {
                           </div>
                           
                           {watchedValues.language && (
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-2 text-sm text-gray-400">
                               <Globe className="h-4 w-4" />
                               <span>
                                 {watchedValues.language === 'french' && "Français"}
@@ -466,21 +465,21 @@ const EditDCE = () => {
                     </Card>
                     
                     <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-muted-foreground">Aperçu du contenu</h3>
+                      <h3 className="text-sm font-medium text-gray-400">Aperçu du contenu</h3>
                       
-                      <Card className="bg-card/30 border border-white/10">
+                      <Card className="bg-[#0d1117] border border-[#30363d]">
                         <CardContent className="p-6">
                           <div className="space-y-4">
                             {watchedValues.title && (
-                              <div className="border-b border-white/10 pb-3">
-                                <h4 className="text-lg font-bold">{watchedValues.title}</h4>
+                              <div className="border-b border-[#30363d]/80 pb-3">
+                                <h4 className="text-lg font-bold text-white">{watchedValues.title}</h4>
                               </div>
                             )}
                             
                             {watchedValues.subcategory && (
                               <div className="space-y-2">
-                                <h5 className="font-medium">1. Introduction</h5>
-                                <p className="text-sm text-muted-foreground">
+                                <h5 className="font-medium text-gray-200">1. Introduction</h5>
+                                <p className="text-sm text-gray-400">
                                   Ce document détaille les spécifications techniques pour {watchedValues.subcategory.toLowerCase()}. 
                                   Il fait partie intégrante du dossier de consultation des entreprises.
                                 </p>
@@ -489,12 +488,12 @@ const EditDCE = () => {
                             
                             {watchedValues.sourceMaterials && (
                               <div className="space-y-2">
-                                <h5 className="font-medium">2. Documents de référence</h5>
-                                <div className="text-sm text-muted-foreground">
+                                <h5 className="font-medium text-gray-200">2. Documents de référence</h5>
+                                <div className="text-sm text-gray-400">
                                   {watchedValues.sourceMaterials.split('\n').map((link, index) => (
                                     <div key={index} className="flex items-center gap-2 ml-2">
                                       <LinkIcon className="h-3 w-3" />
-                                      <span className="text-blue-400 underline">{link}</span>
+                                      <span className="text-[#38bdf8] underline">{link}</span>
                                     </div>
                                   ))}
                                 </div>
@@ -503,15 +502,15 @@ const EditDCE = () => {
                             
                             {watchedValues.additionalNotes && (
                               <div className="space-y-2">
-                                <h5 className="font-medium">3. Informations complémentaires</h5>
-                                <p className="text-sm text-muted-foreground">
+                                <h5 className="font-medium text-gray-200">3. Informations complémentaires</h5>
+                                <p className="text-sm text-gray-400">
                                   {watchedValues.additionalNotes}
                                 </p>
                               </div>
                             )}
                             
                             {(!watchedValues.additionalNotes && !watchedValues.sourceMaterials) && (
-                              <p className="text-sm text-muted-foreground italic">
+                              <p className="text-sm text-gray-500 italic">
                                 Complétez le formulaire pour générer un aperçu du contenu du document...
                               </p>
                             )}
