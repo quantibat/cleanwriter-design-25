@@ -7,37 +7,31 @@ import { Textarea } from "@/components/ui/textarea";
 import { BugIcon, MessageSquareText, SendIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
-
 interface FormValues {
   feedback: string;
 }
-
 const ContributeForm = () => {
   const [submitted, setSubmitted] = useState(false);
-  
   const form = useForm<FormValues>({
     defaultValues: {
-      feedback: '',
-    },
+      feedback: ''
+    }
   });
-
   const onSubmit = (data: FormValues) => {
     console.log('Feedback submitted:', data);
     toast({
       title: "Merci pour votre contribution!",
-      description: "Nous avons bien reçu votre feedback et l'examinerons attentivement.",
+      description: "Nous avons bien reçu votre feedback et l'examinerons attentivement."
     });
     setSubmitted(true);
-    
+
     // Reset the form after a delay
     setTimeout(() => {
       form.reset();
       setSubmitted(false);
     }, 3000);
   };
-
-  return (
-    <div className="space-y-6 w-full">
+  return <div className="space-y-6 w-full">
       <Card className="cosmic-card border-white/10 w-full">
         <CardHeader>
           <CardTitle className="text-2xl flex items-center gap-2">
@@ -85,48 +79,29 @@ const ContributeForm = () => {
           
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
-              <FormField
-                control={form.control}
-                name="feedback"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="feedback" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-lg">Votre feedback</FormLabel>
                     <FormControl>
-                      <Textarea 
-                        placeholder="Partagez vos idées, suggestions ou rapports de bug ici..."
-                        className="min-h-[150px] border-white/10 bg-white/5 focus:border-blue-400"
-                        {...field}
-                      />
+                      <Textarea placeholder="Partagez vos idées, suggestions ou rapports de bug ici..." className="min-h-[150px] border-white/10 bg-white/5 focus:border-blue-400" {...field} />
                     </FormControl>
                     <FormDescription>
                       Soyez aussi détaillé que possible pour nous aider à mieux comprendre.
                     </FormDescription>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
               
-              <Button 
-                type="submit" 
-                variant="blue"
-                className="w-full"
-                disabled={submitted}
-              >
-                {submitted ? (
-                  "Merci pour votre contribution!"
-                ) : (
-                  <>
+              <Button type="submit" variant="blue" disabled={submitted} className="w-full bg-transparent">
+                {submitted ? "Merci pour votre contribution!" : <>
                     <SendIcon className="mr-2 h-4 w-4" />
                     Envoyer un feedback
-                  </>
-                )}
+                  </>}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default ContributeForm;
