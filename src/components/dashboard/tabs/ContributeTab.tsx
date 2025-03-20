@@ -1,12 +1,9 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { HandHeart, Users, MessageSquare, Lightbulb, Share2 } from "lucide-react";
-
 const ContributeTab = () => {
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Collaborer sur les DCE</h2>
         <p className="text-muted-foreground">Travaillez en équipe sur vos dossiers de consultation et partagez votre expertise</p>
@@ -40,35 +37,9 @@ const ContributeTab = () => {
           </CardContent>
         </Card>
         
-        <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
-          <CardHeader>
-            <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
-              <MessageSquare className="h-5 w-5 text-blue-400" />
-            </div>
-            <CardTitle>Commentaires sur les documents</CardTitle>
-            <CardDescription>Discutez et annotez les documents pour améliorer la qualité de vos dossiers</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Voir les commentaires
-            </Button>
-          </CardContent>
-        </Card>
         
-        <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
-          <CardHeader>
-            <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
-              <Lightbulb className="h-5 w-5 text-blue-400" />
-            </div>
-            <CardTitle>Modèles de documents</CardTitle>
-            <CardDescription>Accédez à des modèles de documents standardisés pour vos dossiers de consultation</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
-              Explorer les modèles
-            </Button>
-          </CardContent>
-        </Card>
+        
+        
         
         <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
           <CardHeader>
@@ -85,8 +56,6 @@ const ContributeTab = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ContributeTab;
