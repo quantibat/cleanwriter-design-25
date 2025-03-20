@@ -42,10 +42,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-4">
           {user ? <div className="flex items-center gap-3">
               {!isPremiumUser && <Link to="/free-trial">
-                  <Button variant="blue" size="sm" className="mr-2">
-                    <Zap className="h-4 w-4 mr-1" />
-                    Essai gratuit
-                  </Button>
+                  
                 </Link>}
               <span className="text-sm text-foreground">
                 {user.user_metadata?.full_name || user.email}
