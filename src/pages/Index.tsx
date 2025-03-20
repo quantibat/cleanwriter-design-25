@@ -14,8 +14,8 @@ const Index = () => {
     // Parallax effect for the hero section
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const heroImage = document.querySelector('.hero-image');
-      if (heroImage && heroImage instanceof HTMLElement) {
+      const heroImage = document.querySelector('.hero-image') as HTMLElement | null;
+      if (heroImage) {
         heroImage.style.transform = `translateY(${scrollY * 0.2}px)`;
       }
       
@@ -32,7 +32,7 @@ const Index = () => {
     };
     
     // Smooth scroll for anchor links
-    const handleAnchorClick = (e: Event) => {
+    const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
         e.preventDefault();
@@ -65,8 +65,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#06071b]">
-      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-transparent opacity-40 pointer-events-none"></div>
-      <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-blue-500/20 to-transparent blur-3xl rounded-full opacity-20 pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-blue-900/20 via-indigo-900/10 to-transparent opacity-40 pointer-events-none"></div>
+      <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-blue-600/20 to-transparent blur-3xl rounded-full opacity-20 pointer-events-none"></div>
       <div className="particles-container fixed inset-0 z-0 pointer-events-none"></div>
       <Navbar />
       <main>

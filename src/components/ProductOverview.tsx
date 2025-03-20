@@ -22,7 +22,7 @@ const ProductOverview = () => {
   };
 
   return (
-    <section id="product" className="py-28 px-6">
+    <section id="product" className="py-28 px-6 bg-[#06071b]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           {/* Left column - Image */}
@@ -33,7 +33,7 @@ const ProductOverview = () => {
             transition={{ duration: 0.8 }}
             className="rounded-2xl overflow-hidden relative order-2 md:order-1"
           >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-30"></div>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-50"></div>
             <img 
               src="https://framerusercontent.com/images/AX9CZ2I24YK31pBfKrdXgFLrto.png" 
               alt="Interface de DCE Manager" 
@@ -71,8 +71,8 @@ const ProductOverview = () => {
                 "Collaboration en temps réel entre les équipes"
               ].map((feature, index) => (
                 <motion.li key={index} variants={item} className="flex gap-3 items-start">
-                  <span className="h-5 w-5 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Check className="h-3 w-3 text-green-400" />
+                  <span className="h-5 w-5 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="h-3 w-3 text-blue-400" />
                   </span>
                   <span className="text-blue-100/80">{feature}</span>
                 </motion.li>

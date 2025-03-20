@@ -2,6 +2,7 @@
 import React from 'react';
 import { FolderOpen, BarChart3, Users, Shield } from "lucide-react";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface FeatureCardProps {
   title: string;
@@ -21,9 +22,9 @@ const FeatureCard = ({
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ delay: delay * 0.1, duration: 0.6 }}
-    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group"
+    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group"
   >
-    <div className="h-12 w-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors duration-300">
+    <div className="h-12 w-12 bg-blue-600/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-600/30 transition-colors duration-300">
       <div className="text-blue-400">{icon}</div>
     </div>
     <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
@@ -56,9 +57,9 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-28 px-6 relative">
+    <section id="features" className="py-24 px-6 relative bg-[#06071b]">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-blue-900/5 to-background pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-900/5 via-indigo-900/5 to-transparent pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div 
@@ -83,6 +84,12 @@ const Features = () => {
           {features.map((feature, index) => (
             <FeatureCard key={index} {...feature} delay={index} />
           ))}
+        </div>
+        
+        <div className="mt-16 text-center">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 rounded-full">
+            Découvrir toutes les fonctionnalités
+          </Button>
         </div>
       </div>
     </section>

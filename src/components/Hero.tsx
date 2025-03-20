@@ -6,9 +6,9 @@ import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
+    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6 bg-[#06071b]">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/80 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-indigo-900/5 to-transparent pointer-events-none"></div>
       
       {/* Background stars/dots */}
       <div className="stars absolute inset-0 overflow-hidden pointer-events-none">
@@ -32,14 +32,14 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center space-y-8 max-w-3xl mx-auto relative z-10"
+          className="text-left md:text-center space-y-8 max-w-3xl mx-auto relative z-10"
         >
-          <div className="flex flex-col items-center space-y-4">
+          <div className="flex flex-col items-start md:items-center space-y-4">
             <motion.span 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium"
+              className="px-4 py-1.5 bg-blue-600/20 text-blue-400 rounded-full text-sm font-medium"
             >
               DCE Manager v1.0
             </motion.span>
@@ -69,7 +69,7 @@ const Hero = () => {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
           >
-            <Button className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg rounded-full group">
+            <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 font-medium text-lg rounded-full group">
               Commencer maintenant
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
@@ -86,9 +86,9 @@ const Hero = () => {
           transition={{ delay: 1, duration: 0.8 }}
           className="mt-20 max-w-5xl mx-auto relative"
         >
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-30"></div>
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl blur opacity-30"></div>
           <img 
-            src="https://framerusercontent.com/images/e3CY4LS3JbVAeSh3BdpsCSgCCU.png" 
+            src="public/lovable-uploads/48d64d9e-4521-4624-bbb9-27607eb3bfc2.png" 
             alt="DCE Manager Dashboard" 
             className="w-full h-full object-cover relative z-10 rounded-2xl border border-white/10 shadow-2xl" 
           />
