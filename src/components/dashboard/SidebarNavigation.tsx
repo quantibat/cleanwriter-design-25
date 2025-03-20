@@ -1,45 +1,20 @@
+
 import React from 'react';
-import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon, Users, Zap } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSidebar } from '@/components/ui/sidebar';
-import { useNotifications } from '@/contexts/NotificationContext';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
+
 interface SidebarNavigationProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
 }
+
 const SidebarNavigation = ({
   activeTab = 'tools',
   onTabChange
 }: SidebarNavigationProps) => {
-  const {
-    open
-  } = useSidebar();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const {
-    unreadCount
-  } = useNotifications();
-  const {
-    isPremiumUser
-  } = useAuth();
-  const handleTabChange = (tab: string) => {
-    onTabChange?.(tab);
-  };
-  const handlePremiumLink = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
-    // Vérifier si le lien concerne une fonctionnalité premium et si l'utilisateur n'est pas premium
-    if (!isPremiumUser && (path === '/projects' || path === '/dashboard')) {
-      e.preventDefault();
-      toast({
-        title: "Fonctionnalité premium",
-        description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
-        variant: "default"
-      });
-      navigate('/upgrade-plan');
-    }
-  };
+  const { open } = useSidebar();
+
   return <div className={cn("h-16 border-b border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md w-full", "transition-all duration-300 ease-in-out flex items-center justify-center")}>
       {/* Brand logo */}
       <div className="flex items-center h-full px-6 border-r border-sidebar-border shrink-0">
@@ -50,45 +25,11 @@ const SidebarNavigation = ({
         </Link>
       </div>
 
-      {/* Menu - now horizontal */}
+      {/* Empty space where navigation used to be */}
       <div className="flex-1 h-full flex items-center px-4">
-        <ul className="flex space-x-2 h-full items-center">
-          <li>
-            <Link to="/dashboard" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/dashboard' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => {
-            handleTabChange('tools');
-            handlePremiumLink(e, '/dashboard');
-          }}>
-              <Home className="h-5 w-5 mr-2" />
-              <span>Tableau de bord</span>
-            </Link>
-          </li>
-          
-          <li>
-            <Link to="/projects" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => handlePremiumLink(e, '/projects')}>
-              <Briefcase className="h-5 w-5 mr-2" />
-              <span>Projets</span>
-            </Link>
-          </li>
-          
-          <li>
-            <Link to="/contribute" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/contribute' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={() => handleTabChange('contribute')}>
-              <Gift className="h-5 w-5 mr-2" />
-              <span>Contribuer</span>
-            </Link>
-          </li>
-          
-          {isPremiumUser && <li>
-              
-            </li>}
-          
-          <li>
-            
-          </li>
-        </ul>
+        {/* Navigation items have been moved to DashboardLayout breadcrumb section */}
       </div>
-      
-      {/* Copyright footer - now on the right */}
-      
     </div>;
 };
+
 export default SidebarNavigation;
