@@ -104,7 +104,7 @@ const NotificationBell = () => {
                         {notification.title}
                       </p>
                       <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {formatDistanceToNow(new Date(notification.date), { 
+                        {formatDistanceToNow(new Date(notification.createdAt), { 
                           addSuffix: true,
                           locale: fr
                         })}
