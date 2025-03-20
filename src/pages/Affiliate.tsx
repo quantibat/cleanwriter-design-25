@@ -13,7 +13,7 @@ const Affiliate = () => {
       <Navbar />
 
       <main className="flex-1">
-        <section className="px-6 relative text-center py-[130px]">
+        <section className="px-6 relative text-center pt-[130px]">
           <div className="max-w-5xl mx-auto relative z-10">
             <h1 className="text-3xl font-bold mb-6 md:text-4xl">
               Recevez jusqu'à <span className="text-blue-400">2 000 $</span> par mois grâce au marché à la croissance la plus rapide au monde
@@ -95,9 +95,7 @@ const Affiliate = () => {
               </div>
             </div>
             
-            <Button className="blue-shimmer-button bg-blue-500 hover:bg-blue-600 px-8 py-6 text-lg h-auto mb-16">
-              Devenez un partenaire affilié maintenant !
-            </Button>
+            
             
             <div className="mb-16">
               <div className="flex items-center justify-center mb-6">
