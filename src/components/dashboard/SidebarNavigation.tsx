@@ -36,7 +36,7 @@ const SidebarNavigation = ({
         description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
         variant: "default"
       });
-      navigate('/free-trial');
+      navigate('/upgrade-plan');
     }
   };
   

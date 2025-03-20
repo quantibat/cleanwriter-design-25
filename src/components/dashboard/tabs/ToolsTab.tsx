@@ -13,7 +13,7 @@ const ToolsTab = () => {
 
   const handleCreateClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     // Si l'utilisateur n'est pas premium, on empêche la navigation par défaut
-    // et on redirige vers la page d'essai gratuit
+    // et on redirige vers la page d'upgrade plan
     if (!isPremiumUser) {
       e.preventDefault();
       toast({
@@ -21,7 +21,7 @@ const ToolsTab = () => {
         description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
         variant: "default"
       });
-      navigate('/free-trial');
+      navigate('/upgrade-plan');
     }
   };
 
