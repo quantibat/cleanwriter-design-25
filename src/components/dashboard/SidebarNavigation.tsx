@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon, Users, Zap } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -7,26 +6,28 @@ import { useNotifications } from '@/contexts/NotificationContext';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-
 interface SidebarNavigationProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
 }
-
 const SidebarNavigation = ({
   activeTab = 'tools',
   onTabChange
 }: SidebarNavigationProps) => {
-  const { open } = useSidebar();
+  const {
+    open
+  } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
-  const { unreadCount } = useNotifications();
-  const { isPremiumUser } = useAuth();
-  
+  const {
+    unreadCount
+  } = useNotifications();
+  const {
+    isPremiumUser
+  } = useAuth();
   const handleTabChange = (tab: string) => {
     onTabChange?.(tab);
   };
-  
   const handlePremiumLink = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
     // Vérifier si le lien concerne une fonctionnalité premium et si l'utilisateur n'est pas premium
     if (!isPremiumUser && (path === '/projects' || path === '/dashboard')) {
@@ -39,12 +40,7 @@ const SidebarNavigation = ({
       navigate('/upgrade-plan');
     }
   };
-  
-  return (
-    <div className={cn(
-      "h-16 border-b border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md w-full",
-      "transition-all duration-300 ease-in-out flex items-center justify-center"
-    )}>
+  return <div className={cn("h-16 border-b border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md w-full", "transition-all duration-300 ease-in-out flex items-center justify-center")}>
       {/* Brand logo */}
       <div className="flex items-center h-full px-6 border-r border-sidebar-border shrink-0">
         <Link to="/" className="flex items-center gap-2 font-semibold">
@@ -58,103 +54,41 @@ const SidebarNavigation = ({
       <div className="flex-1 h-full flex items-center px-4">
         <ul className="flex space-x-2 h-full items-center">
           <li>
-            <Link 
-              to="/dashboard" 
-              className={cn(
-                "py-2 px-4 rounded-lg transition-colors",
-                "flex items-center",
-                location.pathname === '/dashboard' 
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                  : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
-              )} 
-              onClick={e => {
-                handleTabChange('tools');
-                handlePremiumLink(e, '/dashboard');
-              }}
-            >
+            <Link to="/dashboard" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/dashboard' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => {
+            handleTabChange('tools');
+            handlePremiumLink(e, '/dashboard');
+          }}>
               <Home className="h-5 w-5 mr-2" />
               <span>Tableau de bord</span>
             </Link>
           </li>
           
           <li>
-            <Link 
-              to="/projects" 
-              className={cn(
-                "py-2 px-4 rounded-lg transition-colors",
-                "flex items-center",
-                location.pathname === '/projects' 
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                  : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
-              )} 
-              onClick={e => handlePremiumLink(e, '/projects')}
-            >
+            <Link to="/projects" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => handlePremiumLink(e, '/projects')}>
               <Briefcase className="h-5 w-5 mr-2" />
               <span>Projets</span>
             </Link>
           </li>
           
           <li>
-            <Link 
-              to="/contribute" 
-              className={cn(
-                "py-2 px-4 rounded-lg transition-colors",
-                "flex items-center",
-                location.pathname === '/contribute' 
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                  : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
-              )} 
-              onClick={() => handleTabChange('contribute')}
-            >
+            <Link to="/contribute" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/contribute' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={() => handleTabChange('contribute')}>
               <Gift className="h-5 w-5 mr-2" />
               <span>Contribuer</span>
             </Link>
           </li>
           
-          {isPremiumUser && (
-            <li>
-              <Link 
-                to="/affiliate" 
-                className={cn(
-                  "py-2 px-4 rounded-lg transition-colors",
-                  "flex items-center",
-                  location.pathname === '/affiliate' 
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                    : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
-                )}
-              >
-                <Users className="h-5 w-5 mr-2" />
-                <span>Affiliation</span>
-              </Link>
-            </li>
-          )}
+          {isPremiumUser && <li>
+              
+            </li>}
           
           <li>
-            <Link 
-              to="/upgrade-plan" 
-              className={cn(
-                "py-2 px-4 rounded-lg transition-colors",
-                "flex items-center",
-                location.pathname === '/upgrade-plan' 
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                  : "hover:bg-sidebar-accent/30 text-sidebar-foreground"
-              )}
-            >
-              <Zap className="h-5 w-5 mr-2" />
-              <span>Upgrader son plan</span>
-            </Link>
+            
           </li>
         </ul>
       </div>
       
       {/* Copyright footer - now on the right */}
-      <div className="shrink-0 px-4 border-l border-sidebar-border h-full flex items-center">
-        <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} DCEManager
-        </p>
-      </div>
-    </div>
-  );
+      
+    </div>;
 };
-
 export default SidebarNavigation;
