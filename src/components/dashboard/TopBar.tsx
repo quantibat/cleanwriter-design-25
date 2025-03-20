@@ -205,7 +205,7 @@ const TopBar = ({
                 <Progress value={65} className="w-24 h-2" />
                 <span className="text-white text-xs">65% de vos crédits utilisés</span>
               </div>
-              <Button size="sm" variant="blue" className="mt-2 text-xs py-1 h-8">
+              <Button size="sm" variant="blue" className="mt-2 text-xs py-1 h-8 bg-transparent">
                 Mettre à niveau
               </Button>
             </div>
