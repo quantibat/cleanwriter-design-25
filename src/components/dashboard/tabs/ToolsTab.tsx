@@ -1,11 +1,30 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FolderPlus, ArrowRight } from "lucide-react";
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/hooks/use-toast';
 
 const ToolsTab = () => {
+  const { isPremiumUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleCreateClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Si l'utilisateur n'est pas premium, on empêche la navigation par défaut
+    // et on redirige vers la page d'essai gratuit
+    if (!isPremiumUser) {
+      e.preventDefault();
+      toast({
+        title: "Fonctionnalité premium",
+        description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
+        variant: "default"
+      });
+      navigate('/free-trial');
+    }
+  };
+
   return (
     <div className="space-y-6 w-full">
       <h2 className="text-2xl font-bold">Outils de gestion</h2>
@@ -22,7 +41,7 @@ const ToolsTab = () => {
           </CardHeader>
           <CardContent>
             <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4" asChild>
-              <Link to="/create-dce">
+              <Link to="/create-dce" onClick={handleCreateClick}>
                 Créer <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
