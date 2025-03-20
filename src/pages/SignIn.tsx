@@ -130,14 +130,14 @@ const SignIn = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-block">
             <h2 className="text-2xl font-bold text-white flex items-center justify-center">
-              <span className="text-blue-400">AI</span>Writer
+              <span className="text-blue-400">DCE</span>Manager
             </h2>
           </Link>
           <p className="mt-2 text-white/60">Connectez-vous à votre compte</p>
         </div>
         
         <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
-          <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur AIWriter</h1>
+          <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur DCEManager</h1>
           
           <div className="space-y-4 mb-4">
             <Button 

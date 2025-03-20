@@ -1,19 +1,50 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, Moon, Sun, Cpu, Globe, Headphones, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle";
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const FreeTrial = () => {
   const [isDarkMode, setIsDarkMode] = React.useState(true);
+  const { user, isPremiumUser } = useAuth();
+  const navigate = useNavigate();
   
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-    // In a real implementation, this would toggle a dark mode class on the root element
+    // Dans une implémentation réelle, cela basculerait une classe de mode sombre sur l'élément racine
+  };
+  
+  const handleStartTrial = () => {
+    if (!user) {
+      // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+      navigate('/signin', { state: { from: { pathname: '/free-trial' } } });
+      return;
+    }
+    
+    if (isPremiumUser) {
+      toast({
+        title: "Déjà abonné",
+        description: "Vous bénéficiez déjà de toutes les fonctionnalités premium.",
+        variant: "default",
+      });
+      navigate('/dashboard');
+      return;
+    }
+    
+    // Simuler le démarrage de l'essai
+    toast({
+      title: "Essai gratuit activé",
+      description: "Votre période d'essai de 7 jours démarre maintenant. Profitez de toutes les fonctionnalités premium!",
+      variant: "default",
+    });
+    // Rediriger vers le tableau de bord après un court délai
+    setTimeout(() => navigate('/dashboard'), 1500);
   };
   
   return (
@@ -25,7 +56,7 @@ const FreeTrial = () => {
           <Toggle 
             pressed={isDarkMode} 
             onPressedChange={toggleDarkMode}
-            aria-label="Toggle dark mode"
+            aria-label="Basculer le mode sombre"
             className="p-2"
           >
             {isDarkMode ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
@@ -62,7 +93,12 @@ const FreeTrial = () => {
                 Explorez toutes nos fonctionnalités avancées pendant 7 jours, sans engagement.
                 Annulez à tout moment avant la fin de l'essai.
               </p>
-              <Button variant="blue" className="w-full text-lg py-6" size="lg">
+              <Button 
+                variant="blue" 
+                className="w-full text-lg py-6" 
+                size="lg"
+                onClick={handleStartTrial}
+              >
                 Commencer l'essai gratuit
                 <ArrowRight className="ml-2" />
               </Button>

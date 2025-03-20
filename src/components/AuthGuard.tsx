@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/hooks/use-toast';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -36,6 +37,11 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   // Si la route nécessite un abonnement premium et que l'utilisateur n'est pas premium,
   // rediriger vers la page d'essai gratuit
   if (requiresPremium && !isPremiumUser) {
+    toast({
+      title: "Fonctionnalité premium",
+      description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
+      variant: "default",
+    });
     return <Navigate to="/free-trial" state={{ from: location }} replace />;
   }
 
