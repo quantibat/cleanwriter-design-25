@@ -15,7 +15,7 @@ const Index = () => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const heroImage = document.querySelector('.hero-image');
-      if (heroImage) {
+      if (heroImage && heroImage instanceof HTMLElement) {
         heroImage.style.transform = `translateY(${scrollY * 0.2}px)`;
       }
       
@@ -32,17 +32,19 @@ const Index = () => {
     };
     
     // Smooth scroll for anchor links
-    const handleAnchorClick = (e) => {
-      const target = e.target;
+    const handleAnchorClick = (e: Event) => {
+      const target = e.target as HTMLElement;
       if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
         e.preventDefault();
-        const id = target.getAttribute('href').slice(1);
-        const element = document.getElementById(id);
-        if (element) {
-          window.scrollTo({
-            top: element.offsetTop - 80, // Offset for fixed header
-            behavior: 'smooth'
-          });
+        const id = target.getAttribute('href')?.slice(1);
+        if (id) {
+          const element = document.getElementById(id);
+          if (element) {
+            window.scrollTo({
+              top: element.offsetTop - 80, // Offset for fixed header
+              behavior: 'smooth'
+            });
+          }
         }
       }
     };

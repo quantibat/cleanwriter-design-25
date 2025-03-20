@@ -2,10 +2,10 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Check, ArrowUpRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 const ProductOverview = () => {
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -16,7 +16,7 @@ const ProductOverview = () => {
     }
   };
 
-  const item = {
+  const item: Variants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 }
   };
