@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -186,16 +187,17 @@ const Affiliate = () => {
 
       await quickAffiliateSignup();
       
-      if (isAffiliate) {
-        toast({
-          title: "Redirection...",
-          description: "Accès au tableau de bord des affiliés",
-          variant: "default"
-        });
-        navigate('/affiliate');
-      } else {
+      // Après avoir créé le compte affilié, notifier l'utilisateur et rediriger
+      toast({
+        title: "Félicitations!",
+        description: "Votre compte affilié a été créé. Redirection vers le tableau de bord...",
+        variant: "default"
+      });
+      
+      // Forcer un rechargement complet de la page pour que les changements d'état soient reflétés
+      setTimeout(() => {
         window.location.href = '/affiliate';
-      }
+      }, 500);
       
     } catch (error: any) {
       toast({
