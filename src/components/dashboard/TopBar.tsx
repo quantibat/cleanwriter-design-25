@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -8,10 +9,12 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
 }
+
 const TopBar = ({
   onThemeToggle,
   isDarkMode
@@ -33,10 +36,12 @@ const TopBar = ({
     email: user?.email || "john.doe@example.com",
     address: user?.user_metadata?.address || "123 Rue de Paris, 75000 Paris"
   };
+  
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
+  
   const handleThemeChange = () => {
     if (isDarkMode) {
       // Apply light theme - make everything white (without transparency)
@@ -89,11 +94,101 @@ const TopBar = ({
     }
     onThemeToggle();
   };
+  
   const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
     setLanguage(newLanguage);
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-  return;
+
+  return (
+    <div className="flex items-center justify-between w-full px-6 py-2 border-b border-[#2A3047] bg-[#121520]">
+      <div className="flex flex-1">
+        {/* Left section: Credits */}
+        <div className="flex items-center">
+          <div className="ml-2 text-sm mr-8">
+            <div className="text-gray-400 font-medium">Crédits restants</div>
+            <div className="flex items-center space-x-2">
+              <Progress value={65} className="w-24 h-2" />
+              <span className="text-white font-semibold">65%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right section: Theme Toggle & Profile */}
+      <div className="flex items-center space-x-4">
+        {/* Theme Toggle */}
+        <div className="flex items-center space-x-2">
+          <Sun className="h-4 w-4 text-gray-400" />
+          <Switch 
+            checked={isDarkMode}
+            onCheckedChange={handleThemeChange}
+          />
+          <Moon className="h-4 w-4 text-gray-400" />
+        </div>
+
+        {/* Language Selector */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Globe className="h-5 w-5 text-gray-400" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? 'bg-accent' : ''}>
+              Français
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? 'bg-accent' : ''}>
+              English
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Avatar + Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative rounded-full h-8 w-8 p-0">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" alt={userData.firstName} />
+                <AvatarFallback>{userData.firstName.charAt(0)}{userData.lastName.charAt(0)}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">{userData.firstName} {userData.lastName}</p>
+                <p className="text-xs leading-none text-muted-foreground">{userData.email}</p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <User className="mr-2 h-4 w-4" />
+              <Link to="/account">Mon compte</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <CreditCard className="mr-2 h-4 w-4" />
+              <Link to="/billing">Facturation</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" />
+              <Link to="/settings">Paramètres</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <HelpCircle className="mr-2 h-4 w-4" />
+              <Link to="/help">Aide</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleSignOut}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Déconnexion
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  );
 };
+
 export default TopBar;
