@@ -61,7 +61,7 @@ const CustomPricing = () => {
       <Navbar />
 
       <main className="flex-1">
-        <section className="px-6 relative py-[130px]">
+        <section className="px-6 relative pt-[130px]">
           <div className="max-w-7xl mx-auto text-center mb-16">
             <h1 className="text-3xl md:text-5xl font-bold mb-4">Plans & Pricing</h1>
             <p className="text-xl text-blue-100/80">Start Your Free Trial To Get Started!</p>
