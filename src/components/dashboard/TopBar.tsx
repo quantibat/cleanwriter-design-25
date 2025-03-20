@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -9,12 +8,10 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
 }
-
 const TopBar = ({
   onThemeToggle,
   isDarkMode
@@ -36,12 +33,10 @@ const TopBar = ({
     email: user?.email || "john.doe@example.com",
     address: user?.user_metadata?.address || "123 Rue de Paris, 75000 Paris"
   };
-  
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
-  
   const handleThemeChange = () => {
     if (isDarkMode) {
       // Apply light theme - make everything white (without transparency)
@@ -94,23 +89,18 @@ const TopBar = ({
     }
     onThemeToggle();
   };
-  
   const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
     setLanguage(newLanguage);
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-
-  return (
-    <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
+  return <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
       {/* Top div with logo and user controls */}
       <div className="flex items-center justify-between w-full px-6 py-3">
         {/* Left: Logo */}
         <div className="flex items-center">
           <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="bg-[#00a2ff] w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">
-              <span className="text-xl">D</span>
-            </div>
+            
             <div className="text-white font-semibold text-xl">
               DCE<span className="text-[#00a2ff]">Manager</span>
             </div>
@@ -222,8 +212,6 @@ const TopBar = ({
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default TopBar;
