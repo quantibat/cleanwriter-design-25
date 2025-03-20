@@ -33,7 +33,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   return (
     <div className="min-h-screen bg-background w-full">
       <SidebarProvider defaultOpen={true}>
-        <div className="flex h-screen overflow-hidden w-full">
+        <div className="flex flex-col h-screen overflow-hidden w-full">
+          {/* Top section with horizontal sidebar */}
           <SidebarNavigation activeTab={activeTab} onTabChange={() => {}} />
           
           <main className="flex-1 flex flex-col overflow-hidden w-full">
