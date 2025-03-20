@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -109,7 +108,8 @@ const ContributeForm = () => {
               
               <Button 
                 type="submit" 
-                className="w-full bg-blue-500 hover:bg-blue-600"
+                variant="blue"
+                className="w-full"
                 disabled={submitted}
               >
                 {submitted ? (

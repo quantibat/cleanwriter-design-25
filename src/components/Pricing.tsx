@@ -32,7 +32,7 @@ const PricingCard = ({ title, price, description, features, popular = false }: P
         </li>
       ))}
     </ul>
-    <Button className={`w-full hover-button ${popular ? 'blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white' : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}>
+    <Button variant={popular ? "blue" : "outline"} className={`w-full hover-button ${!popular && 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}>
       {popular ? "Commencer maintenant" : "Essayer gratuitement"}
     </Button>
   </div>

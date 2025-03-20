@@ -47,7 +47,8 @@ const Onboarding = () => {
           <div className="my-12">
             <Button 
               onClick={handleGoToDashboard}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg h-auto rounded-md"
+              variant="blue"
+              className="px-8 py-6 text-lg h-auto rounded-md"
             >
               Accéder à votre compte DCEManager
             </Button>
