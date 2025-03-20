@@ -54,11 +54,7 @@ const FreeTrial = () => {
       <Navbar />
       
       <main className="pt-24 pb-20 px-4 max-w-5xl mx-auto">
-        <div className="flex justify-end mb-8">
-          <Toggle pressed={isDarkMode} onPressedChange={toggleDarkMode} aria-label="Basculer le mode sombre" className="p-2">
-            {isDarkMode ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-          </Toggle>
-        </div>
+        
         
         <section className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
