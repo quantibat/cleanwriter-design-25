@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -185,25 +184,15 @@ const Affiliate = () => {
         return;
       }
 
-      // Appel de la fonction d'inscription rapide et capture du résultat
       const success = await quickAffiliateSignup();
       
       if (success) {
-        // Après avoir créé le compte affilié, notifier l'utilisateur et rediriger
         toast({
           title: "Redirection...",
           description: "Accès au tableau de bord des affiliés",
           variant: "default"
         });
-        
-        // Redirection optimisée : utilise le router React si possible
-        // sinon force un rechargement complet de la page
-        if (isAffiliate) {
-          navigate('/affiliate');
-        } else {
-          // Force le rechargement si l'état n'est pas encore mis à jour
-          window.location.href = '/affiliate';
-        }
+        navigate('/affiliate');
       }
     } catch (error: any) {
       toast({
