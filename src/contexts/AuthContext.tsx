@@ -9,7 +9,9 @@ type AuthContextType = {
   session: Session | null;
   isLoading: boolean;
   signOut: () => Promise<void>;
-  signInWithTestAccount: () => void; // Nouvelle méthode pour le compte test
+  signInWithTestAccount: () => void; // Compte test standard (premium)
+  signInWithBasicTestAccount: () => void; // Compte test sans abonnement
+  isPremiumUser: boolean; // Indicateur de statut premium
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,8 +20,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
 
-  // Fonction pour connexion avec compte test
+  // Fonction pour connexion avec compte test premium
   const signInWithTestAccount = () => {
     // Créer un faux utilisateur et une fausse session
     const testUser = {
@@ -27,6 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: 'test@exemple.com',
       user_metadata: {
         full_name: 'Utilisateur Test',
+        premium: true
       },
       app_metadata: {
         role: 'user',
@@ -50,12 +54,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Mettre à jour l'état
     setUser(testUser);
     setSession(testSession);
+    setIsPremiumUser(true);
     setIsLoading(false);
 
     // Afficher une notification
     toast({
       title: "Connexion test réussie",
-      description: "Vous êtes connecté avec le compte de démonstration",
+      description: "Vous êtes connecté avec le compte de démonstration premium",
       variant: "default",
     });
 
@@ -66,7 +71,66 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (notificationContext?.addNotification) {
           notificationContext.addNotification({
             title: "Connexion test réussie",
-            message: "Bienvenue sur la démo!",
+            message: "Bienvenue sur la démo premium!",
+            type: "auth",
+          });
+        }
+      } catch (e) {
+        console.error("Impossible d'accéder au contexte de notification:", e);
+      }
+    }, 500);
+  };
+
+  // Fonction pour connexion avec compte test basique (sans premium)
+  const signInWithBasicTestAccount = () => {
+    // Créer un faux utilisateur et une fausse session (sans premium)
+    const testUser = {
+      id: 'test-basic-user-id',
+      email: 'test-basic@exemple.com',
+      user_metadata: {
+        full_name: 'Utilisateur Test Basic',
+        premium: false
+      },
+      app_metadata: {
+        role: 'user',
+      },
+      // Ajout des propriétés manquantes pour satisfaire le type User
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+      confirmed_at: new Date().toISOString(),
+      last_sign_in_at: new Date().toISOString(),
+      role: '',
+      updated_at: new Date().toISOString(),
+    } as User;
+
+    const testSession = {
+      access_token: 'fake-token-basic',
+      refresh_token: 'fake-refresh-token-basic',
+      expires_in: 3600,
+      user: testUser,
+    } as Session;
+
+    // Mettre à jour l'état
+    setUser(testUser);
+    setSession(testSession);
+    setIsPremiumUser(false);
+    setIsLoading(false);
+
+    // Afficher une notification
+    toast({
+      title: "Connexion test réussie",
+      description: "Vous êtes connecté avec le compte de démonstration basique (sans abonnement)",
+      variant: "default",
+    });
+
+    // Notification dans le contexte de notification
+    setTimeout(() => {
+      try {
+        const notificationContext = window._getNotificationContext?.();
+        if (notificationContext?.addNotification) {
+          notificationContext.addNotification({
+            title: "Connexion test réussie",
+            message: "Bienvenue sur la démo basique!",
             type: "auth",
           });
         }
@@ -86,6 +150,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!error && data.session) {
         setSession(data.session);
         setUser(data.session.user);
+        // Vérifier si l'utilisateur est premium
+        setIsPremiumUser(!!data.session.user?.user_metadata?.premium);
       }
       
       setIsLoading(false);
@@ -99,6 +165,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(`Auth event: ${event}`);
         setSession(newSession);
         setUser(newSession?.user ?? null);
+        // Mettre à jour le statut premium
+        setIsPremiumUser(!!newSession?.user?.user_metadata?.premium);
         setIsLoading(false);
         
         // Afficher les notifications appropriées pour les événements d'authentification
@@ -156,7 +224,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, signOut, signInWithTestAccount }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      isLoading, 
+      signOut, 
+      signInWithTestAccount, 
+      signInWithBasicTestAccount,
+      isPremiumUser
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -29,6 +29,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Onboarding from "./pages/Onboarding";
 import Contribute from "./pages/Contribute";
+import FreeTrial from "./pages/FreeTrial";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => (
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/onboarding" element={<Onboarding />} />
+              <Route path="/free-trial" element={<FreeTrial />} />
               
               {/* Routes protégées */}
               <Route path="/dashboard" element={

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut } from "lucide-react";
+import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut, Zap } from "lucide-react";
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,7 +12,8 @@ const Navbar = () => {
   const location = useLocation();
   const {
     user,
-    signOut
+    signOut,
+    isPremiumUser
   } = useAuth();
   
   return <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
@@ -36,14 +37,30 @@ const Navbar = () => {
           <Link to="/affiliate" className="text-sm font-medium transition-colors hover:text-blue-400">
             Affiliation
           </Link>
+          <Link to="/privacy-policy" className="text-sm font-medium transition-colors hover:text-blue-400">
+            Confidentialité
+          </Link>
           
         </div>
 
         {/* Action Buttons (Right) */}
         <div className="hidden md:flex items-center space-x-4">
           {user ? <div className="flex items-center gap-3">
+              {!isPremiumUser && (
+                <Link to="/free-trial">
+                  <Button variant="blue" size="sm" className="mr-2">
+                    <Zap className="h-4 w-4 mr-1" />
+                    Essai gratuit
+                  </Button>
+                </Link>
+              )}
               <span className="text-sm text-foreground">
                 {user.user_metadata?.full_name || user.email}
+                {isPremiumUser && (
+                  <span className="ml-2 bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded-full">
+                    Premium
+                  </span>
+                )}
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -60,6 +77,11 @@ const Navbar = () => {
                   <div className="p-2 text-sm">
                     <p className="font-medium">{user.user_metadata?.full_name || user.email}</p>
                     <p className="text-muted-foreground">{user.email}</p>
+                    {isPremiumUser ? (
+                      <p className="mt-1 text-xs text-amber-400">Compte Premium</p>
+                    ) : (
+                      <p className="mt-1 text-xs text-gray-400">Compte Gratuit</p>
+                    )}
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -83,6 +105,14 @@ const Navbar = () => {
                       Aide
                     </Link>
                   </DropdownMenuItem>
+                  {!isPremiumUser && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/free-trial" className="cursor-pointer flex items-center w-full">
+                        <Zap className="h-4 w-4 mr-2" />
+                        Essai gratuit
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => signOut()}>
                     <LogOut className="h-4 w-4 mr-2" />
@@ -126,8 +156,21 @@ const Navbar = () => {
                       {(user.user_metadata?.full_name || user.email || "U")[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm">{user.user_metadata?.full_name || user.email}</span>
+                  <span className="text-sm">
+                    {user.user_metadata?.full_name || user.email}
+                    {isPremiumUser && (
+                      <span className="ml-2 bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded-full">
+                        Premium
+                      </span>
+                    )}
+                  </span>
                 </div>
+                {!isPremiumUser && (
+                  <Link to="/free-trial" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center">
+                    <Zap className="h-4 w-4 mr-2" />
+                    Essai gratuit
+                  </Link>
+                )}
                 <Link to="/dashboard" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
                   Tableau de bord
                 </Link>

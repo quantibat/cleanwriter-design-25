@@ -4,7 +4,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { supabase } from '../integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, LogIn, Zap } from 'lucide-react';
+import { Mail, LogIn, Zap, ShieldOff } from 'lucide-react';
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +24,7 @@ const formSchema = z.object({
 });
 
 const SignIn = () => {
-  const { user, signInWithTestAccount } = useAuth();
+  const { user, signInWithTestAccount, signInWithBasicTestAccount } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -40,6 +40,7 @@ const SignIn = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDemoLoading, setIsDemoLoading] = useState(false);
+  const [isBasicDemoLoading, setIsBasicDemoLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -103,6 +104,22 @@ const SignIn = () => {
     }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
   }
 
+  async function loginWithBasicDemoAccount() {
+    setIsBasicDemoLoading(true);
+    
+    // Remplir automatiquement le formulaire
+    form.setValue("email", "test-basic@exemple.com");
+    form.setValue("password", "Test1234!");
+    
+    // Utiliser le compte de test basique
+    signInWithBasicTestAccount();
+    
+    setTimeout(() => {
+      navigate('/dashboard');
+      setIsBasicDemoLoading(false);
+    }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
+  }
+
   return (
     <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
@@ -122,15 +139,27 @@ const SignIn = () => {
         <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur AIWriter</h1>
           
-          <Button 
-            variant="outline" 
-            className="w-full mb-4 bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center" 
-            onClick={loginWithDemoAccount} 
-            disabled={isDemoLoading}
-          >
-            <Zap className="w-5 h-5 mr-2" />
-            {isDemoLoading ? "Connexion en cours..." : "Connexion rapide (Compte test)"}
-          </Button>
+          <div className="space-y-4 mb-4">
+            <Button 
+              variant="outline" 
+              className="w-full bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center" 
+              onClick={loginWithDemoAccount} 
+              disabled={isDemoLoading}
+            >
+              <Zap className="w-5 h-5 mr-2" />
+              {isDemoLoading ? "Connexion en cours..." : "Connexion rapide (Compte premium)"}
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="w-full bg-gray-600/20 border border-gray-500/30 text-gray-400 hover:bg-gray-600/30 flex items-center justify-center" 
+              onClick={loginWithBasicDemoAccount} 
+              disabled={isBasicDemoLoading}
+            >
+              <ShieldOff className="w-5 h-5 mr-2" />
+              {isBasicDemoLoading ? "Connexion en cours..." : "Connexion rapide (Sans abonnement)"}
+            </Button>
+          </div>
           
           <div className="mb-8">
             <Button variant="outline" className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5">
@@ -193,7 +222,7 @@ const SignIn = () => {
                 )} 
               />
               
-              <Button type="submit" className="w-full blue-shimmer-button bg-blue-500 hover:bg-blue-600 text-white font-medium" disabled={isLoading}>
+              <Button type="submit" variant="blue" className="w-full font-medium" disabled={isLoading}>
                 {isLoading ? "Connexion en cours..." : "Se connecter"} 
                 {!isLoading && <LogIn className="ml-2 h-4 w-4" />}
               </Button>
