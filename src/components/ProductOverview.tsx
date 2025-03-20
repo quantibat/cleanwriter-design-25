@@ -69,12 +69,12 @@ const ProductOverview = () => {
                 "Suivi des versions et des modifications en temps réel",
                 "Partage sécurisé avec contrôle d'accès personnalisable",
                 "Collaboration en temps réel entre les équipes"
-              ].map((item, index) => (
+              ].map((feature, index) => (
                 <motion.li key={index} variants={item} className="flex gap-3 items-start">
                   <span className="h-5 w-5 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Check className="h-3 w-3 text-green-400" />
                   </span>
-                  <span className="text-blue-100/80">{item}</span>
+                  <span className="text-blue-100/80">{feature}</span>
                 </motion.li>
               ))}
             </motion.ul>
