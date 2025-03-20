@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut, Zap, Gift, Users } from "lucide-react";
@@ -7,7 +6,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { toast } from '@/hooks/use-toast';
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -18,7 +16,6 @@ const Navbar = () => {
     isPremiumUser,
     isAffiliate
   } = useAuth();
-  
   const handleTrialButtonClick = e => {
     e.preventDefault();
     if (!user) {
@@ -34,9 +31,7 @@ const Navbar = () => {
       navigate('/dashboard');
     }
   };
-  
-  return (
-    <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
+  return <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo (Left) */}
         <div className="flex items-center">
@@ -67,7 +62,7 @@ const Navbar = () => {
                 </Link>}
               <span className="text-sm text-foreground">
                 {user.user_metadata?.full_name || user.email}
-                {isPremiumUser && <span className="ml-2 text-amber-400 text-xs">(Premium)</span>}
+                {isPremiumUser}
                 {isAffiliate && <span className="ml-2 text-green-400 text-xs">(Affilié)</span>}
               </span>
               <DropdownMenu>
@@ -207,8 +202,6 @@ const Navbar = () => {
               </Link>}
           </div>
         </div>}
-    </nav>
-  );
+    </nav>;
 };
-
 export default Navbar;
