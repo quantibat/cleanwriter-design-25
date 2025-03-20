@@ -175,7 +175,7 @@ const Affiliate = () => {
   if (!isPremiumUser) {
     return <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
-        <main className="flex-1 flex items-center justify-center">
+        <main className="flex-1 flex items-center justify-center pt-[130px] pb-[80px]">
           <Card className="max-w-md w-full">
             <CardHeader>
               <CardTitle>Accès Premium Requis</CardTitle>
