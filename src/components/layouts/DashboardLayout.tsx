@@ -58,34 +58,32 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
           
           {/* Main content area */}
-          <div className="flex-1 w-full overflow-auto">
+          <div className="flex-1 w-full p-6 overflow-auto">
             {breadcrumbs.length > 0 && (
-              <div className="bg-[#0c101b] pt-4 px-6 pb-2">
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    {breadcrumbs.map((item, index) => (
-                      <React.Fragment key={index}>
-                        {index > 0 && <BreadcrumbSeparator className="text-gray-600" />}
-                        {item.path ? (
-                          <BreadcrumbItem>
-                            <BreadcrumbLink 
-                              href={item.path} 
-                              onClick={(e) => handlePremiumLink(e, item.path || '')}
-                              className="text-gray-400 hover:text-white"
-                            >
-                              {item.label}
-                            </BreadcrumbLink>
-                          </BreadcrumbItem>
-                        ) : (
-                          <BreadcrumbItem>
-                            <BreadcrumbPage className="text-white">{item.label}</BreadcrumbPage>
-                          </BreadcrumbItem>
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </div>
+              <Breadcrumb className="mb-4">
+                <BreadcrumbList>
+                  {breadcrumbs.map((item, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <BreadcrumbSeparator />}
+                      {item.path ? (
+                        <BreadcrumbItem>
+                          <BreadcrumbLink 
+                            href={item.path} 
+                            onClick={(e) => handlePremiumLink(e, item.path || '')}
+                            className="text-gray-400 hover:text-white"
+                          >
+                            {item.label}
+                          </BreadcrumbLink>
+                        </BreadcrumbItem>
+                      ) : (
+                        <BreadcrumbItem>
+                          <BreadcrumbPage className="text-white">{item.label}</BreadcrumbPage>
+                        </BreadcrumbItem>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
             )}
             <div className="w-full max-w-full">
               {children}
