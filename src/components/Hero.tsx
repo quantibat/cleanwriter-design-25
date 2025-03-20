@@ -1,26 +1,19 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
-
 const Hero = () => {
-  return (
-    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
+  return <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
       {/* Background stars */}
       <div className="stars absolute inset-0 overflow-hidden">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <div
-            key={i}
-            className="star"
-            style={{
-              width: `${Math.random() * 2 + 1}px`,
-              height: `${Math.random() * 2 + 1}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 4}s`,
-            }}
-          />
-        ))}
+        {Array.from({
+        length: 50
+      }).map((_, i) => <div key={i} className="star" style={{
+        width: `${Math.random() * 2 + 1}px`,
+        height: `${Math.random() * 2 + 1}px`,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * 4}s`
+      }} />)}
       </div>
       
       <div className="max-w-7xl mx-auto">
@@ -54,28 +47,9 @@ const Hero = () => {
         
         {/* Demo Screen Preview */}
         <div className="mt-16 max-w-4xl mx-auto animated-border-glow">
-          <div className="relative rounded-xl overflow-hidden border border-white/10 bg-card shadow-2xl">
-            <div className="absolute top-0 left-0 right-0 h-8 bg-card flex items-center px-4">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 rounded-full bg-red-500/70"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-500/70"></div>
-                <div className="w-3 h-3 rounded-full bg-green-500/70"></div>
-              </div>
-              <div className="text-xs mx-auto text-white/50">DCE Manager</div>
-            </div>
-            <div className="pt-8 p-4">
-              <img 
-                src="/lovable-uploads/0012ad36-938f-49c5-99e9-142f99106b74.png" 
-                alt="DCE Manager Interface" 
-                className="rounded w-full object-cover"
-                style={{ maxHeight: "350px" }}
-              />
-            </div>
-          </div>
+          
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
