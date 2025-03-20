@@ -6,7 +6,7 @@ const TermsOfService = () => {
   return <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
       
-      <main className="flex-1 px-6 py-[130px]">
+      <main className="flex-1 px-6 pt-[130px]">
         <div className="max-w-4xl mx-auto prose prose-invert prose-blue">
           <h1 className="text-3xl md:text-4xl font-bold mb-8">Conditions d'Utilisation</h1>
           
