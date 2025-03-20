@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { FolderPlus, ArrowRight, Youtube, Twitter, Linkedin, Mail, Globe, Facebook, Instagram } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+
 const ToolsTab = () => {
   const {
     isPremiumUser
   } = useAuth();
   const navigate = useNavigate();
+  
   const handleCreateClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isPremiumUser) {
       e.preventDefault();
@@ -21,6 +23,20 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
+
+  const handleCardClick = () => {
+    if (isPremiumUser) {
+      navigate('/create-dce');
+    } else {
+      toast({
+        title: "Fonctionnalité premium",
+        description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
+        variant: "default"
+      });
+      navigate('/upgrade-plan');
+    }
+  };
+  
   return <div className="space-y-12 w-full">
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
@@ -28,7 +44,10 @@ const ToolsTab = () => {
           YouTube vers ce que vous souhaitez
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-red-600 p-1.5 rounded-md">
@@ -44,7 +63,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-red-600 p-1.5 rounded-md">
@@ -60,7 +82,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-red-600 p-1.5 rounded-md">
@@ -76,7 +101,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-red-600 p-1.5 rounded-md">
@@ -100,7 +128,10 @@ const ToolsTab = () => {
           Dynamisez votre newsletter
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-500 p-1.5 rounded-md">
@@ -116,7 +147,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-500 p-1.5 rounded-md">
@@ -140,7 +174,10 @@ const ToolsTab = () => {
           Développez votre compte Twitter
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-400 p-1.5 rounded-md">
@@ -156,7 +193,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-400 p-1.5 rounded-md">
@@ -180,7 +220,10 @@ const ToolsTab = () => {
           Vendez via email
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-500 p-1.5 rounded-md">
@@ -196,7 +239,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-500 p-1.5 rounded-md">
@@ -220,7 +266,10 @@ const ToolsTab = () => {
           Brillez sur LinkedIn
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-700 p-1.5 rounded-md">
@@ -236,7 +285,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-700 p-1.5 rounded-md">
@@ -267,7 +319,10 @@ const ToolsTab = () => {
           Shine on Social Media
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-red-600 p-1.5 rounded-md">
@@ -283,7 +338,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-400 p-1.5 rounded-md">
@@ -299,7 +357,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-red-600 p-1.5 rounded-md">
@@ -315,7 +376,10 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors">
+          <Card 
+            className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
+            onClick={handleCardClick}
+          >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
                 <div className="bg-blue-400 p-1.5 rounded-md">
