@@ -86,10 +86,7 @@ const SidebarNavigation = ({
             
           </li>
           <li>
-            <Link to="/upgrade-plan" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/upgrade-plan' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
-              <Zap className="h-5 w-5" />
-              <span className={open ? "ml-3" : "hidden"}>Upgrader son plan</span>
-            </Link>
+            
           </li>
         </ul>
       </div>
