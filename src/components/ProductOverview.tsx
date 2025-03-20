@@ -1,56 +1,91 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { Check, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ProductOverview = () => {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
-    <section id="product" className="py-20 px-6 bg-gradient-to-b from-transparent to-blue-950/10">
+    <section id="product" className="py-28 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* Left column - Text content */}
-          <div className="space-y-8 fade-up">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Une gestion simplifiée de vos documents de consultation
-            </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          {/* Left column - Image */}
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="rounded-2xl overflow-hidden relative order-2 md:order-1"
+          >
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-30"></div>
+            <img 
+              src="https://framerusercontent.com/images/AX9CZ2I24YK31pBfKrdXgFLrto.png" 
+              alt="Interface de DCE Manager" 
+              className="w-full h-full object-cover rounded-2xl relative z-10 border border-white/10"
+            />
+          </motion.div>
+          
+          {/* Right column - Text content */}
+          <motion.div 
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="space-y-8 order-1 md:order-2"
+          >
+            <motion.div variants={item}>
+              <span className="px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium">
+                Gestion documentaire simplifiée
+              </span>
+            </motion.div>
             
-            <p className="text-blue-100/80 text-lg">
+            <motion.h2 variants={item} className="text-3xl md:text-4xl font-bold text-white">
+              Une gestion centralisée et intuitive de vos documents d'appel d'offres
+            </motion.h2>
+            
+            <motion.p variants={item} className="text-blue-100/70 text-lg">
               Centralisez tous vos documents et procédures d'appel d'offres en un seul endroit sécurisé et accessible à tous les membres de votre équipe.
-            </p>
+            </motion.p>
             
-            <ul className="space-y-4">
+            <motion.ul variants={container} className="space-y-4">
               {[
                 "Organisation intuitive par projet et catégorie",
                 "Suivi des versions et des modifications en temps réel",
                 "Partage sécurisé avec contrôle d'accès personnalisable",
                 "Collaboration en temps réel entre les équipes"
               ].map((item, index) => (
-                <li key={index} className="flex gap-3 items-start">
-                  <span className="h-6 w-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="h-2 w-2 rounded-full bg-blue-400"></span>
+                <motion.li key={index} variants={item} className="flex gap-3 items-start">
+                  <span className="h-5 w-5 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="h-3 w-3 text-green-400" />
                   </span>
-                  <span className="text-blue-100/90">{item}</span>
-                </li>
+                  <span className="text-blue-100/80">{item}</span>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
             
-            <div>
-              <Button variant="outline" className="group border-white/10 bg-white/5 hover:bg-white/10">
-                <Play className="mr-2 h-4 w-4" />
+            <motion.div variants={item}>
+              <Button variant="outline" className="group border-white/10 bg-white/5 hover:bg-white/10 rounded-full">
                 Voir en action
+                <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </Button>
-            </div>
-          </div>
-          
-          {/* Right column - Image */}
-          <div className="rounded-xl overflow-hidden animated-border-glow fade-up">
-            <img 
-              src="https://framerusercontent.com/images/AX9CZ2I24YK31pBfKrdXgFLrto.png" 
-              alt="Interface de DCE Manager" 
-              className="w-full h-full object-cover rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-500"
-            />
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

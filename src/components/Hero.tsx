@@ -1,13 +1,17 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { PlayCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
   return (
     <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
-      {/* Background stars */}
-      <div className="stars absolute inset-0 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/80 pointer-events-none"></div>
+      
+      {/* Background stars/dots */}
+      <div className="stars absolute inset-0 overflow-hidden pointer-events-none">
         {Array.from({length: 50}).map((_, i) => (
           <div 
             key={i} 
@@ -24,38 +28,71 @@ const Hero = () => {
       </div>
       
       <div className="max-w-7xl mx-auto">
-        <div className="text-center space-y-8 max-w-3xl mx-auto relative z-10">
-          <div className="flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600">
-              Simplifiez la Gestion<br />de vos <span className="text-white">DCE</span>
-            </h1>
-            {/* Decorative angled line */}
-            <div className="mt-3 h-1 w-40 oblique-line"></div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center space-y-8 max-w-3xl mx-auto relative z-10"
+        >
+          <div className="flex flex-col items-center space-y-4">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium"
+            >
+              DCE Manager v1.0
+            </motion.span>
+            
+            <motion.h1 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight"
+            >
+              Gestion intelligente <br /> de vos dossiers d'appel d'offres
+            </motion.h1>
           </div>
           
-          <p className="text-lg md:text-xl text-blue-100/80 max-w-2xl mx-auto">
-            DCE Manager optimise la gestion de vos dossiers de consultation des entreprises. Organisez, partagez et suivez vos documents en toute simplicité.
-          </p>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-lg md:text-xl text-blue-100/70 max-w-2xl mx-auto"
+          >
+            Simplifiez la gestion de vos dossiers de consultation des entreprises. Organisez, partagez et suivez vos documents en toute simplicité.
+          </motion.p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Button className="w-full sm:w-auto glowing-button bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+          >
+            <Button className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 font-medium text-lg rounded-full group">
               Commencer maintenant
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button variant="outline" className="w-full sm:w-auto hover-button font-medium px-8 py-6 text-lg group border-white/10 bg-white/5 hover:bg-white/10">
-              Voir la démo
-              <PlayCircle className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            <Button variant="outline" className="w-full sm:w-auto font-medium px-8 py-6 text-lg group border-white/10 bg-white/5 hover:bg-white/10 rounded-full">
+              Découvrir les fonctionnalités
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
         
         {/* Demo Screen Preview */}
-        <div className="mt-16 max-w-4xl mx-auto animated-border-glow">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="mt-20 max-w-5xl mx-auto relative"
+        >
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl blur opacity-30"></div>
           <img 
             src="https://framerusercontent.com/images/e3CY4LS3JbVAeSh3BdpsCSgCCU.png" 
             alt="DCE Manager Dashboard" 
-            className="w-full h-full object-cover rounded-xl shadow-2xl" 
+            className="w-full h-full object-cover relative z-10 rounded-2xl border border-white/10 shadow-2xl" 
           />
-        </div>
+        </motion.div>
       </div>
     </section>
   );

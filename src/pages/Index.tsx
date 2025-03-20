@@ -11,9 +11,16 @@ import Footer from '@/components/Footer';
 
 const Index = () => {
   useEffect(() => {
+    // Parallax effect for the hero section
     const handleScroll = () => {
-      const fadeElements = document.querySelectorAll('.fade-up');
+      const scrollY = window.scrollY;
+      const heroImage = document.querySelector('.hero-image');
+      if (heroImage) {
+        heroImage.style.transform = `translateY(${scrollY * 0.2}px)`;
+      }
       
+      // Fade in animations
+      const fadeElements = document.querySelectorAll('.fade-up');
       fadeElements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
         const triggerPoint = window.innerHeight * 0.8;
@@ -22,31 +29,6 @@ const Index = () => {
           element.classList.add('visible');
         }
       });
-    };
-    
-    // Create floating particles
-    const createParticles = () => {
-      const container = document.querySelector('.particles-container');
-      if (!container) return;
-      
-      for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('star');
-        
-        // Random size
-        const size = Math.random() * 2 + 1;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        
-        // Random position
-        particle.style.top = `${Math.random() * 100}%`;
-        particle.style.left = `${Math.random() * 100}%`;
-        
-        // Random animation delay
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-        
-        container.appendChild(particle);
-      }
     };
     
     // Smooth scroll for anchor links
@@ -67,7 +49,6 @@ const Index = () => {
     
     // Initial check
     handleScroll();
-    createParticles();
     
     // Add event listeners
     window.addEventListener('scroll', handleScroll);
@@ -81,7 +62,9 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-[#06071b]">
+      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-transparent opacity-40 pointer-events-none"></div>
+      <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-blue-500/20 to-transparent blur-3xl rounded-full opacity-20 pointer-events-none"></div>
       <div className="particles-container fixed inset-0 z-0 pointer-events-none"></div>
       <Navbar />
       <main>

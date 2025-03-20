@@ -1,111 +1,87 @@
 
 import React from 'react';
-import { FolderArchive, Share2, FileSearch, FileCheck } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { FolderOpen, BarChart3, Users, Shield } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface FeatureCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
-  image: string;
-  alt: string;
-  reverse?: boolean;
+  delay: number;
 }
 
 const FeatureCard = ({
   title,
   description,
   icon,
-  image,
-  alt,
-  reverse = false
+  delay
 }: FeatureCardProps) => (
-  <div className="w-full flex flex-col md:flex-row items-stretch gap-8">
-    {/* Image section - 50% width on desktop */}
-    <div className={`w-full md:w-1/2 order-1 ${reverse ? 'md:order-2' : 'md:order-1'}`}>
-      <div className="h-full animated-border-white">
-        <Card className="overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl h-full">
-          <div className="h-full overflow-hidden">
-            <img src={image} alt={alt} className="w-full h-full object-cover object-center" />
-          </div>
-        </Card>
-      </div>
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay: delay * 0.1, duration: 0.6 }}
+    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group"
+  >
+    <div className="h-12 w-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors duration-300">
+      <div className="text-blue-400">{icon}</div>
     </div>
-    
-    {/* Text content section - 50% width on desktop */}
-    <div className={`w-full md:w-1/2 order-2 ${reverse ? 'md:order-1' : 'md:order-2'} h-full`}>
-      <div className="h-full animated-border-white">
-        <Card className="cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60 h-full">
-          <CardContent className="p-10 h-full flex flex-col justify-center">
-            <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
-              <div className="text-blue-400">{icon}</div>
-            </div>
-            <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
-            <p className="text-blue-100/70">{description}</p>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  </div>
+    <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
+    <p className="text-blue-100/70">{description}</p>
+  </motion.div>
 );
 
 const Features = () => {
-  // Feature images
-  const featureImages = [
-    "/lovable-uploads/c51301c4-6875-4882-86b5-a9cd9cd773cd.png", 
-    "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d", 
-    "https://images.unsplash.com/photo-1518770660439-4636190af475", 
-    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-  ];
-  
   const features = [
     {
       title: "Organisation intelligente",
       description: "Classez et structurez vos documents par projet, par lot ou par type pour retrouver rapidement les informations essentielles.",
-      icon: <FolderArchive size={24} />,
-      image: featureImages[0],
-      alt: "Organisation des fichiers",
+      icon: <FolderOpen size={24} />,
     },
     {
-      title: "Partage sécurisé",
-      description: "Partagez vos DCE avec vos collaborateurs ou partenaires externes avec des niveaux d'accès personnalisables.",
-      icon: <Share2 size={24} />,
-      image: featureImages[1],
-      alt: "Partage de documents",
-      reverse: true,
+      title: "Analyses et rapports",
+      description: "Générez des tableaux de bord et des rapports détaillés pour suivre l'état d'avancement de vos projets et optimiser vos processus.",
+      icon: <BarChart3 size={24} />,
     },
     {
-      title: "Recherche avancée",
-      description: "Retrouvez n'importe quel document ou information en quelques secondes grâce à notre moteur de recherche intelligent.",
-      icon: <FileSearch size={24} />,
-      image: featureImages[2],
-      alt: "Recherche de documents",
+      title: "Collaboration d'équipe",
+      description: "Travaillez ensemble efficacement avec des outils de communication intégrés et des permissions d'accès personnalisables.",
+      icon: <Users size={24} />,
     },
     {
-      title: "Validation simplifiée",
-      description: "Suivez l'état d'avancement de vos documents et gérez les validations avec des workflows personnalisables.",
-      icon: <FileCheck size={24} />,
-      image: featureImages[3],
-      alt: "Validation de documents",
-      reverse: true,
+      title: "Sécurité avancée",
+      description: "Protégez vos données sensibles avec un chiffrement de bout en bout et des contrôles d'accès granulaires.",
+      icon: <Shield size={24} />,
     },
   ];
 
   return (
-    <section id="features" className="py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16 fade-up">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Fonctionnalités principales</h2>
-          <p className="text-blue-100/80 max-w-2xl mx-auto">
+    <section id="features" className="py-28 px-6 relative">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-blue-900/5 to-background pointer-events-none"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <span className="px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium">
+            Fonctionnalités
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white">
+            Tout ce dont vous avez besoin
+          </h2>
+          <p className="text-blue-100/70 max-w-2xl mx-auto text-lg">
             Découvrez comment DCE Manager peut transformer votre gestion documentaire et améliorer l'efficacité de vos appels d'offres.
           </p>
-        </div>
+        </motion.div>
         
-        <div className="space-y-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
-            <div key={index} className="fade-up">
-              <FeatureCard {...feature} />
-            </div>
+            <FeatureCard key={index} {...feature} delay={index} />
           ))}
         </div>
       </div>
