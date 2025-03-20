@@ -7,28 +7,26 @@ import { useNotifications } from '@/contexts/NotificationContext';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+
 interface SidebarNavigationProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
 }
+
 const SidebarNavigation = ({
   activeTab = 'tools',
   onTabChange
 }: SidebarNavigationProps) => {
-  const {
-    open
-  } = useSidebar();
+  const { open } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    unreadCount
-  } = useNotifications();
-  const {
-    isPremiumUser
-  } = useAuth();
+  const { unreadCount } = useNotifications();
+  const { isPremiumUser } = useAuth();
+  
   const handleTabChange = (tab: string) => {
     onTabChange?.(tab);
   };
+  
   const handlePremiumLink = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
     // Vérifier si le lien concerne une fonctionnalité premium et si l'utilisateur n'est pas premium
     if (!isPremiumUser && (path === '/projects' || path === '/dashboard')) {
@@ -41,7 +39,9 @@ const SidebarNavigation = ({
       navigate('/free-trial');
     }
   };
-  return <div className={cn("h-screen border-r border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md", "transition-all duration-300 ease-in-out flex flex-col", open ? "w-64" : "w-16")}>
+  
+  return (
+    <div className={cn("h-screen border-r border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md", "transition-all duration-300 ease-in-out flex flex-col", open ? "w-64" : "w-16")}>
       {/* Brand logo */}
       <div className="flex items-center justify-center h-16 border-b border-sidebar-border shrink-0">
         <Link to="/" className="flex items-center gap-2 font-semibold">
@@ -104,6 +104,8 @@ const SidebarNavigation = ({
           © {new Date().getFullYear()} DCEManager
         </p>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default SidebarNavigation;
