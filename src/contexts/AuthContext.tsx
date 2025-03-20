@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user_metadata: {
         full_name: 'Utilisateur Test',
         premium: true,
-        affiliate: false
+        affiliate: true
       },
       app_metadata: {
         role: 'user',
