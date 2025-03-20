@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut, Zap } from "lucide-react";
@@ -7,7 +6,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { toast } from '@/hooks/use-toast';
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -17,8 +15,7 @@ const Navbar = () => {
     signOut,
     isPremiumUser
   } = useAuth();
-
-  const handleTrialButtonClick = (e) => {
+  const handleTrialButtonClick = e => {
     e.preventDefault();
     if (!user) {
       navigate('/dashboard');
@@ -27,13 +24,12 @@ const Navbar = () => {
       toast({
         title: "Accès limité",
         description: "Cette fonctionnalité nécessite un abonnement premium",
-        variant: "destructive",
+        variant: "destructive"
       });
     } else {
       navigate('/dashboard');
     }
   };
-
   return <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo (Left) */}
@@ -121,7 +117,7 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div> : <Button variant="outline" onClick={handleTrialButtonClick}>
+            </div> : <Button variant="outline" onClick={handleTrialButtonClick} className="bg-blue-600 hover:bg-blue-500">
               Démarrer un essai
             </Button>}
         </div>
