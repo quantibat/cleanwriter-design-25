@@ -175,10 +175,34 @@ const Affiliate = () => {
 
   const handleQuickSignup = async () => {
     try {
+      if (!user || !isPremiumUser) {
+        toast({
+          title: "Accès refusé",
+          description: "Vous devez être un utilisateur premium pour devenir affilié",
+          variant: "destructive"
+        });
+        return;
+      }
+
       await quickAffiliateSignup();
-      window.location.reload();
-    } catch (error) {
-      console.error("Error in quick signup:", error);
+      
+      if (isAffiliate) {
+        toast({
+          title: "Redirection...",
+          description: "Accès au tableau de bord des affiliés",
+          variant: "default"
+        });
+        navigate('/affiliate');
+      } else {
+        window.location.href = '/affiliate';
+      }
+      
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message || "Une erreur est survenue lors de l'inscription rapide",
+        variant: "destructive"
+      });
     }
   };
 
