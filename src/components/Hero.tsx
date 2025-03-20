@@ -1,19 +1,26 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
+
 const Hero = () => {
-  return <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
+  return (
+    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
       {/* Background stars */}
       <div className="stars absolute inset-0 overflow-hidden">
-        {Array.from({
-        length: 50
-      }).map((_, i) => <div key={i} className="star" style={{
-        width: `${Math.random() * 2 + 1}px`,
-        height: `${Math.random() * 2 + 1}px`,
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        animationDelay: `${Math.random() * 4}s`
-      }} />)}
+        {Array.from({length: 50}).map((_, i) => (
+          <div 
+            key={i} 
+            className="star" 
+            style={{
+              width: `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 4}s`
+            }} 
+          />
+        ))}
       </div>
       
       <div className="max-w-7xl mx-auto">
@@ -39,15 +46,19 @@ const Hero = () => {
               <PlayCircle className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </div>
-          
-          
         </div>
         
         {/* Demo Screen Preview */}
         <div className="mt-16 max-w-4xl mx-auto animated-border-glow">
-          
+          <img 
+            src="https://framerusercontent.com/images/e3CY4LS3JbVAeSh3BdpsCSgCCU.png" 
+            alt="DCE Manager Dashboard" 
+            className="w-full h-full object-cover rounded-xl shadow-2xl" 
+          />
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Hero;
