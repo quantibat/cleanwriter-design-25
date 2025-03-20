@@ -1,4 +1,3 @@
-
 import React, { ReactNode } from 'react';
 import TopBar from '@/components/dashboard/TopBar';
 import SidebarNavigation from '@/components/dashboard/SidebarNavigation';
@@ -7,18 +6,15 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbS
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-
 interface BreadcrumbItem {
   label: string;
   path?: string;
 }
-
 interface DashboardLayoutProps {
   children: ReactNode;
   activeTab?: string;
   breadcrumbs?: BreadcrumbItem[];
 }
-
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   activeTab = 'tools',
@@ -27,17 +23,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [isDarkMode, setIsDarkMode] = React.useState(true);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isPremiumUser } = useAuth();
-
+  const {
+    isPremiumUser
+  } = useAuth();
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle('dark-theme');
   };
-
   const handleTabChange = (tab: string) => {
     // Maintain existing tab change functionality
   };
-
   const handlePremiumLink = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
     // Vérifier si le lien concerne une fonctionnalité premium et si l'utilisateur n'est pas premium
     if (!isPremiumUser && (path === '/projects' || path === '/dashboard')) {
@@ -50,9 +45,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       navigate('/upgrade-plan');
     }
   };
-
-  return (
-    <div className="min-h-screen bg-[#121520] w-full">
+  return <div className="min-h-screen bg-[#121520] w-full">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-hidden w-full">
           {/* Top navigation bar */}
@@ -65,30 +58,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
               
               {/* Content with optional breadcrumb */}
-              {breadcrumbs.length > 0 && (
-                <div className="px-6 py-2 border-b border-white/5 w-full">
-                  <Breadcrumb className="w-full">
-                    <BreadcrumbList>
-                      <BreadcrumbItem>
-                        <BreadcrumbLink href="/dashboard">Accueil</BreadcrumbLink>
-                      </BreadcrumbItem>
-                      <BreadcrumbSeparator />
-                      {breadcrumbs.map((crumb, index) => (
-                        <BreadcrumbItem key={index}>
-                          {index === breadcrumbs.length - 1 ? (
-                            <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                          ) : (
-                            <>
-                              <BreadcrumbLink href={crumb.path}>{crumb.label}</BreadcrumbLink>
-                              <BreadcrumbSeparator />
-                            </>
-                          )}
-                        </BreadcrumbItem>
-                      ))}
-                    </BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-              )}
+              {breadcrumbs.length > 0}
               
               <div className="flex-1 w-full p-6 overflow-auto">
                 <div className="w-full max-w-full">
@@ -99,8 +69,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </div>
         </div>
       </SidebarProvider>
-    </div>
-  );
+    </div>;
 };
-
 export default DashboardLayout;
