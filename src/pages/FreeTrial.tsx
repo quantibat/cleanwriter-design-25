@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Moon, Sun, Gpt4, Globe, Headphones, Zap } from "lucide-react";
+import { ArrowRight, Check, Moon, Sun, Cpu, Globe, Headphones, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle";
