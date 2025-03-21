@@ -13,25 +13,19 @@ import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 import { Textarea } from "@/components/ui/textarea";
-
-const MOCK_TOPICS = [
-  {
-    id: '1',
-    title: 'La clé des vidéos virales : êtes-vous prêt ?',
-    description: 'Découvrez les facteurs essentiels qui font le succès des vidéos virales sur les plateformes modernes.'
-  },
-  {
-    id: '2',
-    title: 'Les 4 piliers du succès sur YouTube',
-    description: 'Analyse des quatre compétences fondamentales pour réussir et maintenir l\'intérêt de votre audience.'
-  },
-  {
-    id: '3',
-    title: 'Au-delà de l\'argent : ce qui fait vraiment une vie réussie',
-    description: 'Réflexion sur l\'importance de l\'équilibre entre richesse, relations et authenticité.'
-  }
-];
-
+const MOCK_TOPICS = [{
+  id: '1',
+  title: 'La clé des vidéos virales : êtes-vous prêt ?',
+  description: 'Découvrez les facteurs essentiels qui font le succès des vidéos virales sur les plateformes modernes.'
+}, {
+  id: '2',
+  title: 'Les 4 piliers du succès sur YouTube',
+  description: 'Analyse des quatre compétences fondamentales pour réussir et maintenir l\'intérêt de votre audience.'
+}, {
+  id: '3',
+  title: 'Au-delà de l\'argent : ce qui fait vraiment une vie réussie',
+  description: 'Réflexion sur l\'importance de l\'équilibre entre richesse, relations et authenticité.'
+}];
 const MOCK_CONTENT = {
   '1': {
     subject: 'La clé des vidéos virales : êtes-vous prêt ? ✨ 🚀',
@@ -112,7 +106,6 @@ Souvenez-vous que la richesse véritable se mesure à la qualité de vos relatio
 Cordialement,`
   }
 };
-
 type FormData = {
   title: string;
   youtubeLink: string;
@@ -120,7 +113,6 @@ type FormData = {
   language: string;
   aiModel: string;
 };
-
 const CreateDCE = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -129,28 +121,31 @@ const CreateDCE = () => {
   const [generatingContent, setGeneratingContent] = useState(false);
   const [topics, setTopics] = useState<any[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [activeContent, setActiveContent] = useState<{ subject: string; body: string } | null>(null);
-  const { toast } = useToast();
-  const { notifySuccess } = useNotificationsManager();
+  const [activeContent, setActiveContent] = useState<{
+    subject: string;
+    body: string;
+  } | null>(null);
+  const {
+    toast
+  } = useToast();
+  const {
+    notifySuccess
+  } = useNotificationsManager();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
   const [title, setTitle] = useState("Untitled Youtube to Newsletter");
   const [cardTitle, setCardTitle] = useState("Ma sélection de cartes");
-  
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const titleParam = params.get('title');
     const isSocialMediaParam = params.get('isSocialMedia');
-    
     if (titleParam) {
       setTitle(titleParam);
       form.setValue('title', titleParam);
     }
-    
     if (isSocialMediaParam) {
       setIsSocialMediaOnly(isSocialMediaParam === 'true');
     }
   }, [location.search]);
-  
   const form = useForm<FormData>({
     defaultValues: {
       title: 'Untitled Youtube to Newsletter',
@@ -160,22 +155,17 @@ const CreateDCE = () => {
       aiModel: 'gpt-4o'
     }
   });
-
   const totalCredits = 30000;
   const [usedCredits, setUsedCredits] = useState(0);
   const remainingCredits = totalCredits - usedCredits;
-  const percentUsed = Math.round((usedCredits / totalCredits) * 100);
-
+  const percentUsed = Math.round(usedCredits / totalCredits * 100);
   const [videoMetadata, setVideoMetadata] = useState<any>(null);
   const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
-
   const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const link = e.target.value;
     form.setValue('youtubeLink', link);
-    
     const isValid = link.includes('youtube.com/watch') || link.includes('youtu.be/');
     setIsValidYoutubeLink(isValid);
-    
     if (isValid) {
       setVideoMetadata({
         title: '"DÉMOLITION" de JP Fanguin par Jm Corda',
@@ -187,33 +177,24 @@ const CreateDCE = () => {
       setVideoMetadata(null);
     }
   };
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
     form.setValue('title', newTitle);
   };
-
   const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(e.target.value);
   };
-
   const generateTopics = async () => {
     setGeneratingTopics(true);
-    
     const wordCount = 250;
     setUsedCredits(prev => prev + wordCount);
-    
     setTimeout(() => {
       setTopics(MOCK_TOPICS);
       setGeneratingTopics(false);
-      notifySuccess(
-        'Sujets générés', 
-        '3 sujets ont été générés avec succès à partir de la vidéo YouTube.'
-      );
+      notifySuccess('Sujets générés', '3 sujets ont été générés avec succès à partir de la vidéo YouTube.');
     }, 2000);
   };
-
   const handleSelectTopic = (topicId: string) => {
     setSelectedTopics(prev => {
       if (prev.includes(topicId)) {
@@ -221,24 +202,23 @@ const CreateDCE = () => {
       }
       return [...prev, topicId];
     });
-    
     setGeneratingContent(true);
-    
     const wordCount = 500;
     setUsedCredits(prev => prev + wordCount);
-    
     setTimeout(() => {
       setActiveContent(MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT]);
       setGeneratingContent(false);
     }, 1000);
   };
-
-  const breadcrumbs = [
-    { label: 'Projets', path: '/projects' },
-    { label: 'Youtube to Newsletter', path: '/youtube-to-newsletter' },
-    { label: title || 'Untitled Youtube to Newsletter' }
-  ];
-
+  const breadcrumbs = [{
+    label: 'Projets',
+    path: '/projects'
+  }, {
+    label: 'Youtube to Newsletter',
+    path: '/youtube-to-newsletter'
+  }, {
+    label: title || 'Untitled Youtube to Newsletter'
+  }];
   const handleSubmit = async (data: FormData) => {
     if (!isValidYoutubeLink) {
       toast({
@@ -248,103 +228,41 @@ const CreateDCE = () => {
       });
       return;
     }
-    
     generateTopics();
   };
-
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
-
-  return (
-    <DashboardLayout breadcrumbs={breadcrumbs}>
+  return <DashboardLayout breadcrumbs={breadcrumbs}>
       <div className="min-h-screen bg-[#0c101b]">
         <main className="w-full">
-          <ResizablePanelGroup
-            direction="horizontal"
-            className="min-h-[calc(100vh-150px)]"
-          >
+          <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-150px)]">
             <ResizablePanel defaultSize={50} minSize={30}>
               <div className="h-full p-6 overflow-auto">
                 <div className="mb-6">
-                  {isSocialMediaOnly ? (
-                    <Textarea 
-                      placeholder="Description du contenu pour les réseaux sociaux..."
-                      className="min-h-[100px] bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                  ) : (
-                    <Input 
-                      type="text" 
-                      value={title}
-                      onChange={handleTitleChange}
-                      className="text-xl font-medium border-none bg-transparent text-white p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
-                    />
-                  )}
+                  {isSocialMediaOnly ? <Textarea placeholder="Description du contenu pour les réseaux sociaux..." className="min-h-[100px] bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40" value={title} onChange={e => setTitle(e.target.value)} /> : <Input type="text" value={title} onChange={handleTitleChange} className="text-xl font-medium border-none bg-transparent text-white p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0" />}
                 </div>
                 
-                <div className="mb-6 bg-[#1A1F2C] p-4 rounded-lg">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-300">Crédits restants</span>
-                    <span className="text-sm font-medium text-white">{remainingCredits.toLocaleString()} / {totalCredits.toLocaleString()}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Progress value={percentUsed} className="h-2 flex-grow" />
-                    <span className="text-xs text-gray-400">{percentUsed}%</span>
-                  </div>
-                  {percentUsed > 80 && (
-                    <div className="mt-2 flex justify-end">
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="text-xs bg-transparent hover:bg-blue-500/20 text-blue-400 border-blue-500/50"
-                        onClick={handleUpgrade}
-                      >
-                        Mise à niveau
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                
                 
                 <div className="mb-6">
                   <label className="text-sm font-medium text-gray-300 mb-2 block">Titre de la sélection</label>
-                  <Input 
-                    type="text" 
-                    value={cardTitle}
-                    onChange={handleCardTitleChange}
-                    className="w-full py-2 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40"
-                    placeholder="Entrez le titre de votre sélection de cartes"
-                  />
+                  <Input type="text" value={cardTitle} onChange={handleCardTitleChange} className="w-full py-2 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40" placeholder="Entrez le titre de votre sélection de cartes" />
                 </div>
                 
-                {topics.length === 0 ? (
-                  <div className="space-y-6">
+                {topics.length === 0 ? <div className="space-y-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Lien de la vidéo Youtube</label>
                       <div className="relative">
-                        <Input 
-                          type="text"
-                          placeholder="Paste a youtube video link here"
-                          className="pl-10 py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40"
-                          onChange={handleYoutubeLinkChange}
-                          value={form.watch('youtubeLink')}
-                        />
+                        <Input type="text" placeholder="Paste a youtube video link here" className="pl-10 py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40" onChange={handleYoutubeLinkChange} value={form.watch('youtubeLink')} />
                         <Youtube className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
-                        {isValidYoutubeLink && (
-                          <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
-                        )}
+                        {isValidYoutubeLink && <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />}
                       </div>
                     </div>
                     
-                    {videoMetadata && (
-                      <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3">
+                    {videoMetadata && <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3">
                         <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
-                          <img
-                            src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg"
-                            alt="Video thumbnail"
-                            className="w-full h-full object-cover"
-                          />
+                          <img src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg" alt="Video thumbnail" className="w-full h-full object-cover" />
                           <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
                             {videoMetadata.duration}
                           </div>
@@ -362,13 +280,12 @@ const CreateDCE = () => {
                             {videoMetadata.views} •
                           </div>
                         </div>
-                      </div>
-                    )}
+                      </div>}
                     
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Option</label>
                       <div>
-                        <Select onValueChange={(value) => form.setValue('option', value)}>
+                        <Select onValueChange={value => form.setValue('option', value)}>
                           <SelectTrigger className="py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40">
                             <SelectValue placeholder="Aucune option sélectionnée" />
                           </SelectTrigger>
@@ -384,10 +301,7 @@ const CreateDCE = () => {
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Langue de sortie</label>
                       <div>
-                        <Select 
-                          defaultValue="french"
-                          onValueChange={(value) => form.setValue('language', value)}
-                        >
+                        <Select defaultValue="french" onValueChange={value => form.setValue('language', value)}>
                           <SelectTrigger className="py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40">
                             <div className="flex items-center space-x-2">
                               <span className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center bg-blue-100">
@@ -409,10 +323,7 @@ const CreateDCE = () => {
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Modèle d'IA</label>
                       <div>
-                        <Select 
-                          defaultValue="gpt-4o"
-                          onValueChange={(value) => form.setValue('aiModel', value)}
-                        >
+                        <Select defaultValue="gpt-4o" onValueChange={value => form.setValue('aiModel', value)}>
                           <SelectTrigger className="py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40">
                             <div className="flex items-center gap-2">
                               <span className="bg-purple-200 text-purple-800 text-xs py-0.5 px-2 rounded-full">Qualité</span>
@@ -433,32 +344,17 @@ const CreateDCE = () => {
                     </div>
                     
                     <div className="pt-4">
-                      <Button
-                        type="button"
-                        className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md"
-                        onClick={() => handleSubmit(form.getValues())}
-                        disabled={generatingTopics || !isValidYoutubeLink}
-                      >
-                        {generatingTopics ? (
-                          <>Génération en cours...</>
-                        ) : (
-                          <>
+                      <Button type="button" className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md" onClick={() => handleSubmit(form.getValues())} disabled={generatingTopics || !isValidYoutubeLink}>
+                        {generatingTopics ? <>Génération en cours...</> : <>
                             <Sparkles size={18} className="mr-2" />
                             Générez une newsletter
-                          </>
-                        )}
+                          </>}
                       </Button>
                     </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
+                  </div> : <div className="space-y-4">
                     <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3 mb-4">
                       <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
-                        <img
-                          src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg"
-                          alt="Video thumbnail"
-                          className="w-full h-full object-cover"
-                        />
+                        <img src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg" alt="Video thumbnail" className="w-full h-full object-cover" />
                         <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
                           {videoMetadata?.duration || "39:49"}
                         </div>
@@ -481,35 +377,24 @@ const CreateDCE = () => {
                       <span className="text-sm text-gray-400">{selectedTopics.length} sélectionné(s)</span>
                     </div>
                     
-                    <TopicsList 
-                      topics={topics} 
-                      selectedTopics={selectedTopics} 
-                      onSelectTopic={handleSelectTopic}
-                      isLoading={generatingTopics}
-                    />
+                    <TopicsList topics={topics} selectedTopics={selectedTopics} onSelectTopic={handleSelectTopic} isLoading={generatingTopics} />
                     
-                    <Button
-                      className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md mt-4"
-                      onClick={() => {
-                        toast({
-                          title: "Génération terminée",
-                          description: `${selectedTopics.length} newsletter(s) générée(s) avec succès`,
-                        });
-                      }}
-                      disabled={selectedTopics.length === 0}
-                    >
+                    <Button className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md mt-4" onClick={() => {
+                  toast({
+                    title: "Génération terminée",
+                    description: `${selectedTopics.length} newsletter(s) générée(s) avec succès`
+                  });
+                }} disabled={selectedTopics.length === 0}>
                       Générer le contenu pour {selectedTopics.length} sujet(s)
                     </Button>
-                  </div>
-                )}
+                  </div>}
               </div>
             </ResizablePanel>
             
             <ResizableHandle withHandle className="bg-[#1d2535]" />
             
             <ResizablePanel defaultSize={50} minSize={30}>
-              {topics.length === 0 ? (
-                <div className="h-full p-6 overflow-auto border border-dashed border-[#1d2535] rounded-lg flex flex-col items-center justify-center">
+              {topics.length === 0 ? <div className="h-full p-6 overflow-auto border border-dashed border-[#1d2535] rounded-lg flex flex-col items-center justify-center">
                   <div className="text-center max-w-md">
                     <FileText className="h-16 w-16 text-gray-500 mb-4 mx-auto opacity-30" />
                     <h3 className="text-lg font-medium text-white mb-2">Aucun contenu créé pour le moment</h3>
@@ -518,20 +403,11 @@ const CreateDCE = () => {
                       Tout le contenu apparaîtra ici.
                     </p>
                   </div>
-                </div>
-              ) : (
-                <ContentDisplay 
-                  content={activeContent} 
-                  isLoading={generatingContent}
-                />
-              )}
+                </div> : <ContentDisplay content={activeContent} isLoading={generatingContent} />}
             </ResizablePanel>
           </ResizablePanelGroup>
         </main>
       </div>
-    </DashboardLayout>
-  );
+    </DashboardLayout>;
 };
-
 export default CreateDCE;
-
