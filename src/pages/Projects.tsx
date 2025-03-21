@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import ProjectsTab from '@/components/dashboard/tabs/ProjectsTab';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 const Projects = () => {
   const { isPremiumUser } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Vérifier si l'utilisateur est premium
   useEffect(() => {
@@ -20,7 +21,7 @@ const Projects = () => {
       });
       navigate('/upgrade-plan');
     }
-  }, [isPremiumUser, navigate]);
+  }, [isPremiumUser, navigate, toast]);
   
   const breadcrumbs = [
     { label: 'Tableau de bord', path: '/dashboard' },

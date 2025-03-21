@@ -77,6 +77,7 @@ const ProjectsTab = () => {
   const [projectsList, setProjectsList] = useState<Project[]>(projects);
 
   const handleOpenView = (project: Project) => {
+    console.log("Navigating to view project:", project.id);
     navigate(`/view-dce/${project.id}`, {
       state: {
         project
@@ -85,6 +86,7 @@ const ProjectsTab = () => {
   };
 
   const handleOpenEdit = (project: Project) => {
+    console.log("Navigating to edit project:", project.id);
     navigate(`/edit-project/${project.id}`, {
       state: {
         project
@@ -93,6 +95,7 @@ const ProjectsTab = () => {
   };
 
   const handleDelete = (project: Project) => {
+    console.log("Navigating to delete project:", project.id);
     navigate(`/delete-project/${project.id}`, {
       state: {
         project
@@ -101,6 +104,7 @@ const ProjectsTab = () => {
   };
 
   const handleOpenCreate = () => {
+    console.log("Navigating to create project");
     navigate('/create-dce');
   };
 
@@ -165,15 +169,33 @@ const ProjectsTab = () => {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handleOpenView(project)} title="Voir le projet" className="flex items-center gap-1">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => handleOpenView(project)} 
+                      title="Voir le projet" 
+                      className="flex items-center gap-1"
+                    >
                       <Eye className="h-3.5 w-3.5" />
                       Voir
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleOpenEdit(project)} title="Modifier le projet" className="flex items-center gap-1">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => handleOpenEdit(project)} 
+                      title="Modifier le projet" 
+                      className="flex items-center gap-1"
+                    >
                       <Edit className="h-3.5 w-3.5" />
                       Modifier
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleDelete(project)} title="Supprimer le projet" className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-100/10">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => handleDelete(project)} 
+                      title="Supprimer le projet" 
+                      className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-100/10"
+                    >
                       <Trash2 className="h-3.5 w-3.5" />
                       Supprimer
                     </Button>
