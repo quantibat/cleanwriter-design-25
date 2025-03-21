@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useEffect } from 'react';
 import TopBar from '@/components/dashboard/TopBar';
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -5,7 +6,8 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbS
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-import { Home } from 'lucide-react';
+import { Home, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface BreadcrumbItem {
   label: string;
@@ -28,7 +30,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [isDarkMode, setIsDarkMode] = React.useState(true);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isPremiumUser } = useAuth();
+  const { isPremiumUser, userCredits } = useAuth();
   const [dynamicBreadcrumbs, setDynamicBreadcrumbs] = React.useState<BreadcrumbItem[]>(breadcrumbs);
 
   useEffect(() => {
@@ -97,44 +99,57 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
           
           <div className="flex-1 w-full p-6 overflow-auto">
-            {dynamicBreadcrumbs.length > 0 && (
-              <div className="mb-6">
-                <Breadcrumb>
-                  <BreadcrumbList className="flex items-center gap-2 text-gray-400">
-                    <BreadcrumbItem>
-                      <BreadcrumbLink 
-                        href="/projects" 
-                        className="flex items-center text-gray-400 hover:text-white text-sm"
-                      >
-                        <Home size={14} className="mr-1" />
-                        <span>Projets</span>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    
-                    {dynamicBreadcrumbs.map((item, index) => (
-                      <React.Fragment key={index}>
-                        <BreadcrumbSeparator className="text-gray-600" />
-                        {item.path ? (
-                          <BreadcrumbItem>
-                            <BreadcrumbLink 
-                              href={item.path} 
-                              onClick={(e) => handlePremiumLink(e, item.path || '')}
-                              className="text-gray-400 hover:text-white text-sm"
-                            >
-                              {item.label}
-                            </BreadcrumbLink>
-                          </BreadcrumbItem>
-                        ) : (
-                          <BreadcrumbItem>
-                            <BreadcrumbPage className="text-white text-sm">{item.label}</BreadcrumbPage>
-                          </BreadcrumbItem>
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </div>
-            )}
+            <div className="flex justify-between items-center mb-6">
+              {dynamicBreadcrumbs.length > 0 && (
+                <div>
+                  <Breadcrumb>
+                    <BreadcrumbList className="flex items-center gap-2 text-gray-400">
+                      <BreadcrumbItem>
+                        <BreadcrumbLink 
+                          href="/projects" 
+                          className="flex items-center text-gray-400 hover:text-white text-sm"
+                        >
+                          <Home size={14} className="mr-1" />
+                          <span>Projets</span>
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      
+                      {dynamicBreadcrumbs.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <BreadcrumbSeparator className="text-gray-600" />
+                          {item.path ? (
+                            <BreadcrumbItem>
+                              <BreadcrumbLink 
+                                href={item.path} 
+                                onClick={(e) => handlePremiumLink(e, item.path || '')}
+                                className="text-gray-400 hover:text-white text-sm"
+                              >
+                                {item.label}
+                              </BreadcrumbLink>
+                            </BreadcrumbItem>
+                          ) : (
+                            <BreadcrumbItem>
+                              <BreadcrumbPage className="text-white text-sm">{item.label}</BreadcrumbPage>
+                            </BreadcrumbItem>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
+              )}
+              
+              {/* Bouton pour recharger les crédits */}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => navigate('/upgrade-plan')}
+                className="hover:bg-blue-500/10 hover:text-blue-400 hover:border-blue-400 transition-all"
+              >
+                <Zap className="mr-2 h-4 w-4 text-amber-400" /> 
+                <span className="font-medium">{userCredits.toLocaleString()}</span> crédits
+              </Button>
+            </div>
             <div className="w-full max-w-full">
               {children}
             </div>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { supabase } from '../integrations/supabase/client';
@@ -10,8 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+
 const formSchema = z.object({
   email: z.string().email({
     message: "Adresse e-mail invalide."
@@ -20,14 +20,12 @@ const formSchema = z.object({
     message: "Le mot de passe doit contenir au moins 6 caractères."
   })
 });
+
 const SignIn = () => {
-  const {
-    user,
-    signInWithTestAccount,
-    signInWithBasicTestAccount
-  } = useAuth();
+  const { user, signInWithTestAccount, signInWithBasicTestAccount } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  
   useEffect(() => {
     if (user) {
       const origin = location.state?.from?.pathname || '/dashboard';
@@ -36,12 +34,12 @@ const SignIn = () => {
       });
     }
   }, [user, navigate, location]);
-  const {
-    toast
-  } = useToast();
+  
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDemoLoading, setIsDemoLoading] = useState(false);
   const [isBasicDemoLoading, setIsBasicDemoLoading] = useState(false);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,6 +47,7 @@ const SignIn = () => {
       password: ""
     }
   });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
@@ -60,21 +59,23 @@ const SignIn = () => {
       navigate('/dashboard');
       return;
     }
+    
     try {
-      const {
-        data,
-        error
-      } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password
       });
+      
       if (error) {
         throw error;
       }
+      
       toast({
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté."
       });
+      
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Erreur de connexion",
@@ -85,6 +86,7 @@ const SignIn = () => {
       setIsLoading(false);
     }
   }
+
   async function loginWithDemoAccount() {
     setIsDemoLoading(true);
 
@@ -99,6 +101,7 @@ const SignIn = () => {
       setIsDemoLoading(false);
     }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
   }
+  
   async function loginWithBasicDemoAccount() {
     setIsBasicDemoLoading(true);
 
@@ -115,7 +118,9 @@ const SignIn = () => {
       setIsBasicDemoLoading(false);
     }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
   }
-  return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
+
+  return (
+    <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
         {/* Les particules d'arrière-plan seront ajoutés ici avec du CSS */}
       </div>
@@ -130,16 +135,16 @@ const SignIn = () => {
           <p className="mt-2 text-white/60">Connectez-vous à votre compte</p>
         </div>
         
-        <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
+        <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl hover:shadow-[0_0_15px_rgba(30,174,219,0.3)]">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur DCEManager</h1>
           
           <div className="space-y-4 mb-4">
-            <Button variant="outline" className="w-full bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center" onClick={loginWithDemoAccount} disabled={isDemoLoading}>
+            <Button variant="outline" className="w-full bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 hover:shadow-[0_0_10px_rgba(245,158,11,0.3)] flex items-center justify-center transition-all" onClick={loginWithDemoAccount} disabled={isDemoLoading}>
               <Zap className="w-5 h-5 mr-2" />
               {isDemoLoading ? "Connexion en cours..." : "Connexion rapide (Compte premium)"}
             </Button>
             
-            <Button variant="outline" className="w-full bg-gray-600/20 border border-gray-500/30 text-gray-400 hover:bg-gray-600/30 flex items-center justify-center" onClick={loginWithBasicDemoAccount} disabled={isBasicDemoLoading}>
+            <Button variant="outline" className="w-full bg-gray-600/20 border border-gray-500/30 text-gray-400 hover:bg-gray-600/30 hover:shadow-[0_0_10px_rgba(156,163,175,0.3)] flex items-center justify-center transition-all" onClick={loginWithBasicDemoAccount} disabled={isBasicDemoLoading}>
               <ShieldOff className="w-5 h-5 mr-2" />
               {isBasicDemoLoading ? "Connexion en cours..." : "Connexion rapide (Sans abonnement)"}
             </Button>
@@ -168,37 +173,37 @@ const SignIn = () => {
           
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField control={form.control} name="email" render={({
-              field
-            }) => <FormItem>
-                    <FormLabel className="text-white/70">Email</FormLabel>
-                    <FormControl>
-                      <div className="relative form-input-animated">
-                        <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                        <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="votre@email.com" {...field} />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>} />
-              
-              <FormField control={form.control} name="password" render={({
-              field
-            }) => <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel className="text-white/70">Mot de passe</FormLabel>
-                      <Link to="/forgot-password" className="text-xs text-blue-400 hover:underline">
-                        Mot de passe oublié ?
-                      </Link>
+              <FormField control={form.control} name="email" render={({field}) => (
+                <FormItem>
+                  <FormLabel className="text-white/70">Email</FormLabel>
+                  <FormControl>
+                    <div className="relative form-input-animated">
+                      <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
+                      <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500 transition-all hover:border-blue-400" placeholder="votre@email.com" {...field} />
                     </div>
-                    <FormControl>
-                      <div className="relative form-input-animated">
-                        <Input type="password" className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="••••••••" {...field} />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
               
-              <Button type="submit" variant="blue" disabled={isLoading} className="w-full font-medium bg-transparent">
+              <FormField control={form.control} name="password" render={({field}) => (
+                <FormItem>
+                  <div className="flex justify-between items-center">
+                    <FormLabel className="text-white/70">Mot de passe</FormLabel>
+                    <Link to="/forgot-password" className="text-xs text-blue-400 hover:underline">
+                      Mot de passe oublié ?
+                    </Link>
+                  </div>
+                  <FormControl>
+                    <div className="relative form-input-animated">
+                      <Input type="password" className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500 transition-all hover:border-blue-400" placeholder="••••••••" {...field} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              
+              <Button type="submit" variant="blue" disabled={isLoading} className="w-full font-medium bg-transparent hover:shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all">
                 {isLoading ? "Connexion en cours..." : "Se connecter"} 
                 {!isLoading && <LogIn className="ml-2 h-4 w-4" />}
               </Button>
@@ -214,6 +219,8 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default SignIn;
