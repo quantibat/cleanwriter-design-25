@@ -24,7 +24,6 @@ const Projects = () => {
   }, [isPremiumUser, navigate, toast]);
   
   const breadcrumbs = [
-    { label: 'Dashboard', path: '/dashboard' },
     { label: 'Projets' }
   ];
 
