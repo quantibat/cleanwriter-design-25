@@ -60,30 +60,34 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           {/* Main content area */}
           <div className="flex-1 w-full p-6 overflow-auto">
             {breadcrumbs.length > 0 && (
-              <Breadcrumb className="mb-4">
-                <BreadcrumbList>
-                  {breadcrumbs.map((item, index) => (
-                    <React.Fragment key={index}>
-                      {index > 0 && <BreadcrumbSeparator />}
-                      {item.path ? (
-                        <BreadcrumbItem>
-                          <BreadcrumbLink 
-                            href={item.path} 
-                            onClick={(e) => handlePremiumLink(e, item.path || '')}
-                            className="text-gray-400 hover:text-white"
-                          >
-                            {item.label}
-                          </BreadcrumbLink>
-                        </BreadcrumbItem>
-                      ) : (
-                        <BreadcrumbItem>
-                          <BreadcrumbPage className="text-white">{item.label}</BreadcrumbPage>
-                        </BreadcrumbItem>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
+              <div className="mb-6">
+                <Breadcrumb>
+                  <BreadcrumbList className="flex items-center gap-1 text-gray-400">
+                    {breadcrumbs.map((item, index) => (
+                      <React.Fragment key={index}>
+                        {index > 0 && (
+                          <BreadcrumbSeparator className="text-gray-600" />
+                        )}
+                        {item.path ? (
+                          <BreadcrumbItem>
+                            <BreadcrumbLink 
+                              href={item.path} 
+                              onClick={(e) => handlePremiumLink(e, item.path || '')}
+                              className="text-gray-400 hover:text-white text-sm"
+                            >
+                              {item.label}
+                            </BreadcrumbLink>
+                          </BreadcrumbItem>
+                        ) : (
+                          <BreadcrumbItem>
+                            <BreadcrumbPage className="text-white text-sm">{item.label}</BreadcrumbPage>
+                          </BreadcrumbItem>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </div>
             )}
             <div className="w-full max-w-full">
               {children}
