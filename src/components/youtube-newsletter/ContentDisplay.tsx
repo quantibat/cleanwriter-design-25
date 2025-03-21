@@ -20,7 +20,7 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ content, isLoading }) =
 
   if (isLoading) {
     return (
-      <div className="animate-pulse">
+      <div className="h-full p-6 animate-pulse">
         <div className="h-8 bg-gray-700 rounded w-1/2 mb-6"></div>
         <div className="space-y-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
