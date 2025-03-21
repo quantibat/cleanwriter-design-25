@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -78,27 +77,66 @@ const ProjectsTab = () => {
 
   const handleOpenView = (project: Project) => {
     console.log("Navigating to view project:", project.id);
-    navigate(`/view-dce/${project.id}`, {
+    const projectData = {
+      id: project.id,
+      title: project.title,
+      type: project.type,
+      elements: project.elements,
+      description: project.description,
+      date: project.date,
+      lastModified: project.lastModified,
+      progress: project.progress,
+      collaborators: project.collaborators,
+      details: project.details
+    };
+    
+    navigate(`/view-project/${project.id}`, {
       state: {
-        project
+        project: projectData
       }
     });
   };
 
   const handleOpenEdit = (project: Project) => {
     console.log("Navigating to edit project:", project.id);
+    const projectData = {
+      id: project.id,
+      title: project.title,
+      type: project.type,
+      elements: project.elements,
+      description: project.description,
+      date: project.date,
+      lastModified: project.lastModified,
+      progress: project.progress,
+      collaborators: project.collaborators,
+      details: project.details
+    };
+    
     navigate(`/edit-project/${project.id}`, {
       state: {
-        project
+        project: projectData
       }
     });
   };
 
   const handleDelete = (project: Project) => {
     console.log("Navigating to delete project:", project.id);
+    const projectData = {
+      id: project.id,
+      title: project.title,
+      type: project.type,
+      elements: project.elements,
+      description: project.description,
+      date: project.date,
+      lastModified: project.lastModified,
+      progress: project.progress,
+      collaborators: project.collaborators,
+      details: project.details
+    };
+    
     navigate(`/delete-project/${project.id}`, {
       state: {
-        project
+        project: projectData
       }
     });
   };

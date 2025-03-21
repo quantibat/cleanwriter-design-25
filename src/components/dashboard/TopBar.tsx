@@ -11,10 +11,12 @@ import { Progress } from "@/components/ui/progress";
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
+  activeTab:string
 }
 const TopBar = ({
   onThemeToggle,
-  isDarkMode
+  isDarkMode,
+  activeTab
 }: TopBarProps) => {
   const [language, setLanguage] = useState<'fr' | 'en'>('fr');
   const {
@@ -188,21 +190,18 @@ const TopBar = ({
       <div className="flex items-center justify-between w-full px-6 py-3 bg-[#1a1f2b]">
         {/* Left: Navigation Links */}
         <div className="flex items-center space-x-8">
-          <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-white border-b-2 border-[#00a2ff]">
+          <Link to="/dashboard" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'tools' && "text-white border-b-2 border-[#00a2ff]"}`}>
             <span className="text-white">Outils</span>
           </Link>
           
-          <Link to="/projects" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+          <Link to="/projects" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'projects' && "text-white border-b-2 border-[#00a2ff]"}`}>
             <span>Projets</span>
           </Link>
           
-          <Link to="/contribute" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+          <Link to="/contribute" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'contribute' && "text-white border-b-2 border-[#00a2ff]"}`}>
             <span>Contribuer</span>
           </Link>
           
-          <Link to="/affiliate" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
-            <span>Affiliation</span>
-          </Link>
         </div>
 
         {/* Right: Credits Info and Upgrade Button */}

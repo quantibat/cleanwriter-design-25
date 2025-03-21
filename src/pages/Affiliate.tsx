@@ -312,7 +312,7 @@ const Affiliate = () => {
       </div>;
   }
 
-  return <DashboardLayout breadcrumbs={[{
+  return <DashboardLayout activeTab='affiliate' breadcrumbs={[{
     label: 'Affiliation'
   }]}>
       <div className="space-y-6">

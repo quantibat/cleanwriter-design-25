@@ -260,8 +260,6 @@ const EditDCE = () => {
 
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
-    { label: 'Youtube to Newsletter', path: '/youtube-to-newsletter' },
-    { label: title || 'Untitled Youtube to Newsletter' }
   ];
 
   const handleSubmit = async (data: FormData) => {
@@ -286,7 +284,7 @@ const EditDCE = () => {
   }
 
   return (
-    <DashboardLayout breadcrumbs={breadcrumbs}>
+    <DashboardLayout breadcrumbs={breadcrumbs} activeTab="projects">
       <div className="min-h-screen bg-[#0c101b]">
         <main className="w-full">
           <ResizablePanelGroup

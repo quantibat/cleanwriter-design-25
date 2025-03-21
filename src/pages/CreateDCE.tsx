@@ -217,7 +217,7 @@ const CreateDCE = () => {
     label: 'Youtube to Newsletter',
     path: '/youtube-to-newsletter'
   }, {
-    label: title || 'Untitled Youtube to Newsletter'
+    label: title 
   }];
   const handleSubmit = async (data: FormData) => {
     if (!isValidYoutubeLink) {
@@ -233,7 +233,7 @@ const CreateDCE = () => {
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
-  return <DashboardLayout breadcrumbs={breadcrumbs}>
+  return <DashboardLayout breadcrumbs={breadcrumbs} activeTab="projects">
       <div className="min-h-screen bg-[#0c101b]">
         <main className="w-full">
           <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-150px)]">

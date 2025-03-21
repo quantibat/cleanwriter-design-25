@@ -35,7 +35,7 @@ const ViewDCE = () => {
   };
 
   const breadcrumbs = [
-    { label: 'Projets', path: '/dashboard' },
+    { label: 'Projets', path: '/projects' },
     { label: project.title }
   ];
 

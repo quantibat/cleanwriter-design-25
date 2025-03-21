@@ -22,7 +22,7 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
-  activeTab = 'tools',
+  activeTab,
   breadcrumbs = [],
   toolType = ''
 }) => {
@@ -95,8 +95,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     <div className="min-h-screen bg-[#0c101b] w-full">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-hidden w-full">
-          <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
-          
+          <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab }/>
           <div className="flex-1 w-full p-6 overflow-auto">
             {dynamicBreadcrumbs.length > 0 && (
               <div className="mb-6">
