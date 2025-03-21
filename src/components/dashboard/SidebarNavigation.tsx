@@ -1,11 +1,8 @@
 import React from 'react';
-import { Home, Briefcase, PlusCircle, Settings, Gift, BellIcon, Users, Zap } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSidebar } from '@/components/ui/sidebar';
-import { useNotifications } from '@/contexts/NotificationContext';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
+import { Grid, FolderKanban, Gift, Users } from 'lucide-react';
 interface SidebarNavigationProps {
   activeTab?: string;
   onTabChange?: (tab: string) => void;
@@ -17,78 +14,37 @@ const SidebarNavigation = ({
   const {
     open
   } = useSidebar();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const {
-    unreadCount
-  } = useNotifications();
-  const {
-    isPremiumUser
-  } = useAuth();
-  const handleTabChange = (tab: string) => {
-    onTabChange?.(tab);
-  };
-  const handlePremiumLink = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
-    // Vérifier si le lien concerne une fonctionnalité premium et si l'utilisateur n'est pas premium
-    if (!isPremiumUser && (path === '/projects' || path === '/dashboard')) {
-      e.preventDefault();
-      toast({
-        title: "Fonctionnalité premium",
-        description: "Cette section nécessite un abonnement premium. Découvrez notre essai gratuit de 7 jours.",
-        variant: "default"
-      });
-      navigate('/upgrade-plan');
-    }
-  };
-  return <div className={cn("h-16 border-b border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md w-full", "transition-all duration-300 ease-in-out flex items-center justify-center")}>
-      {/* Brand logo */}
-      <div className="flex items-center h-full px-6 border-r border-sidebar-border shrink-0">
-        <Link to="/" className="flex items-center gap-2 font-semibold">
-          <span className="text-xl text-foreground">
-            <span className="text-blue-400">DCE</span>Manager
-          </span>
+  return <div className="bg-[#1a1f2b] border-b border-white/5 py-3 px-6">
+      <div className="flex items-center">
+        <Link to="/dashboard" className="flex items-center gap-2 mr-12">
+          <div className="bg-[#00a2ff] w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">
+            <span className="text-xl">T</span>
+          </div>
+          <div className="text-white font-semibold text-xl">
+            Tugan<span className="text-[#00a2ff]">.ai</span>
+            <div className="text-[10px] text-gray-400 font-medium leading-none mt-0.5">ENHANCED</div>
+          </div>
         </Link>
-      </div>
 
-      {/* Menu - now horizontal */}
-      <div className="flex-1 h-full flex items-center px-4">
-        <ul className="flex space-x-2 h-full items-center">
-          <li>
-            <Link to="/dashboard" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/dashboard' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => {
-            handleTabChange('tools');
-            handlePremiumLink(e, '/dashboard');
-          }}>
-              <Home className="h-5 w-5 mr-2" />
-              <span>Tableau de bord</span>
-            </Link>
-          </li>
+        <div className="flex items-center space-x-8">
+          <Link to="/dashboard" className={cn("flex items-center gap-2 text-sm font-medium py-2 px-1", activeTab === 'tools' ? "text-white border-b-2 border-[#00a2ff]" : "text-gray-400 hover:text-white/80")} onClick={() => onTabChange && onTabChange('tools')}>
+            <Grid size={18} />
+            <span>Outils</span>
+          </Link>
           
-          <li>
-            <Link to="/projects" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => handlePremiumLink(e, '/projects')}>
-              <Briefcase className="h-5 w-5 mr-2" />
-              <span>Projets</span>
-            </Link>
-          </li>
+          <Link to="/projects" className={cn("flex items-center gap-2 text-sm font-medium py-2 px-1", activeTab === 'projects' ? "text-white border-b-2 border-[#00a2ff]" : "text-gray-400 hover:text-white/80")} onClick={() => onTabChange && onTabChange('projects')}>
+            <FolderKanban size={18} />
+            <span>Projets</span>
+          </Link>
           
-          <li>
-            <Link to="/contribute" className={cn("py-2 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/contribute' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={() => handleTabChange('contribute')}>
-              <Gift className="h-5 w-5 mr-2" />
-              <span>Contribuer</span>
-            </Link>
-          </li>
+          <Link to="/contribute" className={cn("flex items-center gap-2 text-sm font-medium py-2 px-1", activeTab === 'contribute' ? "text-white border-b-2 border-[#00a2ff]" : "text-gray-400 hover:text-white/80")} onClick={() => onTabChange && onTabChange('contribute')}>
+            <Gift size={18} />
+            <span>Contribuer</span>
+          </Link>
           
-          {isPremiumUser && <li>
-              
-            </li>}
           
-          <li>
-            
-          </li>
-        </ul>
+        </div>
       </div>
-      
-      {/* Copyright footer - now on the right */}
-      
     </div>;
 };
 export default SidebarNavigation;

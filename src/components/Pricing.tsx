@@ -11,7 +11,13 @@ interface PricingCardProps {
   popular?: boolean;
 }
 
-const PricingCard = ({ title, price, description, features, popular = false }: PricingCardProps) => (
+const PricingCard = ({
+  title,
+  price,
+  description,
+  features,
+  popular = false
+}: PricingCardProps) => (
   <div className={`cosmic-card p-8 flex flex-col h-full relative ${popular ? 'popular-plan' : 'border-white/5'} transition-all duration-300 hover:shadow-blue-500/10 hover:shadow-lg`}>
     {popular && (
       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
@@ -39,55 +45,66 @@ const PricingCard = ({ title, price, description, features, popular = false }: P
 );
 
 const Pricing = () => {
+  const pricingPlans = [
+    {
+      title: "Basique",
+      price: "Gratuit",
+      description: "Pour les petits projets et les débutants",
+      features: [
+        "3 projets maximum",
+        "Stockage limité à 500 Mo",
+        "Collaboration avec 2 utilisateurs",
+        "Export en PDF",
+        "Support par email"
+      ]
+    },
+    {
+      title: "Pro",
+      price: "39€",
+      description: "Pour les équipes et projets multiples",
+      features: [
+        "Projets illimités",
+        "Stockage jusqu'à 10 Go",
+        "Collaboration jusqu'à 10 utilisateurs",
+        "Exports en tous formats",
+        "Support prioritaire",
+        "Historique des versions",
+        "Modèles personnalisés"
+      ],
+      popular: true
+    },
+    {
+      title: "Entreprise",
+      price: "99€",
+      description: "Pour les grandes organisations",
+      features: [
+        "Projets et utilisateurs illimités",
+        "Stockage jusqu'à 100 Go",
+        "Administration avancée",
+        "Intégration API complète",
+        "Support dédié 24/7",
+        "Contrôles de sécurité avancés",
+        "Formations personnalisées"
+      ]
+    }
+  ];
+
   return (
-    <section id="pricing" className="py-20 px-6 relative">
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">Tarifs simples et transparents</h2>
-          <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
-            Choisissez l'offre qui correspond à vos besoins
+    <section id="pricing" className="py-20 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16 fade-up">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Des tarifs adaptés à vos besoins</h2>
+          <p className="text-blue-100/80 max-w-2xl mx-auto">
+            Choisissez le forfait qui correspond à votre niveau d'utilisation et aux fonctionnalités dont vous avez besoin.
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8">
-          <PricingCard 
-            title="Basique" 
-            price="Gratuit" 
-            description="Pour commencer à gérer vos DCE"
-            features={[
-              "10 DCE maximum",
-              "Stockage limité à 500 Mo",
-              "Partage avec 2 collaborateurs",
-              "Support par email"
-            ]}
-          />
-          
-          <PricingCard 
-            title="Professionnel" 
-            price="29 €" 
-            description="Pour les équipes de taille moyenne"
-            features={[
-              "DCE illimités",
-              "Stockage de 10 Go",
-              "Partage avec 10 collaborateurs",
-              "Suivi des versions avancé",
-              "Support prioritaire"
-            ]}
-            popular
-          />
-          
-          <PricingCard 
-            title="Entreprise" 
-            price="79 €" 
-            description="Pour les grandes organisations"
-            features={[
-              "DCE illimités",
-              "Stockage illimité",
-              "Utilisateurs illimités",
-              "API d'intégration",
-              "Support dédié 24/7"
-            ]}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {pricingPlans.map((plan, index) => (
+            <div key={index} className="fade-up" style={{ animationDelay: `${index * 0.1}s` }}>
+              <PricingCard {...plan} />
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Sun, Moon, Search, LogOut, Menu, Globe, User, CreditCard, Settings, HelpCircle } from "lucide-react";
+import { Sun, Moon, LogOut, Globe, User, CreditCard, Settings, HelpCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/components/ui/sidebar';
-import NotificationBell from './NotificationBell';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
@@ -17,7 +16,6 @@ const TopBar = ({
   onThemeToggle,
   isDarkMode
 }: TopBarProps) => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [language, setLanguage] = useState<'fr' | 'en'>('fr');
   const {
     user,
@@ -35,14 +33,18 @@ const TopBar = ({
     email: user?.email || "john.doe@example.com",
     address: user?.user_metadata?.address || "123 Rue de Paris, 75000 Paris"
   };
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    // Implement search functionality
-  };
+
+  // Total credits and used credits
+  const totalCredits = 30000;
+  const usedCredits = 5000; // Example: 5000 credits used
+  const remainingCredits = totalCredits - usedCredits;
+  const percentUsed = Math.round(usedCredits / totalCredits * 100);
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
+  };
+  const handleUpgrade = () => {
+    navigate('/upgrade-plan');
   };
   const handleThemeChange = () => {
     if (isDarkMode) {
@@ -101,112 +103,126 @@ const TopBar = ({
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-  return <div className="w-full bg-sidebar/95 backdrop-blur-md px-2 sm:px-4 md:px-6 border-b border-sidebar-border flex items-center h-16 sticky top-0">
-      {/* Menu toggle button for mobile */}
-      <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleSidebar}>
-        <Menu className="h-5 w-5" />
-        <span className="sr-only">Toggle menu</span>
-      </Button>
-
-      {/* Search (responsive) */}
-      <form onSubmit={handleSearch} className="flex-1 max-w-md mx-2 hidden sm:flex">
-        <div className="relative w-full">
-          
-          
-        </div>
-      </form>
-
-      {/* Mobile search button */}
-      <Button variant="ghost" size="icon" className="sm:hidden ml-2">
-        <Search className="h-5 w-5" />
-      </Button>
-
-      {/* Actions (Right) */}
-      <div className="flex items-center gap-2 sm:gap-4 ml-auto">
-        {/* Notification Bell */}
-        <NotificationBell />
-        
-        {/* Language Selector */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="hover:bg-sidebar-accent/30">
-              <Globe className="h-4 w-4 text-muted-foreground" />
-              <span className="sr-only">Select language</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-popover">
-            <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? "bg-accent/50" : ""}>
-              Français
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? "bg-accent/50" : ""}>
-              English
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Theme Toggle */}
-        <div className="flex items-center gap-1 sm:gap-2">
-          <Sun className="h-4 w-4 text-muted-foreground" />
-          <Switch checked={isDarkMode} onCheckedChange={handleThemeChange} />
-          <Moon className="h-4 w-4 text-muted-foreground" />
+  return <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
+      {/* Top div with logo and user controls */}
+      <div className="flex items-center justify-between w-full px-6 py-3">
+        {/* Left: Logo */}
+        <div className="flex items-center">
+          <Link to="/dashboard" className="flex items-center gap-2">
+            
+            <div className="text-white font-semibold text-xl">
+              DCE<span className="text-[#00a2ff]">Manager</span>
+            </div>
+          </Link>
         </div>
 
-        {/* Profile Dropdown */}
-        {user && <DropdownMenu>
+        {/* Right: User controls */}
+        <div className="flex items-center space-x-4">
+          {/* Theme Toggle */}
+          <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
+            {isDarkMode ? <Sun className="h-5 w-5 text-gray-400" /> : <Moon className="h-5 w-5 text-gray-400" />}
+          </Button>
+
+          {/* Language Selector */}
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="hover:bg-sidebar-accent/30 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.user_metadata?.avatar_url} />
-                  <AvatarFallback className="bg-blue-500 text-white">
-                    {userData.firstName[0]}{userData.lastName[0]}
-                  </AvatarFallback>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Globe className="h-5 w-5 text-gray-400" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? 'bg-accent' : ''}>
+                Français
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? 'bg-accent' : ''}>
+                English
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Avatar + Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative rounded-full h-8 w-8 p-0">
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" alt={userData.firstName} />
+                  <AvatarFallback>{userData.firstName.charAt(0)}{userData.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64 bg-popover">
-              <div className="p-2 text-sm">
-                <p className="font-medium">{userData.firstName} {userData.lastName}</p>
-                <p className="text-muted-foreground">{userData.email}</p>
-              </div>
-              
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{userData.firstName} {userData.lastName}</p>
+                  <p className="text-xs leading-none text-muted-foreground">{userData.email}</p>
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              
-              <DropdownMenuItem asChild>
-                <Link to="/account" className="cursor-pointer flex items-center w-full">
-                  <User className="h-4 w-4 mr-2" />
-                  Mon compte
-                </Link>
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <Link to="/account">Mon compte</Link>
               </DropdownMenuItem>
-              
-              <DropdownMenuItem asChild>
-                <Link to="/billing" className="cursor-pointer flex items-center w-full">
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  Facturation
-                </Link>
+              <DropdownMenuItem>
+                <CreditCard className="mr-2 h-4 w-4" />
+                <Link to="/billing">Facturation</Link>
               </DropdownMenuItem>
-              
-              <DropdownMenuItem asChild>
-                <Link to="/usage" className="cursor-pointer flex items-center w-full">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Utilisation
-                </Link>
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                <Link to="/settings">Paramètres</Link>
               </DropdownMenuItem>
-              
-              <DropdownMenuItem asChild>
-                <Link to="/help" className="cursor-pointer flex items-center w-full">
-                  <HelpCircle className="h-4 w-4 mr-2" />
-                  Aide
-                </Link>
+              <DropdownMenuItem>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                <Link to="/help">Aide</Link>
               </DropdownMenuItem>
-              
               <DropdownMenuSeparator />
-              
-              <DropdownMenuItem className="cursor-pointer flex items-center justify-center py-2 text-destructive" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-2" />
+              <DropdownMenuItem onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
                 Déconnexion
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>}
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Bottom div with navigation and credits */}
+      <div className="flex items-center justify-between w-full px-6 py-3 bg-[#1a1f2b]">
+        {/* Left: Navigation Links */}
+        <div className="flex items-center space-x-8">
+          <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-white border-b-2 border-[#00a2ff]">
+            <span className="text-white">Outils</span>
+          </Link>
+          
+          <Link to="/projects" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+            <span>Projets</span>
+          </Link>
+          
+          <Link to="/contribute" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+            <span>Contribuer</span>
+          </Link>
+          
+          <Link to="/affiliate" className="flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80">
+            <span>Affiliation</span>
+          </Link>
+        </div>
+
+        {/* Right: Credits Info and Upgrade Button */}
+        <div className="flex items-center space-x-4">
+          <div className="bg-[#1e2333] rounded-lg p-3">
+            <div className="flex flex-col">
+              <div className="text-sm text-gray-400 mb-1">Vos crédits disponibles</div>
+              <div className="flex items-center space-x-2">
+                <Progress value={percentUsed} className="w-24 h-2" />
+                <span className="text-white text-xs">{percentUsed}% de vos crédits utilisés</span>
+              </div>
+              <div className="text-sm text-white font-medium mt-1">
+                {remainingCredits.toLocaleString()} / {totalCredits.toLocaleString()} crédits
+              </div>
+              <Button size="sm" variant="blue" onClick={handleUpgrade} className="mt-2 text-xs py-1 h-8 bg-transparent ">
+                Mettre à niveau
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>;
 };

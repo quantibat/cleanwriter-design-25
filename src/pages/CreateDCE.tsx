@@ -1,550 +1,413 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Sparkles, FileText, LinkIcon, Upload, Globe, FileCheck, FolderOpen, LayoutList, PlusCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
-import { Card, CardContent } from "@/components/ui/card";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Progress } from "@/components/ui/progress";
 import { useForm } from "react-hook-form";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import DashboardLayout from '@/components/layouts/DashboardLayout';
+import TopicsList from '@/components/youtube-newsletter/TopicsList';
+import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
+import { useNotificationsManager } from '@/hooks/useNotificationsManager';
+import { Textarea } from "@/components/ui/textarea";
+const MOCK_TOPICS = [{
+  id: '1',
+  title: 'La clé des vidéos virales : êtes-vous prêt ?',
+  description: 'Découvrez les facteurs essentiels qui font le succès des vidéos virales sur les plateformes modernes.'
+}, {
+  id: '2',
+  title: 'Les 4 piliers du succès sur YouTube',
+  description: 'Analyse des quatre compétences fondamentales pour réussir et maintenir l\'intérêt de votre audience.'
+}, {
+  id: '3',
+  title: 'Au-delà de l\'argent : ce qui fait vraiment une vie réussie',
+  description: 'Réflexion sur l\'importance de l\'équilibre entre richesse, relations et authenticité.'
+}];
+const MOCK_CONTENT = {
+  '1': {
+    subject: 'La clé des vidéos virales : êtes-vous prêt ? ✨ 🚀',
+    body: `**Objet : Découvrez la clé du succès cachée derrière l'écran**
 
+Bonjour,
+
+Savez-vous ce qui se cache vraiment derrière une vidéo virale ?
+
+Imaginez un jongleur qui garde en l'air quatre balles : charisme, humour, ambition, et culture.
+
+Ces quatre compétences sont essentielles pour captiver et maintenir l'intérêt.
+
+Un peu comme un chef d'orchestre qui dirige une symphonie, chaque élément doit être parfaitement accordé.
+
+Prenons l'exemple de l'argent.
+
+Il ne suffit pas d'en avoir pour être heureux.
+
+Un millionnaire sans amour ni passion est comme un arbre sans feuilles.
+
+Les relations, elles aussi, nécessitent une attention constante.
+
+Comme un jardin qui doit être entretenu pour fleurir.
+
+Et si vous pensez que la richesse garantit le bonheur, détrompez-vous.
+
+C'est comme croire qu'une belle couverture rend un livre intéressant.
+
+Enfin, l'authenticité est votre meilleur allié.
+
+Dans un monde où les façades sont légion, être vrai est un acte de liberté et de sagesse.
+
+Souvenez-vous que la richesse véritable se mesure à la qualité de vos relations, à votre capacité à vivre selon vos valeurs et à la paix intérieure que vous cultivez jour après jour.
+
+À méditer.
+
+Bien à vous,
+
+[Votre Nom]`
+  },
+  '2': {
+    subject: 'Les 4 piliers du succès sur YouTube révélés',
+    body: `Chers créateurs de contenu,
+
+Si vous avez déjà tenté l'aventure YouTube, vous savez que le succès ne vient pas du jour au lendemain. Au-delà des vues et des likes, quatre piliers fondamentaux soutiennent toute carrière réussie sur la plateforme.
+
+Le premier pilier est indéniablement le contenu de qualité. Un contenu qui informe, divertit ou inspire votre audience. C'est la fondation sur laquelle tout le reste s'appuie.
+
+Le deuxième pilier est la régularité. Publier de façon constante est essentiel pour maintenir l'engagement de votre communauté et favoriser la croissance de votre chaîne.
+
+Le troisième pilier est l'authenticité. Dans un océan de créateurs qui essaient d'imiter les tendances, votre voix unique est votre atout le plus précieux.
+
+Enfin, le quatrième pilier est l'adaptabilité. Les algorithmes changent, les tendances évoluent, et seuls ceux qui savent s'adapter pourront maintenir leur pertinence sur le long terme.
+
+J'espère que ces insights vous aideront dans votre parcours de créateur.
+
+À votre succès !`
+  },
+  '3': {
+    subject: 'Au-delà de l\'argent : les vraies clés du bonheur',
+    body: `Cher lecteur,
+
+Dans notre société actuelle, le succès est souvent mesuré à l'aune de la richesse matérielle. Pourtant, derrière les façades luxueuses se cachent parfois des vies dénuées de sens.
+
+L'argent, aussi important soit-il pour assurer notre confort, n'est qu'un outil. Un outil qui peut nous offrir des opportunités, mais qui ne garantit en rien l'épanouissement personnel.
+
+Les relations authentiques, qu'elles soient familiales, amicales ou amoureuses, constituent le véritable terreau dans lequel s'enracine notre bonheur. Ces connexions humaines nécessitent du temps, de l'attention et de la sincérité pour s'épanouir.
+
+La passion et le sens sont également des composantes essentielles d'une vie accomplie. Trouver ce qui nous anime et y consacrer notre énergie nous permet de nous sentir vivants et utiles.
+
+Enfin, l'authenticité est peut-être la qualité la plus précieuse. Dans un monde où les apparences règnent en maître, avoir le courage d'être soi-même est un acte de liberté et de sagesse.
+
+Souvenez-vous que la richesse véritable se mesure à la qualité de vos relations, à votre capacité à vivre selon vos valeurs et à la paix intérieure que vous cultivez jour après jour.
+
+À méditer, n'est-ce pas ?
+
+Cordialement,`
+  }
+};
+type FormData = {
+  title: string;
+  youtubeLink: string;
+  option: string;
+  language: string;
+  aiModel: string;
+};
 const CreateDCE = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
-  const [generatingDocument, setGeneratingDocument] = useState(false);
-  const { toast } = useToast();
-  
-  const form = useForm({
+  const [generatingTopics, setGeneratingTopics] = useState(false);
+  const [generatingContent, setGeneratingContent] = useState(false);
+  const [topics, setTopics] = useState<any[]>([]);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const [activeContent, setActiveContent] = useState<{
+    subject: string;
+    body: string;
+  } | null>(null);
+  const {
+    toast
+  } = useToast();
+  const {
+    notifySuccess
+  } = useNotificationsManager();
+  const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
+  const [title, setTitle] = useState("Untitled Youtube to Newsletter");
+  const [cardTitle, setCardTitle] = useState("Ma sélection de cartes");
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const titleParam = params.get('title');
+    const isSocialMediaParam = params.get('isSocialMedia');
+    if (titleParam) {
+      setTitle(titleParam);
+      form.setValue('title', titleParam);
+    }
+    if (isSocialMediaParam) {
+      setIsSocialMediaOnly(isSocialMediaParam === 'true');
+    }
+  }, [location.search]);
+  const form = useForm<FormData>({
     defaultValues: {
-      title: '',
-      sourceMaterials: '',
-      category: '',
-      subcategory: '',
+      title: 'Untitled Youtube to Newsletter',
+      youtubeLink: '',
+      option: '',
       language: 'french',
-      format: 'pdf',
-      additionalNotes: ''
+      aiModel: 'gpt-4o'
     }
   });
-
-  const onSubmit = async (data: any) => {
-    setIsLoading(true);
-    console.log("Données du formulaire:", data);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Document créé avec succès",
-        description: "Le document technique a été ajouté au DCE",
+  const totalCredits = 30000;
+  const [usedCredits, setUsedCredits] = useState(0);
+  const remainingCredits = totalCredits - usedCredits;
+  const percentUsed = Math.round(usedCredits / totalCredits * 100);
+  const [videoMetadata, setVideoMetadata] = useState<any>(null);
+  const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
+  const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const link = e.target.value;
+    form.setValue('youtubeLink', link);
+    const isValid = link.includes('youtube.com/watch') || link.includes('youtu.be/');
+    setIsValidYoutubeLink(isValid);
+    if (isValid) {
+      setVideoMetadata({
+        title: '"DÉMOLITION" de JP Fanguin par Jm Corda',
+        channel: 'Jm Corda Business',
+        views: '0 vues',
+        duration: '39:49'
       });
-      navigate('/dashboard');
-    }, 1500);
+    } else {
+      setVideoMetadata(null);
+    }
   };
-
-  const generateWithAI = () => {
-    setGeneratingDocument(true);
-    const formData = form.getValues();
-    console.log("Génération IA basée sur:", formData);
-    
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+    form.setValue('title', newTitle);
+  };
+  const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCardTitle(e.target.value);
+  };
+  const generateTopics = async () => {
+    setGeneratingTopics(true);
+    const wordCount = 250;
+    setUsedCredits(prev => prev + wordCount);
     setTimeout(() => {
-      setGeneratingDocument(false);
-      form.setValue('additionalNotes', 'Document généré automatiquement en utilisant les paramètres spécifiés. Ce document contient des spécifications techniques conformes aux normes en vigueur.');
-      toast({
-        title: "Document généré par IA",
-        description: "Un document a été généré en fonction de vos paramètres",
-      });
+      setTopics(MOCK_TOPICS);
+      setGeneratingTopics(false);
+      notifySuccess('Sujets générés', '3 sujets ont été générés avec succès à partir de la vidéo YouTube.');
     }, 2000);
   };
-
-  const watchedValues = form.watch();
-
-  const categories = {
-    "technique": ["CCTP", "Mémoire technique", "Notes de calcul", "Spécifications"],
-    "administratif": ["CCAP", "RC", "AE", "Annexes administratives"],
-    "planning": ["Planning général", "Phasage", "Jalons", "Délais d'exécution"],
-    "financier": ["Bordereau de prix", "Détail quantitatif", "Estimation", "Budget prévisionnel"]
+  const handleSelectTopic = (topicId: string) => {
+    setSelectedTopics(prev => {
+      if (prev.includes(topicId)) {
+        return prev.filter(id => id !== topicId);
+      }
+      return [...prev, topicId];
+    });
+    setGeneratingContent(true);
+    const wordCount = 500;
+    setUsedCredits(prev => prev + wordCount);
+    setTimeout(() => {
+      setActiveContent(MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT]);
+      setGeneratingContent(false);
+    }, 1000);
   };
-
-  const subcategoryOptions = watchedValues.category ? categories[watchedValues.category as keyof typeof categories] : [];
-
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-white/5 bg-background/20 backdrop-blur-md py-4 px-6 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-1"
-            onClick={() => navigate('/dashboard')}
-          >
-            <ArrowLeft size={16} />
-            Retour
-          </Button>
-          <h1 className="text-xl font-semibold">Créer un document technique</h1>
-          <div></div> {/* Spacer pour centrer le titre */}
-        </div>
-      </header>
-      
-      <main className="flex-1 py-8 px-6 md:px-10 space-y-6">
-        <div className="max-w-7xl mx-auto">
-          <ResizablePanelGroup
-            direction="horizontal"
-            className="min-h-[calc(100vh-180px)]"
-          >
-            <ResizablePanel defaultSize={50} minSize={40}>
-              <div className="h-full p-4 overflow-auto border border-white/20 rounded-lg">
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="space-y-6">
-                      <div className="border-b border-white/10 pb-4">
-                        <h2 className="text-lg font-medium">Informations du document</h2>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Définissez les informations de base du document technique
-                        </p>
-                      </div>
-                      
-                      <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Nom du document</FormLabel>
-                            <FormControl>
-                              <Input 
-                                placeholder="Ex: Cahier des charges techniques - Lot 01" 
-                                {...field} 
-                                className="bg-card/30"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="sourceMaterials"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Liens ou fichiers sources</FormLabel>
-                            <FormControl>
-                              <div className="space-y-2">
-                                <Textarea 
-                                  placeholder="Liens vers documents ou ressources existants (un par ligne)" 
-                                  className="bg-card/30 min-h-[80px]" 
-                                  {...field}
-                                />
-                                <div className="flex gap-2">
-                                  <Button 
-                                    type="button" 
-                                    variant="outline" 
-                                    size="sm" 
-                                    className="text-xs"
-                                    onClick={() => toast({
-                                      title: "Fonctionnalité à venir",
-                                      description: "L'import de fichiers sera disponible prochainement",
-                                    })}
-                                  >
-                                    <Upload size={14} className="mr-1" />
-                                    Importer un fichier
-                                  </Button>
-                                  <Button 
-                                    type="button" 
-                                    variant="outline" 
-                                    size="sm" 
-                                    className="text-xs"
-                                    onClick={() => toast({
-                                      title: "Fonctionnalité à venir",
-                                      description: "L'ajout de liens externes sera disponible prochainement",
-                                    })}
-                                  >
-                                    <LinkIcon size={14} className="mr-1" />
-                                    Ajouter un lien
-                                  </Button>
-                                </div>
-                              </div>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    
-                    <div className="space-y-6 pt-4">
-                      <div className="border-b border-white/10 pb-4">
-                        <h2 className="text-lg font-medium">Catégorisation</h2>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Classez votre document pour une meilleure organisation
-                        </p>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="category"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Catégorie</FormLabel>
-                              <FormControl>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <SelectTrigger className="bg-card/30">
-                                    <SelectValue placeholder="Sélectionner une catégorie" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="technique">Document technique</SelectItem>
-                                    <SelectItem value="administratif">Document administratif</SelectItem>
-                                    <SelectItem value="planning">Planning et délais</SelectItem>
-                                    <SelectItem value="financier">Document financier</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="subcategory"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Sous-catégorie</FormLabel>
-                              <FormControl>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                  disabled={!watchedValues.category}
-                                >
-                                  <SelectTrigger className="bg-card/30">
-                                    <SelectValue placeholder={watchedValues.category ? "Sélectionner une sous-catégorie" : "Choisissez d'abord une catégorie"} />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {subcategoryOptions.map((option) => (
-                                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-6 pt-4">
-                      <div className="border-b border-white/10 pb-4">
-                        <h2 className="text-lg font-medium">Format et options</h2>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Définissez le format et les options du document
-                        </p>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="language"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Langue du document</FormLabel>
-                              <FormControl>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <SelectTrigger className="bg-card/30">
-                                    <SelectValue placeholder="Sélectionner une langue" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="french">Français</SelectItem>
-                                    <SelectItem value="english">Anglais</SelectItem>
-                                    <SelectItem value="german">Allemand</SelectItem>
-                                    <SelectItem value="spanish">Espagnol</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="format"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Format du document</FormLabel>
-                              <FormControl>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <SelectTrigger className="bg-card/30">
-                                    <SelectValue placeholder="Sélectionner un format" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="pdf">PDF</SelectItem>
-                                    <SelectItem value="docx">Microsoft Word (.docx)</SelectItem>
-                                    <SelectItem value="xlsx">Microsoft Excel (.xlsx)</SelectItem>
-                                    <SelectItem value="md">Markdown (.md)</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      
-                      <FormField
-                        control={form.control}
-                        name="additionalNotes"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Notes additionnelles</FormLabel>
-                            <FormDescription>
-                              Ajoutez des informations spécifiques ou instructions pour ce document
-                            </FormDescription>
-                            <FormControl>
-                              <Textarea 
-                                placeholder="Informations complémentaires, consignes spécifiques..." 
-                                className="bg-card/30 min-h-[120px]" 
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <div className="pt-4">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="w-full mb-4 border-blue-400/30 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
-                          onClick={generateWithAI}
-                          disabled={generatingDocument}
-                        >
-                          {generatingDocument ? (
-                            <>Génération en cours...</>
-                          ) : (
-                            <>
-                              <Sparkles size={16} className="mr-2" />
-                              Générer avec IA
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                    
-                    <div className="pt-6 space-y-4">
-                      <Button 
-                        type="submit" 
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <>Enregistrement en cours...</>
-                        ) : (
-                          <>
-                            <PlusCircle size={16} />
-                            Créer le document
-                          </>
-                        )}
-                      </Button>
-                      
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        className="w-full" 
-                        onClick={() => navigate('/dashboard')}
-                        disabled={isLoading}
-                      >
-                        Annuler
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </div>
-            </ResizablePanel>
-            
-            <ResizableHandle withHandle />
-            
+  const breadcrumbs = [{
+    label: 'Projets',
+    path: '/projects'
+  }, {
+    label: 'Youtube to Newsletter',
+    path: '/youtube-to-newsletter'
+  }, {
+    label: title || 'Untitled Youtube to Newsletter'
+  }];
+  const handleSubmit = async (data: FormData) => {
+    if (!isValidYoutubeLink) {
+      toast({
+        title: "Lien YouTube invalide",
+        description: "Veuillez entrer un lien YouTube valide",
+        variant: "destructive"
+      });
+      return;
+    }
+    generateTopics();
+  };
+  const handleUpgrade = () => {
+    navigate('/upgrade-plan');
+  };
+  return <DashboardLayout breadcrumbs={breadcrumbs}>
+      <div className="min-h-screen bg-[#0c101b]">
+        <main className="w-full">
+          <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-150px)]">
             <ResizablePanel defaultSize={50} minSize={30}>
-              <div className="h-full p-4 overflow-auto border border-white/20 rounded-lg">
-                <div className="bg-card/20 backdrop-blur-sm rounded-lg p-8 shadow-lg h-full overflow-hidden scrollbar-none">
-                  <div className="border-b border-white/10 pb-4 mb-6">
-                    <h2 className="text-lg font-medium">Prévisualisation du document</h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Aperçu du document technique en cours de création
-                    </p>
-                  </div>
-                  
-                  {!watchedValues.title && !watchedValues.category ? (
-                    <div className="flex flex-col items-center justify-center h-[calc(100%-100px)] text-center">
-                      <FileText className="h-16 w-16 text-muted-foreground mb-4 opacity-30" />
-                      <p className="text-muted-foreground">
-                        Remplissez le formulaire pour voir la prévisualisation du document
-                      </p>
+              <div className="h-full p-6 overflow-auto">
+                <div className="mb-6">
+                  {isSocialMediaOnly ? <Textarea placeholder="Description du contenu pour les réseaux sociaux..." className="min-h-[100px] bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40" value={title} onChange={e => setTitle(e.target.value)} /> : <Input type="text" value={title} onChange={handleTitleChange} className="text-xl font-medium border-none bg-transparent text-white p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0" />}
+                </div>
+                
+                
+                
+                <div className="mb-6">
+                  <label className="text-sm font-medium text-gray-300 mb-2 block">Titre de la sélection</label>
+                  <Input type="text" value={cardTitle} onChange={handleCardTitleChange} className="w-full py-2 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40" placeholder="Entrez le titre de votre sélection de cartes" />
+                </div>
+                
+                {topics.length === 0 ? <div className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-300">Lien de la vidéo Youtube</label>
+                      <div className="relative">
+                        <Input type="text" placeholder="Paste a youtube video link here" className="pl-10 py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40" onChange={handleYoutubeLinkChange} value={form.watch('youtubeLink')} />
+                        <Youtube className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+                        {isValidYoutubeLink && <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />}
+                      </div>
                     </div>
-                  ) : (
-                    <div className="space-y-6">
-                      <Card className="bg-card/30 border border-white/10 overflow-hidden">
-                        <CardContent className="p-6">
-                          <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                              <div className="bg-blue-500/10 p-2 rounded-md">
-                                <FileText className="h-6 w-6 text-blue-400" />
-                              </div>
-                              <div className="flex-1">
-                                <h3 className="font-medium text-lg line-clamp-1">
-                                  {watchedValues.title || "Titre du document"}
-                                </h3>
-                                <div className="flex flex-wrap items-center gap-2 mt-2">
-                                  {watchedValues.category && (
-                                    <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">
-                                      {watchedValues.category === 'technique' && "Document technique"}
-                                      {watchedValues.category === 'administratif' && "Document administratif"}
-                                      {watchedValues.category === 'planning' && "Planning et délais"}
-                                      {watchedValues.category === 'financier' && "Document financier"}
-                                    </span>
-                                  )}
-                                  {watchedValues.subcategory && (
-                                    <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-full">
-                                      {watchedValues.subcategory}
-                                    </span>
-                                  )}
-                                  {watchedValues.format && (
-                                    <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full flex items-center gap-1">
-                                      <FileCheck className="h-3 w-3" />
-                                      {watchedValues.format === 'pdf' && "PDF"}
-                                      {watchedValues.format === 'docx' && "Word"}
-                                      {watchedValues.format === 'xlsx' && "Excel"}
-                                      {watchedValues.format === 'md' && "Markdown"}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {watchedValues.language && (
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Globe className="h-4 w-4" />
-                                <span>
-                                  {watchedValues.language === 'french' && "Français"}
-                                  {watchedValues.language === 'english' && "Anglais"}
-                                  {watchedValues.language === 'german' && "Allemand"}
-                                  {watchedValues.language === 'spanish' && "Espagnol"}
-                                </span>
-                              </div>
-                            )}
+                    
+                    {videoMetadata && <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3">
+                        <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
+                          <img src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg" alt="Video thumbnail" className="w-full h-full object-cover" />
+                          <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
+                            {videoMetadata.duration}
                           </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card className="bg-card/30 border border-white/10">
-                        <CardContent className="p-6">
-                          <div className="space-y-4">
-                            {watchedValues.title && (
-                              <div className="border-b border-white/10 pb-3">
-                                <h4 className="text-lg font-bold">{watchedValues.title}</h4>
-                              </div>
-                            )}
-                            
-                            {watchedValues.subcategory && (
-                              <div className="space-y-2">
-                                <h5 className="font-medium">1. Introduction</h5>
-                                <p className="text-sm text-muted-foreground">
-                                  Ce document détaille les spécifications techniques pour {watchedValues.subcategory.toLowerCase()}. 
-                                  Il fait partie intégrante du dossier de consultation des entreprises.
-                                </p>
-                              </div>
-                            )}
-                            
-                            {watchedValues.sourceMaterials && (
-                              <div className="space-y-2">
-                                <h5 className="font-medium">2. Documents de référence</h5>
-                                <div className="text-sm text-muted-foreground">
-                                  {watchedValues.sourceMaterials.split('\n').map((link, index) => (
-                                    <div key={index} className="flex items-center gap-2 ml-2">
-                                      <LinkIcon className="h-3 w-3" />
-                                      <span className="text-blue-400 underline">{link}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            
-                            {watchedValues.additionalNotes && (
-                              <div className="space-y-2">
-                                <h5 className="font-medium">3. Informations complémentaires</h5>
-                                <p className="text-sm text-muted-foreground">
-                                  {watchedValues.additionalNotes}
-                                </p>
-                              </div>
-                            )}
-                            
-                            {(!watchedValues.additionalNotes && !watchedValues.sourceMaterials) && (
-                              <p className="text-sm text-muted-foreground italic">
-                                Complétez le formulaire pour générer un aperçu du contenu du document...
-                              </p>
-                            )}
+                        </div>
+                        <div className="flex flex-col justify-between">
+                          <div>
+                            <h3 className="text-sm font-medium text-white line-clamp-2">
+                              {videoMetadata.title}
+                            </h3>
+                            <p className="text-xs text-gray-400">
+                              {videoMetadata.channel}
+                            </p>
                           </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <div className="bg-card/20 border border-white/10 rounded-lg p-4">
-                        <h5 className="text-sm font-medium mb-2">Informations sur le format</h5>
-                        
-                        <div className="space-y-2 text-xs text-muted-foreground">
-                          <div className="flex justify-between">
-                            <span>Type de fichier:</span>
-                            <span className="font-medium">
-                              {watchedValues.format === 'pdf' && "Document PDF"}
-                              {watchedValues.format === 'docx' && "Document Microsoft Word"}
-                              {watchedValues.format === 'xlsx' && "Feuille de calcul Microsoft Excel"}
-                              {watchedValues.format === 'md' && "Document Markdown"}
-                            </span>
+                          <div className="text-xs text-gray-500">
+                            {videoMetadata.views} •
                           </div>
-                          
-                          <div className="flex justify-between">
-                            <span>Langue:</span>
-                            <span className="font-medium">
-                              {watchedValues.language === 'french' && "Français"}
-                              {watchedValues.language === 'english' && "Anglais"}
-                              {watchedValues.language === 'german' && "Allemand"}
-                              {watchedValues.language === 'spanish' && "Espagnol"}
-                            </span>
-                          </div>
-                          
-                          {watchedValues.category && (
-                            <div className="flex justify-between">
-                              <span>Catégorie:</span>
-                              <span className="font-medium">
-                                {watchedValues.category === 'technique' && "Document technique"}
-                                {watchedValues.category === 'administratif' && "Document administratif"}
-                                {watchedValues.category === 'planning' && "Planning et délais"}
-                                {watchedValues.category === 'financier' && "Document financier"}
+                        </div>
+                      </div>}
+                    
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-300">Option</label>
+                      <div>
+                        <Select onValueChange={value => form.setValue('option', value)}>
+                          <SelectTrigger className="py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40">
+                            <SelectValue placeholder="Aucune option sélectionnée" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-[#171a2e] border border-[#2a2f45] text-gray-200">
+                            <SelectItem value="summary">Résumé</SelectItem>
+                            <SelectItem value="transcript">Transcription</SelectItem>
+                            <SelectItem value="newsletter">Newsletter</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-300">Langue de sortie</label>
+                      <div>
+                        <Select defaultValue="french" onValueChange={value => form.setValue('language', value)}>
+                          <SelectTrigger className="py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40">
+                            <div className="flex items-center space-x-2">
+                              <span className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center bg-blue-100">
+                                <span className="text-xs">🇫🇷</span>
                               </span>
+                              <SelectValue />
                             </div>
-                          )}
-                          
-                          {watchedValues.subcategory && (
-                            <div className="flex justify-between">
-                              <span>Type de document:</span>
-                              <span className="font-medium">{watchedValues.subcategory}</span>
+                          </SelectTrigger>
+                          <SelectContent className="bg-[#171a2e] border border-[#2a2f45] text-gray-200">
+                            <SelectItem value="french">Français Formel (vous)</SelectItem>
+                            <SelectItem value="french_informal">Français Informel (tu)</SelectItem>
+                            <SelectItem value="english">English</SelectItem>
+                            <SelectItem value="spanish">Español</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-300">Modèle d'IA</label>
+                      <div>
+                        <Select defaultValue="gpt-4o" onValueChange={value => form.setValue('aiModel', value)}>
+                          <SelectTrigger className="py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-purple-200 text-purple-800 text-xs py-0.5 px-2 rounded-full">Qualité</span>
+                              <SelectValue />
                             </div>
-                          )}
+                          </SelectTrigger>
+                          <SelectContent className="bg-[#171a2e] border border-[#2a2f45] text-gray-200">
+                            <SelectItem value="gpt-4o">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-purple-200 text-purple-800 text-xs py-0.5 px-2 rounded-full">Qualité</span>
+                                <span>GPT-4o</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="gpt-3.5">GPT-3.5</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4">
+                      <Button type="button" className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md" onClick={() => handleSubmit(form.getValues())} disabled={generatingTopics || !isValidYoutubeLink}>
+                        {generatingTopics ? <>Génération en cours...</> : <>
+                            <Sparkles size={18} className="mr-2" />
+                            Générez une newsletter
+                          </>}
+                      </Button>
+                    </div>
+                  </div> : <div className="space-y-4">
+                    <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3 mb-4">
+                      <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
+                        <img src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg" alt="Video thumbnail" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
+                          {videoMetadata?.duration || "39:49"}
                         </div>
                       </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-white">
+                          {videoMetadata?.title || '"DÉMOLITION" de JP Fanguin par Jm Corda'}
+                        </h3>
+                        <p className="text-xs text-gray-400">
+                          {videoMetadata?.channel || 'Jm Corda Business'}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {videoMetadata?.views || '0 vues'} •
+                        </p>
+                      </div>
                     </div>
-                  )}
-                </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-white font-medium">{cardTitle}</h3>
+                      <span className="text-sm text-gray-400">{selectedTopics.length} sélectionné(s)</span>
+                    </div>
+                    
+                    <TopicsList topics={topics} selectedTopics={selectedTopics} onSelectTopic={handleSelectTopic} isLoading={generatingTopics} />
+                    
+                    <Button className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md mt-4" onClick={() => {
+                  toast({
+                    title: "Génération terminée",
+                    description: `${selectedTopics.length} newsletter(s) générée(s) avec succès`
+                  });
+                }} disabled={selectedTopics.length === 0}>
+                      Générer le contenu pour {selectedTopics.length} sujet(s)
+                    </Button>
+                  </div>}
               </div>
             </ResizablePanel>
+            
+            <ResizableHandle withHandle className="bg-[#1d2535]" />
+            
+            <ResizablePanel defaultSize={50} minSize={30}>
+              {topics.length === 0 ? <div className="h-full p-6 overflow-auto border border-dashed border-[#1d2535] rounded-lg flex flex-col items-center justify-center">
+                  <div className="text-center max-w-md">
+                    <FileText className="h-16 w-16 text-gray-500 mb-4 mx-auto opacity-30" />
+                    <h3 className="text-lg font-medium text-white mb-2">Aucun contenu créé pour le moment</h3>
+                    <p className="text-gray-400">
+                      Suivez les étapes sur la gauche pour générer votre premier contenu.
+                      Tout le contenu apparaîtra ici.
+                    </p>
+                  </div>
+                </div> : <ContentDisplay content={activeContent} isLoading={generatingContent} />}
+            </ResizablePanel>
           </ResizablePanelGroup>
-        </div>
-      </main>
-    </div>
-  );
+        </main>
+      </div>
+    </DashboardLayout>;
 };
-
 export default CreateDCE;

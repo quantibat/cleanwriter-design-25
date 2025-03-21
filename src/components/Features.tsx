@@ -1,79 +1,105 @@
 
 import React from 'react';
-import { FolderArchive, Share2, FileSearch, FileCheck } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { FolderOpen, BarChart3, Users, Shield, Sparkles, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface FeatureCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
-  image: string;
-  alt: string;
-  reverse?: boolean;
+  delay: number;
+  color: string;
 }
 
 const FeatureCard = ({
   title,
   description,
   icon,
-  image,
-  alt,
-  reverse = false
+  delay,
+  color
 }: FeatureCardProps) => (
-  <div className="w-full flex flex-col md:flex-row items-stretch gap-8">
-    {/* Image section - 50% width on desktop */}
-    <div className={`w-full md:w-1/2 order-1 ${reverse ? 'md:order-2' : 'md:order-1'}`}>
-      <div className="h-full animated-border-white">
-        <Card className="overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 shadow-xl h-full">
-          <div className="h-full overflow-hidden">
-            <img src={image} alt={alt} className="w-full h-full object-cover object-center" />
-          </div>
-        </Card>
-      </div>
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay: delay * 0.1, duration: 0.6 }}
+    className={`neon-border bg-white/5 backdrop-blur-sm border border-${color}/20 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group`}
+    style={{
+      boxShadow: `0 0 10px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.05)`
+    }}
+  >
+    <div className={`h-12 w-12 bg-${color}/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-${color}/30 transition-colors duration-300`}>
+      <div className={`text-${color}`}>{icon}</div>
     </div>
-    
-    {/* Text content section - 50% width on desktop */}
-    <div className={`w-full md:w-1/2 order-2 ${reverse ? 'md:order-1' : 'md:order-2'} h-full`}>
-      <div className="h-full animated-border-white">
-        <Card className="cosmic-card overflow-hidden border-white/10 hover:border-blue-500/30 transition-all duration-300 bg-card/60 h-full">
-          <CardContent className="p-10 h-full flex flex-col justify-center">
-            <div className="h-12 w-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
-              <div className="text-blue-400">{icon}</div>
-            </div>
-            <h3 className="text-xl font-semibold mb-3 text-white">{title}</h3>
-            <p className="text-blue-100/70">{description}</p>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  </div>
+    <h3 className={`text-xl font-semibold mb-3 text-white neon-text-${color === 'neon-purple' ? 'purple' : (color === 'neon-pink' ? 'pink' : 'blue')}`}>{title}</h3>
+    <p className="text-blue-100/70">{description}</p>
+  </motion.div>
 );
 
 const Features = () => {
-  // Feature images
-  const featureImages = ["/lovable-uploads/c51301c4-6875-4882-86b5-a9cd9cd773cd.png", "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d", "https://images.unsplash.com/photo-1518770660439-4636190af475", "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"];
-  
+  const features = [
+    {
+      title: "Organisation intelligente",
+      description: "Classez et structurez vos documents par projet, par lot ou par type pour retrouver rapidement les informations essentielles.",
+      icon: <FolderOpen size={24} />,
+      color: "neon-purple"
+    },
+    {
+      title: "Analyses et rapports",
+      description: "Générez des tableaux de bord et des rapports détaillés pour suivre l'état d'avancement de vos projets et optimiser vos processus.",
+      icon: <BarChart3 size={24} />,
+      color: "neon-pink"
+    },
+    {
+      title: "Collaboration d'équipe",
+      description: "Travaillez ensemble efficacement avec des outils de communication intégrés et des permissions d'accès personnalisables.",
+      icon: <Users size={24} />,
+      color: "neon-blue"
+    },
+    {
+      title: "Sécurité avancée",
+      description: "Protégez vos données sensibles avec un chiffrement de bout en bout et des contrôles d'accès granulaires.",
+      icon: <Shield size={24} />,
+      color: "neon-green"
+    },
+  ];
+
   return (
-    <section id="features" className="py-28 px-10 md:px-16 relative">
-      {/* Background dots */}
-      <div className="absolute inset-0 cosmic-dots opacity-20"></div>
+    <section id="features" className="py-24 px-6 relative bg-[#06071b]">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/5 via-neon-pink/5 to-transparent pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-32">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">Fonctionnalités principales</h2>
-          <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
-            Des outils efficaces pour gérer vos dossiers de consultation
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <span className="px-4 py-1.5 bg-neon-pink/10 text-neon-pink rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto">
+            <Sparkles className="w-4 h-4 mr-2" /> Fonctionnalités
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white neon-text-pink">
+            Tout ce dont vous avez besoin
+          </h2>
+          <p className="text-blue-100/70 max-w-2xl mx-auto text-lg">
+            Découvrez comment DCE Manager peut transformer votre gestion documentaire et améliorer l'efficacité de vos appels d'offres.
           </p>
+        </motion.div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature, index) => (
+            <FeatureCard key={index} {...feature} delay={index} />
+          ))}
         </div>
         
-        <div className="flex flex-col space-y-32">
-          <FeatureCard title="Organisation des DCE" description="Classez et organisez vos dossiers de consultation des entreprises selon vos besoins. Notre système de classement permet une recherche rapide et efficace." icon={<FolderArchive size={24} />} image={featureImages[0]} alt="Organisation DCE" />
-          
-          <FeatureCard title="Partage sécurisé" description="Partagez vos documents avec vos collaborateurs ou partenaires en toute sécurité. Définissez des permissions d'accès précises pour chaque utilisateur." icon={<Share2 size={24} />} image={featureImages[1]} alt="Partage sécurisé" reverse={true} />
-          
-          <FeatureCard title="Recherche avancée" description="Retrouvez rapidement vos documents grâce à notre moteur de recherche puissant. Filtrez par type, date, statut ou mots-clés pour gagner un temps précieux." icon={<FileSearch size={24} />} image={featureImages[2]} alt="Recherche avancée" />
-          
-          <FeatureCard title="Suivi des versions" description="Suivez l'évolution de vos documents avec un historique complet des versions. Comparez les modifications et restaurez les versions antérieures si nécessaire." icon={<FileCheck size={24} />} image={featureImages[3]} alt="Suivi des versions" reverse={true} />
+        <div className="mt-16 text-center">
+          <Button className="neon-button px-8 py-6 rounded-full text-white flex items-center mx-auto">
+            <Zap className="mr-2 h-5 w-5 text-neon-pink" />
+            Découvrir toutes les fonctionnalités
+          </Button>
         </div>
       </div>
     </section>
