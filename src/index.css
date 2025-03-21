@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -210,6 +211,18 @@
 
 .progress-blue-gradient {
   background: linear-gradient(90deg, #00a2ff, #0077cc);
+}
+
+/* Animations for new homepage */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-fadeIn {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @keyframes twinkle {
