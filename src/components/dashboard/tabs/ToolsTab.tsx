@@ -1,16 +1,20 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FolderPlus, ArrowRight, Youtube, Twitter, Linkedin, Mail, Globe, Facebook, Instagram } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 
 const ToolsTab = () => {
-  const {
-    isPremiumUser
-  } = useAuth();
+  const { isPremiumUser } = useAuth();
   const navigate = useNavigate();
+  const [selectedTitle, setSelectedTitle] = useState('');
+  const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   
   const handleCreateClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isPremiumUser) {
@@ -24,9 +28,19 @@ const ToolsTab = () => {
     }
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (title: string, isSocialMedia: boolean = false) => {
     if (isPremiumUser) {
-      navigate('/create-dce');
+      // Set the selected title and show the form
+      setSelectedTitle(title);
+      setIsSocialMediaOnly(isSocialMedia);
+      setShowForm(true);
+      // Scroll to the form
+      setTimeout(() => {
+        const formElement = document.getElementById('content-form');
+        if (formElement) {
+          formElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     } else {
       toast({
         title: "Fonctionnalité premium",
@@ -36,8 +50,18 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Formulaire soumis",
+      description: "Votre demande a été envoyée avec succès.",
+      variant: "default"
+    });
+  };
   
-  return <div className="space-y-12 w-full">
+  return (
+    <div className="space-y-12 w-full">
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Youtube className="h-5 w-5 text-white bg-red-600 rounded-md p-1" />
@@ -46,7 +70,7 @@ const ToolsTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Convertissez l'audience YouTube en abonnés Twitter", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -65,7 +89,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Transformez des vues YouTube en leads LinkedIn", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -84,7 +108,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Dirigez le trafic YouTube vers votre site web", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -103,7 +127,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Collectez des emails depuis vos vidéos YouTube", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -130,7 +154,7 @@ const ToolsTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Convertissez des abonnés en followers Twitter", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -149,7 +173,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Augmentez vos connexions LinkedIn", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -176,7 +200,7 @@ const ToolsTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Convertissez des followers en connexions pro", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -195,7 +219,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Collectez des emails depuis Twitter", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -222,7 +246,7 @@ const ToolsTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("De l'email au follow Instagram pour plus de ventes", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -241,7 +265,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Email automation pour convertir et vendre", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -268,7 +292,7 @@ const ToolsTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Convertissez des contacts en abonnés", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -287,7 +311,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Générez du trafic qualifié vers votre site", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -307,7 +331,6 @@ const ToolsTab = () => {
       </section>
 
       <section>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           
         </div>
@@ -321,7 +344,7 @@ const ToolsTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("De YouTube à Instagram en un clic", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -340,7 +363,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Transformez vos tweets en contenu vidéo", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -359,7 +382,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Maximisez l'impact de vos vidéos sur Facebook", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -378,7 +401,7 @@ const ToolsTab = () => {
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={handleCardClick}
+            onClick={() => handleCardClick("Synchronisez vos campagnes Twitter et Facebook", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -396,6 +419,61 @@ const ToolsTab = () => {
           </Card>
         </div>
       </section>
-    </div>;
+
+      {showForm && (
+        <section id="content-form" className="mt-8 p-6 bg-[#1A1F2C] border border-white/10 rounded-lg">
+          <h2 className="text-xl font-bold mb-6 text-white">
+            {selectedTitle}
+          </h2>
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            {isSocialMediaOnly ? (
+              <div className="space-y-2">
+                <label htmlFor="socialContent" className="block text-sm font-medium text-gray-300">
+                  Description du contenu pour les réseaux sociaux
+                </label>
+                <Textarea 
+                  id="socialContent"
+                  placeholder="Décrivez le contenu que vous souhaitez générer pour les réseaux sociaux..."
+                  className="w-full min-h-[150px] bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40"
+                />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <label htmlFor="title" className="block text-sm font-medium text-gray-300">
+                  Titre
+                </label>
+                <Input 
+                  id="title"
+                  defaultValue={selectedTitle}
+                  className="w-full bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40"
+                />
+              </div>
+            )}
+            
+            <div className="space-y-2">
+              <label htmlFor="link" className="block text-sm font-medium text-gray-300">
+                Lien (YouTube, site web, etc.)
+              </label>
+              <Input 
+                id="link"
+                placeholder="https://"
+                className="w-full bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40"
+              />
+            </div>
+            
+            <div className="pt-4">
+              <Button 
+                type="submit"
+                className="w-full bg-[#0ea5e9] hover:bg-[#0284c7] text-white transition-all duration-300 hover:shadow-[0_0_15px_rgba(30,174,219,0.5)]"
+              >
+                Générer le contenu
+              </Button>
+            </div>
+          </form>
+        </section>
+      )}
+    </div>
+  );
 };
+
 export default ToolsTab;
