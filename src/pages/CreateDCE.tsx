@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Progress } from "@/components/ui/progress";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
