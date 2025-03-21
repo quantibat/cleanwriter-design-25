@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -5,15 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+
 const Index = () => {
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -62,6 +66,7 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+  
   return <div className="bg-[#06071b] min-h-screen">
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 overflow-hidden px-6">
@@ -352,7 +357,9 @@ const Index = () => {
         </div>
       </section>
       
-      <style jsx>{`
+      {/* Using a style tag correctly without the invalid jsx attribute */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .animate-on-scroll {
           opacity: 0;
           transform: translateY(20px);
@@ -363,7 +370,8 @@ const Index = () => {
           opacity: 1;
           transform: translateY(0);
         }
-      `}</style>
+        `
+      }} />
     </div>;
 };
 export default Index;
