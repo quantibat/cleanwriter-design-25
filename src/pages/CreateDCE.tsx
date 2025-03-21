@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle } from 'lucide-react';
@@ -135,8 +134,8 @@ const CreateDCE = () => {
   const { notifySuccess } = useNotificationsManager();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
   const [title, setTitle] = useState("Untitled Youtube to Newsletter");
+  const [cardTitle, setCardTitle] = useState("Ma sélection de cartes");
   
-  // Parse URL parameters
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const titleParam = params.get('title');
@@ -162,7 +161,6 @@ const CreateDCE = () => {
     }
   });
 
-  // Total credits and used credits
   const totalCredits = 30000;
   const [usedCredits, setUsedCredits] = useState(0);
   const remainingCredits = totalCredits - usedCredits;
@@ -196,11 +194,14 @@ const CreateDCE = () => {
     form.setValue('title', newTitle);
   };
 
+  const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCardTitle(e.target.value);
+  };
+
   const generateTopics = async () => {
     setGeneratingTopics(true);
     
-    // Simulate credit usage
-    const wordCount = 250; // Assume each topic generation uses about 250 words
+    const wordCount = 250;
     setUsedCredits(prev => prev + wordCount);
     
     setTimeout(() => {
@@ -223,8 +224,7 @@ const CreateDCE = () => {
     
     setGeneratingContent(true);
     
-    // Simulate credit usage for content generation
-    const wordCount = 500; // Assume each content generation uses about 500 words
+    const wordCount = 500;
     setUsedCredits(prev => prev + wordCount);
     
     setTimeout(() => {
@@ -284,7 +284,6 @@ const CreateDCE = () => {
                   )}
                 </div>
                 
-                {/* Credit usage display */}
                 <div className="mb-6 bg-[#1A1F2C] p-4 rounded-lg">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-gray-300">Crédits restants</span>
@@ -306,6 +305,17 @@ const CreateDCE = () => {
                       </Button>
                     </div>
                   )}
+                </div>
+                
+                <div className="mb-6">
+                  <label className="text-sm font-medium text-gray-300 mb-2 block">Titre de la sélection</label>
+                  <Input 
+                    type="text" 
+                    value={cardTitle}
+                    onChange={handleCardTitleChange}
+                    className="w-full py-2 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40"
+                    placeholder="Entrez le titre de votre sélection de cartes"
+                  />
                 </div>
                 
                 {topics.length === 0 ? (
@@ -467,7 +477,7 @@ const CreateDCE = () => {
                     </div>
                     
                     <div className="flex items-center justify-between">
-                      <h3 className="text-white font-medium">Sélectionnez un ou plusieurs sujets</h3>
+                      <h3 className="text-white font-medium">{cardTitle}</h3>
                       <span className="text-sm text-gray-400">{selectedTopics.length} sélectionné(s)</span>
                     </div>
                     
@@ -524,3 +534,4 @@ const CreateDCE = () => {
 };
 
 export default CreateDCE;
+
