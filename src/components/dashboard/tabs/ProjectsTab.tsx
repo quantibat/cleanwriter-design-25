@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { FolderPlus, Edit, Eye, Trash2, Database, Clock } from "lucide-react";
+import { FolderPlus, Edit, Eye, Trash2, Database, Clock, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,7 +17,7 @@ const projects = [{
   lastModified: "Aujourd'hui",
   progress: 75,
   collaborators: 3,
-  icon: Youtube,
+  icon: YoutubeIcon,
   details: "Ce projet transforme du contenu YouTube en newsletter prête à l'emploi avec des sujets variés et une mise en forme professionnelle."
 }, {
   id: 2,
@@ -28,7 +29,7 @@ const projects = [{
   lastModified: "Hier",
   progress: 30,
   collaborators: 2,
-  icon: Youtube,
+  icon: YoutubeIcon,
   details: "Transformation d'un webinaire sur les stratégies de marketing digital en série de newsletters ciblées pour différents segments d'audience."
 }, {
   id: 3,
@@ -40,7 +41,7 @@ const projects = [{
   lastModified: "15 août 2023",
   progress: 100,
   collaborators: 1,
-  icon: FileText,
+  icon: FileTextIcon,
   details: "Transcription complète de l'interview du CEO comprenant les points clés sur la vision de l'entreprise pour 2024 et les nouvelles initiatives stratégiques."
 }, {
   id: 4,
@@ -52,7 +53,7 @@ const projects = [{
   lastModified: "12 septembre 2023",
   progress: 60,
   collaborators: 2,
-  icon: File,
+  icon: FileIcon,
   details: "Synthèse des innovations présentées lors de la conférence TechInnovate 2023, avec focus sur l'IA, la blockchain et les énergies renouvelables."
 }, {
   id: 5,
@@ -64,7 +65,7 @@ const projects = [{
   lastModified: "3 octobre 2023",
   progress: 45,
   collaborators: 1,
-  icon: Youtube,
+  icon: YoutubeIcon,
   details: "Série de newsletters basées sur une formation complète de leadership, découpée en modules thématiques pour faciliter l'apprentissage progressif."
 }];
 
@@ -73,9 +74,9 @@ type Project = typeof projects[0];
 const ProjectsTab = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [projectsList, setProjectsList] = useState(projects);
+  const [projectsList, setProjectsList] = useState<Project[]>(projects);
 
-  const handleOpenView = (project) => {
+  const handleOpenView = (project: Project) => {
     navigate(`/view-dce/${project.id}`, {
       state: {
         project
@@ -83,7 +84,7 @@ const ProjectsTab = () => {
     });
   };
 
-  const handleOpenEdit = (project) => {
+  const handleOpenEdit = (project: Project) => {
     navigate(`/edit-project/${project.id}`, {
       state: {
         project
@@ -91,7 +92,7 @@ const ProjectsTab = () => {
     });
   };
 
-  const handleDelete = (project) => {
+  const handleDelete = (project: Project) => {
     navigate(`/delete-project/${project.id}`, {
       state: {
         project
@@ -103,14 +104,14 @@ const ProjectsTab = () => {
     navigate('/create-dce');
   };
 
-  const getIconForType = (type) => {
+  const getIconForType = (type: string) => {
     switch(type) {
       case "Youtube to Newsletter":
-        return <Youtube className="h-3.5 w-3.5 text-red-500" />;
+        return <YoutubeIcon className="h-3.5 w-3.5 text-red-500" />;
       case "Transcription":
-        return <FileText className="h-3.5 w-3.5 text-blue-500" />;
+        return <FileTextIcon className="h-3.5 w-3.5 text-blue-500" />;
       case "Résumé":
-        return <File className="h-3.5 w-3.5 text-green-500" />;
+        return <FileIcon className="h-3.5 w-3.5 text-green-500" />;
       default:
         return <Database className="h-3.5 w-3.5 text-muted-foreground" />;
     }
