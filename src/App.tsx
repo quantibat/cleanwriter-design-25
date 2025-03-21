@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import AuthGuard from "./components/AuthGuard";
+import MainLayout from "./components/layouts/MainLayout";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -42,19 +44,20 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/affiliate" element={<Affiliate />} />
-              <Route path="/pricing" element={<CustomPricing />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
+              {/* Public pages with MainLayout */}
+              <Route path="/" element={<MainLayout><Index /></MainLayout>} />
+              <Route path="/signin" element={<MainLayout><SignIn /></MainLayout>} />
+              <Route path="/signup" element={<MainLayout><SignUp /></MainLayout>} />
+              <Route path="/forgot-password" element={<MainLayout><ForgotPassword /></MainLayout>} />
+              <Route path="/reset-password" element={<MainLayout><ResetPassword /></MainLayout>} />
+              <Route path="/affiliate" element={<MainLayout><Affiliate /></MainLayout>} />
+              <Route path="/pricing" element={<MainLayout><CustomPricing /></MainLayout>} />
+              <Route path="/privacy-policy" element={<MainLayout><PrivacyPolicy /></MainLayout>} />
+              <Route path="/terms-of-service" element={<MainLayout><TermsOfService /></MainLayout>} />
               <Route path="/onboarding" element={<Onboarding />} />
-              <Route path="/free-trial" element={<FreeTrial />} />
+              <Route path="/free-trial" element={<MainLayout><FreeTrial /></MainLayout>} />
               
-              {/* Routes protégées */}
+              {/* Protected routes */}
               <Route path="/dashboard" element={
                 <AuthGuard>
                   <Dashboard />
@@ -119,8 +122,8 @@ const App = () => (
                 }
               />
               
-              {/* Redirection par défaut vers le dashboard si authentifié */}
-              <Route path="*" element={<NotFound />} />
+              {/* Fallback route */}
+              <Route path="*" element={<MainLayout><NotFound /></MainLayout>} />
             </Routes>
           </BrowserRouter>
         </NotificationProvider>
