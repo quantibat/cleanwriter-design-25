@@ -23,6 +23,7 @@ const Projects = () => {
   }, [isPremiumUser, navigate]);
   
   const breadcrumbs = [
+    { label: 'Tableau de bord', path: '/dashboard' },
     { label: 'Projets' }
   ];
 
