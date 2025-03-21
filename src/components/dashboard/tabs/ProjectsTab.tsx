@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { FolderPlus, Edit, Eye, Trash2, Calendar, Database, Clock, Youtube, File, FileText } from "lucide-react";
+import { FolderPlus, Edit, Eye, Trash2, Database, Clock } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 
@@ -74,17 +73,17 @@ type Project = typeof projects[0];
 const ProjectsTab = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [projectsList, setProjectsList] = useState<Project[]>(projects);
+  const [projectsList, setProjectsList] = useState(projects);
 
-  const handleOpenView = (project: Project) => {
-    navigate(`/view-project/${project.id}`, {
+  const handleOpenView = (project) => {
+    navigate(`/view-dce/${project.id}`, {
       state: {
         project
       }
     });
   };
 
-  const handleOpenEdit = (project: Project) => {
+  const handleOpenEdit = (project) => {
     navigate(`/edit-project/${project.id}`, {
       state: {
         project
@@ -92,7 +91,7 @@ const ProjectsTab = () => {
     });
   };
 
-  const handleDelete = (project: Project) => {
+  const handleDelete = (project) => {
     navigate(`/delete-project/${project.id}`, {
       state: {
         project
@@ -104,7 +103,7 @@ const ProjectsTab = () => {
     navigate('/create-dce');
   };
 
-  const getIconForType = (type: string) => {
+  const getIconForType = (type) => {
     switch(type) {
       case "Youtube to Newsletter":
         return <Youtube className="h-3.5 w-3.5 text-red-500" />;
