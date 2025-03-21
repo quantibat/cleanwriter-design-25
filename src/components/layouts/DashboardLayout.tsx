@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useEffect } from 'react';
 import TopBar from '@/components/dashboard/TopBar';
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -100,33 +101,33 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {dynamicBreadcrumbs.length > 0 && (
               <div className="mb-6">
                 <Breadcrumb>
-                  <BreadcrumbList className="flex items-center gap-2 text-gray-400">
+                  <BreadcrumbList className="flex items-center space-x-2 text-gray-200">
                     <BreadcrumbItem>
                       <BreadcrumbLink 
-                        href="/projects" 
-                        className="flex items-center text-gray-400 hover:text-white text-sm"
+                        href="/dashboard" 
+                        className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
                       >
-                        <Home size={14} className="mr-1" />
-                        <span>Projets</span>
+                        <Home size={16} className="mr-1" />
+                        <span>Dashboard</span>
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     
                     {dynamicBreadcrumbs.map((item, index) => (
                       <React.Fragment key={index}>
-                        <BreadcrumbSeparator className="text-gray-600" />
+                        <BreadcrumbSeparator className="text-gray-500" />
                         {item.path ? (
                           <BreadcrumbItem>
                             <BreadcrumbLink 
                               href={item.path} 
                               onClick={(e) => handlePremiumLink(e, item.path || '')}
-                              className="text-gray-400 hover:text-white text-sm"
+                              className="text-gray-300 hover:text-blue-300 transition-colors"
                             >
                               {item.label}
                             </BreadcrumbLink>
                           </BreadcrumbItem>
                         ) : (
                           <BreadcrumbItem>
-                            <BreadcrumbPage className="text-white text-sm">{item.label}</BreadcrumbPage>
+                            <BreadcrumbPage className="text-gray-500 font-medium">{item.label}</BreadcrumbPage>
                           </BreadcrumbItem>
                         )}
                       </React.Fragment>
