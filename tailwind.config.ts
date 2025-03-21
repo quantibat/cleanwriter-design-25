@@ -67,6 +67,14 @@ export default {
 					blue: '#3B82F6',
 					"blue-dark": '#1D4ED8',
 					"blue-light": '#BFDBFE',
+				},
+				neon: {
+					purple: '#8B5CF6',
+					pink: '#D946EF',
+					orange: '#F97316',
+					blue: '#0EA5E9',
+					green: '#10B981',
+					yellow: '#FBBF24',
 				}
 			},
 			borderRadius: {
@@ -118,6 +126,22 @@ export default {
 					"50%": {
 						transform: "translateY(-10px)"
 					}
+				},
+				'neon-pulse': {
+					"0%, 100%": {
+						filter: "brightness(1) drop-shadow(0 0 12px rgba(139, 92, 246, 0.8))"
+					},
+					"50%": {
+						filter: "brightness(1.2) drop-shadow(0 0 20px rgba(217, 70, 239, 0.9))"
+					}
+				},
+				'neon-glow': {
+					"0%, 100%": {
+						boxShadow: "0 0 10px rgba(14, 165, 233, 0.7), 0 0 20px rgba(14, 165, 233, 0.5)"
+					},
+					"50%": {
+						boxShadow: "0 0 20px rgba(14, 165, 233, 0.9), 0 0 30px rgba(14, 165, 233, 0.7)"
+					}
 				}
 			},
 			animation: {
@@ -127,6 +151,8 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 				'enter': 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
 				'float': 'float 5s ease-in-out infinite',
+				'neon-pulse': 'neon-pulse 2s ease-in-out infinite',
+				'neon-glow': 'neon-glow 2s ease-in-out infinite',
 			},
 			fontFamily: {
 				'inter': ['Inter', 'sans-serif'],

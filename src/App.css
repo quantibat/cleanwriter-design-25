@@ -184,6 +184,35 @@
   --foreground: 0 0% 98%;
 }
 
+/* Neon glow effect for elements */
+.neon-glow-purple {
+  box-shadow: 
+    0 0 5px rgba(139, 92, 246, 0.5),
+    0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+.neon-glow-pink {
+  box-shadow: 
+    0 0 5px rgba(217, 70, 239, 0.5),
+    0 0 15px rgba(217, 70, 239, 0.3);
+}
+
+.neon-glow-blue {
+  box-shadow: 
+    0 0 5px rgba(14, 165, 233, 0.5),
+    0 0 15px rgba(14, 165, 233, 0.3);
+}
+
+/* Neon gradient text */
+.neon-gradient-text {
+  background: linear-gradient(90deg, #8B5CF6, #D946EF, #0EA5E9);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: neon-text-shift 3s linear infinite;
+}
+
 @keyframes gradient-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -203,4 +232,9 @@
 @keyframes float {
   0%, 100% { transform: translateY(0) translateX(0); }
   50% { transform: translateY(-10px) translateX(5px); }
+}
+
+@keyframes neon-text-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }

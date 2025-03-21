@@ -225,6 +225,77 @@
   transform: translateY(0);
 }
 
+/* Neon text effect */
+.neon-text {
+  color: #fff;
+  text-shadow: 
+    0 0 5px rgba(217, 70, 239, 0.7),
+    0 0 10px rgba(217, 70, 239, 0.5),
+    0 0 20px rgba(217, 70, 239, 0.3);
+}
+
+.neon-text-blue {
+  color: #fff;
+  text-shadow: 
+    0 0 5px rgba(14, 165, 233, 0.7),
+    0 0 10px rgba(14, 165, 233, 0.5),
+    0 0 20px rgba(14, 165, 233, 0.3);
+}
+
+.neon-text-purple {
+  color: #fff;
+  text-shadow: 
+    0 0 5px rgba(139, 92, 246, 0.7),
+    0 0 10px rgba(139, 92, 246, 0.5),
+    0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.neon-border {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  background-clip: padding-box;
+}
+
+.neon-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg, 
+    rgba(14, 165, 233, 1), 
+    rgba(139, 92, 246, 0.8), 
+    rgba(217, 70, 239, 0.8),
+    rgba(14, 165, 233, 1)
+  );
+  background-size: 400% 400%;
+  animation: neonGradient 3s ease infinite;
+}
+
+.neon-button {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(217, 70, 239, 0.3);
+  box-shadow: 
+    0 0 10px rgba(217, 70, 239, 0.5),
+    0 0 20px rgba(217, 70, 239, 0.3),
+    inset 0 0 10px rgba(217, 70, 239, 0.3);
+  transition: all 0.3s ease;
+}
+
+.neon-button:hover {
+  box-shadow: 
+    0 0 15px rgba(217, 70, 239, 0.7),
+    0 0 30px rgba(217, 70, 239, 0.5),
+    inset 0 0 15px rgba(217, 70, 239, 0.4);
+}
+
 @keyframes twinkle {
   0%, 100% { opacity: 0.2; }
   50% { opacity: 0.7; }
@@ -238,4 +309,10 @@
 @keyframes spin {
   0% { background-position: 0% 0; }
   100% { background-position: 200% 200%; }
+}
+
+@keyframes neonGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
