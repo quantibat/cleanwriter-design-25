@@ -1,5 +1,4 @@
-
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import TopBar from '@/components/dashboard/TopBar';
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb";
@@ -17,17 +16,57 @@ interface DashboardLayoutProps {
   children: ReactNode;
   activeTab?: string;
   breadcrumbs?: BreadcrumbItem[];
+  toolType?: string;
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   activeTab = 'tools',
-  breadcrumbs = []
+  breadcrumbs = [],
+  toolType = ''
 }) => {
   const [isDarkMode, setIsDarkMode] = React.useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const { isPremiumUser } = useAuth();
+  const [dynamicBreadcrumbs, setDynamicBreadcrumbs] = React.useState<BreadcrumbItem[]>(breadcrumbs);
+
+  useEffect(() => {
+    if (!toolType) {
+      setDynamicBreadcrumbs(breadcrumbs);
+      return;
+    }
+
+    const path = location.pathname;
+    let updatedBreadcrumbs: BreadcrumbItem[] = [];
+
+    if (path.includes('youtube-to-newsletter') || toolType === 'youtube') {
+      updatedBreadcrumbs = [
+        { label: 'Projets', path: '/projects' },
+        { label: 'YouTube à Newsletter', path: '/youtube-to-newsletter' },
+        { label: 'Nouveau document' }
+      ];
+    } else if (path.includes('/edit/') || path.includes('/create')) {
+      if (toolType === 'dce') {
+        updatedBreadcrumbs = [
+          { label: 'Projets', path: '/projects' },
+          { label: 'Dossiers de Consultation', path: '/dce' },
+          { label: path.includes('/edit/') ? 'Modifier le dossier' : 'Nouveau dossier' }
+        ];
+      } else if (toolType === 'technique') {
+        updatedBreadcrumbs = [
+          { label: 'Projets', path: '/projects' },
+          { label: 'Documents Techniques', path: '/technique' },
+          { label: path.includes('/edit/') ? 'Modifier le document' : 'Nouveau document' }
+        ];
+      }
+    } else {
+      setDynamicBreadcrumbs(breadcrumbs);
+      return;
+    }
+
+    setDynamicBreadcrumbs(updatedBreadcrumbs);
+  }, [location.pathname, toolType, breadcrumbs]);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -55,12 +94,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     <div className="min-h-screen bg-[#0c101b] w-full">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-hidden w-full">
-          {/* Top navigation bar */}
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
           
-          {/* Main content area */}
           <div className="flex-1 w-full p-6 overflow-auto">
-            {breadcrumbs.length > 0 && (
+            {dynamicBreadcrumbs.length > 0 && (
               <div className="mb-6">
                 <Breadcrumb>
                   <BreadcrumbList className="flex items-center gap-2 text-gray-400">
@@ -74,7 +111,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     
-                    {breadcrumbs.map((item, index) => (
+                    {dynamicBreadcrumbs.map((item, index) => (
                       <React.Fragment key={index}>
                         <BreadcrumbSeparator className="text-gray-600" />
                         {item.path ? (
