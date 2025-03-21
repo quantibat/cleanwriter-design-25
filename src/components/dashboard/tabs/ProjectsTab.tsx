@@ -77,7 +77,7 @@ const ProjectsTab = () => {
   const [projectsList, setProjectsList] = useState<Project[]>(projects);
 
   const handleOpenView = (project: Project) => {
-    navigate(`/view-dce/${project.id}`, {
+    navigate(`/view-project/${project.id}`, {
       state: {
         project
       }
@@ -85,24 +85,19 @@ const ProjectsTab = () => {
   };
 
   const handleOpenEdit = (project: Project) => {
-    navigate(`/edit-dce/${project.id}`, {
+    navigate(`/edit-project/${project.id}`, {
       state: {
         project
       }
     });
   };
 
-  const handleDelete = (projectId: number) => {
-    // Confirmation de suppression
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
-      // Filtrer la liste pour supprimer le projet avec l'ID spécifié
-      const updatedProjects = projectsList.filter(project => project.id !== projectId);
-      setProjectsList(updatedProjects);
-      toast({
-        title: "Projet supprimé",
-        description: "Le projet a été supprimé avec succès."
-      });
-    }
+  const handleDelete = (project: Project) => {
+    navigate(`/delete-project/${project.id}`, {
+      state: {
+        project
+      }
+    });
   };
 
   const handleOpenCreate = () => {
@@ -129,7 +124,7 @@ const ProjectsTab = () => {
           <h2 className="text-2xl font-bold">Tous vos projets</h2>
           <p className="text-muted-foreground py-[10px]">Liste complète des projets et contenus associés à votre compte</p>
         </div>
-        <Button className="bg-blue-500 hover:bg-blue-600" onClick={handleOpenCreate}>
+        <Button onClick={handleOpenCreate}>
           <FolderPlus className="h-4 w-4 mr-2" />
           Nouveau projet
         </Button>
@@ -178,7 +173,7 @@ const ProjectsTab = () => {
                       <Edit className="h-3.5 w-3.5" />
                       Modifier
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleDelete(project.id)} title="Supprimer le projet" className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-100/10">
+                    <Button variant="outline" size="sm" onClick={() => handleDelete(project)} title="Supprimer le projet" className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-100/10">
                       <Trash2 className="h-3.5 w-3.5" />
                       Supprimer
                     </Button>

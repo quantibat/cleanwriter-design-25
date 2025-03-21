@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -32,6 +31,9 @@ import Onboarding from "./pages/Onboarding";
 import Contribute from "./pages/Contribute";
 import FreeTrial from "./pages/FreeTrial";
 import UpgradePlan from './pages/UpgradePlan';
+import EditProject from './pages/EditProject';
+import DeleteProject from './pages/DeleteProject';
+import ViewProject from './pages/ViewProject';
 
 const queryClient = new QueryClient();
 
@@ -121,6 +123,21 @@ const App = () => (
                   </AuthGuard>
                 }
               />
+              <Route path="/edit-project/:id" element={
+                <AuthGuard>
+                  <EditProject />
+                </AuthGuard>
+              } />
+              <Route path="/delete-project/:id" element={
+                <AuthGuard>
+                  <DeleteProject />
+                </AuthGuard>
+              } />
+              <Route path="/view-project/:id" element={
+                <AuthGuard>
+                  <ViewProject />
+                </AuthGuard>
+              } />
               
               {/* Fallback route */}
               <Route path="*" element={<MainLayout><NotFound /></MainLayout>} />
