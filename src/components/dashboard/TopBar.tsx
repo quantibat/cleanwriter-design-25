@@ -8,12 +8,10 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
 }
-
 const TopBar = ({
   onThemeToggle,
   isDarkMode
@@ -40,17 +38,14 @@ const TopBar = ({
   const totalCredits = 30000;
   const usedCredits = 5000; // Example: 5000 credits used
   const remainingCredits = totalCredits - usedCredits;
-  const percentUsed = Math.round((usedCredits / totalCredits) * 100);
-
+  const percentUsed = Math.round(usedCredits / totalCredits * 100);
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
-
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
-
   const handleThemeChange = () => {
     if (isDarkMode) {
       // Apply light theme - make everything white (without transparency)
@@ -103,13 +98,11 @@ const TopBar = ({
     }
     onThemeToggle();
   };
-
   const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
     setLanguage(newLanguage);
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-
   return <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
       {/* Top div with logo and user controls */}
       <div className="flex items-center justify-between w-full px-6 py-3">
@@ -224,12 +217,7 @@ const TopBar = ({
               <div className="text-sm text-white font-medium mt-1">
                 {remainingCredits.toLocaleString()} / {totalCredits.toLocaleString()} crédits
               </div>
-              <Button 
-                size="sm" 
-                variant="blue" 
-                className="mt-2 text-xs py-1 h-8 bg-transparent hover:bg-blue-500/30"
-                onClick={handleUpgrade}
-              >
+              <Button size="sm" variant="blue" onClick={handleUpgrade} className="mt-2 text-xs py-1 h-8 bg-transparent ">
                 Mettre à niveau
               </Button>
             </div>
@@ -238,5 +226,4 @@ const TopBar = ({
       </div>
     </div>;
 };
-
 export default TopBar;
