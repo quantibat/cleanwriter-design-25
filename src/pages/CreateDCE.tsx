@@ -133,6 +133,7 @@ const CreateDCE = () => {
   const { toast } = useToast();
   const { notifySuccess } = useNotificationsManager();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
+  const [title, setTitle] = useState("Untitled Youtube to Newsletter");
   
   // Parse URL parameters
   useEffect(() => {
@@ -141,6 +142,7 @@ const CreateDCE = () => {
     const isSocialMediaParam = params.get('isSocialMedia');
     
     if (titleParam) {
+      setTitle(titleParam);
       form.setValue('title', titleParam);
     }
     
@@ -158,6 +160,12 @@ const CreateDCE = () => {
       aiModel: 'gpt-4o'
     }
   });
+
+  // Total credits and used credits
+  const totalCredits = 30000;
+  const [usedCredits, setUsedCredits] = useState(0);
+  const remainingCredits = totalCredits - usedCredits;
+  const percentUsed = Math.round((usedCredits / totalCredits) * 100);
 
   const [videoMetadata, setVideoMetadata] = useState<any>(null);
   const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
@@ -181,8 +189,18 @@ const CreateDCE = () => {
     }
   };
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+    form.setValue('title', newTitle);
+  };
+
   const generateTopics = async () => {
     setGeneratingTopics(true);
+    
+    // Simulate credit usage
+    const wordCount = 250; // Assume each topic generation uses about 250 words
+    setUsedCredits(prev => prev + wordCount);
     
     setTimeout(() => {
       setTopics(MOCK_TOPICS);
@@ -204,6 +222,10 @@ const CreateDCE = () => {
     
     setGeneratingContent(true);
     
+    // Simulate credit usage for content generation
+    const wordCount = 500; // Assume each content generation uses about 500 words
+    setUsedCredits(prev => prev + wordCount);
+    
     setTimeout(() => {
       setActiveContent(MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT]);
       setGeneratingContent(false);
@@ -213,7 +235,7 @@ const CreateDCE = () => {
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
     { label: 'Youtube to Newsletter', path: '/youtube-to-newsletter' },
-    { label: form.watch('title') || 'Untitled Youtube to Newsletter' }
+    { label: title || 'Untitled Youtube to Newsletter' }
   ];
 
   const handleSubmit = async (data: FormData) => {
@@ -227,6 +249,10 @@ const CreateDCE = () => {
     }
     
     generateTopics();
+  };
+
+  const handleUpgrade = () => {
+    navigate('/upgrade-plan');
   };
 
   return (
@@ -244,16 +270,40 @@ const CreateDCE = () => {
                     <Textarea 
                       placeholder="Description du contenu pour les réseaux sociaux..."
                       className="min-h-[100px] bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40"
-                      value={form.watch('title')}
-                      onChange={(e) => form.setValue('title', e.target.value)}
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   ) : (
                     <Input 
                       type="text" 
-                      value={form.watch('title')}
-                      onChange={(e) => form.setValue('title', e.target.value)}
+                      value={title}
+                      onChange={handleTitleChange}
                       className="text-xl font-medium border-none bg-transparent text-white p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
+                  )}
+                </div>
+                
+                {/* Credit usage display */}
+                <div className="mb-6 bg-[#1A1F2C] p-4 rounded-lg">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-gray-300">Crédits restants</span>
+                    <span className="text-sm font-medium text-white">{remainingCredits.toLocaleString()} / {totalCredits.toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={percentUsed} className="h-2 flex-grow" />
+                    <span className="text-xs text-gray-400">{percentUsed}%</span>
+                  </div>
+                  {percentUsed > 80 && (
+                    <div className="mt-2 flex justify-end">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="text-xs bg-transparent hover:bg-blue-500/20 text-blue-400 border-blue-500/50"
+                        onClick={handleUpgrade}
+                      >
+                        Mise à niveau
+                      </Button>
+                    </div>
                   )}
                 </div>
                 
