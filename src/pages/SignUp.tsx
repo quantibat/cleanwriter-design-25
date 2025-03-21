@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -9,9 +8,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, User, Lock } from 'lucide-react';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
-
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Le nom doit contenir au moins 2 caractères."
@@ -26,12 +24,11 @@ const formSchema = z.object({
     message: "Vous devez accepter les conditions d'utilisation."
   })
 });
-
 const SignUp = () => {
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const {
+    toast
+  } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,32 +38,28 @@ const SignUp = () => {
       acceptTerms: false
     }
   });
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const {
+        data,
+        error
+      } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
           data: {
-            full_name: values.name,
-            credits: 30000, // Attribution de 30 000 crédits à l'inscription
+            full_name: values.name
           }
         }
       });
-      
       if (error) {
         throw error;
       }
-      
       toast({
         title: "Inscription réussie",
-        description: "Votre compte a été créé avec succès. Vous disposez de 30 000 crédits pour générer du contenu."
+        description: "Votre compte a été créé avec succès."
       });
-      
-      // Redirection vers la page de connexion
-      navigate('/signin');
     } catch (error: any) {
       toast({
         title: "Erreur d'inscription",
@@ -77,9 +70,7 @@ const SignUp = () => {
       setIsLoading(false);
     }
   }
-
-  return (
-    <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
+  return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
         {/* Les particules d'arrière-plan seront ajoutés ici avec du CSS */}
       </div>
@@ -94,7 +85,7 @@ const SignUp = () => {
           <p className="mt-2 text-white/60">Créez votre compte</p>
         </div>
         
-        <div className="bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl hover:shadow-[0_0_15px_rgba(30,174,219,0.3)]">
+        <div className="bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Créer un compte</h1>
           
           <div className="mb-8">
@@ -120,60 +111,60 @@ const SignUp = () => {
           
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField control={form.control} name="name" render={({field}) => (
-                <FormItem>
-                  <FormLabel className="text-white/70">Nom complet</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <User className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                      <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500 transition-all hover:border-blue-400" placeholder="Jean Dupont" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              
-              <FormField control={form.control} name="email" render={({field}) => (
-                <FormItem>
-                  <FormLabel className="text-white/70">Email</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                      <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500 transition-all hover:border-blue-400" placeholder="votre@email.com" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              
-              <FormField control={form.control} name="password" render={({field}) => (
-                <FormItem>
-                  <FormLabel className="text-white/70">Mot de passe</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                      <Input type="password" className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500 transition-all hover:border-blue-400" placeholder="••••••••" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              
-              <FormField control={form.control} name="acceptTerms" render={({field}) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-1">
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500" />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel className="text-sm text-white/70">
-                      J'accepte les <Link to="#" className="text-blue-400 hover:underline">conditions d'utilisation</Link> et la <Link to="#" className="text-blue-400 hover:underline">politique de confidentialité</Link>
-                    </FormLabel>
+              <FormField control={form.control} name="name" render={({
+              field
+            }) => <FormItem>
+                    <FormLabel className="text-white/70">Nom complet</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <User className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
+                        <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="Jean Dupont" {...field} />
+                      </div>
+                    </FormControl>
                     <FormMessage />
-                  </div>
-                </FormItem>
-              )} />
+                  </FormItem>} />
               
-              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium transition-all shadow-[0_0_0px_rgba(30,174,219,0)] hover:shadow-[0_0_10px_rgba(30,174,219,0.5)]" disabled={isLoading}>
+              <FormField control={form.control} name="email" render={({
+              field
+            }) => <FormItem>
+                    <FormLabel className="text-white/70">Email</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
+                        <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="votre@email.com" {...field} />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>} />
+              
+              <FormField control={form.control} name="password" render={({
+              field
+            }) => <FormItem>
+                    <FormLabel className="text-white/70">Mot de passe</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
+                        <Input type="password" className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="••••••••" {...field} />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>} />
+              
+              <FormField control={form.control} name="acceptTerms" render={({
+              field
+            }) => <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-1">
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500" />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="text-sm text-white/70">
+                        J'accepte les <Link to="#" className="text-blue-400 hover:underline">conditions d'utilisation</Link> et la <Link to="#" className="text-blue-400 hover:underline">politique de confidentialité</Link>
+                      </FormLabel>
+                      <FormMessage />
+                    </div>
+                  </FormItem>} />
+              
+              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium" disabled={isLoading}>
                 {isLoading ? "Inscription en cours..." : "Créer mon compte"}
               </Button>
             </form>
@@ -188,8 +179,6 @@ const SignUp = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default SignUp;

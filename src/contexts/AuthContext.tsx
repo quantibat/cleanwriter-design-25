@@ -15,8 +15,6 @@ type AuthContextType = {
   isAffiliate: boolean; // Indicateur de statut d'affilié
   registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>; // Inscription comme affilié
   quickAffiliateSignup: () => Promise<boolean>; // Inscription rapide comme affilié, retourne true si réussi
-  userCredits: number; // Nombre de crédits de l'utilisateur
-  updateCredits: (newCreditsAmount: number) => void; // Mettre à jour le nombre de crédits
 };
 
 type AffiliateRegistrationData = {
@@ -34,29 +32,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
   const [isAffiliate, setIsAffiliate] = useState<boolean>(false);
-  const [userCredits, setUserCredits] = useState<number>(0);
-
-  const updateCredits = (newCreditsAmount: number) => {
-    setUserCredits(newCreditsAmount);
-    if (user) {
-      const updatedUser = {
-        ...user,
-        user_metadata: {
-          ...user.user_metadata,
-          credits: newCreditsAmount
-        }
-      } as User;
-      
-      setUser(updatedUser);
-      
-      if (session) {
-        setSession({
-          ...session,
-          user: updatedUser
-        });
-      }
-    }
-  };
 
   const signInWithTestAccount = () => {
     const testUser = {
@@ -65,8 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user_metadata: {
         full_name: 'Utilisateur Test',
         premium: true,
-        affiliate: false,
-        credits: 30000
+        affiliate: false
       },
       app_metadata: {
         role: 'user',
@@ -90,7 +64,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setSession(testSession);
     setIsPremiumUser(true);
     setIsAffiliate(false);
-    setUserCredits(30000);
     setIsLoading(false);
 
     toast({
@@ -122,8 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user_metadata: {
         full_name: 'Utilisateur Test Basic',
         premium: false,
-        affiliate: false,
-        credits: 30000
+        affiliate: false
       },
       app_metadata: {
         role: 'user',
@@ -147,7 +119,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setSession(testSession);
     setIsPremiumUser(false);
     setIsAffiliate(false);
-    setUserCredits(30000);
     setIsLoading(false);
 
     toast({
@@ -278,7 +249,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(data.session.user);
         setIsPremiumUser(!!data.session.user?.user_metadata?.premium);
         setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
-        setUserCredits(data.session.user?.user_metadata?.credits || 0);
       }
       
       setIsLoading(false);
@@ -293,7 +263,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(newSession?.user ?? null);
         setIsPremiumUser(!!newSession?.user?.user_metadata?.premium);
         setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
-        setUserCredits(newSession?.user?.user_metadata?.credits || 0);
         setIsLoading(false);
         
         if (event === 'SIGNED_IN') {
@@ -358,9 +327,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isPremiumUser,
       isAffiliate,
       registerAsAffiliate,
-      quickAffiliateSignup,
-      userCredits,
-      updateCredits
+      quickAffiliateSignup
     }}>
       {children}
     </AuthContext.Provider>
