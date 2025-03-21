@@ -6,6 +6,7 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbS
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { Home } from 'lucide-react';
 
 interface BreadcrumbItem {
   label: string;
@@ -62,12 +63,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {breadcrumbs.length > 0 && (
               <div className="mb-6">
                 <Breadcrumb>
-                  <BreadcrumbList className="flex items-center gap-1 text-gray-400">
+                  <BreadcrumbList className="flex items-center gap-2 text-gray-400">
+                    <BreadcrumbItem>
+                      <BreadcrumbLink 
+                        href="/projects" 
+                        className="flex items-center text-gray-400 hover:text-white text-sm"
+                      >
+                        <Home size={14} className="mr-1" />
+                        <span>Projets</span>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    
                     {breadcrumbs.map((item, index) => (
                       <React.Fragment key={index}>
-                        {index > 0 && (
-                          <BreadcrumbSeparator className="text-gray-600" />
-                        )}
+                        <BreadcrumbSeparator className="text-gray-600" />
                         {item.path ? (
                           <BreadcrumbItem>
                             <BreadcrumbLink 
