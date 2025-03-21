@@ -8,10 +8,12 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
 }
+
 const TopBar = ({
   onThemeToggle,
   isDarkMode
@@ -33,10 +35,22 @@ const TopBar = ({
     email: user?.email || "john.doe@example.com",
     address: user?.user_metadata?.address || "123 Rue de Paris, 75000 Paris"
   };
+
+  // Total credits and used credits
+  const totalCredits = 30000;
+  const usedCredits = 5000; // Example: 5000 credits used
+  const remainingCredits = totalCredits - usedCredits;
+  const percentUsed = Math.round((usedCredits / totalCredits) * 100);
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
+
+  const handleUpgrade = () => {
+    navigate('/upgrade-plan');
+  };
+
   const handleThemeChange = () => {
     if (isDarkMode) {
       // Apply light theme - make everything white (without transparency)
@@ -89,11 +103,13 @@ const TopBar = ({
     }
     onThemeToggle();
   };
+
   const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
     setLanguage(newLanguage);
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
+
   return <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
       {/* Top div with logo and user controls */}
       <div className="flex items-center justify-between w-full px-6 py-3">
@@ -200,12 +216,20 @@ const TopBar = ({
         <div className="flex items-center space-x-4">
           <div className="bg-[#1e2333] rounded-lg p-3">
             <div className="flex flex-col">
-              <div className="text-sm text-gray-400 mb-1">Besoin de crédits?</div>
+              <div className="text-sm text-gray-400 mb-1">Vos crédits disponibles</div>
               <div className="flex items-center space-x-2">
-                <Progress value={65} className="w-24 h-2" />
-                <span className="text-white text-xs">65% de vos crédits utilisés</span>
+                <Progress value={percentUsed} className="w-24 h-2" />
+                <span className="text-white text-xs">{percentUsed}% de vos crédits utilisés</span>
               </div>
-              <Button size="sm" variant="blue" className="mt-2 text-xs py-1 h-8 bg-transparent">
+              <div className="text-sm text-white font-medium mt-1">
+                {remainingCredits.toLocaleString()} / {totalCredits.toLocaleString()} crédits
+              </div>
+              <Button 
+                size="sm" 
+                variant="blue" 
+                className="mt-2 text-xs py-1 h-8 bg-transparent hover:bg-blue-500/30"
+                onClick={handleUpgrade}
+              >
                 Mettre à niveau
               </Button>
             </div>
@@ -214,4 +238,5 @@ const TopBar = ({
       </div>
     </div>;
 };
+
 export default TopBar;
