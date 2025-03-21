@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import DashboardLayout from '@/components/layouts/DashboardLayout';
 import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
+import { Textarea } from "@/components/ui/textarea";
 
 const MOCK_TOPICS = [
   {
@@ -122,6 +123,7 @@ type FormData = {
 
 const CreateDCE = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [generatingTopics, setGeneratingTopics] = useState(false);
   const [generatingContent, setGeneratingContent] = useState(false);
@@ -130,6 +132,22 @@ const CreateDCE = () => {
   const [activeContent, setActiveContent] = useState<{ subject: string; body: string } | null>(null);
   const { toast } = useToast();
   const { notifySuccess } = useNotificationsManager();
+  const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
+  
+  // Parse URL parameters
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const titleParam = params.get('title');
+    const isSocialMediaParam = params.get('isSocialMedia');
+    
+    if (titleParam) {
+      form.setValue('title', titleParam);
+    }
+    
+    if (isSocialMediaParam) {
+      setIsSocialMediaOnly(isSocialMediaParam === 'true');
+    }
+  }, [location.search]);
   
   const form = useForm<FormData>({
     defaultValues: {
@@ -195,7 +213,7 @@ const CreateDCE = () => {
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
     { label: 'Youtube to Newsletter', path: '/youtube-to-newsletter' },
-    { label: 'Untitled Youtube to Newsletter' }
+    { label: form.watch('title') || 'Untitled Youtube to Newsletter' }
   ];
 
   const handleSubmit = async (data: FormData) => {
@@ -222,12 +240,21 @@ const CreateDCE = () => {
             <ResizablePanel defaultSize={50} minSize={30}>
               <div className="h-full p-6 overflow-auto">
                 <div className="mb-6">
-                  <Input 
-                    type="text" 
-                    value="Untitled Youtube to Newsletter" 
-                    className="text-xl font-medium border-none bg-transparent text-white p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
-                    readOnly
-                  />
+                  {isSocialMediaOnly ? (
+                    <Textarea 
+                      placeholder="Description du contenu pour les réseaux sociaux..."
+                      className="min-h-[100px] bg-[#0d1117] border-[#30363d] text-gray-200 focus-visible:ring-blue-500/40"
+                      value={form.watch('title')}
+                      onChange={(e) => form.setValue('title', e.target.value)}
+                    />
+                  ) : (
+                    <Input 
+                      type="text" 
+                      value={form.watch('title')}
+                      onChange={(e) => form.setValue('title', e.target.value)}
+                      className="text-xl font-medium border-none bg-transparent text-white p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                  )}
                 </div>
                 
                 {topics.length === 0 ? (

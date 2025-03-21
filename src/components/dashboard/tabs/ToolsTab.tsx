@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,17 +29,11 @@ const ToolsTab = () => {
 
   const handleCardClick = (title: string, isSocialMedia: boolean = false) => {
     if (isPremiumUser) {
-      // Set the selected title and show the form
-      setSelectedTitle(title);
-      setIsSocialMediaOnly(isSocialMedia);
-      setShowForm(true);
-      // Scroll to the form
-      setTimeout(() => {
-        const formElement = document.getElementById('content-form');
-        if (formElement) {
-          formElement.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+      // Redirect to CreateDCE page with parameters
+      const params = new URLSearchParams();
+      params.append('title', title);
+      params.append('isSocialMedia', isSocialMedia.toString());
+      navigate(`/create-dce?${params.toString()}`);
     } else {
       toast({
         title: "Fonctionnalité premium",
@@ -477,3 +470,4 @@ const ToolsTab = () => {
 };
 
 export default ToolsTab;
+
