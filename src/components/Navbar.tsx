@@ -20,14 +20,17 @@ const Navbar = () => {
     e.preventDefault();
     if (!user) {
       navigate('/dashboard');
-    } else if (!isPremiumUser) {
-      navigate('/upgrade-plan');
-      toast({
-        title: "Accès limité",
-        description: "Cette fonctionnalité nécessite un abonnement premium",
-        variant: "destructive"
-      });
-    } else {
+    } 
+    // else if (!isPremiumUser) {
+    //   navigate('/upgrade-plan');
+    //   toast({
+    //     title: "Accès limité",
+    //     description: "Cette fonctionnalité nécessite un abonnement premium",
+    //     variant: "destructive"
+    //   });
+    // } 
+
+    else {
       navigate('/dashboard');
     }
   };

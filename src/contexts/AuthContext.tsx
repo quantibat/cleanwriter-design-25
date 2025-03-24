@@ -53,7 +53,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 user: updatedUser
               });
             }
-            
             resolve();
           } else {
             reject(new Error("Utilisateur non connecté"));
