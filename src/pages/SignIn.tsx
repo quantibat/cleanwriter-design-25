@@ -67,11 +67,8 @@ const SignIn = () => {
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté."
       });
-<<<<<<< HEAD
-=======
       
       // Redirection vers le tableau de bord sans vérification premium
->>>>>>> 7c8adfa55c4d4a7966ee24d0b677244c579e1711
       navigate('/dashboard');
     } catch (error: any) {
       toast({
