@@ -143,34 +143,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
         console.log(`Auth event: ${event}`);
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-        
-        if (event === 'SIGNED_IN' && newSession?.user?.app_metadata?.provider === 'google') {
-          if (newSession.user.created_at === newSession.user.last_sign_in_at) {
-            console.log("Nouvel utilisateur Google, configuration des métadonnées");
-            
-            const { data, error } = await supabase.auth.updateUser({
-              data: { 
-                full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
-              }
-            });
-            
-            if (error) {
-              console.error("Erreur lors de la mise à jour des métadonnées:", error);
-            }
-          }
-        }
-        
-        setIsLoading(false);
         
         if (event === 'SIGNED_IN') {
+          // Mettre à jour la session et l'utilisateur immédiatement
+          setSession(newSession);
+          setUser(newSession?.user ?? null);
+          
+          // Gérer les métadonnées pour les nouveaux utilisateurs Google
+          if (newSession?.user?.app_metadata?.provider === 'google') {
+            if (newSession.user.created_at === newSession.user.last_sign_in_at) {
+              console.log("Nouvel utilisateur Google, configuration des métadonnées");
+              
+              const { data, error } = await supabase.auth.updateUser({
+                data: { 
+                  full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
+                }
+              });
+              
+              if (error) {
+                console.error("Erreur lors de la mise à jour des métadonnées:", error);
+              }
+            }
+          }
+          
+          // Afficher le message de bienvenue
           toast({
             title: "Connexion réussie",
             description: "Vous êtes maintenant connecté",
             variant: "default",
           });
           
+          // Notification système
           setTimeout(() => {
             try {
               const notificationContext = window._getNotificationContext?.();
@@ -186,6 +189,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           }, 500);
         } else if (event === 'SIGNED_OUT') {
+          // Réinitialiser la session et l'utilisateur
+          setSession(null);
+          setUser(null);
+          
           toast({
             title: "Déconnexion",
             description: "Vous avez été déconnecté",
@@ -198,6 +205,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             variant: "default",
           });
         }
+        
+        setIsLoading(false);
       }
     );
 
@@ -207,12 +216,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "Déconnexion réussie",
-      description: "À bientôt!",
-      variant: "default",
-    });
+    try {
+      await supabase.auth.signOut();
+      setSession(null);
+      setUser(null);
+      toast({
+        title: "Déconnexion réussie",
+        description: "À bientôt!",
+        variant: "default",
+      });
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+      toast({
+        title: "Erreur de déconnexion",
+        description: "Une erreur est survenue lors de la déconnexion",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
