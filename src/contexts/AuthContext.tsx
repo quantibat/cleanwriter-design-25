@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -8,8 +9,6 @@ type AuthContextType = {
   session: Session | null;
   isLoading: boolean;
   signOut: () => Promise<void>;
-  signInWithTestAccount: () => void; // Compte test standard (premium)
-  signInWithBasicTestAccount: () => void; // Compte test sans abonnement
   isPremiumUser: boolean; // Indicateur de statut premium
   isAffiliate: boolean; // Indicateur de statut d'affilié
   registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>; // Inscription comme affilié
@@ -31,116 +30,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
   const [isAffiliate, setIsAffiliate] = useState<boolean>(false);
-
-  const signInWithTestAccount = () => {
-    const testUser = {
-      id: 'test-user-id',
-      email: 'test@exemple.com',
-      user_metadata: {
-        full_name: 'Utilisateur Test',
-        premium: true,
-        affiliate: false
-      },
-      app_metadata: {
-        role: 'user',
-      },
-      aud: 'authenticated',
-      created_at: new Date().toISOString(),
-      confirmed_at: new Date().toISOString(),
-      last_sign_in_at: new Date().toISOString(),
-      role: '',
-      updated_at: new Date().toISOString(),
-    } as User;
-
-    const testSession = {
-      access_token: 'fake-token',
-      refresh_token: 'fake-refresh-token',
-      expires_in: 3600,
-      user: testUser,
-    } as Session;
-
-    setUser(testUser);
-    setSession(testSession);
-    setIsPremiumUser(true);
-    setIsAffiliate(true);
-    setIsLoading(false);
-
-    toast({
-      title: "Connexion test réussie",
-      description: "Vous êtes connecté avec le compte de démonstration premium",
-      variant: "default",
-    });
-
-    setTimeout(() => {
-      try {
-        const notificationContext = window._getNotificationContext?.();
-        if (notificationContext?.addNotification) {
-          notificationContext.addNotification({
-            title: "Connexion test réussie",
-            message: "Bienvenue sur la démo premium!",
-            type: "auth",
-          });
-        }
-      } catch (e) {
-        console.error("Impossible d'accéder au contexte de notification:", e);
-      }
-    }, 500);
-  };
-
-  const signInWithBasicTestAccount = () => {
-    const testUser = {
-      id: 'test-basic-user-id',
-      email: 'test-basic@exemple.com',
-      user_metadata: {
-        full_name: 'Utilisateur Test Basic',
-        premium: false,
-        affiliate: false
-      },
-      app_metadata: {
-        role: 'user',
-      },
-      aud: 'authenticated',
-      created_at: new Date().toISOString(),
-      confirmed_at: new Date().toISOString(),
-      last_sign_in_at: new Date().toISOString(),
-      role: '',
-      updated_at: new Date().toISOString(),
-    } as User;
-
-    const testSession = {
-      access_token: 'fake-token-basic',
-      refresh_token: 'fake-refresh-token-basic',
-      expires_in: 3600,
-      user: testUser,
-    } as Session;
-
-    setUser(testUser);
-    setSession(testSession);
-    setIsPremiumUser(false);
-    setIsAffiliate(false);
-    setIsLoading(false);
-
-    toast({
-      title: "Connexion test réussie",
-      description: "Vous êtes connecté avec le compte de démonstration basique (sans abonnement)",
-      variant: "default",
-    });
-
-    setTimeout(() => {
-      try {
-        const notificationContext = window._getNotificationContext?.();
-        if (notificationContext?.addNotification) {
-          notificationContext.addNotification({
-            title: "Connexion test réussie",
-            message: "Bienvenue sur la démo basique!",
-            type: "auth",
-          });
-        }
-      } catch (e) {
-        console.error("Impossible d'accéder au contexte de notification:", e);
-      }
-    }, 500);
-  };
 
   const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -339,9 +228,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user, 
       session, 
       isLoading, 
-      signOut, 
-      signInWithTestAccount, 
-      signInWithBasicTestAccount,
+      signOut,
       isPremiumUser,
       isAffiliate,
       registerAsAffiliate,

@@ -1,17 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { supabase } from '../integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, LogIn, Zap, ShieldOff } from 'lucide-react';
+import { Mail, LogIn } from 'lucide-react';
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -23,27 +22,19 @@ const formSchema = z.object({
 });
 
 const SignIn = () => {
-  const {
-    user,
-    signInWithTestAccount,
-    signInWithBasicTestAccount
-  } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Rediriger vers le dashboard si l'utilisateur est déjà connecté
   useEffect(() => {
     if (user) {
-      const origin = location.state?.from?.pathname || '/dashboard';
-      navigate(origin, {
-        replace: true
-      });
+      navigate('/dashboard', { replace: true });
     }
-  }, [user, navigate, location]);
-  const {
-    toast
-  } = useToast();
+  }, [user, navigate]);
+  
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [isDemoLoading, setIsDemoLoading] = useState(false);
-  const [isBasicDemoLoading, setIsBasicDemoLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,30 +47,23 @@ const SignIn = () => {
   
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-
-    // Vérifier si c'est le compte test
-    if (values.email === "test@exemple.com" && values.password === "Test1234!") {
-      // Si c'est le compte test, utiliser la fonction spéciale
-      signInWithTestAccount();
-      setIsLoading(false);
-      navigate('/dashboard');
-      return;
-    }
     try {
-      const {
-        data,
-        error
-      } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password
       });
+      
       if (error) {
         throw error;
       }
+      
       toast({
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté."
       });
+      
+      // Redirection vers le dashboard après connexion réussie
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Erreur de connexion",
@@ -89,38 +73,6 @@ const SignIn = () => {
     } finally {
       setIsLoading(false);
     }
-  }
-  
-  async function loginWithDemoAccount() {
-    setIsDemoLoading(true);
-
-    // Remplir automatiquement le formulaire
-    form.setValue("email", "test@exemple.com");
-    form.setValue("password", "Test1234!");
-
-    // Utiliser le compte de test
-    signInWithTestAccount();
-    setTimeout(() => {
-      navigate('/dashboard');
-      setIsDemoLoading(false);
-    }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
-  }
-  
-  async function loginWithBasicDemoAccount() {
-    setIsBasicDemoLoading(true);
-
-    // Remplir automatiquement le formulaire
-    form.setValue("email", "test-basic@exemple.com");
-    form.setValue("password", "Test1234!");
-
-    // Utiliser le compte de test basique
-    signInWithBasicTestAccount();
-
-    // Naviguer directement vers le tableau de bord
-    setTimeout(() => {
-      navigate('/dashboard');
-      setIsBasicDemoLoading(false);
-    }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
   }
   
   async function signInWithGoogle() {
@@ -167,18 +119,6 @@ const SignIn = () => {
         
         <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur DCEManager</h1>
-          
-          <div className="space-y-4 mb-4">
-            <Button variant="outline" className="w-full bg-amber-600/20 border border-amber-500/30 text-amber-400 hover:bg-amber-600/30 flex items-center justify-center" onClick={loginWithDemoAccount} disabled={isDemoLoading}>
-              <Zap className="w-5 h-5 mr-2" />
-              {isDemoLoading ? "Connexion en cours..." : "Connexion rapide (Compte premium)"}
-            </Button>
-            
-            <Button variant="outline" className="w-full bg-gray-600/20 border border-gray-500/30 text-gray-400 hover:bg-gray-600/30 flex items-center justify-center" onClick={loginWithBasicDemoAccount} disabled={isBasicDemoLoading}>
-              <ShieldOff className="w-5 h-5 mr-2" />
-              {isBasicDemoLoading ? "Connexion en cours..." : "Connexion rapide (Sans abonnement)"}
-            </Button>
-          </div>
           
           <div className="mb-8">
             <Button 
@@ -266,4 +206,3 @@ const SignIn = () => {
     </div>;
 };
 export default SignIn;
-
