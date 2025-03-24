@@ -2,13 +2,19 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { HandHeart, Users, MessageSquare, Lightbulb, Share2, Zap } from "lucide-react";
+import { HandHeart, Users, MessageSquare, Lightbulb, Share2 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 const ContributeTab = () => {
   const navigate = useNavigate();
   const { isPremiumUser } = useAuth();
+  
+  const handlePremiumFeature = () => {
+    if (!isPremiumUser) {
+      navigate('/upgrade-plan');
+    }
+  };
   
   return <div className="space-y-6">
       <div>
@@ -38,13 +44,13 @@ const ContributeTab = () => {
             <CardDescription>Partagez vos dossiers avec des intervenants externes de manière sécurisée</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4">
+            <Button className="w-full bg-blue-500 hover:bg-blue-600 mt-4" onClick={handlePremiumFeature}>
               Configurer le partage
             </Button>
           </CardContent>
         </Card>
         
-        {isPremiumUser ? (
+        {isPremiumUser && (
           <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
             <CardHeader>
               <div className="bg-blue-500/20 p-2 rounded-md w-fit mb-3">
@@ -59,24 +65,6 @@ const ContributeTab = () => {
                 onClick={() => navigate('/affiliate')}
               >
                 Accéder au programme
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
-            <CardHeader>
-              <div className="bg-amber-500/20 p-2 rounded-md w-fit mb-3">
-                <Zap className="h-5 w-5 text-amber-400" />
-              </div>
-              <CardTitle>Fonctionnalités Premium</CardTitle>
-              <CardDescription>Débloquez l'accès au programme d'affiliation et plus de fonctionnalités</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button 
-                className="w-full bg-amber-500 hover:bg-amber-600 mt-4"
-                onClick={() => navigate('/upgrade-plan')}
-              >
-                Passer au plan Premium
               </Button>
             </CardContent>
           </Card>

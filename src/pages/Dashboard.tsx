@@ -5,12 +5,10 @@ import ToolsTab from '@/components/dashboard/tabs/ToolsTab';
 import ProjectsTab from '@/components/dashboard/tabs/ProjectsTab';
 import ContributeTab from '@/components/dashboard/tabs/ContributeTab';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
-import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('tools');
   const { notifySuccess } = useNotificationsManager();
-  const { isPremiumUser } = useAuth();
   
   // Exemple de notification de bienvenue
   useEffect(() => {
@@ -33,8 +31,10 @@ const Dashboard = () => {
       case 'tools':
         return <div className="w-full"><ToolsTab /></div>;
       case 'projects':
+        setActiveTab('projects')
         return <div className="w-full"><ProjectsTab /></div>;
       case 'contribute':
+        setActiveTab('contribute')
         return <div className="w-full"><ContributeTab /></div>;
       default:
         return <div className="w-full"><ToolsTab /></div>;
@@ -49,7 +49,6 @@ const Dashboard = () => {
     <DashboardLayout 
       activeTab={activeTab} 
       breadcrumbs={breadcrumbs}
-      onTabChange={setActiveTab}
     >
       {renderTabContent()}
     </DashboardLayout>
