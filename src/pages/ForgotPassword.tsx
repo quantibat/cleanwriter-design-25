@@ -9,11 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+
 const formSchema = z.object({
   email: z.string().email({
     message: "Adresse e-mail invalide."
   })
 });
+
 const ForgotPassword = () => {
   const {
     toast
@@ -26,6 +28,7 @@ const ForgotPassword = () => {
       email: ""
     }
   });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
@@ -52,6 +55,7 @@ const ForgotPassword = () => {
       setIsLoading(false);
     }
   }
+
   return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
@@ -112,4 +116,5 @@ const ForgotPassword = () => {
       </div>
     </div>;
 };
+
 export default ForgotPassword;

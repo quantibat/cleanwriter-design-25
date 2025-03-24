@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, CheckCircle } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+
 const formSchema = z.object({
   password: z.string().min(8, {
     message: "Le mot de passe doit contenir au moins 8 caractères."
@@ -20,6 +21,7 @@ const formSchema = z.object({
   message: "Les mots de passe ne correspondent pas.",
   path: ["confirmPassword"]
 });
+
 const ResetPassword = () => {
   const {
     toast
@@ -27,8 +29,8 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
   useEffect(() => {
-    // Check if we have hash parameters from the reset password email
     const hash = window.location.hash;
     if (!hash) {
       toast({
@@ -38,6 +40,7 @@ const ResetPassword = () => {
       });
     }
   }, [toast]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,6 +48,7 @@ const ResetPassword = () => {
       confirmPassword: ""
     }
   });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
@@ -62,7 +66,6 @@ const ResetPassword = () => {
         description: "Votre mot de passe a été réinitialisé avec succès."
       });
 
-      // Redirect to sign in after a short delay
       setTimeout(() => {
         navigate('/signin');
       }, 3000);
@@ -76,6 +79,7 @@ const ResetPassword = () => {
       setIsLoading(false);
     }
   }
+
   return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
@@ -103,7 +107,13 @@ const ResetPassword = () => {
                         <FormControl>
                           <div className="relative form-input-animated">
                             <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                            <Input type="password" className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="••••••••" {...field} />
+                            <Input 
+                              type="password" 
+                              showPasswordToggle={true}
+                              className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                              placeholder="••••••••" 
+                              {...field} 
+                            />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -116,7 +126,13 @@ const ResetPassword = () => {
                         <FormControl>
                           <div className="relative form-input-animated">
                             <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                            <Input type="password" className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="••••••••" {...field} />
+                            <Input 
+                              type="password" 
+                              showPasswordToggle={true}
+                              className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                              placeholder="••••••••" 
+                              {...field} 
+                            />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -140,4 +156,5 @@ const ResetPassword = () => {
       </div>
     </div>;
 };
+
 export default ResetPassword;
