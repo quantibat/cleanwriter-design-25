@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -6,8 +7,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
@@ -24,6 +25,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,7 +52,7 @@ const SignIn = () => {
         description: "Vous êtes maintenant connecté."
       });
       
-      // Redirection vers le tableau de bord
+      // Redirection vers le tableau de bord sans vérification premium
       navigate('/dashboard');
     } catch (error: any) {
       toast({
@@ -169,12 +171,22 @@ const SignIn = () => {
                       <div className="relative form-input-animated">
                         <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
                         <Input 
-                          type="password" 
-                          className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                          type={showPassword ? "text" : "password"}
+                          className="pl-10 pr-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
                           placeholder="••••••••" 
                           {...field} 
-                          showPasswordToggle={true} 
                         />
+                        <button 
+                          type="button"
+                          className="absolute right-3 top-2.5 text-white/40 hover:text-white/70"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-5 w-5" />
+                          ) : (
+                            <Eye className="h-5 w-5" />
+                          )}
+                        </button>
                       </div>
                     </FormControl>
                     <FormMessage />
