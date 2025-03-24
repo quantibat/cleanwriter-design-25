@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
+  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(true); // Set to true by default
   const [isAffiliate, setIsAffiliate] = useState<boolean>(false);
 
   const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
@@ -67,10 +67,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const quickAffiliateSignup = async (): Promise<boolean> => {
     try {
-      if (!user || !isPremiumUser) {
+      if (!user) {
         toast({
           title: "Accès refusé",
-          description: "Vous devez être un utilisateur premium pour devenir affilié",
+          description: "Vous devez être connecté pour devenir affilié",
           variant: "destructive"
         });
         return false;
@@ -135,7 +135,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!error && data.session) {
         setSession(data.session);
         setUser(data.session.user);
-        setIsPremiumUser(!!data.session.user?.user_metadata?.premium);
+        // Always set premium to true regardless of metadata
+        setIsPremiumUser(true);
         setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
       }
       
@@ -156,7 +157,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             
             const { data, error } = await supabase.auth.updateUser({
               data: { 
-                premium: false,
+                premium: true, // Set premium to true for new Google users
                 affiliate: false,
                 full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
               }
@@ -168,7 +169,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
         
-        setIsPremiumUser(!!newSession?.user?.user_metadata?.premium);
+        // Always set premium to true for all users
+        setIsPremiumUser(true);
         setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
         setIsLoading(false);
         
