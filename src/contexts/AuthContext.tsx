@@ -146,22 +146,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(newSession);
         setUser(newSession?.user ?? null);
         
-        if (event === 'SIGNED_IN' && newSession?.user?.app_metadata?.provider === 'google') {
-          if (newSession.user.created_at === newSession.user.last_sign_in_at) {
-            console.log("Nouvel utilisateur Google, configuration des métadonnées");
-            
-            const { data, error } = await supabase.auth.updateUser({
-              data: { 
-                full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
-              }
-            });
-            
-            if (error) {
-              console.error("Erreur lors de la mise à jour des métadonnées:", error);
-            }
-          }
-        }
-        
         setIsLoading(false);
         
         if (event === 'SIGNED_IN') {
