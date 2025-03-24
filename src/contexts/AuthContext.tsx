@@ -151,30 +151,47 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(newSession);
         setUser(newSession?.user ?? null);
         
-        if (event === 'SIGNED_IN' && newSession?.user?.app_metadata?.provider === 'google') {
-          if (newSession.user.created_at === newSession.user.last_sign_in_at) {
-            console.log("Nouvel utilisateur Google, configuration des métadonnées");
-            
-            const { data, error } = await supabase.auth.updateUser({
-              data: { 
-                premium: true, // Set premium to true for new Google users
-                affiliate: false,
-                full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
+        if (event === 'SIGNED_IN') {
+          // If it's a new Google sign-in, ensure the user is added to the users table
+          if (newSession?.user?.app_metadata?.provider === 'google') {
+            // Check if this is a new user (created_at equals last_sign_in_at)
+            if (newSession.user.created_at === newSession.user.last_sign_in_at) {
+              console.log("Nouvel utilisateur Google, configuration des métadonnées");
+              
+              // Add user to users table
+              const { error: insertError } = await supabase
+                .from('users')
+                .insert({
+                  id: newSession.user.id,
+                  email: newSession.user.email,
+                  full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name,
+                  created_at: new Date()
+                })
+                .select()
+                .single();
+              
+              if (insertError) {
+                console.error("Erreur lors de l'ajout de l'utilisateur à la table users:", insertError);
               }
-            });
-            
-            if (error) {
-              console.error("Erreur lors de la mise à jour des métadonnées:", error);
+              
+              const { data, error } = await supabase.auth.updateUser({
+                data: { 
+                  premium: true, // Set premium to true for new Google users
+                  affiliate: false,
+                  full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
+                }
+              });
+              
+              if (error) {
+                console.error("Erreur lors de la mise à jour des métadonnées:", error);
+              }
             }
           }
-        }
-        
-        // Always set premium to true for all users
-        setIsPremiumUser(true);
-        setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
-        setIsLoading(false);
-        
-        if (event === 'SIGNED_IN') {
+          
+          // Always set premium to true for all users
+          setIsPremiumUser(true);
+          setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
+          
           toast({
             title: "Connexion réussie",
             description: "Vous êtes maintenant connecté",

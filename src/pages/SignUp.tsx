@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,8 @@ const SignUp = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // Step 1: Sign up the user with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -54,8 +56,26 @@ const SignUp = () => {
           }
         }
       });
-      if (error) {
-        throw error;
+      
+      if (authError) {
+        throw authError;
+      }
+      
+      if (authData.user) {
+        // Step 2: Insert user data into the users table
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert({
+            id: authData.user.id,
+            email: values.email,
+            full_name: values.name,
+            created_at: new Date()
+          });
+          
+        if (insertError) {
+          console.error("Error inserting into users table:", insertError);
+          // Continue anyway since the auth user was created successfully
+        }
       }
       
       // Stocker l'email pour l'afficher sur la page de confirmation
