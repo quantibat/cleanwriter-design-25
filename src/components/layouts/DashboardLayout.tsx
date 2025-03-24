@@ -92,7 +92,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   };
 
   return (
-    <div className="bg-[#0c101b] justify-content flex items-center">
+    <div className="min-h-screen bg-[#0c101b] w-full">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-hidden w-full">
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab }/>

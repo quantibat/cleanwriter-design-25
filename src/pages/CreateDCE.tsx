@@ -214,6 +214,9 @@ const CreateDCE = () => {
     label: 'Projets',
     path: '/projects'
   }, {
+    label: 'Youtube to Newsletter',
+    path: '/youtube-to-newsletter'
+  }, {
     label: title 
   }];
   const handleSubmit = async (data: FormData) => {
