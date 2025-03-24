@@ -135,7 +135,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!error && data.session) {
         setSession(data.session);
         setUser(data.session.user);
-        // Always set premium to true regardless of metadata
+        // Always set premium to true for all users
         setIsPremiumUser(true);
         setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
       }

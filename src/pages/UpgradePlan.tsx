@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Check } from "lucide-react";
@@ -6,43 +7,32 @@ import { Card } from "@/components/ui/card";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+
 const UpgradePlan = () => {
-  const {
-    user,
-    isPremiumUser
-  } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const breadcrumbs = [{
-    label: 'Upgrader son plan'
+    label: 'Votre plan'
   }];
+  
   const handleStartTrial = () => {
-    if (isPremiumUser) {
-      toast({
-        title: "Déjà abonné",
-        description: "Vous bénéficiez déjà de toutes les fonctionnalités premium.",
-        variant: "default"
-      });
-      navigate('/dashboard');
-      return;
-    }
-
-    // Simuler le démarrage de l'essai
+    // Tous les utilisateurs sont premium par défaut
     toast({
-      title: "Essai gratuit activé",
-      description: "Votre période d'essai de 7 jours démarre maintenant. Profitez de toutes les fonctionnalités premium!",
+      title: "Accès Premium",
+      description: "Vous bénéficiez déjà de toutes les fonctionnalités premium.",
       variant: "default"
     });
-    // Rediriger vers le tableau de bord après un court délai
-    setTimeout(() => navigate('/dashboard'), 1500);
+    navigate('/dashboard');
   };
+  
   return <DashboardLayout breadcrumbs={breadcrumbs}>
       <div className="w-full max-w-5xl mx-auto">
         <section className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
-            Commencez votre essai gratuit de 7 jours maintenant
+            Vous avez accès à toutes les fonctionnalités
           </h1>
           <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
-            Accédez à toutes les fonctionnalités premium de DCEManager sans engagement. 
+            Profitez de toutes les fonctionnalités premium de DCEManager sans restriction.
             Découvrez comment notre plateforme peut transformer votre gestion de projets.
           </p>
         </section>
@@ -53,27 +43,22 @@ const UpgradePlan = () => {
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-2xl font-bold">Premium</h3>
                 <div className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium">
-                  Essai gratuit
+                  Accès complet
                 </div>
               </div>
               <div className="mb-6">
                 <div className="flex items-end">
-                  <span className="text-3xl font-bold">29€</span>
-                  <span className="text-muted-foreground ml-1">/mois</span>
+                  <span className="text-3xl font-bold">Gratuit</span>
                 </div>
-                <p className="text-muted-foreground mt-2">Après la période d'essai de 7 jours</p>
+                <p className="text-muted-foreground mt-2">Accès à toutes les fonctionnalités</p>
               </div>
               <p className="text-muted-foreground mb-6">
-                Explorez toutes nos fonctionnalités avancées pendant 7 jours, sans engagement.
-                Annulez à tout moment avant la fin de l'essai.
+                Explorez toutes nos fonctionnalités avancées sans limitation.
               </p>
               <Button variant="blue" size="lg" onClick={handleStartTrial} className="w-full text-lg py-6 bg-transparent">
-                Commencer l'essai gratuit
+                Retourner au tableau de bord
                 <ArrowRight className="ml-2" />
               </Button>
-              <p className="text-sm text-muted-foreground mt-3 text-center">
-                Aucune carte bancaire requise pour l'essai
-              </p>
             </div>
             
             <div className="space-y-4">
@@ -112,19 +97,9 @@ const UpgradePlan = () => {
               </ul>
             </div>
           </Card>
-          
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            En commençant votre essai, vous acceptez nos {" "}
-            <a href="/terms-of-service" className="text-blue-400 hover:underline">
-              conditions d'utilisation
-            </a> {" "}
-            et notre {" "}
-            <a href="/privacy-policy" className="text-blue-400 hover:underline">
-              politique de confidentialité
-            </a>.
-          </div>
         </div>
       </div>
     </DashboardLayout>;
 };
+
 export default UpgradePlan;

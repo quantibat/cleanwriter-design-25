@@ -28,24 +28,14 @@ const FreeTrial = () => {
       });
       return;
     }
-    if (isPremiumUser) {
-      toast({
-        title: "Déjà abonné",
-        description: "Vous bénéficiez déjà de toutes les fonctionnalités premium.",
-        variant: "default"
-      });
-      navigate('/dashboard');
-      return;
-    }
-
-    // Simuler le démarrage de l'essai
+    
+    // Tous les utilisateurs sont premium par défaut
     toast({
-      title: "Essai gratuit activé",
-      description: "Votre période d'essai de 7 jours démarre maintenant. Profitez de toutes les fonctionnalités premium!",
+      title: "Accès Premium",
+      description: "Vous bénéficiez déjà de toutes les fonctionnalités premium.",
       variant: "default"
     });
-    // Rediriger vers le tableau de bord après un court délai
-    setTimeout(() => navigate('/dashboard'), 1500);
+    navigate('/dashboard');
   };
 
   return (
@@ -55,7 +45,7 @@ const FreeTrial = () => {
       <main className={`pt-${window.location.pathname !== '/upgrade-plan' ? '24' : '6'} pb-20 px-4 max-w-5xl mx-auto`}>
         <section className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
-            Commencez votre essai gratuit de 7 jours maintenant
+            Commencez à utiliser DCEManager maintenant
           </h1>
           <p className="text-xl text-blue-100/80 max-w-2xl mx-auto">
             Accédez à toutes les fonctionnalités premium de DCEManager sans engagement. 
@@ -69,26 +59,24 @@ const FreeTrial = () => {
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-2xl font-bold text-white">Premium</h3>
                 <div className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium">
-                  Essai gratuit
+                  Accès complet
                 </div>
               </div>
               <div className="mb-6">
                 <div className="flex items-end">
-                  <span className="text-3xl font-bold text-white">29€</span>
-                  <span className="text-blue-100/70 ml-1">/mois</span>
+                  <span className="text-3xl font-bold text-white">Gratuit</span>
                 </div>
-                <p className="text-blue-100/70 mt-2">Après la période d'essai de 7 jours</p>
+                <p className="text-blue-100/70 mt-2">Accès à toutes les fonctionnalités</p>
               </div>
               <p className="text-blue-100/70 mb-6">
-                Explorez toutes nos fonctionnalités avancées pendant 7 jours, sans engagement.
-                Annulez à tout moment avant la fin de l'essai.
+                Explorez toutes nos fonctionnalités avancées sans limitation.
               </p>
               <Button variant="blue" size="lg" onClick={handleStartTrial} className="w-full text-lg py-6 bg-transparent">
-                Commencer l'essai gratuit
+                Commencer maintenant
                 <ArrowRight className="ml-2" />
               </Button>
               <p className="text-sm text-blue-100/60 mt-3 text-center">
-                Aucune carte bancaire requise pour l'essai
+                Aucune carte bancaire requise
               </p>
             </div>
             
@@ -130,7 +118,7 @@ const FreeTrial = () => {
           </Card>
           
           <div className="mt-8 text-center text-sm text-blue-100/60">
-            En commençant votre essai, vous acceptez nos {" "}
+            En utilisant notre service, vous acceptez nos {" "}
             <Link to="/terms-of-service" className="text-blue-400 hover:underline">
               conditions d'utilisation
             </Link> {" "}
