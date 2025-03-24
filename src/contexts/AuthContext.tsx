@@ -189,6 +189,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           }, 500);
         } else if (event === 'SIGNED_OUT') {
+          
           // Réinitialiser la session et l'utilisateur
           setSession(null);
           setUser(null);
