@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -134,8 +133,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!error && data.session) {
         setSession(data.session);
         setUser(data.session.user);
-        setIsPremiumUser(!!data.session.user?.user_metadata?.premium);
-        setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
       }
       
       setIsLoading(false);
@@ -155,8 +152,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             
             const { data, error } = await supabase.auth.updateUser({
               data: { 
-                premium: false,
-                affiliate: false,
                 full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
               }
             });
@@ -167,8 +162,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
         
-        setIsPremiumUser(!!newSession?.user?.user_metadata?.premium);
-        setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
         setIsLoading(false);
         
         if (event === 'SIGNED_IN') {

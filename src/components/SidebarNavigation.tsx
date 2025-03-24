@@ -57,7 +57,6 @@ const SidebarNavigation = ({
           <li>
             <Link to="/dashboard" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/dashboard' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => {
             handleTabChange('tools');
-            handlePremiumLink(e, '/dashboard');
           }}>
               <Home className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Tableau de bord</span>
@@ -72,13 +71,13 @@ const SidebarNavigation = ({
             
           </li>
           <li>
-            <Link to="/projects" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={e => handlePremiumLink(e, '/projects')}>
+            <Link to="/projects" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
               <Briefcase className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Projets</span>
             </Link>
           </li>
           <li>
-            <Link to="/contribute" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/contribute' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={() => handleTabChange('contribute')}>
+            <Link to="/contribute" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/contribute' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
               <Gift className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Contribuer</span>
             </Link>

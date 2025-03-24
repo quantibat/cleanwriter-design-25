@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const formSchema = z.object({
   email: z.string().email({
@@ -20,10 +21,24 @@ const formSchema = z.object({
 });
 
 const SignIn = () => {
-  const { toast } = useToast();
+  const {
+    user
+  } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const {
+    toast
+  } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', {
+        replace: true
+      });
+    }
+  }, [user, navigate]);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,26 +51,25 @@ const SignIn = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const {
+        data,
+        error
+      } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password
       });
-      
       if (error) {
         throw error;
       }
-      
       toast({
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté."
       });
-      
-      // Redirection vers le tableau de bord
       navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Erreur de connexion",
-        description: error.message || "Identifiants incorrects. Veuillez réessayer.",
+        description: error.message || "Une erreur est survenue lors de la connexion.",
         variant: "destructive"
       });
     } finally {
@@ -77,10 +91,8 @@ const SignIn = () => {
       if (error) {
         throw error;
       }
-      
-      // Pas besoin de toast ici car la redirection va se faire automatiquement
     } catch (error: any) {
-      console.error("Erreur de connexion avec Google:", error);
+      console.error("Erreur de connexion Google:", error);
       toast({
         title: "Erreur de connexion avec Google",
         description: error.message || "Une erreur est survenue lors de la connexion avec Google.",
@@ -107,12 +119,12 @@ const SignIn = () => {
         </div>
         
         <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
-          <h1 className="text-2xl font-bold text-white mb-6 text-center">Connexion</h1>
+          <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur DCEManager</h1>
           
           <div className="mb-8">
             <Button 
               variant="outline" 
-              className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5"
+              className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5" 
               onClick={signInWithGoogle}
               disabled={isGoogleLoading}
             >
