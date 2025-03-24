@@ -13,6 +13,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import EmailConfirmation from "./pages/EmailConfirmation";
 import Dashboard from "./pages/Dashboard";
 import Notifications from "./pages/Notifications";
 import Projects from "./pages/Projects";
@@ -53,6 +54,7 @@ const App = () => (
               <Route path="/signup" element={<MainLayout><SignUp /></MainLayout>} />
               <Route path="/forgot-password" element={<MainLayout><ForgotPassword /></MainLayout>} />
               <Route path="/reset-password" element={<MainLayout><ResetPassword /></MainLayout>} />
+              <Route path="/email-confirmation" element={<MainLayout><EmailConfirmation /></MainLayout>} />
               <Route path="/affiliate" element={<MainLayout><Affiliate /></MainLayout>} />
               <Route path="/pricing" element={<MainLayout><CustomPricing /></MainLayout>} />
               <Route path="/privacy-policy" element={<MainLayout><PrivacyPolicy /></MainLayout>} />

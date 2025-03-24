@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -58,12 +57,17 @@ const SignUp = () => {
       if (error) {
         throw error;
       }
+      
+      // Stocker l'email pour l'afficher sur la page de confirmation
+      localStorage.setItem('pendingConfirmationEmail', values.email);
+      
       toast({
         title: "Inscription réussie",
-        description: "Votre compte a été créé avec succès."
+        description: "Votre compte a été créé avec succès. Veuillez vérifier votre email pour confirmer votre compte."
       });
-      // Redirection vers la page de connexion
-      navigate('/signin');
+      
+      // Redirection vers la page de confirmation d'email
+      navigate('/email-confirmation');
     } catch (error: any) {
       toast({
         title: "Erreur d'inscription",
@@ -190,7 +194,13 @@ const SignUp = () => {
                     <FormControl>
                       <div className="relative">
                         <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                        <Input type="password" className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="••••••••" {...field} />
+                        <Input 
+                          type="password" 
+                          className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                          placeholder="••••••••" 
+                          {...field} 
+                          showPasswordToggle={true}
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />

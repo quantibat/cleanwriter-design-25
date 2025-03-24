@@ -1,39 +1,27 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { supabase } from '../integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { Mail, LogIn } from 'lucide-react';
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail, Lock } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
   email: z.string().email({
     message: "Adresse e-mail invalide."
   }),
-  password: z.string().min(6, {
-    message: "Le mot de passe doit contenir au moins 6 caractères."
+  password: z.string().min(1, {
+    message: "Le mot de passe est requis."
   })
 });
 
 const SignIn = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  
-  // Rediriger vers le dashboard si l'utilisateur est déjà connecté
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard', { replace: true });
-    }
-  }, [user, navigate]);
-  
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   
@@ -62,12 +50,12 @@ const SignIn = () => {
         description: "Vous êtes maintenant connecté."
       });
       
-      // Redirection vers le dashboard après connexion réussie
+      // Redirection vers le tableau de bord
       navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Erreur de connexion",
-        description: error.message || "Une erreur est survenue lors de la connexion.",
+        description: error.message || "Identifiants incorrects. Veuillez réessayer.",
         variant: "destructive"
       });
     } finally {
@@ -92,7 +80,7 @@ const SignIn = () => {
       
       // Pas besoin de toast ici car la redirection va se faire automatiquement
     } catch (error: any) {
-      console.error("Erreur de connexion Google:", error);
+      console.error("Erreur de connexion avec Google:", error);
       toast({
         title: "Erreur de connexion avec Google",
         description: error.message || "Une erreur est survenue lors de la connexion avec Google.",
@@ -102,7 +90,8 @@ const SignIn = () => {
     }
   }
   
-  return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
+  return (
+    <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
         {/* Les particules d'arrière-plan seront ajoutés ici avec du CSS */}
       </div>
@@ -118,12 +107,12 @@ const SignIn = () => {
         </div>
         
         <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
-          <h1 className="text-2xl font-bold text-white mb-6 text-center">Bienvenue sur DCEManager</h1>
+          <h1 className="text-2xl font-bold text-white mb-6 text-center">Connexion</h1>
           
           <div className="mb-8">
             <Button 
               variant="outline" 
-              className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5" 
+              className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5"
               onClick={signInWithGoogle}
               disabled={isGoogleLoading}
             >
@@ -170,32 +159,43 @@ const SignIn = () => {
                     <FormMessage />
                   </FormItem>} />
               
-              <FormField control={form.control} name="password" render={({
-              field
-            }) => <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel className="text-white/70">Mot de passe</FormLabel>
-                      <Link to="/forgot-password" className="text-xs text-blue-400 hover:underline">
-                        Mot de passe oublié ?
-                      </Link>
-                    </div>
+              <FormField 
+                control={form.control} 
+                name="password" 
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-white/70">Mot de passe</FormLabel>
                     <FormControl>
                       <div className="relative form-input-animated">
-                        <Input type="password" className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="••••••••" {...field} />
+                        <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
+                        <Input 
+                          type="password" 
+                          className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                          placeholder="••••••••" 
+                          {...field} 
+                          showPasswordToggle={true} 
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>} />
+                  </FormItem>
+                )} 
+              />
               
-              <Button type="submit" variant="blue" disabled={isLoading} className="w-full font-medium bg-transparent">
-                {isLoading ? "Connexion en cours..." : "Se connecter"} 
-                {!isLoading && <LogIn className="ml-2 h-4 w-4" />}
+              <div className="flex items-center justify-end">
+                <Link to="/forgot-password" className="text-sm text-blue-400 hover:underline">
+                  Mot de passe oublié?
+                </Link>
+              </div>
+              
+              <Button type="submit" className="w-full blue-shimmer-button text-white font-medium bg-transparent" disabled={isLoading}>
+                {isLoading ? "Connexion en cours..." : "Se connecter"}
               </Button>
             </form>
           </Form>
           
           <div className="mt-6 text-center text-sm">
-            <span className="text-white/60">Pas encore de compte ?</span>
+            <span className="text-white/60">Pas encore de compte?</span>
             {" "}
             <Link to="/signup" className="text-blue-400 hover:underline">
               S'inscrire
@@ -203,6 +203,8 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default SignIn;
