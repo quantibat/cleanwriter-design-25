@@ -19,7 +19,7 @@ const SidebarNavigation = ({
   const { open } = useSidebar();
   const location = useLocation();
   const { unreadCount } = useNotifications();
-  const { isAffiliate } = useAuth();
+  const { isPremiumUser, isAffiliate } = useAuth();
   
   const handleTabChange = (tab: string) => {
     onTabChange?.(tab);
@@ -65,18 +65,22 @@ const SidebarNavigation = ({
               <span className={open ? "ml-3" : "hidden"}>Contribuer</span>
             </Link>
           </li>
-          <li>
-            <Link to="/affiliate" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/affiliate' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
-              <Users className="h-5 w-5" />
-              <span className={open ? "ml-3" : "hidden"}>Affiliation</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/upgrade-plan" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/upgrade-plan' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
-              <Zap className="h-5 w-5" />
-              <span className={open ? "ml-3" : "hidden"}>Upgrader son plan</span>
-            </Link>
-          </li>
+          {isPremiumUser && (
+            <li>
+              <Link to="/affiliate" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/affiliate' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
+                <Users className="h-5 w-5" />
+                <span className={open ? "ml-3" : "hidden"}>Affiliation</span>
+              </Link>
+            </li>
+          )}
+          {!isPremiumUser && (
+            <li>
+              <Link to="/upgrade-plan" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/upgrade-plan' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
+                <Zap className="h-5 w-5" />
+                <span className={open ? "ml-3" : "hidden"}>Upgrader son plan</span>
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
       

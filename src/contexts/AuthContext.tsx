@@ -1,218 +1,95 @@
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { User, Session } from '@supabase/supabase-js';
-import { toast } from '@/hooks/use-toast';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { supabase } from '../integrations/supabase/client';
+import { User, UserResponse } from '@supabase/supabase-js';
 
-type AuthContextType = {
+interface AuthContextType {
   user: User | null;
-  session: Session | null;
   isLoading: boolean;
+  isPremiumUser: boolean;
+  isAffiliate: boolean;
   signOut: () => Promise<void>;
-  isPremiumUser: boolean; // Indicateur de statut premium
-  isAffiliate: boolean; // Indicateur de statut d'affilié
-  registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>; // Inscription comme affilié
-  quickAffiliateSignup: () => Promise<boolean>; // Inscription rapide comme affilié, retourne true si réussi
-};
+}
 
-type AffiliateRegistrationData = {
-  fullName: string;
-  email: string;
-  password: string;
-  agreeTerms: boolean;
-};
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  isLoading: true,
+  isPremiumUser: false,
+  isAffiliate: false,
+  signOut: async () => {},
+});
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(true); // Set to true by default
-  const [isAffiliate, setIsAffiliate] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPremiumUser, setIsPremiumUser] = useState(false);
+  const [isAffiliate, setIsAffiliate] = useState(false);
 
-  const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      try {
-        setTimeout(() => {
-          if (user) {
-            const updatedUser = {
-              ...user,
-              user_metadata: {
-                ...user.user_metadata,
-                affiliate: true
-              }
-            } as User;
-            
-            setUser(updatedUser);
-            setIsAffiliate(true);
-            
-            if (session) {
-              setSession({
-                ...session,
-                user: updatedUser
-              });
-            }
-            
-            resolve();
-          } else {
-            reject(new Error("Utilisateur non connecté"));
-          }
-        }, 1000);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
-
-  const quickAffiliateSignup = async (): Promise<boolean> => {
-    try {
-      if (!user) {
-        toast({
-          title: "Accès refusé",
-          description: "Vous devez être connecté pour devenir affilié",
-          variant: "destructive"
-        });
-        return false;
-      }
-
-      const updatedUser = {
-        ...user,
-        user_metadata: {
-          ...user.user_metadata,
-          affiliate: true
-        }
-      } as User;
-      
-      setUser(updatedUser);
-      setIsAffiliate(true);
-      
-      if (session) {
-        setSession({
-          ...session,
-          user: updatedUser
-        });
-      }
-      
-      toast({
-        title: "Félicitations!",
-        description: "Vous êtes maintenant un affilié DCEManager",
-        variant: "default"
-      });
-
-      setTimeout(() => {
-        try {
-          const notificationContext = window._getNotificationContext?.();
-          if (notificationContext?.addNotification) {
-            notificationContext.addNotification({
-              title: "Bienvenue dans le programme d'affiliation",
-              message: "Votre compte affilié est prêt à l'emploi!",
-              type: "success",
-            });
-          }
-        } catch (e) {
-          console.error("Impossible d'accéder au contexte de notification:", e);
-        }
-      }, 500);
-      
-      return true;
-    } catch (error: any) {
-      toast({
-        title: "Erreur",
-        description: error.message || "Une erreur est survenue lors de l'inscription rapide",
-        variant: "destructive"
-      });
-      return false;
-    }
-  };
-
+  // Check if user is authenticated
   useEffect(() => {
-    const getInitialSession = async () => {
-      setIsLoading(true);
-      
-      const { data, error } = await supabase.auth.getSession();
-      
-      if (!error && data.session) {
-        setSession(data.session);
-        setUser(data.session.user);
-        // Always set premium to true regardless of metadata
-        setIsPremiumUser(true);
-        setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
+    const fetchUser = async () => {
+      try {
+        setIsLoading(true);
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        setUser(user);
+        
+        // Vérifier si l'utilisateur est premium en consultant une table spécifique
+        // Par défaut, l'utilisateur n'est PAS premium
+        setIsPremiumUser(false);
+        setIsAffiliate(false);
+        
+        // Vous pourriez vérifier le statut premium dans une table profiles
+        if (user) {
+          const { data: profileData, error } = await supabase
+            .from('profiles')
+            .select('is_premium, is_affiliate')
+            .eq('id', user.id)
+            .single();
+            
+          if (profileData && !error) {
+            setIsPremiumUser(profileData.is_premium || false);
+            setIsAffiliate(profileData.is_affiliate || false);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        setIsLoading(false);
       }
-      
-      setIsLoading(false);
     };
 
-    getInitialSession();
+    fetchUser();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
-        console.log(`Auth event: ${event}`);
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
+    // Écouter les changements d'authentification
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setUser(session?.user || null);
+        setIsLoading(true);
         
-        if (event === 'SIGNED_IN' && newSession?.user?.app_metadata?.provider === 'google') {
-          if (newSession.user.created_at === newSession.user.last_sign_in_at) {
-            console.log("Nouvel utilisateur Google, configuration des métadonnées");
-            
-            const { data, error } = await supabase.auth.updateUser({
-              data: { 
-                premium: true, // Set premium to true for new Google users
-                affiliate: false,
-                full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
-              }
-            });
-            
-            if (error) {
-              console.error("Erreur lors de la mise à jour des métadonnées:", error);
-            }
-          }
+        // Réinitialiser les statuts premium et affiliate quand l'état d'authentification change
+        if (!session?.user) {
+          setIsPremiumUser(false);
+          setIsAffiliate(false);
+          setIsLoading(false);
+          return;
         }
         
-        // Always set premium to true for all users
-        setIsPremiumUser(true);
-        setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
-        setIsLoading(false);
-        
-        if (event === 'SIGNED_IN') {
-          toast({
-            title: "Connexion réussie",
-            description: "Vous êtes maintenant connecté",
-            variant: "default",
-          });
+        // Vérifier le statut premium et affiliate
+        const { data: profileData, error } = await supabase
+          .from('profiles')
+          .select('is_premium, is_affiliate')
+          .eq('id', session.user.id)
+          .single();
           
-          // Notification système
-          setTimeout(() => {
-            try {
-              const notificationContext = window._getNotificationContext?.();
-              if (notificationContext?.addNotification) {
-                notificationContext.addNotification({
-                  title: "Connexion réussie",
-                  message: `Bienvenue ${newSession?.user?.email || 'utilisateur'}!`,
-                  type: "auth",
-                });
-              }
-            } catch (e) {
-              console.error("Impossible d'accéder au contexte de notification:", e);
-            }
-          }, 500);
-        } else if (event === 'SIGNED_OUT') {
-          
-          // Réinitialiser la session et l'utilisateur
-          setSession(null);
-          setUser(null);
-          
-          toast({
-            title: "Déconnexion",
-            description: "Vous avez été déconnecté",
-            variant: "default",
-          });
-        } else if (event === 'PASSWORD_RECOVERY') {
-          toast({
-            title: "Récupération de mot de passe",
-            description: "Veuillez vérifier votre email pour réinitialiser votre mot de passe",
-            variant: "default",
-          });
+        if (profileData && !error) {
+          setIsPremiumUser(profileData.is_premium || false);
+          setIsAffiliate(profileData.is_affiliate || false);
+        } else {
+          setIsPremiumUser(false);
+          setIsAffiliate(false);
         }
         
         setIsLoading(false);
@@ -220,61 +97,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     );
 
     return () => {
-      authListener.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, []);
 
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
-      setSession(null);
       setUser(null);
-      toast({
-        title: "Déconnexion réussie",
-        description: "À bientôt!",
-        variant: "default",
-      });
+      setIsPremiumUser(false);
+      setIsAffiliate(false);
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
-      toast({
-        title: "Erreur de déconnexion",
-        description: "Une erreur est survenue lors de la déconnexion",
-        variant: "destructive",
-      });
     }
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      session, 
-      isLoading, 
-      signOut,
-      isPremiumUser,
-      isAffiliate,
-      registerAsAffiliate,
-      quickAffiliateSignup
-    }}>
+    <AuthContext.Provider value={{ user, isLoading, isPremiumUser, isAffiliate, signOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
-if (typeof window !== 'undefined') {
-  window._getNotificationContext = () => {
-    try {
-      const element = document.querySelector('#__root');
-      return (element as any)?.__NOTIFICATION_CONTEXT__;
-    } catch (e) {
-      return null;
-    }
-  };
-}
