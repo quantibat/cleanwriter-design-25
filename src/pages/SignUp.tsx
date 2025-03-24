@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -10,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, User, Lock } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Le nom doit contenir au moins 2 caractères."
@@ -24,11 +26,13 @@ const formSchema = z.object({
     message: "Vous devez accepter les conditions d'utilisation."
   })
 });
+
 const SignUp = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,13 +42,11 @@ const SignUp = () => {
       acceptTerms: false
     }
   });
+  
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const {
-        data,
-        error
-      } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -60,6 +62,8 @@ const SignUp = () => {
         title: "Inscription réussie",
         description: "Votre compte a été créé avec succès."
       });
+      // Redirection vers la page de connexion
+      navigate('/signin');
     } catch (error: any) {
       toast({
         title: "Erreur d'inscription",
@@ -70,6 +74,34 @@ const SignUp = () => {
       setIsLoading(false);
     }
   }
+  
+  async function signUpWithGoogle() {
+    setIsGoogleLoading(true);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/dashboard'
+        }
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Pas besoin de toast ici car la redirection va se faire automatiquement
+    } catch (error: any) {
+      console.error("Erreur d'inscription avec Google:", error);
+      toast({
+        title: "Erreur d'inscription avec Google",
+        description: error.message || "Une erreur est survenue lors de l'inscription avec Google.",
+        variant: "destructive"
+      });
+      setIsGoogleLoading(false);
+    }
+  }
+  
   return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
         {/* Les particules d'arrière-plan seront ajoutés ici avec du CSS */}
@@ -79,7 +111,7 @@ const SignUp = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-block">
             <h2 className="text-2xl font-bold text-white flex items-center justify-center">
-              <span className="text-blue-400">AI</span>Writer
+              <span className="text-blue-400">DCE</span>Manager
             </h2>
           </Link>
           <p className="mt-2 text-white/60">Créez votre compte</p>
@@ -89,14 +121,28 @@ const SignUp = () => {
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Créer un compte</h1>
           
           <div className="mb-8">
-            <Button variant="outline" className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5">
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
-                <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z" />
-                <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z" />
-                <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z" />
-              </svg>
-              S'inscrire avec Google
+            <Button 
+              variant="outline" 
+              className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5"
+              onClick={signUpWithGoogle}
+              disabled={isGoogleLoading}
+            >
+              {isGoogleLoading ? (
+                <span className="flex items-center">
+                  <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent"></span>
+                  Inscription en cours...
+                </span>
+              ) : (
+                <>
+                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
+                    <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z" />
+                    <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z" />
+                    <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z" />
+                  </svg>
+                  S'inscrire avec Google
+                </>
+              )}
             </Button>
           </div>
           

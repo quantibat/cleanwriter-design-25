@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+
 const formSchema = z.object({
   email: z.string().email({
     message: "Adresse e-mail invalide."
@@ -20,6 +21,7 @@ const formSchema = z.object({
     message: "Le mot de passe doit contenir au moins 6 caractères."
   })
 });
+
 const SignIn = () => {
   const {
     user,
@@ -42,6 +44,8 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDemoLoading, setIsDemoLoading] = useState(false);
   const [isBasicDemoLoading, setIsBasicDemoLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,6 +53,7 @@ const SignIn = () => {
       password: ""
     }
   });
+  
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
@@ -85,6 +90,7 @@ const SignIn = () => {
       setIsLoading(false);
     }
   }
+  
   async function loginWithDemoAccount() {
     setIsDemoLoading(true);
 
@@ -99,6 +105,7 @@ const SignIn = () => {
       setIsDemoLoading(false);
     }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
   }
+  
   async function loginWithBasicDemoAccount() {
     setIsBasicDemoLoading(true);
 
@@ -115,6 +122,34 @@ const SignIn = () => {
       setIsBasicDemoLoading(false);
     }, 800); // Un petit délai pour que l'utilisateur voie les champs remplis
   }
+  
+  async function signInWithGoogle() {
+    setIsGoogleLoading(true);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/dashboard'
+        }
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Pas besoin de toast ici car la redirection va se faire automatiquement
+    } catch (error: any) {
+      console.error("Erreur de connexion Google:", error);
+      toast({
+        title: "Erreur de connexion avec Google",
+        description: error.message || "Une erreur est survenue lors de la connexion avec Google.",
+        variant: "destructive"
+      });
+      setIsGoogleLoading(false);
+    }
+  }
+  
   return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="particles-container fixed inset-0 z-0 pointer-events-none">
         {/* Les particules d'arrière-plan seront ajoutés ici avec du CSS */}
@@ -146,14 +181,28 @@ const SignIn = () => {
           </div>
           
           <div className="mb-8">
-            <Button variant="outline" className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5">
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
-                <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z" />
-                <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z" />
-                <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z" />
-              </svg>
-              Se connecter avec Google
+            <Button 
+              variant="outline" 
+              className="w-full bg-transparent border border-white/10 text-white hover:bg-white/5" 
+              onClick={signInWithGoogle}
+              disabled={isGoogleLoading}
+            >
+              {isGoogleLoading ? (
+                <span className="flex items-center">
+                  <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent"></span>
+                  Connexion en cours...
+                </span>
+              ) : (
+                <>
+                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
+                    <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z" />
+                    <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z" />
+                    <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z" />
+                  </svg>
+                  Se connecter avec Google
+                </>
+              )}
             </Button>
           </div>
           
@@ -217,3 +266,4 @@ const SignIn = () => {
     </div>;
 };
 export default SignIn;
+

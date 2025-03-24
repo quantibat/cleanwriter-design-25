@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -257,10 +256,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     getInitialSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
+      async (event, newSession) => {
         console.log(`Auth event: ${event}`);
         setSession(newSession);
         setUser(newSession?.user ?? null);
+        
+        if (event === 'SIGNED_IN' && newSession?.user?.app_metadata?.provider === 'google') {
+          if (newSession.user.created_at === newSession.user.last_sign_in_at) {
+            console.log("Nouvel utilisateur Google, configuration des métadonnées");
+            
+            const { data, error } = await supabase.auth.updateUser({
+              data: { 
+                premium: false,
+                affiliate: false,
+                full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
+              }
+            });
+            
+            if (error) {
+              console.error("Erreur lors de la mise à jour des métadonnées:", error);
+            }
+          }
+        }
+        
         setIsPremiumUser(!!newSession?.user?.user_metadata?.premium);
         setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
         setIsLoading(false);
