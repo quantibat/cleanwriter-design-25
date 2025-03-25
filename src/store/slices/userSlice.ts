@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -121,6 +120,9 @@ const userSlice = createSlice({
     setPremiumUser: (state, action: PayloadAction<boolean>) => {
       state.isPremiumUser = action.payload;
     },
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -170,5 +172,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, setSession, setPremiumUser } = userSlice.actions;
+export const { setUser, setSession, setPremiumUser, setIsLoading } = userSlice.actions;
 export default userSlice.reducer;
