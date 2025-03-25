@@ -14,6 +14,7 @@ interface BreadcrumbItem {
 interface DashboardLayoutProps {
   children: ReactNode;
   activeTab?: string;
+  onTabChange?: (tab: string) => void; // Add a callback for tab changes
   breadcrumbs?: BreadcrumbItem[];
   toolType?: string;
 }
@@ -21,6 +22,7 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   activeTab,
+  onTabChange,
   breadcrumbs = [],
   toolType = ''
 }) => {
@@ -70,11 +72,23 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     document.documentElement.classList.toggle('dark-theme');
   };
 
+  // Handle tab changes from TopBar
+  const handleTabChange = (newTab: string) => {
+    if (onTabChange) {
+      onTabChange(newTab);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0c101b] w-full">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-hidden w-full">
-          <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab }/>
+          <TopBar 
+            onThemeToggle={toggleTheme} 
+            isDarkMode={isDarkMode} 
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+          />
           <div className="flex-1 w-full p-6 overflow-auto">
             {dynamicBreadcrumbs.length > 0 && (
               <div className="mb-6">

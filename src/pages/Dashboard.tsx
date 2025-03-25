@@ -5,10 +5,12 @@ import ToolsTab from '@/components/dashboard/tabs/ToolsTab';
 import ProjectsTab from '@/components/dashboard/tabs/ProjectsTab';
 import ContributeTab from '@/components/dashboard/tabs/ContributeTab';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('tools');
   const { notifySuccess } = useNotificationsManager();
+  const { isLoading } = useAuth();
   
   // Exemple de notification de bienvenue
   useEffect(() => {
@@ -26,6 +28,12 @@ const Dashboard = () => {
     }
   }, [notifySuccess]);
 
+  // We need to stop any potential rendering loops by ensuring activeTab state is properly managed
+  // The issue may be related to how the active tab is synchronized with the layout
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'tools':
@@ -39,6 +47,15 @@ const Dashboard = () => {
     }
   };
 
+  // If still loading, show a loading indicator
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0c101b] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   const breadcrumbs = [
     { label: activeTab === 'tools' ? 'Outils' : activeTab === 'projects' ? 'Projets' : 'Contribuer' }
   ];
@@ -46,6 +63,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout 
       activeTab={activeTab} 
+      onTabChange={handleTabChange}
       breadcrumbs={breadcrumbs}
     >
       {renderTabContent()}
