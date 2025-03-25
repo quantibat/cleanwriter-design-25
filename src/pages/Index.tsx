@@ -6,15 +6,18 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Container } from "@/components/ui/container";
+
 const Index = () => {
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -63,6 +66,7 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+  
   return <div className="bg-[#06071b] min-h-screen">
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 overflow-hidden px-6">
@@ -125,7 +129,19 @@ const Index = () => {
             </motion.div>
             
             {/* Right Column - App Screenshot */}
-            
+            <motion.div initial={{
+            opacity: 0,
+            x: 30
+          }} animate={{
+            opacity: 1,
+            x: 0
+          }} transition={{
+            duration: 0.8,
+            delay: 0.2
+          }} className="hero-image rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-30"></div>
+              <img src="/lovable-uploads/6efa4977-b5a4-4c98-a242-0067f8ad1b2d.png" alt="Interface DCE Manager" className="w-full rounded-2xl relative z-10 border border-white/10" />
+            </motion.div>
           </div>
         </Container>
       </section>
@@ -343,7 +359,7 @@ const Index = () => {
       
       {/* Using a style tag correctly without the invalid jsx attribute */}
       <style dangerouslySetInnerHTML={{
-      __html: `
+        __html: `
         .animate-on-scroll {
           opacity: 0;
           transform: translateY(20px);
@@ -355,7 +371,7 @@ const Index = () => {
           transform: translateY(0);
         }
         `
-    }} />
+      }} />
     </div>;
 };
 export default Index;
