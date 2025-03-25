@@ -9,6 +9,69 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      projects: {
+        Row: {
+          active_content: Json | null
+          ai_model: string | null
+          card_title: string | null
+          created_at: string | null
+          elements: number | null
+          id: string
+          is_social_media_only: boolean | null
+          option_type: string | null
+          output_language: string | null
+          progress: number | null
+          selected_topics: string[] | null
+          title: string
+          topics: Json | null
+          updated_at: string | null
+          used_credits: number | null
+          user_id: string
+          video_metadata: Json | null
+          youtube_link: string | null
+        }
+        Insert: {
+          active_content?: Json | null
+          ai_model?: string | null
+          card_title?: string | null
+          created_at?: string | null
+          elements?: number | null
+          id?: string
+          is_social_media_only?: boolean | null
+          option_type?: string | null
+          output_language?: string | null
+          progress?: number | null
+          selected_topics?: string[] | null
+          title?: string
+          topics?: Json | null
+          updated_at?: string | null
+          used_credits?: number | null
+          user_id: string
+          video_metadata?: Json | null
+          youtube_link?: string | null
+        }
+        Update: {
+          active_content?: Json | null
+          ai_model?: string | null
+          card_title?: string | null
+          created_at?: string | null
+          elements?: number | null
+          id?: string
+          is_social_media_only?: boolean | null
+          option_type?: string | null
+          output_language?: string | null
+          progress?: number | null
+          selected_topics?: string[] | null
+          title?: string
+          topics?: Json | null
+          updated_at?: string | null
+          used_credits?: number | null
+          user_id?: string
+          video_metadata?: Json | null
+          youtube_link?: string | null
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           avatar_url: string | null

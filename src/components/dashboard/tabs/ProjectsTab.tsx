@@ -1,93 +1,55 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { FolderPlus, Edit, Eye, Trash2, Database, Clock, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-
-// Liste étendue de projets avec données supplémentaires
-const projects = [{
-  id: 1,
-  title: "Youtube to Newsletter - JM Corda",
-  type: "Youtube to Newsletter",
-  elements: 3,
-  description: "Transformation de la vidéo 'DÉMOLITION' de JP Fanguin par Jm Corda en newsletter",
-  date: "15 juin 2023",
-  lastModified: "Aujourd'hui",
-  progress: 75,
-  collaborators: 3,
-  icon: YoutubeIcon,
-  details: "Ce projet transforme du contenu YouTube en newsletter prête à l'emploi avec des sujets variés et une mise en forme professionnelle."
-}, {
-  id: 2,
-  title: "Webinaire Marketing Digital",
-  type: "Youtube to Newsletter",
-  elements: 4,
-  description: "Newsletter basée sur le webinaire de stratégies marketing digital",
-  date: "22 juin 2023",
-  lastModified: "Hier",
-  progress: 30,
-  collaborators: 2,
-  icon: YoutubeIcon,
-  details: "Transformation d'un webinaire sur les stratégies de marketing digital en série de newsletters ciblées pour différents segments d'audience."
-}, {
-  id: 3,
-  title: "Interview CEO - Transcription",
-  type: "Transcription",
-  elements: 1,
-  description: "Transcription de l'interview du CEO pour le blog d'entreprise",
-  date: "10 mai 2023",
-  lastModified: "15 août 2023",
-  progress: 100,
-  collaborators: 1,
-  icon: FileTextIcon,
-  details: "Transcription complète de l'interview du CEO comprenant les points clés sur la vision de l'entreprise pour 2024 et les nouvelles initiatives stratégiques."
-}, {
-  id: 4,
-  title: "Conférence Tech - Points clés",
-  type: "Résumé",
-  elements: 5,
-  description: "Résumé des points clés de la conférence TechInnovate 2023",
-  date: "5 avril 2023",
-  lastModified: "12 septembre 2023",
-  progress: 60,
-  collaborators: 2,
-  icon: FileIcon,
-  details: "Synthèse des innovations présentées lors de la conférence TechInnovate 2023, avec focus sur l'IA, la blockchain et les énergies renouvelables."
-}, {
-  id: 5,
-  title: "Formation Leadership - Newsletter",
-  type: "Youtube to Newsletter",
-  elements: 3,
-  description: "Transformation de la formation leadership en série de newsletters",
-  date: "18 mars 2023",
-  lastModified: "3 octobre 2023",
-  progress: 45,
-  collaborators: 1,
-  icon: YoutubeIcon,
-  details: "Série de newsletters basées sur une formation complète de leadership, découpée en modules thématiques pour faciliter l'apprentissage progressif."
-}];
-
-type Project = typeof projects[0];
+import { getUserProjects } from '@/services/projectsService';
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 const ProjectsTab = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [projectsList, setProjectsList] = useState<Project[]>(projects);
+  const [projectsList, setProjectsList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleOpenView = (project: Project) => {
-    console.log("Navigating to view project:", project.id);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      setIsLoading(true);
+      try {
+        const projects = await getUserProjects();
+        if (projects) {
+          setProjectsList(projects);
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        toast({
+          title: 'Erreur',
+          description: 'Impossible de récupérer vos projets',
+          variant: 'destructive'
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [toast]);
+
+  const handleOpenView = (project: any) => {
     const projectData = {
       id: project.id,
       title: project.title,
-      type: project.type,
-      elements: project.elements,
-      description: project.description,
-      date: project.date,
-      lastModified: project.lastModified,
-      progress: project.progress,
-      collaborators: project.collaborators,
-      details: project.details
+      type: project.option_type || 'Youtube to Newsletter',
+      elements: project.elements || 0,
+      description: project.card_title || '',
+      date: new Date(project.created_at).toLocaleDateString('fr-FR'),
+      lastModified: formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true }),
+      progress: project.progress || 0,
+      collaborators: 1,
+      details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
     };
     
     navigate(`/view-project/${project.id}`, {
@@ -97,19 +59,18 @@ const ProjectsTab = () => {
     });
   };
 
-  const handleOpenEdit = (project: Project) => {
-    console.log("Navigating to edit project:", project.id);
+  const handleOpenEdit = (project: any) => {
     const projectData = {
       id: project.id,
       title: project.title,
-      type: project.type,
-      elements: project.elements,
-      description: project.description,
-      date: project.date,
-      lastModified: project.lastModified,
-      progress: project.progress,
-      collaborators: project.collaborators,
-      details: project.details
+      type: project.option_type || 'Youtube to Newsletter',
+      elements: project.elements || 0,
+      description: project.card_title || '',
+      date: new Date(project.created_at).toLocaleDateString('fr-FR'),
+      lastModified: formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true }),
+      progress: project.progress || 0,
+      collaborators: 1,
+      details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
     };
     
     navigate(`/edit-project/${project.id}`, {
@@ -119,19 +80,18 @@ const ProjectsTab = () => {
     });
   };
 
-  const handleDelete = (project: Project) => {
-    console.log("Navigating to delete project:", project.id);
+  const handleDelete = (project: any) => {
     const projectData = {
       id: project.id,
       title: project.title,
-      type: project.type,
-      elements: project.elements,
-      description: project.description,
-      date: project.date,
-      lastModified: project.lastModified,
-      progress: project.progress,
-      collaborators: project.collaborators,
-      details: project.details
+      type: project.option_type || 'Youtube to Newsletter',
+      elements: project.elements || 0,
+      description: project.card_title || '',
+      date: new Date(project.created_at).toLocaleDateString('fr-FR'),
+      lastModified: formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true }),
+      progress: project.progress || 0,
+      collaborators: 1,
+      details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
     };
     
     navigate(`/delete-project/${project.id}`, {
@@ -142,16 +102,18 @@ const ProjectsTab = () => {
   };
 
   const handleOpenCreate = () => {
-    console.log("Navigating to create project");
     navigate('/create-dce');
   };
 
   const getIconForType = (type: string) => {
     switch(type) {
+      case "newsletter":
       case "Youtube to Newsletter":
         return <YoutubeIcon className="h-3.5 w-3.5 text-red-500" />;
+      case "transcript":
       case "Transcription":
         return <FileTextIcon className="h-3.5 w-3.5 text-blue-500" />;
+      case "summary":
       case "Résumé":
         return <FileIcon className="h-3.5 w-3.5 text-green-500" />;
       default:
@@ -184,63 +146,77 @@ const ProjectsTab = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {projectsList.map(project => (
-              <TableRow key={project.id}>
-                <TableCell className="font-medium">{project.title}</TableCell>
-                <TableCell>
-                  <span className="flex items-center gap-1">
-                    {getIconForType(project.type)}
-                    {project.type}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span className="flex items-center gap-1">
-                    <Database className="h-3.5 w-3.5 text-muted-foreground" />
-                    {project.elements} éléments
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                    {project.lastModified}
-                  </span>
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleOpenView(project)} 
-                      title="Voir le projet" 
-                      className="flex items-center gap-1"
-                    >
-                      <Eye className="h-3.5 w-3.5" />
-                      Voir
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleOpenEdit(project)} 
-                      title="Modifier le projet" 
-                      className="flex items-center gap-1"
-                    >
-                      <Edit className="h-3.5 w-3.5" />
-                      Modifier
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleDelete(project)} 
-                      title="Supprimer le projet" 
-                      className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-100/10"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                      Supprimer
-                    </Button>
-                  </div>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8">
+                  Chargement des projets...
                 </TableCell>
               </TableRow>
-            ))}
+            ) : projectsList.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8">
+                  Aucun projet trouvé. Créez votre premier projet en cliquant sur "Nouveau projet".
+                </TableCell>
+              </TableRow>
+            ) : (
+              projectsList.map(project => (
+                <TableRow key={project.id}>
+                  <TableCell className="font-medium">{project.title}</TableCell>
+                  <TableCell>
+                    <span className="flex items-center gap-1">
+                      {getIconForType(project.option_type)}
+                      {project.option_type || 'Youtube to Newsletter'}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="flex items-center gap-1">
+                      <Database className="h-3.5 w-3.5 text-muted-foreground" />
+                      {project.elements || 0} éléments
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                      {formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true })}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleOpenView(project)} 
+                        title="Voir le projet" 
+                        className="flex items-center gap-1"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        Voir
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleOpenEdit(project)} 
+                        title="Modifier le projet" 
+                        className="flex items-center gap-1"
+                      >
+                        <Edit className="h-3.5 w-3.5" />
+                        Modifier
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleDelete(project)} 
+                        title="Supprimer le projet" 
+                        className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-100/10"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Supprimer
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

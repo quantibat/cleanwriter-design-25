@@ -14,6 +14,7 @@ import DashboardLayout from '@/components/layouts/DashboardLayout';
 import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
+import { getProjectById, updateProject } from '@/services/projectsService';
 
 const MOCK_TOPICS = [
   {
@@ -127,6 +128,7 @@ const EditDCE = () => {
   const location = useLocation();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [generatingTopics, setGeneratingTopics] = useState(false);
   const [generatingContent, setGeneratingContent] = useState(false);
   const [topics, setTopics] = useState<any[]>([]);
@@ -146,34 +148,97 @@ const EditDCE = () => {
   const [videoMetadata, setVideoMetadata] = useState<any>(null);
   const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
   
-  const projectData = location.state?.project || null;
+  const [projectData, setProjectData] = useState<any>(location.state?.project || null);
+  const [dbProject, setDbProject] = useState<any>(null);
   
   useEffect(() => {
-    if (!projectData) {
-      toast({
-        title: "Erreur",
-        description: "Impossible de trouver le dossier demandé",
-        variant: "destructive"
-      });
-      navigate('/dashboard');
-      return;
-    }
+    const fetchProject = async () => {
+      if (id) {
+        try {
+          setIsFetching(true);
+          const project = await getProjectById(id);
+          
+          if (project) {
+            setDbProject(project);
+            
+            // Transform database project to UI format
+            if (!projectData) {
+              setProjectData({
+                id: project.id,
+                title: project.title,
+                type: project.option_type || 'Youtube to Newsletter',
+                elements: project.elements || 0,
+                description: project.card_title || '',
+                progress: project.progress || 0
+              });
+            }
+            
+            // Set form data
+            setTitle(project.title || "Untitled Youtube to Newsletter");
+            setCardTitle(project.card_title || "Ma sélection de cartes");
+            setIsSocialMediaOnly(project.is_social_media_only || false);
+            setUsedCredits(project.used_credits || 0);
+            
+            if (project.youtube_link) {
+              setIsValidYoutubeLink(true);
+              form.setValue('youtubeLink', project.youtube_link);
+            }
+            
+            if (project.option_type) {
+              form.setValue('option', project.option_type);
+            }
+            
+            if (project.output_language) {
+              form.setValue('language', project.output_language);
+            }
+            
+            if (project.ai_model) {
+              form.setValue('aiModel', project.ai_model);
+            }
+            
+            if (project.video_metadata) {
+              setVideoMetadata(project.video_metadata);
+            }
+            
+            if (project.topics && Array.isArray(project.topics) && project.topics.length > 0) {
+              setTopics(project.topics);
+            }
+            
+            if (project.selected_topics && Array.isArray(project.selected_topics)) {
+              setSelectedTopics(project.selected_topics);
+            }
+            
+            if (project.active_content) {
+              setActiveContent(project.active_content);
+            }
+          } else {
+            toast({
+              title: "Erreur",
+              description: "Impossible de trouver le projet demandé",
+              variant: "destructive"
+            });
+            navigate('/projects');
+          }
+        } catch (error) {
+          console.error("Error fetching project:", error);
+          toast({
+            title: "Erreur",
+            description: "Une erreur est survenue lors de la récupération du projet",
+            variant: "destructive"
+          });
+        } finally {
+          setIsFetching(false);
+        }
+      } else {
+        setIsFetching(false);
+      }
+    };
     
-    setTitle(projectData.title || "Untitled Youtube to Newsletter");
-    setCardTitle(projectData.description || "Ma sélection de cartes");
-    
-    if (projectData.elements > 0) {
-      setTopics(MOCK_TOPICS.slice(0, projectData.elements > 3 ? 3 : projectData.elements));
-    }
-    
-    // Set progress based on project progress
-    if (projectData.progress) {
-      setUsedCredits((projectData.progress / 100) * totalCredits);
-    }
-  }, [projectData, navigate, toast]);
+    fetchProject();
+  }, [id, navigate, toast, form, projectData]);
 
   const getInitialFormValues = () => {
-    if (!projectData) return {
+    if (!dbProject) return {
       title: '',
       youtubeLink: '',
       option: '',
@@ -182,11 +247,11 @@ const EditDCE = () => {
     };
 
     return {
-      title: projectData.title || '',
-      youtubeLink: '',
-      option: projectData.type || '',
-      language: 'french',
-      aiModel: 'gpt-4o'
+      title: dbProject.title || '',
+      youtubeLink: dbProject.youtube_link || '',
+      option: dbProject.option_type || '',
+      language: dbProject.output_language || 'french',
+      aiModel: dbProject.ai_model || 'gpt-4o'
     };
   };
   
@@ -201,15 +266,13 @@ const EditDCE = () => {
     const isValid = link.includes('youtube.com/watch') || link.includes('youtu.be/');
     setIsValidYoutubeLink(isValid);
     
-    if (isValid) {
+    if (isValid && !videoMetadata) {
       setVideoMetadata({
         title: '"DÉMOLITION" de JP Fanguin par Jm Corda',
         channel: 'Jm Corda Business',
         views: '0 vues',
         duration: '39:49'
       });
-    } else {
-      setVideoMetadata(null);
     }
   };
 
@@ -260,27 +323,69 @@ const EditDCE = () => {
 
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
+    { label: title, path: `/view-project/${id}` },
+    { label: 'Modifier' }
   ];
 
   const handleSubmit = async (data: FormData) => {
+    if (!id) return;
+    
     setIsLoading(true);
     
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Update project in database
+      const projectUpdate = {
+        title: title,
+        youtubeLink: data.youtubeLink,
+        option: data.option,
+        language: data.language,
+        aiModel: data.aiModel,
+        cardTitle: cardTitle,
+        isSocialMediaOnly: isSocialMediaOnly,
+        topics: topics,
+        selectedTopics: selectedTopics,
+        activeContent: activeContent,
+        videoMetadata: videoMetadata,
+        usedCredits: usedCredits,
+        progress: topics.length > 0 ? (selectedTopics.length > 0 ? 75 : 40) : 10,
+        elements: selectedTopics.length || topics.length
+      };
+      
+      const updatedProject = await updateProject(id, projectUpdate);
+      
+      if (updatedProject) {
+        setTimeout(() => {
+          setIsLoading(false);
+          toast({
+            title: "Modifications enregistrées",
+            description: "Votre projet a été mis à jour avec succès.",
+          });
+          navigate('/projects');
+        }, 1000);
+      }
+    } catch (error) {
+      console.error("Error saving project:", error);
       toast({
-        title: "Modifications enregistrées",
-        description: "Votre projet a été mis à jour avec succès.",
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'enregistrement du projet",
+        variant: "destructive"
       });
-      navigate('/projects');
-    }, 1500);
+      setIsLoading(false);
+    }
   };
 
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
 
-  if (!projectData) {
-    return null;
+  if (isFetching) {
+    return (
+      <DashboardLayout breadcrumbs={breadcrumbs} activeTab="projects">
+        <div className="min-h-screen bg-[#0c101b] flex items-center justify-center">
+          <p className="text-white">Chargement du projet...</p>
+        </div>
+      </DashboardLayout>
+    );
   }
 
   return (
@@ -520,9 +625,9 @@ const EditDCE = () => {
                       onClick={() => {
                         handleSubmit(form.getValues());
                       }}
-                      disabled={selectedTopics.length === 0}
+                      disabled={isLoading}
                     >
-                      Enregistrer les modifications
+                      {isLoading ? 'Enregistrement...' : 'Enregistrer les modifications'}
                     </Button>
                   </div>
                 )}

@@ -11,18 +11,64 @@ import { Slider } from "@/components/ui/slider";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
+import { getProjectById, updateProject } from '@/services/projectsService';
 
 const EditProject = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   
   // Get project from location state or fetch it based on ID
-  const project = location.state?.project || null;
+  const [project, setProject] = useState<any>(location.state?.project || null);
   
+  useEffect(() => {
+    const fetchProject = async () => {
+      if (!location.state?.project && id) {
+        try {
+          setIsLoading(true);
+          const fetchedProject = await getProjectById(id);
+          
+          if (fetchedProject) {
+            // Transform database project to UI format
+            setProject({
+              id: fetchedProject.id,
+              title: fetchedProject.title,
+              type: fetchedProject.option_type || 'Youtube to Newsletter',
+              description: fetchedProject.card_title || '',
+              details: `Projet basé sur la vidéo YouTube: ${fetchedProject.youtube_link || 'Non spécifié'}`,
+              progress: fetchedProject.progress || 0,
+              collaborators: 1,
+              elements: fetchedProject.elements || 0
+            });
+          } else {
+            toast({
+              title: "Erreur",
+              description: "Projet introuvable",
+              variant: "destructive"
+            });
+            navigate('/projects');
+          }
+        } catch (error) {
+          console.error("Error fetching project:", error);
+          toast({
+            title: "Erreur",
+            description: "Impossible de récupérer les détails du projet",
+            variant: "destructive"
+          });
+          navigate('/projects');
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    fetchProject();
+  }, [id, location.state, navigate, toast]);
+
   // If project not found, handle it
-  if (!project) {
+  if (!project && !isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center w-full">
         <div className="text-center">
@@ -36,40 +82,73 @@ const EditProject = () => {
     );
   }
 
-  const [progress, setProgress] = useState(project.progress || 0);
+  const [progress, setProgress] = useState(project?.progress || 0);
   
   const form = useForm({
     defaultValues: {
-      title: project.title || '',
-      type: project.type || 'Youtube to Newsletter',
-      description: project.description || '',
-      details: project.details || '',
-      collaborators: project.collaborators?.toString() || '1',
+      title: project?.title || '',
+      type: project?.type || 'Youtube to Newsletter',
+      description: project?.description || '',
+      details: project?.details || '',
+      collaborators: project?.collaborators?.toString() || '1',
     }
   });
 
-  const onSubmit = (data) => {
-    // In a real app, you would save the data to your backend
-    // Here we'll just show a success message and navigate back
-    const updatedProject = {
-      ...project,
-      ...data,
-      progress,
-    };
+  const onSubmit = async (data: any) => {
+    if (!id) return;
     
-    toast({
-      title: "Projet mis à jour",
-      description: "Les modifications ont été enregistrées avec succès."
-    });
-    
-    navigate('/view-project/' + id, { state: { project: updatedProject } });
+    setIsLoading(true);
+    try {
+      // Update database project
+      const updated = await updateProject(id, {
+        title: data.title,
+        option: data.type,
+        cardTitle: data.description,
+        progress
+      });
+      
+      if (updated) {
+        // Transform updated project to UI format for state navigation
+        const updatedProject = {
+          ...project,
+          ...data,
+          progress,
+        };
+        
+        toast({
+          title: "Projet mis à jour",
+          description: "Les modifications ont été enregistrées avec succès."
+        });
+        
+        navigate('/view-project/' + id, { state: { project: updatedProject } });
+      }
+    } catch (error) {
+      console.error("Error updating project:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de mettre à jour le projet",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
-    { label: project.title, path: `/view-project/${id}` },
+    { label: project?.title, path: `/view-project/${id}` },
     { label: 'Modifier' }
   ];
+
+  if (isLoading && !project) {
+    return (
+      <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
+        <div className="w-full max-w-4xl mx-auto flex items-center justify-center min-h-[60vh]">
+          <p>Chargement du projet...</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
@@ -189,12 +268,13 @@ const EditProject = () => {
                 type="button" 
                 variant="outline"
                 onClick={() => navigate(`/view-project/${id}`, { state: { project } })}
+                disabled={isLoading}
               >
                 Annuler
               </Button>
-              <Button type="submit">
+              <Button type="submit" disabled={isLoading}>
                 <Save className="h-4 w-4 mr-2" />
-                Enregistrer les modifications
+                {isLoading ? 'Enregistrement...' : 'Enregistrer les modifications'}
               </Button>
             </div>
           </form>
