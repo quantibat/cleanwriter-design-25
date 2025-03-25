@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -104,10 +103,30 @@ const Index = () => {
               <form onSubmit={handleSubmit} className="mb-8 max-w-md mx-auto lg:mx-0">
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="flex-1">
-                    
-                    {!isEmailValid}
+                    <Input
+                      type="email"
+                      placeholder="Votre adresse email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setIsEmailValid(true);
+                      }}
+                      className={`h-12 border-white/10 bg-white/5 ${!isEmailValid ? 'border-red-500' : ''}`}
+                    />
+                    {!isEmailValid && (
+                      <p className="text-red-500 text-sm mt-1 text-left">
+                        Adresse email invalide
+                      </p>
+                    )}
                   </div>
-                  
+                  <Button 
+                    type="submit" 
+                    className="h-12 px-6 bg-blue-600 hover:bg-blue-700"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Inscription...' : 'Essayer gratuitement'}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
                 </div>
               </form>
               
@@ -129,7 +148,28 @@ const Index = () => {
             </motion.div>
             
             {/* Right Column - App Screenshot */}
-            
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 30
+              }}
+              animate={{
+                opacity: 1,
+                y: 0
+              }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8
+              }}
+              className="hero-image relative hidden lg:block"
+            >
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-50"></div>
+              <img
+                src="/lovable-uploads/6efa4977-b5a4-4c98-a242-0067f8ad1b2d.png"
+                alt="Interface de DCE Manager"
+                className="w-full h-auto relative z-10 rounded-2xl border border-white/10 shadow-xl"
+              />
+            </motion.div>
           </div>
         </Container>
       </section>
