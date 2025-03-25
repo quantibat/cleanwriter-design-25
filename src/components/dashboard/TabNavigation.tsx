@@ -21,10 +21,10 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab = 'tools', onTa
       className="w-full" 
       onValueChange={handleValueChange}
     >
-      <TabsList className="bg-[#0d1320]/80 p-1">
+      <TabsList className="bg-[#0d1320]/80 p-1 w-full md:w-auto">
         <TabsTrigger 
           value="tools" 
-          className="flex items-center data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300"
+          className="flex items-center justify-center flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300"
         >
           <Wrench size={16} className="mr-2" />
           <span className="hidden sm:inline-block">Outils</span>
@@ -32,7 +32,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab = 'tools', onTa
         
         <TabsTrigger 
           value="projects" 
-          className="flex items-center data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300"
+          className="flex items-center justify-center flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300"
         >
           <FolderKanban size={16} className="mr-2" />
           <span className="hidden sm:inline-block">Projets</span>
@@ -40,7 +40,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab = 'tools', onTa
         
         <TabsTrigger 
           value="contribute" 
-          className="flex items-center data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300"
+          className="flex items-center justify-center flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300"
         >
           <Lightbulb size={16} className="mr-2" />
           <span className="hidden sm:inline-block">Contribuer</span>

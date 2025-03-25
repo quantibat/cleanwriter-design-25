@@ -40,7 +40,7 @@ const TopBar: React.FC<TopBarProps> = ({ onThemeToggle, isDarkMode, activeTab, o
     : 'DC';
   
   return (
-    <header className="flex flex-wrap items-center justify-between bg-[#151f30] px-4 py-3 shadow-md">
+    <header className="flex flex-wrap items-center justify-between bg-[#151f30] px-4 py-3 shadow-md w-full">
       <div className="flex items-center space-x-2">
         <h1 className="text-xl font-semibold text-white">
           <span className="text-blue-400">DCE</span>Manager

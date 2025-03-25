@@ -28,8 +28,6 @@ const Dashboard = () => {
     }
   }, [notifySuccess]);
 
-  // We need to stop any potential rendering loops by ensuring activeTab state is properly managed
-  // The issue may be related to how the active tab is synchronized with the layout
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
   };
@@ -37,13 +35,13 @@ const Dashboard = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'tools':
-        return <div className="w-full"><ToolsTab /></div>;
+        return <ToolsTab />;
       case 'projects':
-        return <div className="w-full"><ProjectsTab /></div>;
+        return <ProjectsTab />;
       case 'contribute':
-        return <div className="w-full"><ContributeTab /></div>;
+        return <ContributeTab />;
       default:
-        return <div className="w-full"><ToolsTab /></div>;
+        return <ToolsTab />;
     }
   };
 
@@ -66,7 +64,9 @@ const Dashboard = () => {
       onTabChange={handleTabChange}
       breadcrumbs={breadcrumbs}
     >
-      {renderTabContent()}
+      <div className="w-full">
+        {renderTabContent()}
+      </div>
     </DashboardLayout>
   );
 };
