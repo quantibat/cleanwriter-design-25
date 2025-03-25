@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tool, FolderKanban, Lightbulb } from 'lucide-react';
+import { Wrench, FolderKanban, Lightbulb } from 'lucide-react';
 
 interface TabNavigationProps {
   activeTab?: string;
@@ -26,7 +26,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab = 'tools', onTa
           value="tools" 
           className="flex items-center data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-300"
         >
-          <Tool size={16} className="mr-2" />
+          <Wrench size={16} className="mr-2" />
           <span className="hidden sm:inline-block">Outils</span>
         </TabsTrigger>
         

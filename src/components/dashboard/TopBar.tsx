@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from '@/contexts/AuthContext';
 import NotificationBell from './NotificationBell';
 import TabNavigation from './TabNavigation';
+import { supabase } from '@/integrations/supabase/client';
 
 interface TopBarProps {
   onThemeToggle: () => void;
