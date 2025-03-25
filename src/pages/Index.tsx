@@ -1,26 +1,20 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users, TrendingUp, Activity, Gauge, LineChart, PercentCircle, Award } from "lucide-react";
+import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Container } from "@/components/ui/container";
-import Hero from "@/components/Hero";
-
 const Index = () => {
-  console.log("Index component mounting");
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -44,8 +38,8 @@ const Index = () => {
     }, 1000);
   };
 
+  // Parallax effect for hero section
   useEffect(() => {
-    console.log("Index component mounted");
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
@@ -69,9 +63,7 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  return (
-    <div className="bg-[#06071b] min-h-screen">
+  return <div className="bg-[#06071b] min-h-screen">
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 overflow-hidden px-6">
         {/* Background elements */}
@@ -108,30 +100,10 @@ const Index = () => {
               <form onSubmit={handleSubmit} className="mb-8 max-w-md mx-auto lg:mx-0">
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="flex-1">
-                    <Input
-                      type="email"
-                      placeholder="Entrez votre email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setIsEmailValid(true);
-                      }}
-                      className={`h-12 ${!isEmailValid ? 'border-red-500' : ''}`}
-                    />
-                    {!isEmailValid && (
-                      <p className="text-red-500 text-sm mt-1 text-left">
-                        Veuillez entrer un email valide
-                      </p>
-                    )}
+                    
+                    {!isEmailValid}
                   </div>
-                  <Button 
-                    type="submit"
-                    className="h-12 px-6 bg-blue-600 hover:bg-blue-700"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Inscription...' : 'Essai gratuit'}
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
+                  
                 </div>
               </form>
               
@@ -153,19 +125,7 @@ const Index = () => {
             </motion.div>
             
             {/* Right Column - App Screenshot */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="hidden lg:block relative hero-image"
-            >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-30"></div>
-              <img
-                src="/lovable-uploads/6efa4977-b5a4-4c98-a242-0067f8ad1b2d.png"
-                alt="DCE Manager Dashboard"
-                className="relative rounded-xl shadow-2xl border border-white/10 w-full h-auto z-10"
-              />
-            </motion.div>
+            
           </div>
         </Container>
       </section>
@@ -192,31 +152,10 @@ const Index = () => {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
-            <div className="flex flex-col items-center p-4 hover:scale-125 transition-transform duration-300">
-              <TrendingUp className="h-12 w-12 text-blue-400 mb-2 glow-blue" />
-              <span className="text-white font-medium text-sm text-center">+30% de productivité</span>
-            </div>
-            <div className="flex flex-col items-center p-4 hover:scale-125 transition-transform duration-300">
-              <Activity className="h-12 w-12 text-blue-400 mb-2 glow-blue" />
-              <span className="text-white font-medium text-sm text-center">Performance accrue</span>
-            </div>
-            <div className="flex flex-col items-center p-4 hover:scale-125 transition-transform duration-300">
-              <Gauge className="h-12 w-12 text-blue-400 mb-2 glow-blue" />
-              <span className="text-white font-medium text-sm text-center">Optimisation du temps</span>
-            </div>
-            <div className="flex flex-col items-center p-4 hover:scale-125 transition-transform duration-300">
-              <LineChart className="h-12 w-12 text-blue-400 mb-2 glow-blue" />
-              <span className="text-white font-medium text-sm text-center">Croissance des résultats</span>
-            </div>
-            <div className="flex flex-col items-center p-4 hover:scale-125 transition-transform duration-300">
-              <PercentCircle className="h-12 w-12 text-blue-400 mb-2 glow-blue" />
-              <span className="text-white font-medium text-sm text-center">95% de satisfaction</span>
-            </div>
-            <div className="flex flex-col items-center p-4 hover:scale-125 transition-transform duration-300">
-              <Award className="h-12 w-12 text-blue-400 mb-2 glow-blue" />
-              <span className="text-white font-medium text-sm text-center">Qualité certifiée</span>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center">
+            {[...Array(6)].map((_, i) => <div key={i} className="h-12 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+                <div className="h-full w-32 bg-white/10 rounded-md animate-pulse"></div>
+              </div>)}
           </div>
         </Container>
       </section>
@@ -241,32 +180,34 @@ const Index = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Tout ce dont vous avez besoin pour vos DCE
             </h2>
-            <p className="text-blue-100/70 max-w-3xl mx-auto text-lg">Une suite complète d'outils pour créer, gérer et optimiser vos dossiers de consultation des entreprises</p>
+            <p className="text-blue-100/70 max-w-3xl mx-auto text-lg">
+              Une suite complète d'outils pour créer, gérer et optimiser vos dossiers de consultation des entreprises
+            </p>
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[{
-            icon: <FileText className="h-8 w-8 text-blue-400 glow-blue" />,
+            icon: <FileText className="h-8 w-8 text-blue-400" />,
             title: "Génération automatisée",
             description: "Créez des documents standardisés et personnalisables en quelques clics, en respectant la réglementation en vigueur."
           }, {
-            icon: <Users className="h-8 w-8 text-blue-400 glow-blue" />,
+            icon: <Users className="h-8 w-8 text-blue-400" />,
             title: "Collaboration simplifiée",
             description: "Partagez facilement vos DCE avec votre équipe et vos partenaires, avec un contrôle précis des accès."
           }, {
-            icon: <BarChart3 className="h-8 w-8 text-blue-400 glow-blue" />,
+            icon: <BarChart3 className="h-8 w-8 text-blue-400" />,
             title: "Analyses et suivi",
             description: "Suivez l'avancement de vos projets et générez des rapports détaillés pour prendre les meilleures décisions."
           }, {
-            icon: <Shield className="h-8 w-8 text-blue-400 glow-blue" />,
+            icon: <Shield className="h-8 w-8 text-blue-400" />,
             title: "Sécurité renforcée",
             description: "Protégez vos données sensibles avec un chiffrement de bout en bout et des sauvegardes automatiques."
           }, {
-            icon: <CheckCircle className="h-8 w-8 text-blue-400 glow-blue" />,
+            icon: <CheckCircle className="h-8 w-8 text-blue-400" />,
             title: "Conformité garantie",
             description: "Assurez-vous que vos DCE respectent toutes les exigences légales et réglementaires actuelles."
           }, {
-            icon: <ArrowRight className="h-8 w-8 text-blue-400 glow-blue" />,
+            icon: <ArrowRight className="h-8 w-8 text-blue-400" />,
             title: "Export multi-format",
             description: "Exportez vos documents dans différents formats (PDF, Word, Excel) pour faciliter le partage et l'archivage."
           }].map((feature, index) => <motion.div key={index} initial={{
@@ -413,14 +354,8 @@ const Index = () => {
           opacity: 1;
           transform: translateY(0);
         }
-
-        .glow-blue {
-          filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.7));
-        }
         `
     }} />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
