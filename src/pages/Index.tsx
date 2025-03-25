@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -157,27 +158,45 @@ const Index = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
             <div className="flex flex-col items-center p-4">
-              <TrendingUp className="h-12 w-12 text-blue-400 mb-2" />
+              <div className="icon-container relative mb-2">
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
+                <TrendingUp className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
+              </div>
               <span className="text-white font-medium text-sm text-center">+30% de productivité</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <Activity className="h-12 w-12 text-green-400 mb-2" />
+              <div className="icon-container relative mb-2">
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
+                <Activity className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
+              </div>
               <span className="text-white font-medium text-sm text-center">Performance accrue</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <Gauge className="h-12 w-12 text-purple-400 mb-2" />
+              <div className="icon-container relative mb-2">
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
+                <Gauge className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
+              </div>
               <span className="text-white font-medium text-sm text-center">Optimisation du temps</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <LineChart className="h-12 w-12 text-yellow-400 mb-2" />
+              <div className="icon-container relative mb-2">
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
+                <LineChart className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
+              </div>
               <span className="text-white font-medium text-sm text-center">Croissance des résultats</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <PercentCircle className="h-12 w-12 text-red-400 mb-2" />
+              <div className="icon-container relative mb-2">
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
+                <PercentCircle className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
+              </div>
               <span className="text-white font-medium text-sm text-center">95% de satisfaction</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <Award className="h-12 w-12 text-orange-400 mb-2" />
+              <div className="icon-container relative mb-2">
+                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
+                <Award className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
+              </div>
               <span className="text-white font-medium text-sm text-center">Qualité certifiée</span>
             </div>
           </div>
@@ -375,6 +394,11 @@ const Index = () => {
         .animate-fadeIn {
           opacity: 1;
           transform: translateY(0);
+        }
+
+        .icon-container:hover .blur-[8px] {
+          background-color: rgba(59, 130, 246, 0.5);
+          filter: blur(12px);
         }
         `
     }} />
