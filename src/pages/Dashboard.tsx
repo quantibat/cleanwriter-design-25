@@ -31,10 +31,8 @@ const Dashboard = () => {
       case 'tools':
         return <div className="w-full"><ToolsTab /></div>;
       case 'projects':
-        setActiveTab('projects')
         return <div className="w-full"><ProjectsTab /></div>;
       case 'contribute':
-        setActiveTab('contribute')
         return <div className="w-full"><ContributeTab /></div>;
       default:
         return <div className="w-full"><ToolsTab /></div>;
