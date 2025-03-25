@@ -8,6 +8,8 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import UserDropdownMenu from './UserDropdownMenu';
+
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
@@ -142,47 +144,8 @@ const TopBar = ({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Avatar + Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative rounded-full h-8 w-8 p-0">
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" alt={userData.firstName} />
-                  <AvatarFallback>{userData.firstName.charAt(0)}{userData.lastName.charAt(0)}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{userData.firstName} {userData.lastName}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{userData.email}</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <Link to="/account">Mon compte</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard className="mr-2 h-4 w-4" />
-                <Link to="/billing">Facturation</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <Link to="/settings">Paramètres</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <HelpCircle className="mr-2 h-4 w-4" />
-                <Link to="/help">Aide</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut}>
-                <LogOut className="mr-2 h-4 w-4" />
-                Déconnexion
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* User Dropdown Menu */}
+          <UserDropdownMenu onSignOut={handleSignOut} />
         </div>
       </div>
 
