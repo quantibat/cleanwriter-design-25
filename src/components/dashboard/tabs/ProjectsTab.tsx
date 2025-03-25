@@ -1,109 +1,31 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { FolderPlus, Edit, Eye, Trash2, Database, Clock, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useToast } from "@/hooks/use-toast";
-import { getUserProjects } from '@/services/projectsService';
-import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { useProjects } from '@/hooks/useProjects';
 
 const ProjectsTab = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
   const [projectsList, setProjectsList] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { 
+    isLoading, 
+    getUserProjects, 
+    viewProject, 
+    editProject, 
+    deleteProjectNavigate, 
+    goToCreateProject 
+  } = useProjects();
 
   useEffect(() => {
     const fetchProjects = async () => {
-      setIsLoading(true);
-      try {
-        const projects = await getUserProjects();
-        if (projects) {
-          setProjectsList(projects);
-        }
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-        toast({
-          title: 'Erreur',
-          description: 'Impossible de récupérer vos projets',
-          variant: 'destructive'
-        });
-      } finally {
-        setIsLoading(false);
+      const projects = await getUserProjects();
+      if (projects) {
+        setProjectsList(projects);
       }
     };
 
     fetchProjects();
-  }, [toast]);
-
-  const handleOpenView = (project: any) => {
-    const projectData = {
-      id: project.id,
-      title: project.title,
-      type: project.option_type || 'Youtube to Newsletter',
-      elements: project.elements || 0,
-      description: project.card_title || '',
-      date: new Date(project.created_at).toLocaleDateString('fr-FR'),
-      lastModified: formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true }),
-      progress: project.progress || 0,
-      collaborators: 1,
-      details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
-    };
-    
-    navigate(`/view-project/${project.id}`, {
-      state: {
-        project: projectData
-      }
-    });
-  };
-
-  const handleOpenEdit = (project: any) => {
-    const projectData = {
-      id: project.id,
-      title: project.title,
-      type: project.option_type || 'Youtube to Newsletter',
-      elements: project.elements || 0,
-      description: project.card_title || '',
-      date: new Date(project.created_at).toLocaleDateString('fr-FR'),
-      lastModified: formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true }),
-      progress: project.progress || 0,
-      collaborators: 1,
-      details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
-    };
-    
-    navigate(`/edit-project/${project.id}`, {
-      state: {
-        project: projectData
-      }
-    });
-  };
-
-  const handleDelete = (project: any) => {
-    const projectData = {
-      id: project.id,
-      title: project.title,
-      type: project.option_type || 'Youtube to Newsletter',
-      elements: project.elements || 0,
-      description: project.card_title || '',
-      date: new Date(project.created_at).toLocaleDateString('fr-FR'),
-      lastModified: formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true }),
-      progress: project.progress || 0,
-      collaborators: 1,
-      details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
-    };
-    
-    navigate(`/delete-project/${project.id}`, {
-      state: {
-        project: projectData
-      }
-    });
-  };
-
-  const handleOpenCreate = () => {
-    navigate('/create-dce');
-  };
+  }, [getUserProjects]);
 
   const getIconForType = (type: string) => {
     switch(type) {
@@ -128,7 +50,7 @@ const ProjectsTab = () => {
           <h2 className="text-2xl font-bold">Tous vos projets</h2>
           <p className="text-muted-foreground py-[10px]">Liste complète des projets et contenus associés à votre compte</p>
         </div>
-        <Button onClick={handleOpenCreate}>
+        <Button onClick={goToCreateProject}>
           <FolderPlus className="h-4 w-4 mr-2" />
           Nouveau projet
         </Button>
@@ -177,7 +99,7 @@ const ProjectsTab = () => {
                   <TableCell>
                     <span className="flex items-center gap-1">
                       <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                      {formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true })}
+                      {new Date(project.updated_at).toLocaleDateString('fr-FR')}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
@@ -185,7 +107,7 @@ const ProjectsTab = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        onClick={() => handleOpenView(project)} 
+                        onClick={() => viewProject(project)} 
                         title="Voir le projet" 
                         className="flex items-center gap-1"
                       >
@@ -195,7 +117,7 @@ const ProjectsTab = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        onClick={() => handleOpenEdit(project)} 
+                        onClick={() => editProject(project)} 
                         title="Modifier le projet" 
                         className="flex items-center gap-1"
                       >
@@ -205,7 +127,7 @@ const ProjectsTab = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        onClick={() => handleDelete(project)} 
+                        onClick={() => deleteProjectNavigate(project)} 
                         title="Supprimer le projet" 
                         className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-100/10"
                       >

@@ -1,8 +1,4 @@
 
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
-import { User } from '@supabase/supabase-js';
-import { Json } from '@/integrations/supabase/types';
 import { store } from '@/store';
 import { 
   fetchProjects as fetchProjectsAction,
@@ -29,7 +25,7 @@ export interface ProjectFormData {
   elements?: number;
 }
 
-// Ces méthodes sont des wrappers autour des actions Redux pour simplifier la migration
+// Ces méthodes sont des wrappers autour des actions Redux pour simplifier l'usage
 export const createProject = async (data: ProjectFormData) => {
   return store.dispatch(createProjectAction(data)).unwrap();
 };

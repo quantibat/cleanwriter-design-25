@@ -74,25 +74,28 @@ export const createProject = createAsyncThunk(
         throw new Error('Utilisateur non authentifié');
       }
       
+      // Préparer les données en utilisant les clés de la table dans la base de données
+      const projectData = {
+        user_id: user.id,
+        title: data.title || 'Untitled Youtube to Newsletter',
+        youtube_link: data.youtubeLink,
+        option_type: data.option,
+        output_language: data.language || 'french',
+        ai_model: data.aiModel || 'gpt-4o',
+        card_title: data.cardTitle || 'Ma sélection de cartes',
+        is_social_media_only: data.isSocialMediaOnly || false,
+        topics: data.topics || [],
+        selected_topics: data.selectedTopics || [],
+        active_content: data.activeContent || null,
+        video_metadata: data.videoMetadata || null,
+        used_credits: data.usedCredits || 0,
+        progress: data.progress || 0,
+        elements: data.elements || 0
+      };
+
       const { data: project, error } = await supabase
         .from('projects')
-        .insert({
-          user_id: user.id,
-          title: data.title || 'Untitled Youtube to Newsletter',
-          youtube_link: data.youtubeLink,
-          option_type: data.option,
-          output_language: data.language || 'french',
-          ai_model: data.aiModel || 'gpt-4o',
-          card_title: data.cardTitle || 'Ma sélection de cartes',
-          is_social_media_only: data.isSocialMediaOnly || false,
-          topics: data.topics || [],
-          selected_topics: data.selectedTopics || [],
-          active_content: data.activeContent || null,
-          video_metadata: data.videoMetadata || null,
-          used_credits: data.usedCredits || 0,
-          progress: data.progress || 0,
-          elements: data.elements || 0
-        })
+        .insert(projectData)
         .select()
         .single();
 
@@ -119,7 +122,8 @@ export const updateProject = createAsyncThunk(
   'projects/updateProject',
   async ({ id, data }: { id: string, data: Partial<ProjectFormData> }, { rejectWithValue }) => {
     try {
-      const updateData: any = {};
+      // Mapper les noms de propriétés pour correspondre à la structure de la base de données
+      const updateData: Record<string, any> = {};
       
       if (data.title !== undefined) updateData.title = data.title;
       if (data.youtubeLink !== undefined) updateData.youtube_link = data.youtubeLink;
@@ -135,8 +139,6 @@ export const updateProject = createAsyncThunk(
       if (data.usedCredits !== undefined) updateData.used_credits = data.usedCredits;
       if (data.progress !== undefined) updateData.progress = data.progress;
       if (data.elements !== undefined) updateData.elements = data.elements;
-      
-      // No need to manually set updated_at, our trigger will handle it
       
       const { data: project, error } = await supabase
         .from('projects')

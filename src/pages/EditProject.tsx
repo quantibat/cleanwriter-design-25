@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Save } from 'lucide-react';
@@ -10,17 +9,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useForm } from "react-hook-form";
-import { useToast } from "@/hooks/use-toast";
-import { getProjectById, updateProject } from '@/services/projectsService';
+import { useProjects } from '@/hooks/useProjects';
 
 const EditProject = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
   
-  // Get project from location state or fetch it based on ID
+  const { 
+    isLoading: isProjectLoading, 
+    getProjectById, 
+    updateExistingProject,
+    transformDbProjectToUiModel
+  } = useProjects();
+  
+  const [isLoading, setIsLoading] = useState(false);
   const [project, setProject] = useState<any>(location.state?.project || null);
   
   useEffect(() => {
@@ -31,32 +34,12 @@ const EditProject = () => {
           const fetchedProject = await getProjectById(id);
           
           if (fetchedProject) {
-            // Transform database project to UI format
-            setProject({
-              id: fetchedProject.id,
-              title: fetchedProject.title,
-              type: fetchedProject.option_type || 'Youtube to Newsletter',
-              description: fetchedProject.card_title || '',
-              details: `Projet basé sur la vidéo YouTube: ${fetchedProject.youtube_link || 'Non spécifié'}`,
-              progress: fetchedProject.progress || 0,
-              collaborators: 1,
-              elements: fetchedProject.elements || 0
-            });
+            setProject(transformDbProjectToUiModel(fetchedProject));
           } else {
-            toast({
-              title: "Erreur",
-              description: "Projet introuvable",
-              variant: "destructive"
-            });
             navigate('/projects');
           }
         } catch (error) {
           console.error("Error fetching project:", error);
-          toast({
-            title: "Erreur",
-            description: "Impossible de récupérer les détails du projet",
-            variant: "destructive"
-          });
           navigate('/projects');
         } finally {
           setIsLoading(false);
@@ -65,10 +48,9 @@ const EditProject = () => {
     };
     
     fetchProject();
-  }, [id, location.state, navigate, toast]);
+  }, [id, location.state, navigate, getProjectById, transformDbProjectToUiModel]);
 
-  // If project not found, handle it
-  if (!project && !isLoading) {
+  if (!project && !isLoading && !isProjectLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center w-full">
         <div className="text-center">
@@ -100,7 +82,7 @@ const EditProject = () => {
     setIsLoading(true);
     try {
       // Update database project
-      const updated = await updateProject(id, {
+      const updated = await updateExistingProject(id, {
         title: data.title,
         option: data.type,
         cardTitle: data.description,
@@ -115,20 +97,10 @@ const EditProject = () => {
           progress,
         };
         
-        toast({
-          title: "Projet mis à jour",
-          description: "Les modifications ont été enregistrées avec succès."
-        });
-        
         navigate('/view-project/' + id, { state: { project: updatedProject } });
       }
     } catch (error) {
       console.error("Error updating project:", error);
-      toast({
-        title: "Erreur",
-        description: "Impossible de mettre à jour le projet",
-        variant: "destructive"
-      });
     } finally {
       setIsLoading(false);
     }
@@ -140,7 +112,7 @@ const EditProject = () => {
     { label: 'Modifier' }
   ];
 
-  if (isLoading && !project) {
+  if ((isLoading || isProjectLoading) && !project) {
     return (
       <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
         <div className="w-full max-w-4xl mx-auto flex items-center justify-center min-h-[60vh]">

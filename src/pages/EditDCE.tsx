@@ -13,7 +13,8 @@ import DashboardLayout from '@/components/layouts/DashboardLayout';
 import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
-import { getProjectById, updateProject } from '@/services/projectsService';
+import { useProjects } from '@/hooks/useProjects';
+import { useActiveContent, ActiveContent } from '@/hooks/useActiveContent';
 
 const MOCK_TOPICS = [
   {
@@ -132,9 +133,10 @@ const EditDCE = () => {
   const [generatingContent, setGeneratingContent] = useState(false);
   const [topics, setTopics] = useState<any[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [activeContent, setActiveContent] = useState<{ subject: string; body: string } | null>(null);
+  const { activeContent, setActiveContent } = useActiveContent(null);
   const { toast } = useToast();
   const { notifySuccess } = useNotificationsManager();
+  const { getProjectById, updateExistingProject } = useProjects();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
   const [title, setTitle] = useState("Untitled Youtube to Newsletter");
   const [cardTitle, setCardTitle] = useState("Ma sélection de cartes");
@@ -253,7 +255,7 @@ const EditDCE = () => {
     };
     
     fetchProject();
-  }, [id, navigate, toast, form, projectData]);
+  }, [id, navigate, toast, form, projectData, getProjectById, setActiveContent]);
 
   const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const link = e.target.value;
@@ -354,7 +356,7 @@ const EditDCE = () => {
         elements: selectedTopics.length || topics.length
       };
       
-      const updatedProject = await updateProject(id, projectUpdate);
+      const updatedProject = await updateExistingProject(id, projectUpdate);
       
       if (updatedProject) {
         setTimeout(() => {
@@ -666,4 +668,3 @@ const EditDCE = () => {
 };
 
 export default EditDCE;
-
