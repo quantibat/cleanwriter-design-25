@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setUser, setSession, setPremiumUser, signOut as signOutAction, setIsLoading } from '@/store/slices/userSlice';
+import { setUser, setSession, setPremiumUser, signOut as signOutAction, setIsLoading, registerAsAffiliate as registerAsAffiliateAction } from '@/store/slices/userSlice';
 import { toast } from '@/hooks/use-toast';
 
 type AuthContextType = {
@@ -11,13 +11,16 @@ type AuthContextType = {
   isLoading: boolean;
   signOut: () => Promise<void>;
   isPremiumUser: boolean;
+  isAffiliate: boolean;
+  registerAsAffiliate: (formData: any) => Promise<void>;
+  quickAffiliateSignup: () => Promise<boolean>;
 };
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const dispatch = useAppDispatch();
-  const { user, session, isLoading, isPremiumUser } = useAppSelector((state) => state.user);
+  const { user, session, isLoading, isPremiumUser, isAffiliate } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     const getInitialSession = async () => {
@@ -152,8 +155,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Implement registerAsAffiliate function
+  const registerAsAffiliate = async (formData: any) => {
+    try {
+      await dispatch(registerAsAffiliateAction()).unwrap();
+    } catch (error: any) {
+      throw new Error(error.message || "Une erreur est survenue lors de l'inscription");
+    }
+  };
+
+  // Implement quickAffiliateSignup function
+  const quickAffiliateSignup = async (): Promise<boolean> => {
+    try {
+      await dispatch(registerAsAffiliateAction()).unwrap();
+      return true;
+    } catch (error) {
+      console.error("Erreur lors de l'inscription rapide comme affilié:", error);
+      return false;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, signOut, isPremiumUser }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      isLoading, 
+      signOut, 
+      isPremiumUser, 
+      isAffiliate, 
+      registerAsAffiliate, 
+      quickAffiliateSignup 
+    }}>
       {children}
     </AuthContext.Provider>
   );
