@@ -103,30 +103,10 @@ const Index = () => {
               <form onSubmit={handleSubmit} className="mb-8 max-w-md mx-auto lg:mx-0">
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="flex-1">
-                    <Input
-                      type="email"
-                      placeholder="Votre adresse email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setIsEmailValid(true);
-                      }}
-                      className={`h-12 border-white/10 bg-white/5 ${!isEmailValid ? 'border-red-500' : ''}`}
-                    />
-                    {!isEmailValid && (
-                      <p className="text-red-500 text-sm mt-1 text-left">
-                        Adresse email invalide
-                      </p>
-                    )}
+                    
+                    {!isEmailValid}
                   </div>
-                  <Button 
-                    type="submit" 
-                    className="h-12 px-6 bg-blue-600 hover:bg-blue-700"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Inscription...' : 'Essayer gratuitement'}
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
+                  
                 </div>
               </form>
               
@@ -148,28 +128,7 @@ const Index = () => {
             </motion.div>
             
             {/* Right Column - App Screenshot */}
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 30
-              }}
-              animate={{
-                opacity: 1,
-                y: 0
-              }}
-              transition={{
-                delay: 0.3,
-                duration: 0.8
-              }}
-              className="hero-image relative hidden lg:block"
-            >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-50"></div>
-              <img
-                src="/lovable-uploads/6efa4977-b5a4-4c98-a242-0067f8ad1b2d.png"
-                alt="Interface de DCE Manager"
-                className="w-full h-auto relative z-10 rounded-2xl border border-white/10 shadow-xl"
-              />
-            </motion.div>
+            
           </div>
         </Container>
       </section>
@@ -198,45 +157,27 @@ const Index = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
             <div className="flex flex-col items-center p-4">
-              <div className="icon-container relative mb-2">
-                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
-                <TrendingUp className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
-              </div>
+              <TrendingUp className="h-12 w-12 text-blue-400 mb-2" />
               <span className="text-white font-medium text-sm text-center">+30% de productivité</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <div className="icon-container relative mb-2">
-                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
-                <Activity className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
-              </div>
+              <Activity className="h-12 w-12 text-green-400 mb-2" />
               <span className="text-white font-medium text-sm text-center">Performance accrue</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <div className="icon-container relative mb-2">
-                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
-                <Gauge className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
-              </div>
+              <Gauge className="h-12 w-12 text-purple-400 mb-2" />
               <span className="text-white font-medium text-sm text-center">Optimisation du temps</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <div className="icon-container relative mb-2">
-                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
-                <LineChart className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
-              </div>
+              <LineChart className="h-12 w-12 text-yellow-400 mb-2" />
               <span className="text-white font-medium text-sm text-center">Croissance des résultats</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <div className="icon-container relative mb-2">
-                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
-                <PercentCircle className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
-              </div>
+              <PercentCircle className="h-12 w-12 text-red-400 mb-2" />
               <span className="text-white font-medium text-sm text-center">95% de satisfaction</span>
             </div>
             <div className="flex flex-col items-center p-4">
-              <div className="icon-container relative mb-2">
-                <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-[8px] scale-110"></div>
-                <Award className="h-12 w-12 text-blue-400 relative z-10 transition-transform duration-300 hover:scale-125" />
-              </div>
+              <Award className="h-12 w-12 text-orange-400 mb-2" />
               <span className="text-white font-medium text-sm text-center">Qualité certifiée</span>
             </div>
           </div>
@@ -434,11 +375,6 @@ const Index = () => {
         .animate-fadeIn {
           opacity: 1;
           transform: translateY(0);
-        }
-
-        .icon-container:hover .blur-[8px] {
-          background-color: rgba(59, 130, 246, 0.5);
-          filter: blur(12px);
         }
         `
     }} />
