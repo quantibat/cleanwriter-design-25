@@ -69,7 +69,7 @@ const SignUp = () => {
             id: authData.user.id,
             email: values.email,
             full_name: values.name,
-            created_at: new Date().toISOString()  // Convert Date to ISO string
+            created_at: new Date()
           });
           
         if (insertError) {

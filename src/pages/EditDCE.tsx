@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle, Upload, Globe, FileCheck, Save, LinkIcon } from 'lucide-react';
@@ -13,8 +14,6 @@ import DashboardLayout from '@/components/layouts/DashboardLayout';
 import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
-import { useProjects } from '@/hooks/useProjects';
-import { useActiveContent, ActiveContent } from '@/hooks/useActiveContent';
 
 const MOCK_TOPICS = [
   {
@@ -128,15 +127,13 @@ const EditDCE = () => {
   const location = useLocation();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
   const [generatingTopics, setGeneratingTopics] = useState(false);
   const [generatingContent, setGeneratingContent] = useState(false);
   const [topics, setTopics] = useState<any[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const { activeContent, setActiveContent } = useActiveContent(null);
+  const [activeContent, setActiveContent] = useState<{ subject: string; body: string } | null>(null);
   const { toast } = useToast();
   const { notifySuccess } = useNotificationsManager();
-  const { getProjectById, updateExistingProject } = useProjects();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
   const [title, setTitle] = useState("Untitled Youtube to Newsletter");
   const [cardTitle, setCardTitle] = useState("Ma sélection de cartes");
@@ -149,113 +146,53 @@ const EditDCE = () => {
   const [videoMetadata, setVideoMetadata] = useState<any>(null);
   const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
   
-  const [projectData, setProjectData] = useState<any>(location.state?.project || null);
-  const [dbProject, setDbProject] = useState<any>(null);
+  const projectData = location.state?.project || null;
   
-  const form = useForm<FormData>({
-    defaultValues: {
-      title: 'Untitled Youtube to Newsletter',
+  useEffect(() => {
+    if (!projectData) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de trouver le dossier demandé",
+        variant: "destructive"
+      });
+      navigate('/dashboard');
+      return;
+    }
+    
+    setTitle(projectData.title || "Untitled Youtube to Newsletter");
+    setCardTitle(projectData.description || "Ma sélection de cartes");
+    
+    if (projectData.elements > 0) {
+      setTopics(MOCK_TOPICS.slice(0, projectData.elements > 3 ? 3 : projectData.elements));
+    }
+    
+    // Set progress based on project progress
+    if (projectData.progress) {
+      setUsedCredits((projectData.progress / 100) * totalCredits);
+    }
+  }, [projectData, navigate, toast]);
+
+  const getInitialFormValues = () => {
+    if (!projectData) return {
+      title: '',
       youtubeLink: '',
       option: '',
       language: 'french',
       aiModel: 'gpt-4o'
-    }
-  });
-  
-  useEffect(() => {
-    const fetchProject = async () => {
-      if (id) {
-        try {
-          setIsFetching(true);
-          const project = await getProjectById(id);
-          
-          if (project) {
-            setDbProject(project);
-            
-            // Transform database project to UI format
-            if (!projectData) {
-              setProjectData({
-                id: project.id,
-                title: project.title,
-                type: project.option_type || 'Youtube to Newsletter',
-                elements: project.elements || 0,
-                description: project.card_title || '',
-                progress: project.progress || 0
-              });
-            }
-            
-            // Set form data
-            setTitle(project.title || "Untitled Youtube to Newsletter");
-            setCardTitle(project.card_title || "Ma sélection de cartes");
-            setIsSocialMediaOnly(project.is_social_media_only || false);
-            setUsedCredits(project.used_credits || 0);
-            
-            if (project.youtube_link) {
-              setIsValidYoutubeLink(true);
-              form.setValue('youtubeLink', project.youtube_link);
-            }
-            
-            if (project.option_type) {
-              form.setValue('option', project.option_type);
-            }
-            
-            if (project.output_language) {
-              form.setValue('language', project.output_language);
-            }
-            
-            if (project.ai_model) {
-              form.setValue('aiModel', project.ai_model);
-            }
-            
-            if (project.video_metadata) {
-              setVideoMetadata(project.video_metadata);
-            }
-            
-            if (project.topics && Array.isArray(project.topics) && project.topics.length > 0) {
-              setTopics(project.topics);
-            }
-            
-            if (project.selected_topics && Array.isArray(project.selected_topics)) {
-              setSelectedTopics(project.selected_topics);
-            }
-            
-            if (project.active_content) {
-              // Fix for TypeScript error: ensure active_content has the right format
-              if (typeof project.active_content === 'object' && 
-                  project.active_content !== null &&
-                  'subject' in project.active_content && 
-                  'body' in project.active_content) {
-                setActiveContent({
-                  subject: project.active_content.subject as string,
-                  body: project.active_content.body as string
-                });
-              }
-            }
-          } else {
-            toast({
-              title: "Erreur",
-              description: "Impossible de trouver le projet demandé",
-              variant: "destructive"
-            });
-            navigate('/projects');
-          }
-        } catch (error) {
-          console.error("Error fetching project:", error);
-          toast({
-            title: "Erreur",
-            description: "Une erreur est survenue lors de la récupération du projet",
-            variant: "destructive"
-          });
-        } finally {
-          setIsFetching(false);
-        }
-      } else {
-        setIsFetching(false);
-      }
     };
-    
-    fetchProject();
-  }, [id, navigate, toast, form, projectData, getProjectById, setActiveContent]);
+
+    return {
+      title: projectData.title || '',
+      youtubeLink: '',
+      option: projectData.type || '',
+      language: 'french',
+      aiModel: 'gpt-4o'
+    };
+  };
+  
+  const form = useForm<FormData>({
+    defaultValues: getInitialFormValues()
+  });
 
   const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const link = e.target.value;
@@ -264,13 +201,15 @@ const EditDCE = () => {
     const isValid = link.includes('youtube.com/watch') || link.includes('youtu.be/');
     setIsValidYoutubeLink(isValid);
     
-    if (isValid && !videoMetadata) {
+    if (isValid) {
       setVideoMetadata({
         title: '"DÉMOLITION" de JP Fanguin par Jm Corda',
         channel: 'Jm Corda Business',
         views: '0 vues',
         duration: '39:49'
       });
+    } else {
+      setVideoMetadata(null);
     }
   };
 
@@ -314,83 +253,34 @@ const EditDCE = () => {
     setUsedCredits(prev => prev + wordCount);
     
     setTimeout(() => {
-      // Fix the type issue by properly casting or creating a valid object
-      const content = MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT];
-      if (content) {
-        setActiveContent({
-          subject: content.subject,
-          body: content.body
-        });
-      }
+      setActiveContent(MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT]);
       setGeneratingContent(false);
     }, 1000);
   };
 
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
-    { label: title, path: `/view-project/${id}` },
-    { label: 'Modifier' }
   ];
 
   const handleSubmit = async (data: FormData) => {
-    if (!id) return;
-    
     setIsLoading(true);
     
-    try {
-      // Update project in database
-      const projectUpdate = {
-        title: title,
-        youtubeLink: data.youtubeLink,
-        option: data.option,
-        language: data.language,
-        aiModel: data.aiModel,
-        cardTitle: cardTitle,
-        isSocialMediaOnly: isSocialMediaOnly,
-        topics: topics,
-        selectedTopics: selectedTopics,
-        activeContent: activeContent,
-        videoMetadata: videoMetadata,
-        usedCredits: usedCredits,
-        progress: topics.length > 0 ? (selectedTopics.length > 0 ? 75 : 40) : 10,
-        elements: selectedTopics.length || topics.length
-      };
-      
-      const updatedProject = await updateExistingProject(id, projectUpdate);
-      
-      if (updatedProject) {
-        setTimeout(() => {
-          setIsLoading(false);
-          toast({
-            title: "Modifications enregistrées",
-            description: "Votre projet a été mis à jour avec succès.",
-          });
-          navigate('/projects');
-        }, 1000);
-      }
-    } catch (error) {
-      console.error("Error saving project:", error);
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'enregistrement du projet",
-        variant: "destructive"
-      });
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      toast({
+        title: "Modifications enregistrées",
+        description: "Votre projet a été mis à jour avec succès.",
+      });
+      navigate('/projects');
+    }, 1500);
   };
 
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
 
-  if (isFetching) {
-    return (
-      <DashboardLayout breadcrumbs={breadcrumbs} activeTab="projects">
-        <div className="min-h-screen bg-[#0c101b] flex items-center justify-center">
-          <p className="text-white">Chargement du projet...</p>
-        </div>
-      </DashboardLayout>
-    );
+  if (!projectData) {
+    return null;
   }
 
   return (
@@ -630,9 +520,9 @@ const EditDCE = () => {
                       onClick={() => {
                         handleSubmit(form.getValues());
                       }}
-                      disabled={isLoading}
+                      disabled={selectedTopics.length === 0}
                     >
-                      {isLoading ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                      Enregistrer les modifications
                     </Button>
                   </div>
                 )}
