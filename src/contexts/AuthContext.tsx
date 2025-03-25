@@ -176,7 +176,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 data: { 
                   premium: true, // Set premium to true for new Google users
                   affiliate: false,
-                  full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name
+                  full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name,
+                  enterprise: "",
+                  siret: ""
                 }
               });
               

@@ -14,25 +14,31 @@ export type Database = {
           avatar_url: string | null
           created_at: string | null
           email: string
+          enterprise: string | null
           full_name: string | null
           id: string
           phone: string | null
+          siret: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
           email: string
+          enterprise?: string | null
           full_name?: string | null
           id?: string
           phone?: string | null
+          siret?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string | null
           email?: string
+          enterprise?: string | null
           full_name?: string | null
           id?: string
           phone?: string | null
+          siret?: string | null
         }
         Relationships: []
       }
