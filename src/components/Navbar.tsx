@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, CreditCard, HelpCircle, Settings, LogOut, Zap, Gift, Users } from "lucide-react";
@@ -6,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { toast } from '@/hooks/use-toast';
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -16,6 +18,7 @@ const Navbar = () => {
     isPremiumUser,
     isAffiliate
   } = useAuth();
+
   const handleTrialButtonClick = e => {
     e.preventDefault();
     if (!user) {
@@ -31,6 +34,27 @@ const Navbar = () => {
       navigate('/dashboard');
     }
   };
+  
+  // Get avatar URL from user metadata
+  const getAvatarUrl = () => {
+    if (user?.user_metadata?.avatar_url) {
+      return user.user_metadata.avatar_url;
+    } else if (user?.app_metadata?.provider === 'google' && user?.user_metadata?.picture) {
+      return user.user_metadata.picture;
+    }
+    return null;
+  };
+  
+  // Get user initials for avatar fallback
+  const getUserInitials = () => {
+    if (user?.user_metadata?.full_name) {
+      return user.user_metadata.full_name[0].toUpperCase();
+    } else if (user?.email) {
+      return user.email[0].toUpperCase();
+    }
+    return "U";
+  };
+
   return <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo (Left) */}
@@ -62,16 +86,16 @@ const Navbar = () => {
                 </Link>}
               <span className="text-sm text-foreground">
                 {user.user_metadata?.full_name || user.email}
-                {isPremiumUser}
+                {isPremiumUser && <span className="ml-2 text-amber-400 text-xs">(Premium)</span>}
                 {isAffiliate && <span className="ml-2 text-green-400 text-xs">(Affilié)</span>}
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.user_metadata?.avatar_url} />
+                      <AvatarImage src={getAvatarUrl()} />
                       <AvatarFallback className="bg-blue-500 text-white">
-                        {(user.user_metadata?.full_name || user.email || "U")[0].toUpperCase()}
+                        {getUserInitials()}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -156,8 +180,9 @@ const Navbar = () => {
             {user ? <>
                 <div className="py-2 flex items-center gap-2">
                   <Avatar className="h-6 w-6">
+                    <AvatarImage src={getAvatarUrl()} />
                     <AvatarFallback className="bg-blue-500 text-white text-xs">
-                      {(user.user_metadata?.full_name || user.email || "U")[0].toUpperCase()}
+                      {getUserInitials()}
                     </AvatarFallback>
                   </Avatar>
                   <span className="text-sm">
@@ -204,4 +229,5 @@ const Navbar = () => {
         </div>}
     </nav>;
 };
+
 export default Navbar;
