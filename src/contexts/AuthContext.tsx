@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -14,7 +13,7 @@ type AuthContextType = {
   isAffiliate: boolean;
   registerAsAffiliate: () => Promise<boolean>;
   quickAffiliateSignup: () => Promise<boolean>;
-  updateUserProfile: (profile: UserProfile) => Promise<boolean>;
+  updateUserProfile: (profile: Partial<UserProfile>) => Promise<boolean>;
   getUserProfile: () => UserProfile;
   isProfileComplete: () => boolean;
   updatePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
@@ -34,13 +33,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch(setSession(newSession));
         
         if (event === 'SIGNED_IN') {
-          // Si c'est une nouvelle connexion Google, s'assurer que l'utilisateur est ajouté à la table users
           if (newSession?.user?.app_metadata?.provider === 'google') {
-            // Vérifier si c'est un nouvel utilisateur (created_at égal à last_sign_in_at)
             if (newSession.user.created_at === newSession.user.last_sign_in_at) {
               console.log("Nouvel utilisateur Google, configuration des métadonnées");
               
-              // Ajouter l'utilisateur à la table users
               const { error: insertError } = await supabase
                 .from('users')
                 .insert({
@@ -70,10 +66,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           }
           
-          // Toujours définir isPremiumUser à true pour tous les utilisateurs
           dispatch(setPremiumUser(true));
           
-          // Système de notification (si disponible)
           setTimeout(() => {
             try {
               const notificationContext = window._getNotificationContext?.();
@@ -92,7 +86,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
-    // Initialiser la session au chargement
     const getInitialSession = async () => {
       const { data, error } = await supabase.auth.getSession();
       

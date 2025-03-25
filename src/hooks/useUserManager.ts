@@ -82,7 +82,7 @@ export const useUserManager = () => {
   };
   
   // Gestion du profil
-  const updateUserProfile = async (profile: UserProfile): Promise<boolean> => {
+  const updateUserProfile = async (profile: Partial<UserProfile>): Promise<boolean> => {
     if (!user) {
       toast({
         title: 'Erreur',
@@ -92,16 +92,26 @@ export const useUserManager = () => {
       return false;
     }
     
+    // Ensure all required fields are present
+    const completeProfile: UserProfile = {
+      firstName: profile.firstName || user?.user_metadata?.full_name?.split(' ')[0] || '',
+      lastName: profile.lastName || user?.user_metadata?.full_name?.split(' ')[1] || '',
+      email: profile.email || user?.email || '',
+      address: profile.address || user?.user_metadata?.address || '',
+      enterprise: profile.enterprise || user?.user_metadata?.enterprise || '',
+      siret: profile.siret || user?.user_metadata?.siret || ''
+    };
+    
     setUpdateLoading(true);
     
     try {
       // Mise à jour des métadonnées utilisateur
       const { error: updateError } = await supabase.auth.updateUser({
         data: { 
-          full_name: `${profile.firstName} ${profile.lastName}`,
-          address: profile.address,
-          enterprise: profile.enterprise,
-          siret: profile.siret
+          full_name: `${completeProfile.firstName} ${completeProfile.lastName}`,
+          address: completeProfile.address,
+          enterprise: completeProfile.enterprise,
+          siret: completeProfile.siret
         }
       });
       
@@ -111,9 +121,9 @@ export const useUserManager = () => {
       const { error: userUpdateError } = await supabase
         .from('users')
         .update({
-          full_name: `${profile.firstName} ${profile.lastName}`,
-          enterprise: profile.enterprise,
-          siret: profile.siret
+          full_name: `${completeProfile.firstName} ${completeProfile.lastName}`,
+          enterprise: completeProfile.enterprise,
+          siret: completeProfile.siret
         })
         .eq('id', user.id);
       
@@ -124,10 +134,10 @@ export const useUserManager = () => {
         ...user,
         user_metadata: {
           ...user.user_metadata,
-          full_name: `${profile.firstName} ${profile.lastName}`,
-          address: profile.address,
-          enterprise: profile.enterprise,
-          siret: profile.siret
+          full_name: `${completeProfile.firstName} ${completeProfile.lastName}`,
+          address: completeProfile.address,
+          enterprise: completeProfile.enterprise,
+          siret: completeProfile.siret
         }
       } as User;
       
