@@ -1,18 +1,18 @@
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { User, Session } from '@supabase/supabase-js';
-import { toast } from '@/hooks/use-toast';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setUser, setSession, setPremiumUser, signOut as signOutAction } from '@/store/slices/userSlice';
 
 type AuthContextType = {
-  user: User | null;
-  session: Session | null;
+  user: any | null;
+  session: any | null;
   isLoading: boolean;
   signOut: () => Promise<void>;
-  isPremiumUser: boolean; // Indicateur de statut premium
-  isAffiliate: boolean; // Indicateur de statut d'affilié
-  registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>; // Inscription comme affilié
-  quickAffiliateSignup: () => Promise<boolean>; // Inscription rapide comme affilié, retourne true si réussi
+  isPremiumUser: boolean;
+  isAffiliate: boolean;
+  registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>;
+  quickAffiliateSignup: () => Promise<boolean>;
 };
 
 type AffiliateRegistrationData = {
@@ -25,11 +25,8 @@ type AffiliateRegistrationData = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(true); // Set to true by default
-  const [isAffiliate, setIsAffiliate] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const { user, session, isLoading, isPremiumUser, isAffiliate, error } = useAppSelector(state => state.user);
 
   const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -42,16 +39,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 ...user.user_metadata,
                 affiliate: true
               }
-            } as User;
+            };
             
-            setUser(updatedUser);
-            setIsAffiliate(true);
+            dispatch(setUser(updatedUser));
             
             if (session) {
-              setSession({
+              dispatch(setSession({
                 ...session,
                 user: updatedUser
-              });
+              }));
             }
             
             resolve();
@@ -68,11 +64,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const quickAffiliateSignup = async (): Promise<boolean> => {
     try {
       if (!user) {
-        toast({
-          title: "Accès refusé",
-          description: "Vous devez être connecté pour devenir affilié",
-          variant: "destructive"
-        });
         return false;
       }
 
@@ -82,24 +73,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           ...user.user_metadata,
           affiliate: true
         }
-      } as User;
+      };
       
-      setUser(updatedUser);
-      setIsAffiliate(true);
+      dispatch(setUser(updatedUser));
       
       if (session) {
-        setSession({
+        dispatch(setSession({
           ...session,
           user: updatedUser
-        });
+        }));
       }
       
-      toast({
-        title: "Félicitations!",
-        description: "Vous êtes maintenant un affilié DCEManager",
-        variant: "default"
-      });
-
       setTimeout(() => {
         try {
           const notificationContext = window._getNotificationContext?.();
@@ -117,55 +101,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       return true;
     } catch (error: any) {
-      toast({
-        title: "Erreur",
-        description: error.message || "Une erreur est survenue lors de l'inscription rapide",
-        variant: "destructive"
-      });
       return false;
     }
   };
 
+  const signOut = async () => {
+    dispatch(signOutAction());
+  };
+
   useEffect(() => {
-    const getInitialSession = async () => {
-      setIsLoading(true);
-      
-      const { data, error } = await supabase.auth.getSession();
-      
-      if (!error && data.session) {
-        setSession(data.session);
-        setUser(data.session.user);
-        // Always set premium to true for all users
-        setIsPremiumUser(true);
-        setIsAffiliate(!!data.session.user?.user_metadata?.affiliate);
-      }
-      
-      setIsLoading(false);
-    };
-
-    getInitialSession();
-
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
         console.log(`Auth event: ${event}`);
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
+        dispatch(setSession(newSession));
         
         if (event === 'SIGNED_IN') {
-          // If it's a new Google sign-in, ensure the user is added to the users table
+          // Si c'est une nouvelle connexion Google, s'assurer que l'utilisateur est ajouté à la table users
           if (newSession?.user?.app_metadata?.provider === 'google') {
-            // Check if this is a new user (created_at equals last_sign_in_at)
+            // Vérifier si c'est un nouvel utilisateur (created_at égal à last_sign_in_at)
             if (newSession.user.created_at === newSession.user.last_sign_in_at) {
               console.log("Nouvel utilisateur Google, configuration des métadonnées");
               
-              // Add user to users table
+              // Ajouter l'utilisateur à la table users
               const { error: insertError } = await supabase
                 .from('users')
                 .insert({
                   id: newSession.user.id,
                   email: newSession.user.email,
                   full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name,
-                  created_at: new Date().toISOString()  // Convert Date to ISO string
+                  created_at: new Date().toISOString()
                 });
               
               if (insertError) {
@@ -174,7 +138,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               
               const { data, error } = await supabase.auth.updateUser({
                 data: { 
-                  premium: true, // Set premium to true for new Google users
+                  premium: true,
                   affiliate: false,
                   full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name,
                   enterprise: "",
@@ -188,17 +152,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           }
           
-          // Always set premium to true for all users
-          setIsPremiumUser(true);
-          setIsAffiliate(!!newSession?.user?.user_metadata?.affiliate);
+          // Toujours définir isPremiumUser à true pour tous les utilisateurs
+          dispatch(setPremiumUser(true));
           
-          toast({
-            title: "Connexion réussie",
-            description: "Vous êtes maintenant connecté",
-            variant: "default",
-          });
-          
-          // Notification système
+          // Système de notification (si disponible)
           setTimeout(() => {
             try {
               const notificationContext = window._getNotificationContext?.();
@@ -213,53 +170,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               console.error("Impossible d'accéder au contexte de notification:", e);
             }
           }, 500);
-        } else if (event === 'SIGNED_OUT') {
-          
-          // Réinitialiser la session et l'utilisateur
-          setSession(null);
-          setUser(null);
-          
-          toast({
-            title: "Déconnexion",
-            description: "Vous avez été déconnecté",
-            variant: "default",
-          });
-        } else if (event === 'PASSWORD_RECOVERY') {
-          toast({
-            title: "Récupération de mot de passe",
-            description: "Veuillez vérifier votre email pour réinitialiser votre mot de passe",
-            variant: "default",
-          });
         }
-        
-        setIsLoading(false);
       }
     );
+
+    // Initialiser la session au chargement
+    const getInitialSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      
+      if (!error && data.session) {
+        dispatch(setSession(data.session));
+        dispatch(setPremiumUser(true));
+      }
+    };
+
+    getInitialSession();
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, []);
-
-  const signOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      setSession(null);
-      setUser(null);
-      toast({
-        title: "Déconnexion réussie",
-        description: "À bientôt!",
-        variant: "default",
-      });
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
-      toast({
-        title: "Erreur de déconnexion",
-        description: "Une erreur est survenue lors de la déconnexion",
-        variant: "destructive",
-      });
-    }
-  };
+  }, [dispatch]);
 
   return (
     <AuthContext.Provider value={{ 
