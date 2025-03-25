@@ -9,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import UserDropdownMenu from './UserDropdownMenu';
+import { Container } from "@/components/ui/container";
 
 interface TopBarProps {
   onThemeToggle: () => void;
@@ -52,11 +53,11 @@ const TopBar = ({
   };
   const handleThemeChange = () => {
     if (isDarkMode) {
-      // Apply light theme - make everything white (without transparency)
+      // Apply light theme
       document.documentElement.classList.add('light-theme');
       document.documentElement.classList.remove('dark-theme');
 
-      // Set pure white background (no transparency) and black text for the entire application
+      // Set light theme colors
       document.documentElement.style.setProperty('--background', '#FFFFFF');
       document.documentElement.style.setProperty('--foreground', '#000000');
       document.documentElement.style.setProperty('--card', '#FFFFFF');
@@ -74,11 +75,19 @@ const TopBar = ({
       document.documentElement.style.setProperty('--border', '#E4E4E7');
       document.documentElement.style.setProperty('--sidebar-border', '#E4E4E7');
 
+      // Update TopBar specific styles
+      document.documentElement.style.setProperty('--topbar-background', '#FFFFFF');
+      document.documentElement.style.setProperty('--topbar-border', '#E4E4E7');
+      document.documentElement.style.setProperty('--topbar-text', '#000000');
+      document.documentElement.style.setProperty('--topbar-text-muted', '#71717A');
+      document.documentElement.style.setProperty('--topbar-text-transparent', '#9CA3AF');
+      document.documentElement.style.setProperty('--topbar-hover', '#F9FAFB');
+
       // Remove background image and transparency effects
       document.body.style.backgroundImage = 'none';
       document.body.style.backgroundColor = '#FFFFFF';
     } else {
-      // Maintain dark theme (current theme)
+      // Maintain dark theme
       document.documentElement.classList.add('dark-theme');
       document.documentElement.classList.remove('light-theme');
 
@@ -99,6 +108,14 @@ const TopBar = ({
       document.documentElement.style.removeProperty('--sidebar-accent-foreground');
       document.documentElement.style.removeProperty('--border');
       document.documentElement.style.removeProperty('--sidebar-border');
+
+      // Reset TopBar specific styles
+      document.documentElement.style.removeProperty('--topbar-background');
+      document.documentElement.style.removeProperty('--topbar-border');
+      document.documentElement.style.removeProperty('--topbar-text');
+      document.documentElement.style.removeProperty('--topbar-text-muted');
+      document.documentElement.style.removeProperty('--topbar-text-transparent');
+      document.documentElement.style.removeProperty('--topbar-hover');
     }
     onThemeToggle();
   };
@@ -107,85 +124,75 @@ const TopBar = ({
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-  return <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
+  return <div className="flex flex-col w-full border-b border-[var(--topbar-border)] bg-[var(--topbar-background)]">
       {/* Top div with logo and user controls */}
-      <div className="flex items-center justify-between w-full px-6 py-3">
-        {/* Left: Logo */}
-        <div className="flex items-center">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            
-            <div className="text-white font-semibold text-xl">
-              DCE<span className="text-[#00a2ff]">Manager</span>
-            </div>
-          </Link>
-        </div>
-
-        {/* Right: User controls */}
-        <div className="flex items-center space-x-4">
-          {/* Theme Toggle */}
-          <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
-            {isDarkMode ? <Sun className="h-5 w-5 text-gray-400" /> : <Moon className="h-5 w-5 text-gray-400" />}
-          </Button>
-
-          {/* Language Selector */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Globe className="h-5 w-5 text-gray-400" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? 'bg-accent' : ''}>
-                Français
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? 'bg-accent' : ''}>
-                English
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* User Dropdown Menu */}
-          <UserDropdownMenu onSignOut={handleSignOut} />
-        </div>
-      </div>
-
-      {/* Bottom div with navigation and credits */}
-      <div className="flex items-center justify-between w-full px-6 py-3 bg-[#1a1f2b]">
-        {/* Left: Navigation Links */}
-        <div className="flex items-center space-x-8">
-          <Link to="/dashboard" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'tools' && "text-white border-b-2 border-[#00a2ff]"}`}>
-            <span className="text-white">Outils</span>
-          </Link>
-          
-          <Link to="/projects" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'projects' && "text-white border-b-2 border-[#00a2ff]"}`}>
-            <span>Projets</span>
-          </Link>
-          
-          <Link to="/contribute" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'contribute' && "text-white border-b-2 border-[#00a2ff]"}`}>
-            <span>Contribuer</span>
-          </Link>
-          
-        </div>
-
-        {/* Right: Credits Info and Upgrade Button */}
-        <div className="flex items-center space-x-4">
-          <div className="bg-[#1e2333] rounded-lg p-3">
-            <div className="flex flex-col">
-              <div className="text-sm text-gray-400 mb-1">Vos crédits disponibles</div>
-              <div className="flex items-center space-x-2">
-                <Progress value={percentUsed} className="w-24 h-2" />
-                <span className="text-white text-xs">{percentUsed}% de vos crédits utilisés</span>
+      <Container className="py-3">
+        <div className="flex items-center justify-between w-full">
+          {/* Left: Logo */}
+          <div className="flex items-center">
+            <Link to="/dashboard" className="flex items-center gap-2">
+              <div className="text-[var(--topbar-text)] font-semibold text-xl">
+                DCE<span className="text-[#00a2ff]">Manager</span>
               </div>
-              <div className="text-sm text-white font-medium mt-1">
-                {remainingCredits.toLocaleString()} / {totalCredits.toLocaleString()} crédits
-              </div>
-              <Button size="sm" variant="blue" onClick={handleUpgrade} className="mt-2 text-xs py-1 h-8 bg-transparent ">
-                Mettre à niveau
-              </Button>
-            </div>
+            </Link>
+          </div>
+
+          {/* Right: User controls */}
+          <div className="flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
+              {isDarkMode ? <Sun className="h-5 w-5 text-[var(--topbar-text-transparent)]" /> : <Moon className="h-5 w-5 text-[var(--topbar-text-transparent)]" />}
+            </Button>
+
+            {/* Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Globe className="h-5 w-5 text-[var(--topbar-text-transparent)]" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? 'bg-[var(--topbar-hover)]' : ''}>
+                  Français
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? 'bg-[var(--topbar-hover)]' : ''}>
+                  English
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* User Dropdown Menu */}
+            <UserDropdownMenu onSignOut={handleSignOut} />
           </div>
         </div>
-      </div>
+      </Container>
+
+      {/* Bottom div with navigation and credits */}
+      <Container className="py-3 bg-[var(--topbar-background)]">
+        <div className="flex items-center justify-between w-full">
+          {/* Left: Navigation Links */}
+          <div className="flex items-center space-x-8">
+            <Link to="/dashboard" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-[var(--topbar-text-transparent)] hover:text-[var(--topbar-text)] ${activeTab === 'tools' && "text-[var(--topbar-text)] border-b-2 border-[#00a2ff]"}`}>
+              <span>Outils</span>
+            </Link>
+            
+            <Link to="/projects" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-[var(--topbar-text-transparent)] hover:text-[var(--topbar-text)] ${activeTab === 'projects' && "text-[var(--topbar-text)] border-b-2 border-[#00a2ff]"}`}>
+              <span>Projets</span>
+            </Link>
+            
+            <Link to="/contribute" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-[var(--topbar-text-transparent)] hover:text-[var(--topbar-text)] ${activeTab === 'contribute' && "text-[var(--topbar-text)] border-b-2 border-[#00a2ff]"}`}>
+              <span>Contribuer</span>
+            </Link>
+          </div>
+
+          {/* Right: Credits Info and Upgrade Button */}
+          <div className="flex items-center space-x-4">
+            <Button size="sm" variant="blue" onClick={handleUpgrade} className="mt-2 text-xs py-1 h-8 bg-transparent">
+              Mettre à niveau
+            </Button>
+          </div>
+        </div>
+      </Container>
     </div>;
 };
 export default TopBar;

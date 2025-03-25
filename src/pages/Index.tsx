@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { Container } from "@/components/ui/container";
 
 const Index = () => {
   const [email, setEmail] = useState('');
@@ -76,7 +76,7 @@ const Index = () => {
           <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
         </div>
         
-        <div className="max-w-7xl mx-auto relative z-10">
+        <Container className="relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Text Content */}
             <motion.div initial={{
@@ -143,12 +143,12 @@ const Index = () => {
               <img src="/lovable-uploads/6efa4977-b5a4-4c98-a242-0067f8ad1b2d.png" alt="Interface DCE Manager" className="w-full rounded-2xl relative z-10 border border-white/10" />
             </motion.div>
           </div>
-        </div>
+        </Container>
       </section>
       
       {/* Social Proof Section */}
       <section className="py-16 px-6 bg-[#070823]">
-        <div className="max-w-7xl mx-auto">
+        <Container>
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -173,12 +173,12 @@ const Index = () => {
                 <div className="h-full w-32 bg-white/10 rounded-md animate-pulse"></div>
               </div>)}
           </div>
-        </div>
+        </Container>
       </section>
       
       {/* Features Section */}
       <section className="py-24 px-6 bg-[#06071b]">
-        <div className="max-w-7xl mx-auto">
+        <Container>
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -245,12 +245,12 @@ const Index = () => {
                 <p className="text-blue-100/70">{feature.description}</p>
               </motion.div>)}
           </div>
-        </div>
+        </Container>
       </section>
       
       {/* Testimonials Section */}
       <section className="py-24 px-6 bg-[#070823]">
-        <div className="max-w-5xl mx-auto">
+        <Container>
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -311,13 +311,13 @@ const Index = () => {
                 </div>
               </motion.div>)}
           </div>
-        </div>
+        </Container>
       </section>
       
       {/* CTA Section */}
       <section className="py-24 px-6 bg-[#06071b] relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-20"></div>
-        <div className="max-w-5xl mx-auto relative">
+        <Container className="relative">
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -354,7 +354,7 @@ const Index = () => {
               Essai gratuit de 14 jours · Aucune carte de crédit requise
             </p>
           </motion.div>
-        </div>
+        </Container>
       </section>
       
       {/* Using a style tag correctly without the invalid jsx attribute */}
