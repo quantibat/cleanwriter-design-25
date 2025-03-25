@@ -3,18 +3,21 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users } from "lucide-react";
+import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users, TrendingUp, Activity, Gauge, LineChart, PercentCircle, Award } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Container } from "@/components/ui/container";
+
 const Index = () => {
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -38,7 +41,6 @@ const Index = () => {
     }, 1000);
   };
 
-  // Parallax effect for hero section
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -63,6 +65,7 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
   return <div className="bg-[#06071b] min-h-screen">
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 overflow-hidden px-6">
@@ -152,10 +155,31 @@ const Index = () => {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center">
-            {[...Array(6)].map((_, i) => <div key={i} className="h-12 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
-                <div className="h-full w-32 bg-white/10 rounded-md animate-pulse"></div>
-              </div>)}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+            <div className="flex flex-col items-center p-4">
+              <TrendingUp className="h-12 w-12 text-blue-400 mb-2" />
+              <span className="text-white font-medium text-sm text-center">+30% de productivité</span>
+            </div>
+            <div className="flex flex-col items-center p-4">
+              <Activity className="h-12 w-12 text-green-400 mb-2" />
+              <span className="text-white font-medium text-sm text-center">Performance accrue</span>
+            </div>
+            <div className="flex flex-col items-center p-4">
+              <Gauge className="h-12 w-12 text-purple-400 mb-2" />
+              <span className="text-white font-medium text-sm text-center">Optimisation du temps</span>
+            </div>
+            <div className="flex flex-col items-center p-4">
+              <LineChart className="h-12 w-12 text-yellow-400 mb-2" />
+              <span className="text-white font-medium text-sm text-center">Croissance des résultats</span>
+            </div>
+            <div className="flex flex-col items-center p-4">
+              <PercentCircle className="h-12 w-12 text-red-400 mb-2" />
+              <span className="text-white font-medium text-sm text-center">95% de satisfaction</span>
+            </div>
+            <div className="flex flex-col items-center p-4">
+              <Award className="h-12 w-12 text-orange-400 mb-2" />
+              <span className="text-white font-medium text-sm text-center">Qualité certifiée</span>
+            </div>
           </div>
         </Container>
       </section>
@@ -356,4 +380,5 @@ const Index = () => {
     }} />
     </div>;
 };
+
 export default Index;
