@@ -165,10 +165,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                   id: newSession.user.id,
                   email: newSession.user.email,
                   full_name: newSession.user.user_metadata.full_name || newSession.user.user_metadata.name,
-                  created_at: new Date()
-                })
-                .select()
-                .single();
+                  created_at: new Date().toISOString()  // Convert Date to ISO string
+                });
               
               if (insertError) {
                 console.error("Erreur lors de l'ajout de l'utilisateur à la table users:", insertError);
