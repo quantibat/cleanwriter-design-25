@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle, Upload, Globe, FileCheck, Save, LinkIcon } from 'lucide-react';
@@ -151,6 +150,16 @@ const EditDCE = () => {
   const [projectData, setProjectData] = useState<any>(location.state?.project || null);
   const [dbProject, setDbProject] = useState<any>(null);
   
+  const form = useForm<FormData>({
+    defaultValues: {
+      title: 'Untitled Youtube to Newsletter',
+      youtubeLink: '',
+      option: '',
+      language: 'french',
+      aiModel: 'gpt-4o'
+    }
+  });
+  
   useEffect(() => {
     const fetchProject = async () => {
       if (id) {
@@ -209,7 +218,16 @@ const EditDCE = () => {
             }
             
             if (project.active_content) {
-              setActiveContent(project.active_content);
+              // Fix for TypeScript error: ensure active_content has the right format
+              if (typeof project.active_content === 'object' && 
+                  project.active_content !== null &&
+                  'subject' in project.active_content && 
+                  'body' in project.active_content) {
+                setActiveContent({
+                  subject: project.active_content.subject as string,
+                  body: project.active_content.body as string
+                });
+              }
             }
           } else {
             toast({
@@ -236,28 +254,6 @@ const EditDCE = () => {
     
     fetchProject();
   }, [id, navigate, toast, form, projectData]);
-
-  const getInitialFormValues = () => {
-    if (!dbProject) return {
-      title: '',
-      youtubeLink: '',
-      option: '',
-      language: 'french',
-      aiModel: 'gpt-4o'
-    };
-
-    return {
-      title: dbProject.title || '',
-      youtubeLink: dbProject.youtube_link || '',
-      option: dbProject.option_type || '',
-      language: dbProject.output_language || 'french',
-      aiModel: dbProject.ai_model || 'gpt-4o'
-    };
-  };
-  
-  const form = useForm<FormData>({
-    defaultValues: getInitialFormValues()
-  });
 
   const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const link = e.target.value;
@@ -316,7 +312,14 @@ const EditDCE = () => {
     setUsedCredits(prev => prev + wordCount);
     
     setTimeout(() => {
-      setActiveContent(MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT]);
+      // Fix the type issue by properly casting or creating a valid object
+      const content = MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT];
+      if (content) {
+        setActiveContent({
+          subject: content.subject,
+          body: content.body
+        });
+      }
       setGeneratingContent(false);
     }, 1000);
   };
@@ -663,3 +666,4 @@ const EditDCE = () => {
 };
 
 export default EditDCE;
+

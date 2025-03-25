@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle } from 'lucide-react';
@@ -143,6 +142,16 @@ const CreateDCE = () => {
   const [title, setTitle] = useState("Untitled Youtube to Newsletter");
   const [cardTitle, setCardTitle] = useState("Ma sélection de cartes");
 
+  const form = useForm<FormData>({
+    defaultValues: {
+      title: 'Untitled Youtube to Newsletter',
+      youtubeLink: '',
+      option: '',
+      language: 'french',
+      aiModel: 'gpt-4o'
+    }
+  });
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const titleParam = params.get('title');
@@ -154,17 +163,7 @@ const CreateDCE = () => {
     if (isSocialMediaParam) {
       setIsSocialMediaOnly(isSocialMediaParam === 'true');
     }
-  }, [location.search]);
-
-  const form = useForm<FormData>({
-    defaultValues: {
-      title: 'Untitled Youtube to Newsletter',
-      youtubeLink: '',
-      option: '',
-      language: 'french',
-      aiModel: 'gpt-4o'
-    }
-  });
+  }, [location.search, form]);
 
   const totalCredits = 30000;
   const [usedCredits, setUsedCredits] = useState(0);
@@ -223,7 +222,13 @@ const CreateDCE = () => {
     const wordCount = 500;
     setUsedCredits(prev => prev + wordCount);
     setTimeout(() => {
-      setActiveContent(MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT]);
+      const content = MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT];
+      if (content) {
+        setActiveContent({
+          subject: content.subject,
+          body: content.body
+        });
+      }
       setGeneratingContent(false);
     }, 1000);
   };

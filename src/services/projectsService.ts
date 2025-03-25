@@ -1,6 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { User } from '@supabase/supabase-js';
 
 export interface ProjectFormData {
   title: string;
@@ -21,9 +22,17 @@ export interface ProjectFormData {
 
 export const createProject = async (data: ProjectFormData) => {
   try {
+    // Get the current user
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      throw new Error('Utilisateur non authentifié');
+    }
+    
     const { data: project, error } = await supabase
       .from('projects')
       .insert({
+        user_id: user.id,
         title: data.title || 'Untitled Youtube to Newsletter',
         youtube_link: data.youtubeLink,
         option_type: data.option,
