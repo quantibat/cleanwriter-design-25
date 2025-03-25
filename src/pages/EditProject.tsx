@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Save } from 'lucide-react';
@@ -10,19 +9,48 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useForm } from "react-hook-form";
-import { useToast } from "@/hooks/use-toast";
+import { useProjects } from '@/hooks/useProjects';
 
 const EditProject = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
-  const { toast } = useToast();
   
-  // Get project from location state or fetch it based on ID
-  const project = location.state?.project || null;
+  const { 
+    isLoading: isProjectLoading, 
+    getProjectById, 
+    updateExistingProject,
+    transformDbProjectToUiModel
+  } = useProjects();
   
-  // If project not found, handle it
-  if (!project) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [project, setProject] = useState<any>(location.state?.project || null);
+  
+  useEffect(() => {
+    const fetchProject = async () => {
+      if (!location.state?.project && id) {
+        try {
+          setIsLoading(true);
+          const fetchedProject = await getProjectById(id);
+          
+          if (fetchedProject) {
+            setProject(transformDbProjectToUiModel(fetchedProject));
+          } else {
+            navigate('/projects');
+          }
+        } catch (error) {
+          console.error("Error fetching project:", error);
+          navigate('/projects');
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    fetchProject();
+  }, [id, location.state, navigate, getProjectById, transformDbProjectToUiModel]);
+
+  if (!project && !isLoading && !isProjectLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center w-full">
         <div className="text-center">
@@ -36,40 +64,63 @@ const EditProject = () => {
     );
   }
 
-  const [progress, setProgress] = useState(project.progress || 0);
+  const [progress, setProgress] = useState(project?.progress || 0);
   
   const form = useForm({
     defaultValues: {
-      title: project.title || '',
-      type: project.type || 'Youtube to Newsletter',
-      description: project.description || '',
-      details: project.details || '',
-      collaborators: project.collaborators?.toString() || '1',
+      title: project?.title || '',
+      type: project?.type || 'Youtube to Newsletter',
+      description: project?.description || '',
+      details: project?.details || '',
+      collaborators: project?.collaborators?.toString() || '1',
     }
   });
 
-  const onSubmit = (data) => {
-    // In a real app, you would save the data to your backend
-    // Here we'll just show a success message and navigate back
-    const updatedProject = {
-      ...project,
-      ...data,
-      progress,
-    };
+  const onSubmit = async (data: any) => {
+    if (!id) return;
     
-    toast({
-      title: "Projet mis à jour",
-      description: "Les modifications ont été enregistrées avec succès."
-    });
-    
-    navigate('/view-project/' + id, { state: { project: updatedProject } });
+    setIsLoading(true);
+    try {
+      // Update database project
+      const updated = await updateExistingProject(id, {
+        title: data.title,
+        option: data.type,
+        cardTitle: data.description,
+        progress
+      });
+      
+      if (updated) {
+        // Transform updated project to UI format for state navigation
+        const updatedProject = {
+          ...project,
+          ...data,
+          progress,
+        };
+        
+        navigate('/view-project/' + id, { state: { project: updatedProject } });
+      }
+    } catch (error) {
+      console.error("Error updating project:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
-    { label: project.title, path: `/view-project/${id}` },
+    { label: project?.title, path: `/view-project/${id}` },
     { label: 'Modifier' }
   ];
+
+  if ((isLoading || isProjectLoading) && !project) {
+    return (
+      <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
+        <div className="w-full max-w-4xl mx-auto flex items-center justify-center min-h-[60vh]">
+          <p>Chargement du projet...</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
@@ -189,12 +240,13 @@ const EditProject = () => {
                 type="button" 
                 variant="outline"
                 onClick={() => navigate(`/view-project/${id}`, { state: { project } })}
+                disabled={isLoading}
               >
                 Annuler
               </Button>
-              <Button type="submit">
+              <Button type="submit" disabled={isLoading}>
                 <Save className="h-4 w-4 mr-2" />
-                Enregistrer les modifications
+                {isLoading ? 'Enregistrement...' : 'Enregistrer les modifications'}
               </Button>
             </div>
           </form>

@@ -1,23 +1,35 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Trash2, AlertTriangle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useToast } from "@/hooks/use-toast";
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { deleteProject, fetchProjectById } from '@/store/slices/projectsSlice';
 
 const DeleteProject = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { toast } = useToast();
+  const dispatch = useAppDispatch();
+  const { currentProject, isLoading } = useAppSelector(state => state.projects);
+  const [isDeleting, setIsDeleting] = useState(false);
   
-  // Get project from location state or fetch it based on ID
-  const project = location.state?.project || null;
+  // Obtenir le projet depuis le state location ou le charger depuis Redux
+  const project = location.state?.project || currentProject;
   
-  // If project not found, handle it
-  if (!project) {
+  useEffect(() => {
+    // Si nous n'avons pas le projet dans location.state et pas dans Redux, charger depuis l'API
+    if (!location.state?.project && !currentProject && id) {
+      dispatch(fetchProjectById(id));
+    }
+  }, [dispatch, id, location.state, currentProject]);
+
+  // Si projet non trouvé, gérer cette situation
+  if (!project && !isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center w-full">
         <div className="text-center">
@@ -31,22 +43,38 @@ const DeleteProject = () => {
     );
   }
   
-  const handleDelete = () => {
-    // In a real app, you would delete the data from your backend
-    // Here we'll just show a success message and navigate back
-    toast({
-      title: "Projet supprimé",
-      description: "Le projet a été supprimé avec succès."
-    });
+  const handleDelete = async () => {
+    if (!id) return;
     
-    navigate('/projects');
+    setIsDeleting(true);
+    
+    try {
+      await dispatch(deleteProject(id)).unwrap();
+      toast({
+        title: "Projet supprimé",
+        description: "Le projet a été supprimé avec succès."
+      });
+      navigate('/projects');
+    } catch (error) {
+      setIsDeleting(false);
+    }
   };
 
   const breadcrumbs = [
     { label: 'Projets', path: '/projects' },
-    { label: project.title, path: `/view-project/${id}` },
+    { label: project?.title, path: `/view-project/${id}` },
     { label: 'Supprimer' }
   ];
+
+  if (isLoading && !project) {
+    return (
+      <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
+        <div className="flex items-center justify-center h-64">
+          <p>Chargement du projet...</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
@@ -76,8 +104,14 @@ const DeleteProject = () => {
               <h3 className="font-semibold mb-2">Informations du projet :</h3>
               <ul className="text-left space-y-1 text-sm">
                 <li><span className="text-muted-foreground">Titre :</span> {project.title}</li>
-                <li><span className="text-muted-foreground">Type :</span> {project.type}</li>
-                <li><span className="text-muted-foreground">Date de création :</span> {project.date}</li>
+                <li><span className="text-muted-foreground">Type :</span> {project.option_type || project.type}</li>
+                <li>
+                  <span className="text-muted-foreground">Date de création :</span> {
+                    project.created_at 
+                      ? new Date(project.created_at).toLocaleDateString('fr-FR')
+                      : project.date
+                  }
+                </li>
                 <li><span className="text-muted-foreground">Progression :</span> {project.progress}%</li>
               </ul>
             </div>
@@ -87,6 +121,7 @@ const DeleteProject = () => {
                 variant="outline"
                 onClick={() => navigate(`/view-project/${id}`, { state: { project } })}
                 className="w-full sm:w-auto"
+                disabled={isDeleting}
               >
                 Annuler
               </Button>
@@ -94,9 +129,10 @@ const DeleteProject = () => {
                 variant="destructive"
                 onClick={handleDelete}
                 className="w-full sm:w-auto"
+                disabled={isDeleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Confirmer la suppression
+                {isDeleting ? 'Suppression en cours...' : 'Confirmer la suppression'}
               </Button>
             </div>
           </CardContent>
