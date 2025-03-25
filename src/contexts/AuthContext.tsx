@@ -2,7 +2,8 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setUser, setSession, setPremiumUser, signOut as signOutAction } from '@/store/slices/userSlice';
+import { setUser, setSession, setPremiumUser } from '@/store/slices/userSlice';
+import { useUserManager, UserProfile } from '@/hooks/useUserManager';
 
 type AuthContextType = {
   user: any | null;
@@ -11,103 +12,20 @@ type AuthContextType = {
   signOut: () => Promise<void>;
   isPremiumUser: boolean;
   isAffiliate: boolean;
-  registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>;
+  registerAsAffiliate: () => Promise<boolean>;
   quickAffiliateSignup: () => Promise<boolean>;
-};
-
-type AffiliateRegistrationData = {
-  fullName: string;
-  email: string;
-  password: string;
-  agreeTerms: boolean;
+  updateUserProfile: (profile: UserProfile) => Promise<boolean>;
+  getUserProfile: () => UserProfile;
+  isProfileComplete: () => boolean;
+  updatePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
-  const { user, session, isLoading, isPremiumUser, isAffiliate, error } = useAppSelector(state => state.user);
-
-  const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      try {
-        setTimeout(() => {
-          if (user) {
-            const updatedUser = {
-              ...user,
-              user_metadata: {
-                ...user.user_metadata,
-                affiliate: true
-              }
-            };
-            
-            dispatch(setUser(updatedUser));
-            
-            if (session) {
-              dispatch(setSession({
-                ...session,
-                user: updatedUser
-              }));
-            }
-            
-            resolve();
-          } else {
-            reject(new Error("Utilisateur non connecté"));
-          }
-        }, 1000);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
-
-  const quickAffiliateSignup = async (): Promise<boolean> => {
-    try {
-      if (!user) {
-        return false;
-      }
-
-      const updatedUser = {
-        ...user,
-        user_metadata: {
-          ...user.user_metadata,
-          affiliate: true
-        }
-      };
-      
-      dispatch(setUser(updatedUser));
-      
-      if (session) {
-        dispatch(setSession({
-          ...session,
-          user: updatedUser
-        }));
-      }
-      
-      setTimeout(() => {
-        try {
-          const notificationContext = window._getNotificationContext?.();
-          if (notificationContext?.addNotification) {
-            notificationContext.addNotification({
-              title: "Bienvenue dans le programme d'affiliation",
-              message: "Votre compte affilié est prêt à l'emploi!",
-              type: "success",
-            });
-          }
-        } catch (e) {
-          console.error("Impossible d'accéder au contexte de notification:", e);
-        }
-      }, 500);
-      
-      return true;
-    } catch (error: any) {
-      return false;
-    }
-  };
-
-  const signOut = async () => {
-    dispatch(signOutAction());
-  };
+  const { user, session, isLoading, isPremiumUser, isAffiliate } = useAppSelector(state => state.user);
+  const userManager = useUserManager();
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -196,11 +114,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user, 
       session, 
       isLoading, 
-      signOut,
+      signOut: userManager.signOut,
       isPremiumUser,
       isAffiliate,
-      registerAsAffiliate,
-      quickAffiliateSignup
+      registerAsAffiliate: userManager.registerAsAffiliate,
+      quickAffiliateSignup: userManager.quickAffiliateSignup,
+      updateUserProfile: userManager.updateUserProfile,
+      getUserProfile: userManager.getUserProfile,
+      isProfileComplete: userManager.isProfileComplete,
+      updatePassword: userManager.updatePassword
     }}>
       {children}
     </AuthContext.Provider>

@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
 
 interface AuthGuardProps {
   children: React.ReactNode;

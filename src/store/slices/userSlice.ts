@@ -43,11 +43,6 @@ export const signIn = createAsyncThunk(
       if (error) throw error;
       return data;
     } catch (error: any) {
-      toast({
-        title: 'Erreur de connexion',
-        description: error.message,
-        variant: 'destructive',
-      });
       return rejectWithValue(error.message);
     }
   }
@@ -61,11 +56,6 @@ export const signOut = createAsyncThunk(
       if (error) throw error;
       return null;
     } catch (error: any) {
-      toast({
-        title: 'Erreur de déconnexion',
-        description: error.message,
-        variant: 'destructive',
-      });
       return rejectWithValue(error.message);
     }
   }
@@ -95,11 +85,6 @@ export const registerAsAffiliate = createAsyncThunk(
       
       return updatedUser;
     } catch (error: any) {
-      toast({
-        title: 'Erreur',
-        description: error.message,
-        variant: 'destructive',
-      });
       return rejectWithValue(error.message);
     }
   }

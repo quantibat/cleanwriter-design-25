@@ -24,12 +24,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toast } from '@/components/ui/use-toast';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
-import { supabase } from '@/integrations/supabase/client';
 
-const formSchema = z.object({
+// Schéma de validation du formulaire de profil
+const profileFormSchema = z.object({
   firstName: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
   lastName: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
   email: z.string().email({ message: "Adresse email invalide" }),
@@ -38,75 +37,66 @@ const formSchema = z.object({
   siret: z.string().min(9, { message: "Le SIRET doit contenir au moins 9 caractères" })
 });
 
-const Account = () => {
-  const { user } = useAuth();
-  const [isIncomplete, setIsIncomplete] = useState(false);
-  
-  // Parse user data from metadata
-  const userData = {
-    firstName: user?.user_metadata?.full_name?.split(' ')[0] || "",
-    lastName: user?.user_metadata?.full_name?.split(' ')[1] || "",
-    email: user?.email || "",
-    address: user?.user_metadata?.address || "",
-    enterprise: user?.user_metadata?.enterprise || "",
-    siret: user?.user_metadata?.siret || ""
-  };
+// Schéma de validation du formulaire de mot de passe
+const passwordFormSchema = z.object({
+  currentPassword: z.string().min(1, { message: "Le mot de passe actuel est requis" }),
+  newPassword: z.string().min(6, { message: "Le nouveau mot de passe doit contenir au moins 6 caractères" }),
+  confirmPassword: z.string().min(6, { message: "La confirmation du mot de passe doit contenir au moins 6 caractères" })
+}).refine(data => data.newPassword === data.confirmPassword, {
+  message: "Les mots de passe ne correspondent pas",
+  path: ["confirmPassword"]
+});
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: userData,
+const Account = () => {
+  const { getUserProfile, updateUserProfile, isProfileComplete, updatePassword } = useAuth();
+  const [isIncomplete, setIsIncomplete] = useState(false);
+  const [passwordUpdateLoading, setPasswordUpdateLoading] = useState(false);
+  
+  // Formulaire de profil
+  const profileForm = useForm<z.infer<typeof profileFormSchema>>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: getUserProfile(),
   });
 
-  // Check if any field is empty and show alert if needed
+  // Formulaire de mot de passe
+  const passwordForm = useForm<z.infer<typeof passwordFormSchema>>({
+    resolver: zodResolver(passwordFormSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
+    },
+  });
+
+  // Vérifier si le profil est complet
   useEffect(() => {
-    const subscription = form.watch((value) => {
+    setIsIncomplete(!isProfileComplete());
+    
+    const subscription = profileForm.watch((value) => {
       const isEmpty = Object.values(value).some(val => !val);
       setIsIncomplete(isEmpty);
     });
     
     return () => subscription.unsubscribe();
-  }, [form]);
+  }, [profileForm, isProfileComplete]);
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  // Soumission du formulaire de profil
+  const onProfileSubmit = async (data: z.infer<typeof profileFormSchema>) => {
+    await updateUserProfile(data);
+  };
+
+  // Soumission du formulaire de mot de passe
+  const onPasswordSubmit = async (data: z.infer<typeof passwordFormSchema>) => {
+    setPasswordUpdateLoading(true);
     try {
-      // Update user metadata
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: { 
-          full_name: `${data.firstName} ${data.lastName}`,
-          address: data.address,
-          enterprise: data.enterprise,
-          siret: data.siret
-        }
+      await updatePassword(data.currentPassword, data.newPassword);
+      passwordForm.reset({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
       });
-      
-      if (updateError) throw updateError;
-      
-      // Update user in the public users table
-      const { error: userUpdateError } = await supabase
-        .from('users')
-        .update({
-          full_name: `${data.firstName} ${data.lastName}`,
-          enterprise: data.enterprise,
-          siret: data.siret
-        })
-        .eq('id', user?.id);
-      
-      if (userUpdateError) throw userUpdateError;
-      
-      toast({
-        title: "Profil mis à jour",
-        description: "Vos informations ont été mises à jour avec succès",
-      });
-      
-      // Refresh incomplete status
-      setIsIncomplete(Object.values(data).some(val => !val));
-    } catch (error: any) {
-      console.error("Erreur lors de la mise à jour du profil:", error);
-      toast({
-        title: "Erreur",
-        description: error.message || "Une erreur est survenue lors de la mise à jour du profil",
-        variant: "destructive"
-      });
+    } finally {
+      setPasswordUpdateLoading(false);
     }
   };
 
@@ -125,6 +115,7 @@ const Account = () => {
           </Alert>
         )}
         
+        {/* Formulaire d'informations personnelles */}
         <Card className="mb-8 w-full">
           <CardHeader>
             <CardTitle>Informations personnelles</CardTitle>
@@ -133,11 +124,11 @@ const Account = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="w-full">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+            <Form {...profileForm}>
+              <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4 w-full">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                   <FormField
-                    control={form.control}
+                    control={profileForm.control}
                     name="firstName"
                     render={({ field }) => (
                       <FormItem className="w-full">
@@ -151,7 +142,7 @@ const Account = () => {
                   />
                   
                   <FormField
-                    control={form.control}
+                    control={profileForm.control}
                     name="lastName"
                     render={({ field }) => (
                       <FormItem className="w-full">
@@ -166,7 +157,7 @@ const Account = () => {
                 </div>
                 
                 <FormField
-                  control={form.control}
+                  control={profileForm.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem className="w-full">
@@ -180,7 +171,7 @@ const Account = () => {
                 />
                 
                 <FormField
-                  control={form.control}
+                  control={profileForm.control}
                   name="address"
                   render={({ field }) => (
                     <FormItem className="w-full">
@@ -195,7 +186,7 @@ const Account = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                   <FormField
-                    control={form.control}
+                    control={profileForm.control}
                     name="enterprise"
                     render={({ field }) => (
                       <FormItem className="w-full">
@@ -209,7 +200,7 @@ const Account = () => {
                   />
                   
                   <FormField
-                    control={form.control}
+                    control={profileForm.control}
                     name="siret"
                     render={({ field }) => (
                       <FormItem className="w-full">
@@ -233,6 +224,7 @@ const Account = () => {
           </CardContent>
         </Card>
         
+        {/* Formulaire de sécurité */}
         <Card className="w-full">
           <CardHeader>
             <CardTitle>Sécurité</CardTitle>
@@ -241,21 +233,76 @@ const Account = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 w-full">
-            <div className="w-full">
-              <Label htmlFor="current-password">Mot de passe actuel</Label>
-              <Input id="current-password" type="password" className="w-full" showPasswordToggle={true} />
-            </div>
-            <div className="w-full">
-              <Label htmlFor="new-password">Nouveau mot de passe</Label>
-              <Input id="new-password" type="password" className="w-full" showPasswordToggle={true} />
-            </div>
-            <div className="w-full">
-              <Label htmlFor="confirm-password">Confirmer le mot de passe</Label>
-              <Input id="confirm-password" type="password" className="w-full" showPasswordToggle={true} />
-            </div>
-            <div className="flex justify-end w-full">
-              <Button className="w-full md:w-auto">Modifier le mot de passe</Button>
-            </div>
+            <Form {...passwordForm}>
+              <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4 w-full">
+                <FormField
+                  control={passwordForm.control}
+                  name="currentPassword"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Mot de passe actuel</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          className="w-full" 
+                          showPasswordToggle={true} 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={passwordForm.control}
+                  name="newPassword"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Nouveau mot de passe</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          className="w-full" 
+                          showPasswordToggle={true} 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={passwordForm.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Confirmer le mot de passe</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          className="w-full" 
+                          showPasswordToggle={true} 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="flex justify-end w-full">
+                  <Button 
+                    type="submit" 
+                    className="w-full md:w-auto"
+                    disabled={passwordUpdateLoading}
+                  >
+                    {passwordUpdateLoading ? "Modification en cours..." : "Modifier le mot de passe"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </CardContent>
         </Card>
       </div>
