@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -63,6 +64,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // Toujours définir isPremiumUser à true pour tous les utilisateurs
           dispatch(setPremiumUser(true));
           
+          // Make sure to set isLoading to false after Google login
+          dispatch(setIsLoading(false));
+          
           // Afficher le message de bienvenue
           toast({
             title: "Connexion réussie",
@@ -96,6 +100,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             description: "Vous avez été déconnecté",
             variant: "default",
           });
+        } else if (event === 'TOKEN_REFRESHED') {
+          // When token is refreshed, make sure loading state is reset
+          dispatch(setIsLoading(false));
         } else if (event === 'PASSWORD_RECOVERY') {
           toast({
             title: "Récupération de mot de passe",
@@ -114,12 +121,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, [dispatch]);
 
-  // Ajouter un useEffect pour gérer isLoading en fonction de l'état de l'utilisateur
+  // Add a second useEffect to monitor auth state changes and force isLoading to false
+  // after a timeout to prevent the loading state from getting stuck
   useEffect(() => {
-    if (user) {
-      dispatch(setIsLoading(false));
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        console.log('Force resetting isLoading state after timeout');
+        dispatch(setIsLoading(false));
+      }, 5000); // 5 second safety timeout
+      return () => clearTimeout(timer);
     }
-  }, [user, dispatch]);
+  }, [isLoading, dispatch]);
 
   const signOut = async () => {
     try {
