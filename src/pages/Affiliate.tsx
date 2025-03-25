@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -127,7 +128,7 @@ const Affiliate = () => {
     }
     setIsRegistering(true);
     try {
-      await registerAsAffiliate();
+      await registerAsAffiliate(formData);
       toast({
         title: "Inscription réussie !",
         description: "Vous êtes maintenant un affilié DCEManager",

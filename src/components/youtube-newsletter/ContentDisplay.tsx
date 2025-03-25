@@ -2,10 +2,12 @@
 import React from 'react';
 import { Copy, ThumbsUp, ThumbsDown, Save } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { ActiveContent } from '@/hooks/useActiveContent';
 
 interface ContentDisplayProps {
-  content: ActiveContent | null;
+  content: {
+    subject: string;
+    body: string;
+  } | null;
   isLoading: boolean;
 }
 

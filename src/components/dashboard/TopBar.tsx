@@ -1,77 +1,228 @@
-
-import React from 'react';
-import { Moon, Sun } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Sun, Moon, LogOut, Globe, User, CreditCard, Settings, HelpCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
-import NotificationBell from './NotificationBell';
-import TabNavigation from './TabNavigation';
-import { supabase } from '@/integrations/supabase/client';
-
+import { useSidebar } from '@/components/ui/sidebar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
-  activeTab?: string;
-  onTabChange?: (tab: string) => void;
+  activeTab:string
 }
-
-const TopBar: React.FC<TopBarProps> = ({ onThemeToggle, isDarkMode, activeTab, onTabChange }) => {
+const TopBar = ({
+  onThemeToggle,
+  isDarkMode,
+  activeTab
+}: TopBarProps) => {
+  const [language, setLanguage] = useState<'fr' | 'en'>('fr');
+  const {
+    user,
+    signOut
+  } = useAuth();
   const navigate = useNavigate();
-  const { user } = useAuth();
-  
+  const {
+    toggleSidebar
+  } = useSidebar();
+
+  // Mock user data - in a real app, this would come from the user object or a separate API call
+  const userData = {
+    firstName: user?.user_metadata?.full_name?.split(' ')[0] || "John",
+    lastName: user?.user_metadata?.full_name?.split(' ')[1] || "Doe",
+    email: user?.email || "john.doe@example.com",
+    address: user?.user_metadata?.address || "123 Rue de Paris, 75000 Paris"
+  };
+
+  // Total credits and used credits
+  const totalCredits = 30000;
+  const usedCredits = 5000; // Example: 5000 credits used
+  const remainingCredits = totalCredits - usedCredits;
+  const percentUsed = Math.round(usedCredits / totalCredits * 100);
   const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      navigate('/signin');
-    } catch (error) {
-      console.error('Erreur lors de la déconnexion:', error);
-    }
+    await signOut();
+    navigate('/');
   };
-  
-  const handleTabChange = (tab: string) => {
-    if (onTabChange) {
-      onTabChange(tab);
-    }
+  const handleUpgrade = () => {
+    navigate('/upgrade-plan');
   };
-  
-  const userInitials = user?.email 
-    ? user.email.substring(0, 2).toUpperCase() 
-    : 'DC';
-  
-  return (
-    <header className="flex flex-wrap items-center justify-between bg-[#151f30] px-4 py-3 shadow-md w-full">
-      <div className="flex items-center space-x-2">
-        <h1 className="text-xl font-semibold text-white">
-          <span className="text-blue-400">DCE</span>Manager
-        </h1>
-      </div>
-      
-      <div className="flex-grow mx-4">
-        <TabNavigation activeTab={activeTab} onTabChange={handleTabChange} />
-      </div>
-      
-      <div className="flex items-center space-x-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-gray-300 hover:text-white"
-          onClick={onThemeToggle}
-        >
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </Button>
-        
-        <NotificationBell />
-        
-        <div className="flex items-center space-x-2">
-          <Avatar className="h-9 w-9 cursor-pointer" onClick={() => navigate('/account')}>
-            <AvatarImage src="" />
-            <AvatarFallback className="bg-blue-600 text-white">{userInitials}</AvatarFallback>
-          </Avatar>
+  const handleThemeChange = () => {
+    if (isDarkMode) {
+      // Apply light theme - make everything white (without transparency)
+      document.documentElement.classList.add('light-theme');
+      document.documentElement.classList.remove('dark-theme');
+
+      // Set pure white background (no transparency) and black text for the entire application
+      document.documentElement.style.setProperty('--background', '#FFFFFF');
+      document.documentElement.style.setProperty('--foreground', '#000000');
+      document.documentElement.style.setProperty('--card', '#FFFFFF');
+      document.documentElement.style.setProperty('--card-foreground', '#000000');
+      document.documentElement.style.setProperty('--popover', '#FFFFFF');
+      document.documentElement.style.setProperty('--popover-foreground', '#000000');
+      document.documentElement.style.setProperty('--sidebar-background', '#FFFFFF');
+      document.documentElement.style.setProperty('--sidebar-foreground', '#000000');
+      document.documentElement.style.setProperty('--muted', '#F9FAFB');
+      document.documentElement.style.setProperty('--muted-foreground', '#71717A');
+      document.documentElement.style.setProperty('--accent', '#F9FAFB');
+      document.documentElement.style.setProperty('--accent-foreground', '#000000');
+      document.documentElement.style.setProperty('--sidebar-accent', '#F9FAFB');
+      document.documentElement.style.setProperty('--sidebar-accent-foreground', '#000000');
+      document.documentElement.style.setProperty('--border', '#E4E4E7');
+      document.documentElement.style.setProperty('--sidebar-border', '#E4E4E7');
+
+      // Remove background image and transparency effects
+      document.body.style.backgroundImage = 'none';
+      document.body.style.backgroundColor = '#FFFFFF';
+    } else {
+      // Maintain dark theme (current theme)
+      document.documentElement.classList.add('dark-theme');
+      document.documentElement.classList.remove('light-theme');
+
+      // Reset to default dark theme values
+      document.documentElement.style.removeProperty('--background');
+      document.documentElement.style.removeProperty('--foreground');
+      document.documentElement.style.removeProperty('--card');
+      document.documentElement.style.removeProperty('--card-foreground');
+      document.documentElement.style.removeProperty('--popover');
+      document.documentElement.style.removeProperty('--popover-foreground');
+      document.documentElement.style.removeProperty('--sidebar-background');
+      document.documentElement.style.removeProperty('--sidebar-foreground');
+      document.documentElement.style.removeProperty('--muted');
+      document.documentElement.style.removeProperty('--muted-foreground');
+      document.documentElement.style.removeProperty('--accent');
+      document.documentElement.style.removeProperty('--accent-foreground');
+      document.documentElement.style.removeProperty('--sidebar-accent');
+      document.documentElement.style.removeProperty('--sidebar-accent-foreground');
+      document.documentElement.style.removeProperty('--border');
+      document.documentElement.style.removeProperty('--sidebar-border');
+    }
+    onThemeToggle();
+  };
+  const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
+    setLanguage(newLanguage);
+    console.log(`Language changed to: ${newLanguage}`);
+    // Here you would implement the actual language change logic
+  };
+  return <div className="flex flex-col w-full border-b border-[#2A3047] bg-[#121520]">
+      {/* Top div with logo and user controls */}
+      <div className="flex items-center justify-between w-full px-6 py-3">
+        {/* Left: Logo */}
+        <div className="flex items-center">
+          <Link to="/dashboard" className="flex items-center gap-2">
+            
+            <div className="text-white font-semibold text-xl">
+              DCE<span className="text-[#00a2ff]">Manager</span>
+            </div>
+          </Link>
+        </div>
+
+        {/* Right: User controls */}
+        <div className="flex items-center space-x-4">
+          {/* Theme Toggle */}
+          <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
+            {isDarkMode ? <Sun className="h-5 w-5 text-gray-400" /> : <Moon className="h-5 w-5 text-gray-400" />}
+          </Button>
+
+          {/* Language Selector */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Globe className="h-5 w-5 text-gray-400" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleLanguageChange('fr')} className={language === 'fr' ? 'bg-accent' : ''}>
+                Français
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('en')} className={language === 'en' ? 'bg-accent' : ''}>
+                English
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Avatar + Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative rounded-full h-8 w-8 p-0">
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" alt={userData.firstName} />
+                  <AvatarFallback>{userData.firstName.charAt(0)}{userData.lastName.charAt(0)}</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{userData.firstName} {userData.lastName}</p>
+                  <p className="text-xs leading-none text-muted-foreground">{userData.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <Link to="/account">Mon compte</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <CreditCard className="mr-2 h-4 w-4" />
+                <Link to="/billing">Facturation</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                <Link to="/settings">Paramètres</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                <Link to="/help">Aide</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Déconnexion
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
-    </header>
-  );
-};
 
+      {/* Bottom div with navigation and credits */}
+      <div className="flex items-center justify-between w-full px-6 py-3 bg-[#1a1f2b]">
+        {/* Left: Navigation Links */}
+        <div className="flex items-center space-x-8">
+          <Link to="/dashboard" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'tools' && "text-white border-b-2 border-[#00a2ff]"}`}>
+            <span className="text-white">Outils</span>
+          </Link>
+          
+          <Link to="/projects" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'projects' && "text-white border-b-2 border-[#00a2ff]"}`}>
+            <span>Projets</span>
+          </Link>
+          
+          <Link to="/contribute" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-gray-400 hover:text-white/80 ${activeTab === 'contribute' && "text-white border-b-2 border-[#00a2ff]"}`}>
+            <span>Contribuer</span>
+          </Link>
+          
+        </div>
+
+        {/* Right: Credits Info and Upgrade Button */}
+        <div className="flex items-center space-x-4">
+          <div className="bg-[#1e2333] rounded-lg p-3">
+            <div className="flex flex-col">
+              <div className="text-sm text-gray-400 mb-1">Vos crédits disponibles</div>
+              <div className="flex items-center space-x-2">
+                <Progress value={percentUsed} className="w-24 h-2" />
+                <span className="text-white text-xs">{percentUsed}% de vos crédits utilisés</span>
+              </div>
+              <div className="text-sm text-white font-medium mt-1">
+                {remainingCredits.toLocaleString()} / {totalCredits.toLocaleString()} crédits
+              </div>
+              <Button size="sm" variant="blue" onClick={handleUpgrade} className="mt-2 text-xs py-1 h-8 bg-transparent ">
+                Mettre à niveau
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>;
+};
 export default TopBar;

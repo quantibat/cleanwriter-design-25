@@ -1,8 +1,8 @@
+
 import React, { createContext, useContext, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setUser, setSession, setPremiumUser } from '@/store/slices/userSlice';
-import { useUserManager, UserProfile } from '@/hooks/useUserManager';
+import { setUser, setSession, setPremiumUser, signOut as signOutAction } from '@/store/slices/userSlice';
 
 type AuthContextType = {
   user: any | null;
@@ -11,20 +11,103 @@ type AuthContextType = {
   signOut: () => Promise<void>;
   isPremiumUser: boolean;
   isAffiliate: boolean;
-  registerAsAffiliate: () => Promise<boolean>;
+  registerAsAffiliate: (formData: AffiliateRegistrationData) => Promise<void>;
   quickAffiliateSignup: () => Promise<boolean>;
-  updateUserProfile: (profile: Partial<UserProfile>) => Promise<boolean>;
-  getUserProfile: () => UserProfile;
-  isProfileComplete: () => boolean;
-  updatePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
+};
+
+type AffiliateRegistrationData = {
+  fullName: string;
+  email: string;
+  password: string;
+  agreeTerms: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
-  const { user, session, isLoading, isPremiumUser, isAffiliate } = useAppSelector(state => state.user);
-  const userManager = useUserManager();
+  const { user, session, isLoading, isPremiumUser, isAffiliate, error } = useAppSelector(state => state.user);
+
+  const registerAsAffiliate = async (formData: AffiliateRegistrationData): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      try {
+        setTimeout(() => {
+          if (user) {
+            const updatedUser = {
+              ...user,
+              user_metadata: {
+                ...user.user_metadata,
+                affiliate: true
+              }
+            };
+            
+            dispatch(setUser(updatedUser));
+            
+            if (session) {
+              dispatch(setSession({
+                ...session,
+                user: updatedUser
+              }));
+            }
+            
+            resolve();
+          } else {
+            reject(new Error("Utilisateur non connecté"));
+          }
+        }, 1000);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const quickAffiliateSignup = async (): Promise<boolean> => {
+    try {
+      if (!user) {
+        return false;
+      }
+
+      const updatedUser = {
+        ...user,
+        user_metadata: {
+          ...user.user_metadata,
+          affiliate: true
+        }
+      };
+      
+      dispatch(setUser(updatedUser));
+      
+      if (session) {
+        dispatch(setSession({
+          ...session,
+          user: updatedUser
+        }));
+      }
+      
+      setTimeout(() => {
+        try {
+          const notificationContext = window._getNotificationContext?.();
+          if (notificationContext?.addNotification) {
+            notificationContext.addNotification({
+              title: "Bienvenue dans le programme d'affiliation",
+              message: "Votre compte affilié est prêt à l'emploi!",
+              type: "success",
+            });
+          }
+        } catch (e) {
+          console.error("Impossible d'accéder au contexte de notification:", e);
+        }
+      }, 500);
+      
+      return true;
+    } catch (error: any) {
+      return false;
+    }
+  };
+
+  const signOut = async () => {
+    dispatch(signOutAction());
+  };
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -33,10 +116,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch(setSession(newSession));
         
         if (event === 'SIGNED_IN') {
+          // Si c'est une nouvelle connexion Google, s'assurer que l'utilisateur est ajouté à la table users
           if (newSession?.user?.app_metadata?.provider === 'google') {
+            // Vérifier si c'est un nouvel utilisateur (created_at égal à last_sign_in_at)
             if (newSession.user.created_at === newSession.user.last_sign_in_at) {
               console.log("Nouvel utilisateur Google, configuration des métadonnées");
               
+              // Ajouter l'utilisateur à la table users
               const { error: insertError } = await supabase
                 .from('users')
                 .insert({
@@ -66,8 +152,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           }
           
+          // Toujours définir isPremiumUser à true pour tous les utilisateurs
           dispatch(setPremiumUser(true));
           
+          // Système de notification (si disponible)
           setTimeout(() => {
             try {
               const notificationContext = window._getNotificationContext?.();
@@ -86,6 +174,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
+    // Initialiser la session au chargement
     const getInitialSession = async () => {
       const { data, error } = await supabase.auth.getSession();
       
@@ -107,15 +196,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user, 
       session, 
       isLoading, 
-      signOut: userManager.signOut,
+      signOut,
       isPremiumUser,
       isAffiliate,
-      registerAsAffiliate: userManager.registerAsAffiliate,
-      quickAffiliateSignup: userManager.quickAffiliateSignup,
-      updateUserProfile: userManager.updateUserProfile,
-      getUserProfile: userManager.getUserProfile,
-      isProfileComplete: userManager.isProfileComplete,
-      updatePassword: userManager.updatePassword
+      registerAsAffiliate,
+      quickAffiliateSignup
     }}>
       {children}
     </AuthContext.Provider>
