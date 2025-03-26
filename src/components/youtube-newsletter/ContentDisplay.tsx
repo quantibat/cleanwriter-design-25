@@ -1,7 +1,8 @@
 
-import React from 'react';
-import { Copy, ThumbsUp, ThumbsDown, Save } from 'lucide-react';
+import React, { useRef } from 'react';
+import { Copy, ThumbsUp, ThumbsDown, Save, Download } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface ContentDisplayProps {
   content: {
@@ -9,12 +10,20 @@ interface ContentDisplayProps {
     body: string;
   } | null;
   isLoading: boolean;
+  onDownloadPDF?: () => void;
 }
 
-const ContentDisplay: React.FC<ContentDisplayProps> = ({ content, isLoading }) => {
+const ContentDisplay: React.FC<ContentDisplayProps> = ({ content, isLoading, onDownloadPDF }) => {
+  const { toast } = useToast();
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const handleCopy = () => {
     if (content) {
       navigator.clipboard.writeText(content.body);
+      toast({
+        title: "Contenu copié",
+        description: "Le contenu a été copié dans le presse-papier"
+      });
     }
   };
 
@@ -44,6 +53,10 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ content, isLoading }) =
     );
   }
 
+  // Calculate approximate word count and reading time
+  const wordCount = content.body.split(/\s+/).length;
+  const readingMinutes = Math.max(1, Math.round(wordCount / 200));
+
   return (
     <div className="h-full flex flex-col">
       <div className="p-4 border-b border-[#1d2535]">
@@ -56,6 +69,11 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ content, isLoading }) =
             <Button variant="ghost" size="sm" onClick={handleCopy}>
               <Copy size={16} className="mr-1" /> Copier
             </Button>
+            {onDownloadPDF && (
+              <Button variant="ghost" size="sm" onClick={onDownloadPDF}>
+                <Download size={16} className="mr-1" /> PDF
+              </Button>
+            )}
             <Button variant="ghost" size="sm">
               <Save size={16} className="mr-1" /> Enregistrer
             </Button>
@@ -85,7 +103,7 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ content, isLoading }) =
           </Button>
         </div>
       </div>
-      <div className="flex-1 p-6 overflow-auto">
+      <div className="flex-1 p-6 overflow-auto" ref={contentRef}>
         <div className="prose prose-invert max-w-full">
           {content.body.split('\n\n').map((paragraph, index) => (
             <p key={index} className="mb-4 text-gray-200">
@@ -94,7 +112,7 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ content, isLoading }) =
           ))}
         </div>
         <div className="mt-8 pt-4 border-t border-[#1d2535] text-sm flex justify-between text-gray-500">
-          <div>136 mots - 1 min de lecture</div>
+          <div>{wordCount} mots - {readingMinutes} min de lecture</div>
           <div className="flex items-center gap-2">
             <span>16171 Crédits utilisés (1590 pour l'analyse de contenu et 270 pour la génération)</span>
           </div>

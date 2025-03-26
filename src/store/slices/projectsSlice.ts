@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { supabase } from '@/integrations/supabase/client';
 import { ProjectFormData } from '@/services/projectsService';
@@ -87,6 +86,7 @@ export const createProject = createAsyncThunk(
         topics: data.topics || [],
         selected_topics: data.selectedTopics || [],
         active_content: data.activeContent || null,
+        generated_contents: data.generatedContents || null,
         video_metadata: data.videoMetadata || null,
         used_credits: data.usedCredits || 0,
         progress: data.progress || 0,
@@ -135,6 +135,7 @@ export const updateProject = createAsyncThunk(
       if (data.topics !== undefined) updateData.topics = data.topics;
       if (data.selectedTopics !== undefined) updateData.selected_topics = data.selectedTopics;
       if (data.activeContent !== undefined) updateData.active_content = data.activeContent;
+      if (data.generatedContents !== undefined) updateData.generated_contents = data.generatedContents;
       if (data.videoMetadata !== undefined) updateData.video_metadata = data.videoMetadata;
       if (data.usedCredits !== undefined) updateData.used_credits = data.usedCredits;
       if (data.progress !== undefined) updateData.progress = data.progress;

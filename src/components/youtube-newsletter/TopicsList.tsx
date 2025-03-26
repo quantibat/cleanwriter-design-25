@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, CheckCircle2 } from 'lucide-react';
+import { Check, CheckCircle2, Download } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 interface Topic {
@@ -13,6 +13,7 @@ interface TopicsListProps {
   topics: Topic[];
   selectedTopics: string[];
   onSelectTopic: (topicId: string) => void;
+  onDownloadPDF?: () => void;
   isLoading: boolean;
 }
 
@@ -20,6 +21,7 @@ const TopicsList: React.FC<TopicsListProps> = ({
   topics, 
   selectedTopics, 
   onSelectTopic,
+  onDownloadPDF,
   isLoading
 }) => {
   if (isLoading) {
@@ -45,6 +47,20 @@ const TopicsList: React.FC<TopicsListProps> = ({
 
   return (
     <div className="space-y-3">
+      {selectedTopics.length > 0 && onDownloadPDF && (
+        <div className="flex justify-end mb-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1 text-xs text-blue-400 border-blue-500/30 hover:bg-blue-500/10"
+            onClick={onDownloadPDF}
+          >
+            <Download size={14} />
+            Télécharger en PDF
+          </Button>
+        </div>
+      )}
+      
       {topics.map((topic) => {
         const isSelected = selectedTopics.includes(topic.id);
         

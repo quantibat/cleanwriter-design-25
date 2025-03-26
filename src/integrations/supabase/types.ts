@@ -16,6 +16,7 @@ export type Database = {
           card_title: string | null
           created_at: string | null
           elements: number | null
+          generated_contents: Json | null
           id: string
           is_social_media_only: boolean | null
           option_type: string | null
@@ -36,6 +37,7 @@ export type Database = {
           card_title?: string | null
           created_at?: string | null
           elements?: number | null
+          generated_contents?: Json | null
           id?: string
           is_social_media_only?: boolean | null
           option_type?: string | null
@@ -56,6 +58,7 @@ export type Database = {
           card_title?: string | null
           created_at?: string | null
           elements?: number | null
+          generated_contents?: Json | null
           id?: string
           is_social_media_only?: boolean | null
           option_type?: string | null

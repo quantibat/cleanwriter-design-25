@@ -6,15 +6,16 @@ export interface ActiveContent {
   body: string;
 }
 
-export const useActiveContent = (initialContent: ActiveContent | null = null) => {
+export const useActiveContent = (initialContent: ActiveContent | null) => {
   const [activeContent, setActiveContent] = useState<ActiveContent | null>(initialContent);
 
-  const updateActiveContent = (content: ActiveContent | null) => {
-    setActiveContent(content);
+  const clearActiveContent = () => {
+    setActiveContent(null);
   };
 
   return {
     activeContent,
-    setActiveContent: updateActiveContent
+    setActiveContent,
+    clearActiveContent,
   };
 };

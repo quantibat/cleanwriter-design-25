@@ -19,6 +19,7 @@ export interface ProjectFormData {
   topics?: any[];
   selectedTopics?: string[];
   activeContent?: any;
+  generatedContents?: any[];
   videoMetadata?: any;
   usedCredits?: number;
   progress?: number;
