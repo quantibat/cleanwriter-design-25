@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle } from 'lucide-react';
@@ -15,24 +16,7 @@ import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 import { Textarea } from "@/components/ui/textarea";
 import { createProject } from '@/services/projectsService';
 import { useAuth } from '@/contexts/AuthContext';
-
-const MOCK_TOPICS = [
-  {
-    id: '1',
-    title: 'La clé des vidéos virales : êtes-vous prêt ?',
-    description: 'Découvrez les facteurs essentiels qui font le succès des vidéos virales sur les plateformes modernes.'
-  },
-  {
-    id: '2',
-    title: 'Les 4 piliers du succès sur YouTube',
-    description: 'Analyse des quatre compétences fondamentales pour réussir et maintenir l\'intérêt de votre audience.'
-  },
-  {
-    id: '3',
-    title: 'Au-delà de l\'argent : ce qui fait vraiment une vie réussie',
-    description: 'Réflexion sur l\'importance de l\'équilibre entre richesse, relations et authenticité.'
-  }
-];
+import { supabase } from '@/integrations/supabase/client';
 
 const MOCK_CONTENT = {
   '1': {
@@ -200,15 +184,59 @@ const CreateDCE = () => {
     setCardTitle(e.target.value);
   };
 
+  // Modified function to use OpenAI API through Supabase Edge Function
   const generateTopics = async () => {
+    if (!isValidYoutubeLink) {
+      toast({
+        title: "Lien YouTube invalide",
+        description: "Veuillez entrer un lien YouTube valide pour générer des sujets",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setGeneratingTopics(true);
-    const wordCount = 250;
-    setUsedCredits(prev => prev + wordCount);
-    setTimeout(() => {
-      setTopics(MOCK_TOPICS);
+    
+    try {
+      const formData = form.getValues();
+      
+      // Call Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('generate-topics', {
+        body: {
+          youtubeLink: formData.youtubeLink,
+          option: formData.option,
+          language: formData.language,
+          isSocialMediaOnly: isSocialMediaOnly,
+          title: title
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data && data.topics && Array.isArray(data.topics)) {
+        setTopics(data.topics);
+        const wordCount = data.topics.reduce((count: number, topic: any) => 
+          count + (topic.title?.length || 0) + (topic.description?.length || 0), 0);
+        setUsedCredits(prev => prev + wordCount);
+        notifySuccess(
+          'Sujets générés', 
+          `${data.topics.length} sujets ont été générés avec succès à partir de la vidéo YouTube.`
+        );
+      } else {
+        throw new Error("Format de réponse inattendu");
+      }
+    } catch (err: any) {
+      console.error("Error generating topics:", err);
+      toast({
+        title: "Erreur de génération",
+        description: err.message || "Une erreur est survenue lors de la génération des sujets",
+        variant: "destructive"
+      });
+    } finally {
       setGeneratingTopics(false);
-      notifySuccess('Sujets générés', '3 sujets ont été générés avec succès à partir de la vidéo YouTube.');
-    }, 2000);
+    }
   };
 
   const handleSelectTopic = (topicId: string) => {
@@ -253,66 +281,70 @@ const CreateDCE = () => {
       return;
     }
     
-    // First generate topics
-    setGeneratingTopics(true);
-    
-    setTimeout(async () => {
-      const generatedTopics = MOCK_TOPICS;
-      setTopics(generatedTopics);
-      setGeneratingTopics(false);
+    // First generate topics if none exist
+    if (topics.length === 0) {
+      setGeneratingTopics(true);
       
-      // Save project to database
       try {
-        setIsLoading(true);
-        
-        const projectData = {
-          title: title,
-          youtubeLink: data.youtubeLink,
-          option: data.option,
-          language: data.language,
-          aiModel: data.aiModel,
-          cardTitle: cardTitle,
-          isSocialMediaOnly: isSocialMediaOnly,
-          topics: generatedTopics,
-          selectedTopics: [],
-          videoMetadata: videoMetadata,
-          usedCredits: 250, // Initial credits used for topic generation
-          progress: 10,
-          elements: generatedTopics.length
-        };
-        
-        const project = await createProject(projectData);
-        
-        if (project) {
-          notifySuccess(
-            'Projet créé', 
-            'Votre projet a été créé avec succès et les sujets ont été générés.'
-          );
-          
-          // Redirect to edit page with the project data
-          navigate(`/edit-project/${project.id}`, {
-            state: {
-              project: {
-                id: project.id,
-                title: project.title,
-                type: project.option_type || 'Youtube to Newsletter',
-                elements: project.elements,
-                description: project.card_title,
-                date: new Date(project.created_at).toLocaleDateString('fr-FR'),
-                lastModified: 'Aujourd\'hui',
-                progress: project.progress,
-                collaborators: 1,
-                details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
-              }
-            }
-          });
-        }
+        // Call the generate topics function
+        await generateTopics();
       } catch (error) {
-        console.error('Error saving project:', error);
-      } finally {
-        setIsLoading(false);
+        console.error("Error generating topics:", error);
+        setGeneratingTopics(false);
+        return;
       }
-    }, 2000);
+    }
+    
+    try {
+      setIsLoading(true);
+      
+      const projectData = {
+        title: title,
+        youtubeLink: data.youtubeLink,
+        option: data.option,
+        language: data.language,
+        aiModel: data.aiModel,
+        cardTitle: cardTitle,
+        isSocialMediaOnly: isSocialMediaOnly,
+        topics: topics,
+        selectedTopics: [],
+        videoMetadata: videoMetadata,
+        usedCredits: 250, // Initial credits used for topic generation
+        progress: 10,
+        elements: topics.length
+      };
+      
+      const project = await createProject(projectData);
+      
+      if (project) {
+        notifySuccess(
+          'Projet créé', 
+          'Votre projet a été créé avec succès et les sujets ont été générés.'
+        );
+        
+        // Redirect to edit page with the project data
+        navigate(`/edit-project/${project.id}`, {
+          state: {
+            project: {
+              id: project.id,
+              title: project.title,
+              type: project.option_type || 'Youtube to Newsletter',
+              elements: project.elements,
+              description: project.card_title,
+              date: new Date(project.created_at).toLocaleDateString('fr-FR'),
+              lastModified: 'Aujourd\'hui',
+              progress: project.progress,
+              collaborators: 1,
+              details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error saving project:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleUpgrade = () => {
@@ -473,7 +505,7 @@ const CreateDCE = () => {
                       <Button 
                         type="button" 
                         className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md" 
-                        onClick={() => handleSubmit(form.getValues())} 
+                        onClick={() => generateTopics()} 
                         disabled={generatingTopics || !isValidYoutubeLink || isLoading}
                       >
                         {generatingTopics || isLoading ? (

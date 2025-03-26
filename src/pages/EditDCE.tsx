@@ -15,6 +15,7 @@ import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 import { useProjects } from '@/hooks/useProjects';
 import { useActiveContent, ActiveContent } from '@/hooks/useActiveContent';
+import { supabase } from '@/integrations/supabase/client';
 
 const MOCK_TOPICS = [
   {
@@ -285,19 +286,57 @@ const EditDCE = () => {
   };
 
   const generateTopics = async () => {
+    if (!isValidYoutubeLink) {
+      toast({
+        title: "Lien YouTube invalide",
+        description: "Veuillez entrer un lien YouTube valide pour générer des sujets",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setGeneratingTopics(true);
     
-    const wordCount = 250;
-    setUsedCredits(prev => prev + wordCount);
-    
-    setTimeout(() => {
-      setTopics(MOCK_TOPICS);
+    try {
+      const formData = form.getValues();
+      
+      // Call Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('generate-topics', {
+        body: {
+          youtubeLink: formData.youtubeLink,
+          option: formData.option,
+          language: formData.language,
+          isSocialMediaOnly: isSocialMediaOnly,
+          title: title
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data && data.topics && Array.isArray(data.topics)) {
+        setTopics(data.topics);
+        const wordCount = data.topics.reduce((count: number, topic: any) => 
+          count + (topic.title?.length || 0) + (topic.description?.length || 0), 0);
+        setUsedCredits(prev => prev + wordCount);
+        notifySuccess(
+          'Sujets générés', 
+          `${data.topics.length} sujets ont été générés avec succès à partir de la vidéo YouTube.`
+        );
+      } else {
+        throw new Error("Format de réponse inattendu");
+      }
+    } catch (err: any) {
+      console.error("Error generating topics:", err);
+      toast({
+        title: "Erreur de génération",
+        description: err.message || "Une erreur est survenue lors de la génération des sujets",
+        variant: "destructive"
+      });
+    } finally {
       setGeneratingTopics(false);
-      notifySuccess(
-        'Sujets générés', 
-        '3 sujets ont été générés avec succès à partir de la vidéo YouTube.'
-      );
-    }, 2000);
+    }
   };
 
   const handleSelectTopic = (topicId: string) => {
