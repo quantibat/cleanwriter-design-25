@@ -26,23 +26,48 @@ export interface ProjectFormData {
   elements?: number;
 }
 
-// Ces méthodes sont des wrappers autour des actions Redux pour simplifier l'usage
+// Add better error handling to these service methods
 export const createProject = async (data: ProjectFormData) => {
-  return store.dispatch(createProjectAction(data)).unwrap();
+  try {
+    return await store.dispatch(createProjectAction(data)).unwrap();
+  } catch (error) {
+    console.error('Error creating project:', error);
+    throw error;
+  }
 };
 
 export const updateProject = async (id: string, data: Partial<ProjectFormData>) => {
-  return store.dispatch(updateProjectAction({ id, data })).unwrap();
+  try {
+    return await store.dispatch(updateProjectAction({ id, data })).unwrap();
+  } catch (error) {
+    console.error('Error updating project:', error);
+    throw error;
+  }
 };
 
 export const getProjectById = async (id: string) => {
-  return store.dispatch(fetchProjectByIdAction(id)).unwrap();
+  try {
+    return await store.dispatch(fetchProjectByIdAction(id)).unwrap();
+  } catch (error) {
+    console.error('Error fetching project by ID:', error);
+    throw error;
+  }
 };
 
 export const getUserProjects = async () => {
-  return store.dispatch(fetchProjectsAction()).unwrap();
+  try {
+    return await store.dispatch(fetchProjectsAction()).unwrap();
+  } catch (error) {
+    console.error('Error fetching user projects:', error);
+    throw error;
+  }
 };
 
 export const deleteProject = async (id: string) => {
-  return store.dispatch(deleteProjectAction(id)).unwrap();
+  try {
+    return await store.dispatch(deleteProjectAction(id)).unwrap();
+  } catch (error) {
+    console.error('Error deleting project:', error);
+    throw error;
+  }
 };

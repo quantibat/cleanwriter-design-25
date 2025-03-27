@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -33,6 +32,7 @@ export const useProjects = () => {
   const { toast } = useToast();
   const { notifySuccess, notifyError } = useNotificationsManager();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const transformDbProjectToUiModel = (project: any): ProjectUIModel => {
     return {
@@ -51,44 +51,63 @@ export const useProjects = () => {
     };
   };
 
-  const getUserProjects = async () => {
+  const getUserProjects = useCallback(async (retry = true) => {
     setIsLoading(true);
+    setError(null);
+    
     try {
+      console.log('Fetching projects...');
       const projects = await dispatch(fetchProjects()).unwrap();
+      console.log('Projects fetched successfully:', projects);
       setIsLoading(false);
       return projects;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching projects:', error);
+      
+      // If it's a network error and this is our first try, attempt one retry
+      if (retry && (error instanceof TypeError || error.message === 'Failed to fetch')) {
+        console.log('Network error, retrying once...');
+        // Wait a bit before retrying
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return getUserProjects(false);
+      }
+      
+      setError(error.message || 'Une erreur est survenue lors de la récupération des projets');
       toast({
         title: 'Erreur',
-        description: 'Impossible de récupérer vos projets',
+        description: error.message || 'Impossible de récupérer vos projets',
         variant: 'destructive'
       });
       setIsLoading(false);
       return [];
     }
-  };
+  }, [dispatch, toast]);
 
-  const getProjectById = async (id: string) => {
+  const getProjectById = useCallback(async (id: string) => {
     setIsLoading(true);
+    setError(null);
+    
     try {
       const project = await dispatch(fetchProjectById(id)).unwrap();
       setIsLoading(false);
       return project;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching project:', error);
+      setError(error.message || 'Une erreur est survenue lors de la récupération du projet');
       toast({
         title: 'Erreur',
-        description: 'Impossible de récupérer le projet',
+        description: error.message || 'Impossible de récupérer le projet',
         variant: 'destructive'
       });
       setIsLoading(false);
       return null;
     }
-  };
+  }, [dispatch, toast]);
 
   const createNewProject = async (data: any) => {
     setIsLoading(true);
+    setError(null);
+    
     try {
       const project = await dispatch(createProject(data)).unwrap();
       notifySuccess(
@@ -97,11 +116,12 @@ export const useProjects = () => {
       );
       setIsLoading(false);
       return project;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating project:', error);
+      setError(error.message || 'Une erreur est survenue lors de la création du projet');
       notifyError(
         'Erreur', 
-        'Impossible de créer le projet'
+        error.message || 'Impossible de créer le projet'
       );
       setIsLoading(false);
       return null;
@@ -110,6 +130,8 @@ export const useProjects = () => {
 
   const updateExistingProject = async (id: string, data: any) => {
     setIsLoading(true);
+    setError(null);
+    
     try {
       const project = await dispatch(updateProject({ id, data })).unwrap();
       notifySuccess(
@@ -118,11 +140,12 @@ export const useProjects = () => {
       );
       setIsLoading(false);
       return project;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating project:', error);
+      setError(error.message || 'Une erreur est survenue lors de la mise à jour du projet');
       notifyError(
         'Erreur', 
-        'Impossible de mettre à jour le projet'
+        error.message || 'Impossible de mettre à jour le projet'
       );
       setIsLoading(false);
       return null;
@@ -131,6 +154,8 @@ export const useProjects = () => {
 
   const deleteProject = async (id: string) => {
     setIsLoading(true);
+    setError(null);
+    
     try {
       await dispatch(deleteProjectAction(id)).unwrap();
       notifySuccess(
@@ -139,11 +164,12 @@ export const useProjects = () => {
       );
       setIsLoading(false);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting project:', error);
+      setError(error.message || 'Une erreur est survenue lors de la suppression du projet');
       notifyError(
         'Erreur', 
-        'Impossible de supprimer le projet'
+        error.message || 'Impossible de supprimer le projet'
       );
       setIsLoading(false);
       return false;
@@ -177,6 +203,7 @@ export const useProjects = () => {
 
   return {
     isLoading,
+    error,
     getUserProjects,
     getProjectById,
     createNewProject,

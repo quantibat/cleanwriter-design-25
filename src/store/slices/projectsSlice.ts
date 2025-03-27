@@ -22,20 +22,28 @@ export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
   async (_, { rejectWithValue }) => {
     try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) {
+        throw new Error('Vous devez être connecté pour accéder à vos projets');
+      }
+
+      console.log('Fetching projects from Supabase...');
       const { data: projects, error } = await supabase
         .from('projects')
         .select('*')
         .order('updated_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error fetching projects:', error);
+        throw error;
+      }
+      
+      console.log('Projects fetched successfully:', projects);
       return projects;
     } catch (error: any) {
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Une erreur est survenue lors de la récupération des projets',
-        variant: 'destructive'
-      });
-      return rejectWithValue(error.message);
+      console.error('Error in fetchProjects thunk:', error);
+      
+      return rejectWithValue(error.message || 'Une erreur est survenue lors de la récupération des projets');
     }
   }
 );
@@ -44,6 +52,11 @@ export const fetchProjectById = createAsyncThunk(
   'projects/fetchProjectById',
   async (id: string, { rejectWithValue }) => {
     try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) {
+        throw new Error('Vous devez être connecté pour accéder à ce projet');
+      }
+
       const { data: project, error } = await supabase
         .from('projects')
         .select('*')
@@ -53,12 +66,7 @@ export const fetchProjectById = createAsyncThunk(
       if (error) throw error;
       return project;
     } catch (error: any) {
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Une erreur est survenue lors de la récupération du projet',
-        variant: 'destructive'
-      });
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || 'Une erreur est survenue lors de la récupération du projet');
     }
   }
 );
@@ -73,7 +81,6 @@ export const createProject = createAsyncThunk(
         throw new Error('Utilisateur non authentifié');
       }
       
-      // Préparer les données en utilisant les clés de la table dans la base de données
       const projectData = {
         user_id: user.id,
         title: data.title || 'Untitled Youtube to Newsletter',
@@ -101,19 +108,9 @@ export const createProject = createAsyncThunk(
 
       if (error) throw error;
       
-      toast({
-        title: 'Succès',
-        description: 'Projet créé avec succès',
-      });
-      
       return project;
     } catch (error: any) {
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Une erreur est survenue lors de la création du projet',
-        variant: 'destructive'
-      });
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || 'Une erreur est survenue lors de la création du projet');
     }
   }
 );
@@ -122,7 +119,6 @@ export const updateProject = createAsyncThunk(
   'projects/updateProject',
   async ({ id, data }: { id: string, data: Partial<ProjectFormData> }, { rejectWithValue }) => {
     try {
-      // Mapper les noms de propriétés pour correspondre à la structure de la base de données
       const updateData: Record<string, any> = {};
       
       if (data.title !== undefined) updateData.title = data.title;
@@ -150,19 +146,9 @@ export const updateProject = createAsyncThunk(
 
       if (error) throw error;
       
-      toast({
-        title: 'Succès',
-        description: 'Projet mis à jour avec succès',
-      });
-      
       return project;
     } catch (error: any) {
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Une erreur est survenue lors de la mise à jour du projet',
-        variant: 'destructive'
-      });
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || 'Une erreur est survenue lors de la mise à jour du projet');
     }
   }
 );
@@ -178,19 +164,9 @@ export const deleteProject = createAsyncThunk(
 
       if (error) throw error;
       
-      toast({
-        title: 'Succès',
-        description: 'Projet supprimé avec succès',
-      });
-      
       return id;
     } catch (error: any) {
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Une erreur est survenue lors de la suppression du projet',
-        variant: 'destructive'
-      });
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || 'Une erreur est survenue lors de la suppression du projet');
     }
   }
 );
@@ -205,6 +181,9 @@ const projectsSlice = createSlice({
     clearCurrentProject: (state) => {
       state.currentProject = null;
     },
+    clearError: (state) => {
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -215,6 +194,7 @@ const projectsSlice = createSlice({
       .addCase(fetchProjects.fulfilled, (state, action) => {
         state.isLoading = false;
         state.projects = action.payload;
+        state.error = null;
       })
       .addCase(fetchProjects.rejected, (state, action) => {
         state.isLoading = false;
@@ -227,16 +207,32 @@ const projectsSlice = createSlice({
       .addCase(fetchProjectById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.currentProject = action.payload;
+        state.error = null;
       })
       .addCase(fetchProjectById.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
+      .addCase(createProject.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(createProject.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.projects.unshift(action.payload);
         state.currentProject = action.payload;
+        state.error = null;
+      })
+      .addCase(createProject.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateProject.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(updateProject.fulfilled, (state, action) => {
+        state.isLoading = false;
         const index = state.projects.findIndex(project => project.id === action.payload.id);
         if (index !== -1) {
           state.projects[index] = action.payload;
@@ -244,15 +240,30 @@ const projectsSlice = createSlice({
         if (state.currentProject?.id === action.payload.id) {
           state.currentProject = action.payload;
         }
+        state.error = null;
+      })
+      .addCase(updateProject.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteProject.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(deleteProject.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.projects = state.projects.filter(project => project.id !== action.payload);
         if (state.currentProject?.id === action.payload) {
           state.currentProject = null;
         }
+        state.error = null;
+      })
+      .addCase(deleteProject.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { setCurrentProject, clearCurrentProject } = projectsSlice.actions;
+export const { setCurrentProject, clearCurrentProject, clearError } = projectsSlice.actions;
 export default projectsSlice.reducer;
