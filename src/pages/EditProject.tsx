@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Sparkles, Youtube, Clock, RefreshCw, FileText, CheckCircle } from 'lucide-react';
@@ -15,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Json } from '@/integrations/supabase/types';
 import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
+import GeneratedContentCard from '@/components/youtube-newsletter/GeneratedContentCard';
 import { ActiveContent } from '@/hooks/useActiveContent';
 
 interface ContentItem {
@@ -476,32 +478,55 @@ const EditProject = () => {
           
           <TabsContent value="generated-content">
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-medium mb-4">Sujets générés</h3>
-                  <TopicsList 
-                    topics={topics.map((topic: any) => ({
-                      id: topic.id,
-                      title: topic.title,
-                      description: topic.description
-                    }))} 
-                    selectedTopics={selectedTopics} 
-                    onSelectTopic={handleSelectTopic}
-                    onDownloadPDF={handleDownloadPDF}
-                    isLoading={false}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium mb-4">Contenu</h3>
-                  <div className="border rounded-lg overflow-hidden">
-                    <ContentDisplay 
-                      contents={selectedContents} 
-                      isLoading={false}
+              {topics.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">Sujets générés</h3>
+                    <TopicsList 
+                      topics={topics.map((topic: any) => ({
+                        id: topic.id,
+                        title: topic.title,
+                        description: topic.description
+                      }))} 
+                      selectedTopics={selectedTopics} 
+                      onSelectTopic={handleSelectTopic}
                       onDownloadPDF={handleDownloadPDF}
+                      isLoading={false}
                     />
                   </div>
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">Contenu</h3>
+                    <div className="border rounded-lg overflow-hidden">
+                      <ContentDisplay 
+                        contents={selectedContents} 
+                        isLoading={false}
+                        onDownloadPDF={handleDownloadPDF}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : generatedContents.length > 0 ? (
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Contenus générés</h3>
+                  <div className="space-y-4">
+                    {generatedContents.map((content, index) => (
+                      <GeneratedContentCard 
+                        key={index} 
+                        content={content}
+                        onDownload={handleDownloadPDF}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12 border rounded-md">
+                  <Sparkles className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Aucun contenu généré</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Ce projet ne contient pas encore de contenu généré.
+                  </p>
+                </div>
+              )}
               
               <div className="flex justify-end space-x-4 pt-4">
                 <Button 
