@@ -91,8 +91,8 @@ const Testimonials = () => {
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-4">
-                  <Card className="cosmic-card hover:border-blue-500/20 h-full">
-                    <CardContent className="p-8 md:p-10 flex flex-col items-center text-center">
+                  <Card className="relative border border-transparent bg-transparent hover:scale-[1.02] transition-transform duration-300 testimonial-card">
+                    <CardContent className="p-8 md:p-10 flex flex-col items-center text-center bg-white/5 backdrop-blur-sm rounded-xl">
                       <Quote className="h-10 w-10 text-blue-400 mb-6 opacity-50" />
                       
                       <p className="text-lg text-blue-100/90 mb-8 italic">
@@ -136,6 +136,38 @@ const Testimonials = () => {
           </div>
         </div>
       </div>
+
+      {/* Add styles for neon border effect */}
+      <style jsx>{`
+        .testimonial-card {
+          position: relative;
+        }
+        
+        .testimonial-card::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(45deg, #3B82F6, #60A5FA, #3B82F6);
+          border-radius: inherit;
+          z-index: -1;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        .testimonial-card:hover::before {
+          opacity: 1;
+          animation: borderAnimate 2s linear infinite;
+        }
+        
+        @keyframes borderAnimate {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
     </section>
   );
 };
