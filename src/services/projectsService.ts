@@ -142,6 +142,7 @@ export const mapProjectFromDb = (project: any) => {
     video_metadata: project.video_metadata,
     topics: project.topics,
     selected_topics: project.selected_topics,
+    elements: project.elements, // Add elements property to fix the error
     // Convert Json to ActiveContent types
     activeContent: project.active_content ? jsonToActiveContent(project.active_content as Json) : null,
     generatedContents: project.generated_contents 

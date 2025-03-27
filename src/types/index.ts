@@ -19,6 +19,7 @@ export interface Project {
   videoMetadata?: any;
   activeContent?: ActiveContent | null;
   generatedContents?: ActiveContent[];
+  elements?: number; // Add the elements property to fix the error
 }
 
 export interface ProjectInsert {

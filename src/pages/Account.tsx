@@ -28,6 +28,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle, Building, Upload, UserRound } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
@@ -60,6 +61,7 @@ const Account = () => {
     enterprise: false,
     security: false
   });
+  const notificationsManager = useNotificationsManager();
   
   // Parse user data from metadata
   const userData = {
@@ -196,6 +198,12 @@ const Account = () => {
         title: "Avatar mis à jour",
         description: "Votre photo de profil a été mise à jour avec succès",
       });
+      
+      // Add to notification center
+      notificationsManager.notifySuccess(
+        "Avatar mis à jour", 
+        "Votre photo de profil a été mise à jour avec succès"
+      );
     } catch (error: any) {
       console.error("Erreur lors de l'upload de l'avatar:", error);
       toast({
@@ -203,6 +211,11 @@ const Account = () => {
         description: error.message || "Une erreur est survenue lors de l'upload de l'image",
         variant: "destructive"
       });
+      
+      notificationsManager.notifyError(
+        "Erreur", 
+        error.message || "Une erreur est survenue lors de l'upload de l'image"
+      );
     } finally {
       setUploading(false);
     }
@@ -236,6 +249,12 @@ const Account = () => {
         title: "Profil mis à jour",
         description: "Vos informations personnelles ont été mises à jour avec succès",
       });
+      
+      // Add to notification center
+      notificationsManager.notifySuccess(
+        "Profil mis à jour", 
+        "Vos informations personnelles ont été mises à jour avec succès"
+      );
     } catch (error: any) {
       console.error("Erreur lors de la mise à jour du profil:", error);
       toast({
@@ -243,6 +262,11 @@ const Account = () => {
         description: error.message || "Une erreur est survenue lors de la mise à jour du profil",
         variant: "destructive"
       });
+      
+      notificationsManager.notifyError(
+        "Erreur", 
+        error.message || "Une erreur est survenue lors de la mise à jour du profil"
+      );
     } finally {
       setIsSaving({ ...isSaving, profile: false });
     }
@@ -277,6 +301,12 @@ const Account = () => {
         title: "Informations entreprise mises à jour",
         description: "Les informations de votre entreprise ont été mises à jour avec succès",
       });
+      
+      // Add to notification center
+      notificationsManager.notifySuccess(
+        "Entreprise mise à jour", 
+        "Les informations de votre entreprise ont été mises à jour avec succès"
+      );
     } catch (error: any) {
       console.error("Erreur lors de la mise à jour des informations entreprise:", error);
       toast({
@@ -284,6 +314,11 @@ const Account = () => {
         description: error.message || "Une erreur est survenue lors de la mise à jour",
         variant: "destructive"
       });
+      
+      notificationsManager.notifyError(
+        "Erreur", 
+        error.message || "Une erreur est survenue lors de la mise à jour des informations entreprise"
+      );
     } finally {
       setIsSaving({ ...isSaving, enterprise: false });
     }
@@ -311,6 +346,12 @@ const Account = () => {
         title: "Mot de passe mis à jour",
         description: "Votre mot de passe a été modifié avec succès",
       });
+      
+      // Add to notification center
+      notificationsManager.notifySuccess(
+        "Mot de passe mis à jour", 
+        "Votre mot de passe a été modifié avec succès"
+      );
     } catch (error: any) {
       console.error("Erreur lors de la mise à jour du mot de passe:", error);
       toast({
@@ -318,6 +359,11 @@ const Account = () => {
         description: error.message || "Une erreur est survenue lors de la modification du mot de passe",
         variant: "destructive"
       });
+      
+      notificationsManager.notifyError(
+        "Erreur", 
+        error.message || "Une erreur est survenue lors de la modification du mot de passe"
+      );
     } finally {
       setIsSaving({ ...isSaving, security: false });
     }
