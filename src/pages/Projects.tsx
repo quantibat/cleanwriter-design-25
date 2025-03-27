@@ -69,7 +69,7 @@ const Projects = () => {
                 Rafraîchir
               </Button>
             )}
-            <Button onClick={() => navigate('/create-project')}>
+            <Button onClick={() => navigate('/create-dce')}>
               <FolderPlus className="h-4 w-4 mr-2" />
               Nouveau projet
             </Button>
