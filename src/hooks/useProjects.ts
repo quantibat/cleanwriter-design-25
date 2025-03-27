@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -98,11 +97,11 @@ export const useProjects = () => {
       const project = await dispatch(fetchProjectById(id)).unwrap();
       
       if (project.generated_contents) {
-        project.generated_contents = jsonToActiveContentArray(project.generated_contents);
+        project.generated_contents = jsonToActiveContentArray(project.generated_contents as Json);
       }
       
       if (project.active_content) {
-        project.active_content = jsonToActiveContent(project.active_content);
+        project.active_content = jsonToActiveContent(project.active_content as Json);
       }
       
       setIsLoading(false);
