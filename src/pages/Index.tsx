@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -212,7 +211,15 @@ const Index = () => {
       </section>
       
       {/* Features Section */}
-      <section className="py-24 px-6 bg-[#06071b]">
+      <section className="py-24 px-6 bg-[#06071b] relative neon-grid-background">
+        {/* Grid overlay */}
+        <div className="absolute inset-0 neon-grid z-0"></div>
+        
+        {/* Neon glow effects */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
+        
         <Container>
           <motion.div initial={{
           opacity: 0,
@@ -224,7 +231,7 @@ const Index = () => {
           once: true
         }} transition={{
           duration: 0.8
-        }} className="text-center mb-16 animate-on-scroll">
+        }} className="text-center mb-16 animate-on-scroll relative z-10">
             <span className="inline-block px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium mb-4">
               Fonctionnalités
             </span>
@@ -234,7 +241,7 @@ const Index = () => {
             <p className="text-blue-100/70 max-w-3xl mx-auto text-lg">Une suite complète d'outils pour créer, gérer et optimiser vos dossiers de consultation des entreprises</p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
             {[{
             icon: <FileText className="h-8 w-8 text-blue-400" />,
             title: "Génération automatisée",
