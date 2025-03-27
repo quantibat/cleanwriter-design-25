@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Project, ProjectInsert, ProjectUpdate } from '@/types';
@@ -34,8 +33,10 @@ export const useProjects = () => {
     try {
       if (!user) {
         setError('User not authenticated');
-        return;
+        return [];
       }
+      
+      console.log('Fetching projects for user:', user.id);
       const { data: projectsData, error: projectsError } = await supabase
         .from('projects')
         .select('*')
@@ -43,16 +44,23 @@ export const useProjects = () => {
         .order('created_at', { ascending: false });
 
       if (projectsError) {
+        console.error('Error fetching projects:', projectsError);
         setError(projectsError.message);
-        return;
+        return [];
       }
 
       if (projectsData) {
+        console.log('Projects fetched:', projectsData.length);
         const transformedProjects = projectsData.map(project => transformDbProjectToUiModel(project));
         setProjects(transformedProjects);
+        return transformedProjects;
       }
+      
+      return [];
     } catch (e: any) {
+      console.error('Exception in fetchProjects:', e);
       setError(e.message);
+      return [];
     } finally {
       setIsLoading(false);
     }
@@ -110,12 +118,14 @@ export const useProjects = () => {
         projectToInsert.generated_contents = activeContentArrayToJson(projectToInsert.generated_contents as unknown as ActiveContent[]);
       }
 
+      console.log('Inserting project with data:', projectToInsert);
       const { data, error } = await supabase
         .from('projects')
         .insert([projectToInsert])
-        .select()
+        .select();
 
       if (error) {
+        console.error('Error creating project:', error);
         setError(error.message);
         toast({
           title: "Erreur",
@@ -126,6 +136,7 @@ export const useProjects = () => {
       }
 
       if (data) {
+        console.log('Project created successfully:', data);
         fetchProjects();
         toast({
           title: "Projet créé",
@@ -136,6 +147,7 @@ export const useProjects = () => {
 
       return false;
     } catch (e: any) {
+      console.error('Exception in createNewProject:', e);
       setError(e.message);
       toast({
         title: "Erreur",
@@ -203,7 +215,6 @@ export const useProjects = () => {
     }
   };
 
-  // Add navigation helpers for ProjectsTab
   const getUserProjects = () => {
     return projects;
   };
@@ -241,7 +252,9 @@ export const useProjects = () => {
       selectedTopics: project.selected_topics,
       videoMetadata: project.video_metadata,
       activeContent: project.active_content ? jsonToActiveContent(project.active_content) : null,
-      generatedContents: project.generated_contents ? jsonToActiveContentArray(project.generated_contents) : []
+      generatedContents: project.generated_contents ? jsonToActiveContentArray(project.generated_contents) : [],
+      elements: project.elements || 0,
+      updated_at: project.updated_at
     };
   };
 
@@ -255,7 +268,6 @@ export const useProjects = () => {
     updateExistingProject,
     deleteProject,
     transformDbProjectToUiModel,
-    // Add the new functions for ProjectsTab
     getUserProjects,
     viewProject,
     editProject,

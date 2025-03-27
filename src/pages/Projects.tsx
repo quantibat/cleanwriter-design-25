@@ -12,20 +12,25 @@ import ProjectsTable from '@/components/projects/ProjectsTable';
 
 const Projects = () => {
   const navigate = useNavigate();
-  const { getUserProjects, isLoading, error } = useProjects();
+  const { fetchProjects, getUserProjects, isLoading, error } = useProjects();
   const [projects, setProjects] = useState<any[]>([]);
   const [retryCount, setRetryCount] = useState(0);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
 
-  const fetchProjects = async () => {
-    const projectsList = await getUserProjects();
+  const loadProjects = async () => {
+    console.log('Loading projects...');
+    // First, fetch fresh data from the database
+    await fetchProjects();
+    // Then, get the updated list
+    const projectsList = getUserProjects();
+    console.log('Projects loaded:', projectsList);
     if (projectsList) {
       setProjects(projectsList);
     }
   };
 
   useEffect(() => {
-    fetchProjects();
+    loadProjects();
   }, [retryCount]);
 
   const handleRetry = () => {

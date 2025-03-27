@@ -37,6 +37,7 @@ export const extractYoutubeInfo = async (youtubeLink: string) => {
     });
 
     if (error) throw error;
+    console.log('YouTube info extracted:', data);
     return data;
   } catch (error) {
     console.error('Error extracting YouTube info:', error);
@@ -52,6 +53,8 @@ export const createProject = async (projectData: ProjectFormData) => {
     if (!userData || !userData.user) {
       throw new Error("User not authenticated");
     }
+
+    console.log('Creating project with data:', projectData);
 
     // Convert ActiveContent types to Json before sending to Supabase
     let processedData: any = {
@@ -88,6 +91,8 @@ export const createProject = async (projectData: ProjectFormData) => {
       .single();
       
     if (error) throw error;
+    
+    console.log('Project created successfully:', data);
     
     // Return the newly created project with proper type conversion
     return mapProjectFromDb(data);
