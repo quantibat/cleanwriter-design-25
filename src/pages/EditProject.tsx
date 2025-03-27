@@ -15,6 +15,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Json } from '@/integrations/supabase/types';
 import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
+import { ActiveContent } from '@/hooks/useActiveContent';
+
+interface ContentItem {
+  topicId?: string;
+  subject: string;
+  body: string;
+}
 
 const EditProject = () => {
   const navigate = useNavigate();
@@ -37,9 +44,9 @@ const EditProject = () => {
   const [currentTab, setCurrentTab] = useState("edit");
   const [topics, setTopics] = useState<any[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [selectedContents, setSelectedContents] = useState<any[]>([]);
-  const [generatedContents, setGeneratedContents] = useState<any[]>([]);
-  const [activeContent, setActiveContent] = useState<any>(null);
+  const [selectedContents, setSelectedContents] = useState<ContentItem[]>([]);
+  const [generatedContents, setGeneratedContents] = useState<ContentItem[]>([]);
+  const [activeContent, setActiveContent] = useState<ActiveContent | null>(null);
   
   const form = useForm({
     defaultValues: {
@@ -95,10 +102,17 @@ const EditProject = () => {
                 : typeof fetchedProject.generated_contents === 'object' && fetchedProject.generated_contents !== null 
                   ? Object.values(fetchedProject.generated_contents) 
                   : [];
-              setGeneratedContents(contentsArray);
               
-              if (fetchedProject.selected_topics && contentsArray.length > 0) {
-                const selectedContentsList = contentsArray.filter(content => 
+              const typedContents: ContentItem[] = contentsArray.map((content: any) => ({
+                topicId: content.topicId || undefined,
+                subject: content.subject || '',
+                body: content.body || ''
+              }));
+              
+              setGeneratedContents(typedContents);
+              
+              if (fetchedProject.selected_topics && typedContents.length > 0) {
+                const selectedContentsList = typedContents.filter(content => 
                   content.topicId && fetchedProject.selected_topics.includes(content.topicId)
                 );
                 setSelectedContents(selectedContentsList);
@@ -196,20 +210,10 @@ const EditProject = () => {
   const handleSelectTopic = (topicId: string) => {
     setSelectedTopics(prevSelected => {
       if (prevSelected.includes(topicId)) {
-        setSelectedContents(prevContents => prevContents.filter(content => {
-          if (typeof content === 'object' && content !== null && 'topicId' in content) {
-            return content.topicId !== topicId;
-          }
-          return true;
-        }));
+        setSelectedContents(prevContents => prevContents.filter(content => content.topicId !== topicId));
         return prevSelected.filter(id => id !== topicId);
       } else {
-        const content = generatedContents.find(content => {
-          if (typeof content === 'object' && content !== null && 'topicId' in content) {
-            return content.topicId === topicId;
-          }
-          return false;
-        });
+        const content = generatedContents.find(content => content.topicId === topicId);
         if (content) {
           setSelectedContents(prevContents => [...prevContents, content]);
         }
