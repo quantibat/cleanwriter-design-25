@@ -2,17 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { FolderPlus, Database, Clock, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon, RefreshCw } from "lucide-react";
+import { FolderPlus, Database, Clock, RefreshCw, LayoutGrid, Table as TableIcon } from "lucide-react";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useProjects } from '@/hooks/useProjects';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import ProjectsGrid from '@/components/projects/ProjectsGrid';
+import ProjectsTable from '@/components/projects/ProjectsTable';
 
 const Projects = () => {
   const navigate = useNavigate();
   const { getUserProjects, isLoading, error } = useProjects();
   const [projects, setProjects] = useState<any[]>([]);
   const [retryCount, setRetryCount] = useState(0);
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
 
   const fetchProjects = async () => {
     const projectsList = await getUserProjects();
@@ -29,22 +32,6 @@ const Projects = () => {
     setRetryCount(prev => prev + 1);
   };
 
-  const getIconForType = (type: string) => {
-    switch(type) {
-      case "newsletter":
-      case "Youtube to Newsletter":
-        return <YoutubeIcon className="h-5 w-5 text-red-500" />;
-      case "transcript":
-      case "Transcription":
-        return <FileTextIcon className="h-5 w-5 text-blue-500" />;
-      case "summary":
-      case "Résumé":
-        return <FileIcon className="h-5 w-5 text-green-500" />;
-      default:
-        return <Database className="h-5 w-5 text-muted-foreground" />;
-    }
-  };
-
   const breadcrumbs = [
     { label: 'Projets' }
   ];
@@ -58,6 +45,24 @@ const Projects = () => {
             <p className="text-muted-foreground">Liste complète des projets et contenus associés à votre compte</p>
           </div>
           <div className="flex gap-2">
+            <div className="flex border rounded-md overflow-hidden">
+              <Button 
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                className="rounded-none"
+                onClick={() => setViewMode('grid')}
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant={viewMode === 'table' ? 'default' : 'ghost'}
+                size="sm"
+                className="rounded-none"
+                onClick={() => setViewMode('table')}
+              >
+                <TableIcon className="h-4 w-4" />
+              </Button>
+            </div>
             {isLoading ? null : (
               <Button variant="outline" onClick={handleRetry} disabled={isLoading}>
                 <RefreshCw className="h-4 w-4 mr-2" />
@@ -93,40 +98,15 @@ const Projects = () => {
         {isLoading ? (
           <div className="text-center py-8">Chargement des projets...</div>
         ) : projects.length === 0 && !error ? (
-          <Card>
-            <CardContent className="p-6 text-center">
-              <p className="text-muted-foreground">Aucun projet trouvé. Créez votre premier projet en cliquant sur "Nouveau projet".</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
-              <Card key={project.id} className="hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate(`/view-project/${project.id}`, { state: { project } })}>
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      {getIconForType(project.option_type)}
-                      <h3 className="font-semibold">{project.title}</h3>
-                    </div>
-                    <span className="text-sm text-muted-foreground">{project.progress}%</span>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{project.card_title || ''}</p>
-                  
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Database className="h-4 w-4" />
-                      {project.elements || 0} éléments
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Clock className="h-4 w-4" />
-                      {new Date(project.updated_at).toLocaleDateString('fr-FR')}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="border rounded-md p-8 text-center">
+            <p className="text-muted-foreground">Aucun projet trouvé. Créez votre premier projet en cliquant sur "Nouveau projet".</p>
           </div>
+        ) : (
+          viewMode === 'grid' ? (
+            <ProjectsGrid projects={projects} />
+          ) : (
+            <ProjectsTable projects={projects} />
+          )
         )}
       </div>
     </DashboardLayout>
