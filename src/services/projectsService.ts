@@ -1,3 +1,4 @@
+
 import { store } from '@/store';
 import { 
   fetchProjects as fetchProjectsAction,
@@ -6,7 +7,8 @@ import {
   updateProject as updateProjectAction,
   deleteProject as deleteProjectAction
 } from '@/store/slices/projectsSlice';
-import { ActiveContent } from '@/hooks/useActiveContent';
+import { ActiveContent, activeContentToJson, jsonArrayToActiveContent } from '@/hooks/useActiveContent';
+import { Json } from '@/integrations/supabase/types';
 
 export interface ProjectFormData {
   title: string;
@@ -39,7 +41,14 @@ export interface ProjectFormData {
 // Add better error handling to these service methods
 export const createProject = async (data: ProjectFormData) => {
   try {
-    return await store.dispatch(createProjectAction(data)).unwrap();
+    // Convert ActiveContent to Json compatible format before sending to Redux
+    const projectData = {
+      ...data,
+      activeContent: data.activeContent ? activeContentToJson(data.activeContent) : null,
+      generatedContents: data.generatedContents ? data.generatedContents.map(c => activeContentToJson(c)) : []
+    };
+    
+    return await store.dispatch(createProjectAction(projectData)).unwrap();
   } catch (error) {
     console.error('Error creating project:', error);
     throw error;
@@ -48,7 +57,18 @@ export const createProject = async (data: ProjectFormData) => {
 
 export const updateProject = async (id: string, data: Partial<ProjectFormData>) => {
   try {
-    return await store.dispatch(updateProjectAction({ id, data })).unwrap();
+    // Convert ActiveContent to Json compatible format before sending to Redux
+    const updateData: any = { ...data };
+    
+    if (data.activeContent !== undefined) {
+      updateData.activeContent = activeContentToJson(data.activeContent);
+    }
+    
+    if (data.generatedContents !== undefined) {
+      updateData.generatedContents = data.generatedContents.map(c => activeContentToJson(c));
+    }
+    
+    return await store.dispatch(updateProjectAction({ id, data: updateData })).unwrap();
   } catch (error) {
     console.error('Error updating project:', error);
     throw error;
@@ -57,7 +77,14 @@ export const updateProject = async (id: string, data: Partial<ProjectFormData>) 
 
 export const getProjectById = async (id: string) => {
   try {
-    return await store.dispatch(fetchProjectByIdAction(id)).unwrap();
+    const project = await store.dispatch(fetchProjectByIdAction(id)).unwrap();
+    
+    // Convert Json to ActiveContent after fetching from Redux
+    if (project.generated_contents) {
+      project.generated_contents = jsonArrayToActiveContent(project.generated_contents);
+    }
+    
+    return project;
   } catch (error) {
     console.error('Error fetching project by ID:', error);
     throw error;
@@ -98,7 +125,7 @@ export const saveGeneratedContent = async (projectId: string, content: ActiveCon
     // Add the new content
     const newContents = [...typedContents, content];
     
-    // Update the project with the new contents
+    // Update the project with the new contents - already converted to Json in updateProject
     return await updateProject(projectId, {
       generated_contents: newContents
     });
@@ -111,6 +138,7 @@ export const saveGeneratedContent = async (projectId: string, content: ActiveCon
 // Function to save multiple generated contents to a project
 export const saveGeneratedContents = async (projectId: string, contents: ActiveContent[]) => {
   try {
+    // Contents are already converted to Json in updateProject
     return await updateProject(projectId, {
       generated_contents: contents
     });

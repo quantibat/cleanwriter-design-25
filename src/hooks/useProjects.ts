@@ -12,7 +12,7 @@ import {
 } from '@/store/slices/projectsSlice';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { ActiveContent } from '@/hooks/useActiveContent';
+import { ActiveContent, jsonArrayToActiveContent, activeContentToJson } from '@/hooks/useActiveContent';
 
 export interface ProjectUIModel {
   id: string;
@@ -65,10 +65,8 @@ export const useProjects = () => {
     } catch (error: any) {
       console.error('Error fetching projects:', error);
       
-      // If it's a network error and this is our first try, attempt one retry
       if (retry && (error instanceof TypeError || error.message === 'Failed to fetch')) {
         console.log('Network error, retrying once...');
-        // Wait a bit before retrying
         await new Promise(resolve => setTimeout(resolve, 1000));
         return getUserProjects(false);
       }
@@ -92,17 +90,7 @@ export const useProjects = () => {
       const project = await dispatch(fetchProjectById(id)).unwrap();
       
       if (project.generated_contents) {
-        const contentsArray = Array.isArray(project.generated_contents) 
-          ? project.generated_contents 
-          : typeof project.generated_contents === 'object' && project.generated_contents !== null 
-            ? Object.values(project.generated_contents) 
-            : [];
-            
-        project.generated_contents = contentsArray.map((content: any) => ({
-          topicId: content.topicId || undefined,
-          subject: content.subject || '',
-          body: content.body || ''
-        }));
+        project.generated_contents = jsonArrayToActiveContent(project.generated_contents);
       }
       
       setIsLoading(false);
@@ -224,18 +212,13 @@ export const useProjects = () => {
     try {
       const project = await dispatch(fetchProjectById(projectId)).unwrap();
       
-      const existingContents = project.generated_contents || [];
-      const typedContents: ActiveContent[] = Array.isArray(existingContents) 
-        ? existingContents 
-        : typeof existingContents === 'object' && existingContents !== null 
-          ? Object.values(existingContents) 
-          : [];
+      const existingContents = jsonArrayToActiveContent(project.generated_contents);
       
-      const newContents = [...typedContents, content];
+      const newContents = [...existingContents, content];
       
       const updatedProject = await dispatch(updateProject({ 
         id: projectId, 
-        data: { generated_contents: newContents } 
+        data: { generated_contents: newContents.map(c => activeContentToJson(c)) } 
       })).unwrap();
       
       setIsLoading(false);
@@ -260,7 +243,7 @@ export const useProjects = () => {
     try {
       const updatedProject = await dispatch(updateProject({ 
         id: projectId, 
-        data: { generated_contents: contents } 
+        data: { generated_contents: contents.map(c => activeContentToJson(c)) } 
       })).unwrap();
       
       setIsLoading(false);

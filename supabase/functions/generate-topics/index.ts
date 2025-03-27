@@ -1,6 +1,5 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.51.1'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -16,7 +15,7 @@ serve(async (req) => {
   try {
     // Get request body
     const requestData = await req.json()
-    const { youtubeLink, language, option, isSocialMediaOnly, title } = requestData
+    const { youtubeLink, language, option, isSocialMediaOnly, title, topicId } = requestData
 
     // Check if we have required parameters
     if (!youtubeLink) {
@@ -50,7 +49,28 @@ Le contenu inclut généralement:
 La longueur et le style dépendraient des paramètres fournis, comme la langue (${language || 'french'}) et le type de contenu (${option || 'newsletter'}).`
     }))
 
-    // Response with generated topics
+    // If a specific topic ID was requested, only return that content
+    if (topicId) {
+      const requestedContent = generatedContents.find(content => content.topicId === topicId);
+      if (requestedContent) {
+        return new Response(
+          JSON.stringify({ content: requestedContent }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
+      } else {
+        return new Response(
+          JSON.stringify({ error: 'Topic ID not found' }),
+          { 
+            status: 404,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
+      }
+    }
+
+    // Response with all generated topics and contents
     return new Response(
       JSON.stringify({ 
         topics: generatedTopics,
