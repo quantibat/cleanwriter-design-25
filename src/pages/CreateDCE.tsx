@@ -13,7 +13,7 @@ import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 import { Textarea } from "@/components/ui/textarea";
-import { createProject, extractYoutubeInfo } from '@/services/projectsService';
+import { createProject, extractYoutubeInfo, ProjectFormData } from '@/services/projectsService';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -305,7 +305,7 @@ const CreateDCE = () => {
     label: title
   }];
 
-  const handleSubmit = async (data: FormData) => {
+  const handleSubmit = async (data: ProjectFormData) => {
     if (!isValidYoutubeLink) {
       toast({
         title: "Lien YouTube invalide",
@@ -370,6 +370,11 @@ const CreateDCE = () => {
       }
     } catch (error) {
       console.error('Error saving project:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la création du projet",
+        variant: "destructive"
+      });
     } finally {
       setIsLoading(false);
     }
