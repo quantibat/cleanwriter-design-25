@@ -16,6 +16,7 @@ import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 import { useProjects } from '@/hooks/useProjects';
 import { useActiveContent, ActiveContent } from '@/hooks/useActiveContent';
 import { supabase } from '@/integrations/supabase/client';
+import { extractYoutubeInfo } from '@/services/projectsService';
 
 const MOCK_TOPICS = [
   {
@@ -149,6 +150,8 @@ const EditDCE = () => {
 
   const [videoMetadata, setVideoMetadata] = useState<any>(null);
   const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
+  const [youtubeInfo, setYoutubeInfo] = useState<any>(null);
+  const [fetchingMetadata, setFetchingMetadata] = useState(false);
   
   const [projectData, setProjectData] = useState<any>(location.state?.project || null);
   const [dbProject, setDbProject] = useState<any>(null);
@@ -194,6 +197,22 @@ const EditDCE = () => {
             if (project.youtube_link) {
               setIsValidYoutubeLink(true);
               form.setValue('youtubeLink', project.youtube_link);
+              
+              // Fetch video metadata for the existing YouTube link
+              try {
+                const info = await extractYoutubeInfo(project.youtube_link);
+                if (info) {
+                  setYoutubeInfo(info);
+                  setVideoMetadata({
+                    title: info.title,
+                    channel: info.channel,
+                    views: info.views,
+                    duration: info.duration
+                  });
+                }
+              } catch (error) {
+                console.error("Error fetching YouTube info for existing project:", error);
+              }
             }
             
             if (project.option_type) {
@@ -209,6 +228,7 @@ const EditDCE = () => {
             }
             
             if (project.video_metadata) {
+              // If we already have metadata in the project, use it
               setVideoMetadata(project.video_metadata);
             }
             
@@ -258,20 +278,39 @@ const EditDCE = () => {
     fetchProject();
   }, [id, navigate, toast, form, projectData, getProjectById, setActiveContent]);
 
-  const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleYoutubeLinkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const link = e.target.value;
     form.setValue('youtubeLink', link);
     
-    const isValid = link.includes('youtube.com/watch') || link.includes('youtu.be/');
-    setIsValidYoutubeLink(isValid);
+    if (!link) {
+      setIsValidYoutubeLink(false);
+      setVideoMetadata(null);
+      setYoutubeInfo(null);
+      return;
+    }
     
-    if (isValid && !videoMetadata) {
-      setVideoMetadata({
-        title: '"DÉMOLITION" de JP Fanguin par Jm Corda',
-        channel: 'Jm Corda Business',
-        views: '0 vues',
-        duration: '39:49'
-      });
+    setFetchingMetadata(true);
+    try {
+      const info = await extractYoutubeInfo(link);
+      setYoutubeInfo(info);
+      
+      if (info) {
+        setIsValidYoutubeLink(true);
+        setVideoMetadata({
+          title: info.title,
+          channel: info.channel,
+          views: info.views,
+          duration: info.duration
+        });
+      } else {
+        setIsValidYoutubeLink(false);
+        setVideoMetadata(null);
+      }
+    } catch (error) {
+      console.error("Error extracting YouTube info:", error);
+      setIsValidYoutubeLink(false);
+    } finally {
+      setFetchingMetadata(false);
     }
   };
 
@@ -507,35 +546,40 @@ const EditDCE = () => {
                           value={form.watch('youtubeLink')}
                         />
                         <Youtube className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
-                        {isValidYoutubeLink && (
+                        {isValidYoutubeLink && !fetchingMetadata && (
                           <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+                        )}
+                        {fetchingMetadata && (
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div className="animate-spin h-5 w-5 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+                          </div>
                         )}
                       </div>
                     </div>
                     
-                    {videoMetadata && (
+                    {isValidYoutubeLink && youtubeInfo && (
                       <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3">
                         <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
                           <img
-                            src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg"
+                            src={youtubeInfo.thumbnailUrl}
                             alt="Video thumbnail"
                             className="w-full h-full object-cover"
                           />
                           <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
-                            {videoMetadata.duration}
+                            {videoMetadata?.duration || "00:00"}
                           </div>
                         </div>
-                        <div className="flex flex-col justify-between">
+                        <div className="flex flex-col justify-between flex-grow">
                           <div>
                             <h3 className="text-sm font-medium text-white line-clamp-2">
-                              {videoMetadata.title}
+                              {videoMetadata?.title || "Loading title..."}
                             </h3>
                             <p className="text-xs text-gray-400">
-                              {videoMetadata.channel}
+                              {videoMetadata?.channel || "Loading channel..."}
                             </p>
                           </div>
                           <div className="text-xs text-gray-500">
-                            {videoMetadata.views} •
+                            {videoMetadata?.views || "Views unavailable"}
                           </div>
                         </div>
                       </div>
@@ -631,23 +675,23 @@ const EditDCE = () => {
                     <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3 mb-4">
                       <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
                         <img
-                          src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg"
+                          src={youtubeInfo?.thumbnailUrl || "https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg"}
                           alt="Video thumbnail"
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
-                          {videoMetadata?.duration || "39:49"}
+                          {videoMetadata?.duration || "00:00"}
                         </div>
                       </div>
-                      <div>
-                        <h3 className="text-sm font-medium text-white">
-                          {videoMetadata?.title || '"DÉMOLITION" de JP Fanguin par Jm Corda'}
+                      <div className="flex-grow">
+                        <h3 className="text-sm font-medium text-white line-clamp-2">
+                          {videoMetadata?.title || "Video Title Unavailable"}
                         </h3>
                         <p className="text-xs text-gray-400">
-                          {videoMetadata?.channel || 'Jm Corda Business'}
+                          {videoMetadata?.channel || "Channel Unavailable"}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {videoMetadata?.views || '0 vues'} •
+                          {videoMetadata?.views || "Views unavailable"}
                         </p>
                       </div>
                     </div>

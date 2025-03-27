@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle } from 'lucide-react';
@@ -128,6 +129,7 @@ const CreateDCE = () => {
   const [videoMetadata, setVideoMetadata] = useState<any>(null);
   const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
   const [youtubeInfo, setYoutubeInfo] = useState<any>(null);
+  const [fetchingMetadata, setFetchingMetadata] = useState(false);
   
   const form = useForm<FormData>({
     defaultValues: {
@@ -157,32 +159,39 @@ const CreateDCE = () => {
   const remainingCredits = totalCredits - usedCredits;
   const percentUsed = Math.round(usedCredits / totalCredits * 100);
 
-  const fetchVideoMetadata = async (videoId: string) => {
-    try {
-      setVideoMetadata({
-        title: "YouTube Video: " + videoId,
-        channel: "Channel Name",
-        views: "0 vues",
-        duration: "00:00"
-      });
-    } catch (error) {
-      console.error("Error fetching video metadata:", error);
-    }
-  };
-
-  const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleYoutubeLinkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const link = e.target.value;
     form.setValue('youtubeLink', link);
     
-    const info = extractYoutubeInfo(link);
-    setYoutubeInfo(info);
-    
-    if (info) {
-      setIsValidYoutubeLink(true);
-      fetchVideoMetadata(info.videoId);
-    } else {
+    if (!link) {
       setIsValidYoutubeLink(false);
       setVideoMetadata(null);
+      setYoutubeInfo(null);
+      return;
+    }
+    
+    setFetchingMetadata(true);
+    try {
+      const info = await extractYoutubeInfo(link);
+      setYoutubeInfo(info);
+      
+      if (info) {
+        setIsValidYoutubeLink(true);
+        setVideoMetadata({
+          title: info.title,
+          channel: info.channel,
+          views: info.views,
+          duration: info.duration
+        });
+      } else {
+        setIsValidYoutubeLink(false);
+        setVideoMetadata(null);
+      }
+    } catch (error) {
+      console.error("Error extracting YouTube info:", error);
+      setIsValidYoutubeLink(false);
+    } finally {
+      setFetchingMetadata(false);
     }
   };
 
@@ -374,8 +383,13 @@ const CreateDCE = () => {
                           value={form.watch('youtubeLink')} 
                         />
                         <Youtube className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
-                        {isValidYoutubeLink && (
+                        {isValidYoutubeLink && !fetchingMetadata && (
                           <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+                        )}
+                        {fetchingMetadata && (
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div className="animate-spin h-5 w-5 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -392,7 +406,7 @@ const CreateDCE = () => {
                             {videoMetadata?.duration || "00:00"}
                           </div>
                         </div>
-                        <div className="flex flex-col justify-between">
+                        <div className="flex flex-col justify-between flex-grow">
                           <div>
                             <h3 className="text-sm font-medium text-white line-clamp-2">
                               {videoMetadata?.title || "Loading title..."}
@@ -402,7 +416,7 @@ const CreateDCE = () => {
                             </p>
                           </div>
                           <div className="text-xs text-gray-500">
-                            {videoMetadata?.views || "0 vues"} •
+                            {videoMetadata?.views || "Views unavailable"}
                           </div>
                         </div>
                       </div>
@@ -497,18 +511,18 @@ const CreateDCE = () => {
                           className="w-full h-full object-cover" 
                         />
                         <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
-                          {videoMetadata?.duration || "39:49"}
+                          {videoMetadata?.duration || "00:00"}
                         </div>
                       </div>
-                      <div>
-                        <h3 className="text-sm font-medium text-white">
-                          {videoMetadata?.title || '"DÉMOLITION" de JP Fanguin par Jm Corda'}
+                      <div className="flex-grow">
+                        <h3 className="text-sm font-medium text-white line-clamp-2">
+                          {videoMetadata?.title || "Video Title Unavailable"}
                         </h3>
                         <p className="text-xs text-gray-400">
-                          {videoMetadata?.channel || 'Jm Corda Business'}
+                          {videoMetadata?.channel || "Channel Unavailable"}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {videoMetadata?.views || '0 vues'} •
+                          {videoMetadata?.views || "Views unavailable"}
                         </p>
                       </div>
                     </div>

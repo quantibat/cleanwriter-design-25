@@ -82,8 +82,8 @@ export const deleteProject = async (id: string) => {
   }
 };
 
-// New utility function to extract YouTube video information
-export const extractYoutubeInfo = (url: string) => {
+// Enhanced utility function to extract YouTube video information
+export const extractYoutubeInfo = async (url: string) => {
   let videoId = '';
   
   // Extract video ID from different YouTube URL formats
@@ -96,9 +96,38 @@ export const extractYoutubeInfo = (url: string) => {
   
   if (!videoId) return null;
   
-  return {
+  // Basic info that doesn't require API calls
+  const info = {
     videoId,
     thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
     embedUrl: `https://www.youtube.com/embed/${videoId}`
   };
+  
+  try {
+    // Try to get video metadata from YouTube's oEmbed API
+    const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+    if (response.ok) {
+      const data = await response.json();
+      return {
+        ...info,
+        title: data.title || 'Unknown Title',
+        channel: data.author_name || 'Unknown Channel',
+        // These aren't provided by oEmbed, but we'll set placeholders
+        views: 'Views unavailable',
+        duration: 'Duration unavailable'
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching YouTube metadata:', error);
+  }
+  
+  // Fallback if the API call fails
+  return {
+    ...info,
+    title: 'Video Title Unavailable',
+    channel: 'Channel Unavailable',
+    views: 'Views unavailable',
+    duration: 'Duration unavailable'
+  };
 };
+
