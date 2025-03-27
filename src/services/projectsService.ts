@@ -127,9 +127,9 @@ export const saveGeneratedContent = async (projectId: string, content: ActiveCon
     // Get existing generated contents or initialize as empty array
     const existingContents = project.generated_contents || [];
     const typedContents: ActiveContent[] = Array.isArray(existingContents) 
-      ? existingContents 
+      ? existingContents as ActiveContent[]
       : typeof existingContents === 'object' && existingContents !== null 
-        ? Object.values(existingContents) 
+        ? Object.values(existingContents) as ActiveContent[]
         : [];
     
     // Add the new content
