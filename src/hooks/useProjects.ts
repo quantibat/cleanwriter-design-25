@@ -1,311 +1,226 @@
-import { useState, useCallback } from 'react';
-import { useAppDispatch } from '@/store/hooks';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
-import { useNotificationsManager } from '@/hooks/useNotificationsManager';
-import { 
-  fetchProjects, 
-  fetchProjectById, 
-  createProject, 
-  updateProject,
-  deleteProject as deleteProjectAction
-} from '@/store/slices/projectsSlice';
-import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { 
-  ActiveContent, 
-  jsonToActiveContent, 
-  jsonToActiveContentArray, 
-  activeContentToJson,
-  activeContentArrayToJson
-} from '@/hooks/useActiveContent';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Project, ProjectInsert, ProjectUpdate } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from "@/hooks/use-toast";
 import { Json } from '@/integrations/supabase/types';
-
-export interface ProjectUIModel {
-  id: string;
-  title: string;
-  type: string;
-  elements: number;
-  description: string;
-  date?: string;
-  lastModified?: string;
-  progress: number;
-  collaborators?: number;
-  details?: string;
-}
+import {
+  ActiveContent,
+  activeContentToJson,
+  activeContentArrayToJson,
+  jsonToActiveContent,
+  jsonToActiveContentArray
+} from "@/types/contentTypes";
 
 export const useProjects = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const { toast } = useToast();
-  const { notifySuccess, notifyError } = useNotificationsManager();
+  const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const transformDbProjectToUiModel = (project: any): ProjectUIModel => {
-    return {
-      id: project.id,
-      title: project.title,
-      type: project.option_type || 'Youtube to Newsletter',
-      elements: project.elements || 0,
-      description: project.card_title || '',
-      date: project.created_at ? new Date(project.created_at).toLocaleDateString('fr-FR') : undefined,
-      lastModified: project.updated_at 
-        ? formatDistanceToNow(new Date(project.updated_at), { locale: fr, addSuffix: true }) 
-        : undefined,
-      progress: project.progress || 0,
-      collaborators: 1,
-      details: `Projet basé sur la vidéo YouTube: ${project.youtube_link || 'Non spécifié'}`
-    };
+  useEffect(() => {
+    if (user) {
+      fetchProjects();
+    }
+  }, [user]);
+
+  const fetchProjects = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      if (!user) {
+        setError('User not authenticated');
+        return;
+      }
+      const { data: projectsData, error: projectsError } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (projectsError) {
+        setError(projectsError.message);
+        return;
+      }
+
+      if (projectsData) {
+        const transformedProjects = projectsData.map(project => transformDbProjectToUiModel(project));
+        setProjects(transformedProjects);
+      }
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const getUserProjects = useCallback(async (retry = true) => {
+  const getProjectById = async (id: string) => {
     setIsLoading(true);
     setError(null);
-    
     try {
-      console.log('Fetching projects...');
-      const projects = await dispatch(fetchProjects()).unwrap();
-      console.log('Projects fetched successfully:', projects);
-      setIsLoading(false);
-      return projects;
-    } catch (error: any) {
-      console.error('Error fetching projects:', error);
-      
-      if (retry && (error instanceof TypeError || error.message === 'Failed to fetch')) {
-        console.log('Network error, retrying once...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return getUserProjects(false);
+      if (!user) {
+        setError('User not authenticated');
+        return null;
       }
-      
-      setError(error.message || 'Une erreur est survenue lors de la récupération des projets');
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Impossible de récupérer vos projets',
-        variant: 'destructive'
-      });
-      setIsLoading(false);
-      return [];
-    }
-  }, [dispatch, toast]);
+      const { data: projectData, error: projectError } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', id)
+        .eq('user_id', user.id)
+        .single();
 
-  const getProjectById = useCallback(async (id: string) => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const project = await dispatch(fetchProjectById(id)).unwrap();
-      
-      if (project.generated_contents) {
-        project.generated_contents = jsonToActiveContentArray(project.generated_contents as Json);
+      if (projectError) {
+        setError(projectError.message);
+        return null;
       }
-      
-      if (project.active_content) {
-        project.active_content = jsonToActiveContent(project.active_content as Json);
-      }
-      
-      setIsLoading(false);
-      return project;
-    } catch (error: any) {
-      console.error('Error fetching project:', error);
-      setError(error.message || 'Une erreur est survenue lors de la récupération du projet');
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Impossible de récupérer le projet',
-        variant: 'destructive'
-      });
-      setIsLoading(false);
+
+      return projectData;
+    } catch (e: any) {
+      setError(e.message);
       return null;
+    } finally {
+      setIsLoading(false);
     }
-  }, [dispatch, toast]);
+  };
 
-  const createNewProject = async (data: any) => {
+  const createNewProject = async (project: ProjectInsert) => {
     setIsLoading(true);
     setError(null);
-    
     try {
-      const preparedData = {
-        ...data,
-        activeContent: data.activeContent ? activeContentToJson(data.activeContent) : null,
-        generatedContents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : ([] as unknown as Json)
+      if (!user) {
+        setError('User not authenticated');
+        return false;
+      }
+
+      const projectToInsert = {
+        ...project,
+        user_id: user.id,
       };
-      
-      const project = await dispatch(createProject(preparedData)).unwrap();
-      notifySuccess(
-        'Projet créé', 
-        'Votre projet a été créé avec succès'
-      );
+
+      const { data, error } = await supabase
+        .from('projects')
+        .insert([projectToInsert])
+        .select()
+
+      if (error) {
+        setError(error.message);
+        toast({
+          title: "Erreur",
+          description: "Une erreur est survenue lors de la création du projet",
+          variant: "destructive"
+        });
+        return false;
+      }
+
+      if (data) {
+        fetchProjects();
+        toast({
+          title: "Projet créé",
+          description: "Votre projet a été créé avec succès."
+        });
+        return true;
+      }
+
+      return false;
+    } catch (e: any) {
+      setError(e.message);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la création du projet",
+        variant: "destructive"
+      });
+      return false;
+    } finally {
       setIsLoading(false);
-      return project;
-    } catch (error: any) {
-      console.error('Error creating project:', error);
-      setError(error.message || 'Une erreur est survenue lors de la création du projet');
-      notifyError(
-        'Erreur', 
-        error.message || 'Impossible de créer le projet'
-      );
-      setIsLoading(false);
-      return null;
     }
   };
 
-  const updateExistingProject = async (id: string, data: any) => {
-    setIsLoading(true);
-    setError(null);
-    
+  const updateExistingProject = async (projectId: string, data: any) => {
     try {
-      const updateData: any = { ...data };
-      
-      if (data.activeContent !== undefined) {
-        updateData.activeContent = data.activeContent ? activeContentToJson(data.activeContent) : null;
+      let updatedData = { ...data };
+
+      if (updatedData.active_content) {
+        updatedData.active_content = activeContentToJson(updatedData.active_content);
       }
-      
-      if (data.generatedContents !== undefined) {
-        updateData.generatedContents = data.generatedContents ? activeContentArrayToJson(data.generatedContents) : ([] as unknown as Json);
+
+      if (updatedData.generated_contents && Array.isArray(updatedData.generated_contents)) {
+        updatedData.generated_contents = activeContentArrayToJson(updatedData.generated_contents);
       }
-      
-      const project = await dispatch(updateProject({ id, data: updateData })).unwrap();
-      notifySuccess(
-        'Projet mis à jour', 
-        'Votre projet a été mis à jour avec succès'
-      );
-      setIsLoading(false);
-      return project;
-    } catch (error: any) {
+
+      const { error } = await supabase
+        .from('projects')
+        .update(updatedData)
+        .eq('id', projectId);
+
+      if (error) throw error;
+
+      return true;
+    } catch (error) {
       console.error('Error updating project:', error);
-      setError(error.message || 'Une erreur est survenue lors de la mise à jour du projet');
-      notifyError(
-        'Erreur', 
-        error.message || 'Impossible de mettre à jour le projet'
-      );
-      setIsLoading(false);
-      return null;
+      return false;
     }
   };
 
   const deleteProject = async (id: string) => {
     setIsLoading(true);
     setError(null);
-    
     try {
-      await dispatch(deleteProjectAction(id)).unwrap();
-      notifySuccess(
-        'Projet supprimé', 
-        'Votre projet a été supprimé avec succès'
-      );
-      setIsLoading(false);
+      if (!user) {
+        setError('User not authenticated');
+        return false;
+      }
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) {
+        setError(error.message);
+        return false;
+      }
+
+      fetchProjects();
       return true;
-    } catch (error: any) {
-      console.error('Error deleting project:', error);
-      setError(error.message || 'Une erreur est survenue lors de la suppression du projet');
-      notifyError(
-        'Erreur', 
-        error.message || 'Impossible de supprimer le projet'
-      );
-      setIsLoading(false);
+    } catch (e: any) {
+      setError(e.message);
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const viewProject = (project: any) => {
-    const projectData = transformDbProjectToUiModel(project);
-    navigate(`/view-project/${project.id}`, {
-      state: { project: projectData }
-    });
-  };
-
-  const editProject = (project: any) => {
-    const projectData = transformDbProjectToUiModel(project);
-    navigate(`/edit-project/${project.id}`, {
-      state: { project: projectData }
-    });
-  };
-
-  const deleteProjectNavigate = (project: any) => {
-    const projectData = transformDbProjectToUiModel(project);
-    navigate(`/delete-project/${project.id}`, {
-      state: { project: projectData }
-    });
-  };
-
-  const goToCreateProject = () => {
-    navigate('/create-dce');
-  };
-
-  const saveGeneratedContent = async (projectId: string, content: ActiveContent) => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const project = await dispatch(fetchProjectById(projectId)).unwrap();
-      
-      const existingContents = jsonToActiveContentArray(project.generated_contents as Json);
-      
-      const newContents = [...existingContents, content];
-      
-      const jsonContents = activeContentArrayToJson(newContents);
-      
-      const updatedProject = await dispatch(updateProject({ 
-        id: projectId, 
-        data: { generated_contents: jsonContents } 
-      })).unwrap();
-      
-      setIsLoading(false);
-      return updatedProject;
-    } catch (error: any) {
-      console.error('Error saving generated content:', error);
-      setError(error.message || 'Une erreur est survenue lors de la sauvegarde du contenu');
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Impossible de sauvegarder le contenu',
-        variant: 'destructive'
-      });
-      setIsLoading(false);
-      return null;
-    }
-  };
-
-  const saveGeneratedContents = async (projectId: string, contents: ActiveContent[]) => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const jsonContents = activeContentArrayToJson(contents);
-      
-      const updatedProject = await dispatch(updateProject({ 
-        id: projectId, 
-        data: { generated_contents: jsonContents } 
-      })).unwrap();
-      
-      setIsLoading(false);
-      return updatedProject;
-    } catch (error: any) {
-      console.error('Error saving generated contents:', error);
-      setError(error.message || 'Une erreur est survenue lors de la sauvegarde des contenus');
-      toast({
-        title: 'Erreur',
-        description: error.message || 'Impossible de sauvegarder les contenus',
-        variant: 'destructive'
-      });
-      setIsLoading(false);
-      return null;
-    }
+  const transformDbProjectToUiModel = (project: any) => {
+    return {
+      id: project.id,
+      createdAt: project.created_at,
+      title: project.title,
+      type: project.option_type,
+      description: project.card_title,
+      youtubeLink: project.youtube_link,
+      language: project.output_language,
+      aiModel: project.ai_model,
+      progress: project.progress,
+      details: project.details,
+      collaborators: project.collaborators,
+      topics: project.topics,
+      selectedTopics: project.selected_topics,
+      videoMetadata: project.video_metadata,
+      activeContent: project.active_content ? jsonToActiveContent(project.active_content) : null,
+      generatedContents: project.generated_contents ? jsonToActiveContentArray(project.generated_contents) : []
+    };
   };
 
   return {
+    projects,
     isLoading,
     error,
-    getUserProjects,
+    fetchProjects,
     getProjectById,
     createNewProject,
     updateExistingProject,
     deleteProject,
-    viewProject,
-    editProject,
-    deleteProjectNavigate,
-    goToCreateProject,
-    transformDbProjectToUiModel,
-    saveGeneratedContent,
-    saveGeneratedContents
+    transformDbProjectToUiModel
   };
 };

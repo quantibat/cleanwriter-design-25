@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,7 +25,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Upload, UserRound } from "lucide-react";
+import { AlertTriangle, Building, Upload, UserRound } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -35,6 +34,9 @@ const formSchema = z.object({
   lastName: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
   email: z.string().email({ message: "Adresse email invalide" }),
   address: z.string().min(5, { message: "Adresse invalide" }),
+});
+
+const enterpriseFormSchema = z.object({
   enterprise: z.string().min(2, { message: "Le nom de l'entreprise doit contenir au moins 2 caractères" }),
   siret: z.string().min(9, { message: "Le SIRET doit contenir au moins 9 caractères" })
 });
@@ -79,8 +81,8 @@ const Account = () => {
     },
   });
 
-  const enterpriseForm = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const enterpriseForm = useForm<z.infer<typeof enterpriseFormSchema>>({
+    resolver: zodResolver(enterpriseFormSchema),
     defaultValues: {
       enterprise: userData.enterprise,
       siret: userData.siret
@@ -246,7 +248,7 @@ const Account = () => {
     }
   };
 
-  const onSubmitEnterprise = async (data: Partial<z.infer<typeof formSchema>>) => {
+  const onSubmitEnterprise = async (data: z.infer<typeof enterpriseFormSchema>) => {
     try {
       setIsSaving({ ...isSaving, enterprise: true });
       
@@ -455,11 +457,14 @@ const Account = () => {
             </Card>
 
             <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Informations entreprise</CardTitle>
-                <CardDescription>
-                  Gérez les informations de votre entreprise
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center space-x-2">
+                <Building className="h-5 w-5 text-blue-500" />
+                <div>
+                  <CardTitle>Informations entreprise</CardTitle>
+                  <CardDescription>
+                    Gérez les informations de votre entreprise
+                  </CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="w-full">
                 <Form {...enterpriseForm}>

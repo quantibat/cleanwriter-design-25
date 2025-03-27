@@ -3,7 +3,8 @@ import * as React from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   showPasswordToggle?: boolean
 }
 
@@ -12,7 +13,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const [showPassword, setShowPassword] = React.useState(false)
     
     // Determine the actual type to use
-    const inputType = showPasswordToggle && showPassword ? "text" : type
+    const inputType = showPasswordToggle && type === "password" && showPassword 
+      ? "text" 
+      : type
 
     return (
       <div className="relative">
