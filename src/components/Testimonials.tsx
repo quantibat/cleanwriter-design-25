@@ -91,7 +91,8 @@ const Testimonials = () => {
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-4">
-                  <Card className="relative border border-transparent bg-transparent hover:scale-[1.02] transition-transform duration-300 testimonial-card">
+                  <div className="relative border border-transparent bg-transparent hover:scale-[1.02] transition-transform duration-300 testimonial-card group">
+                    <div className="absolute -inset-[2px] bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 rounded-xl opacity-0 group-hover:opacity-100 z-[-1] animate-gradient-x"></div>
                     <CardContent className="p-8 md:p-10 flex flex-col items-center text-center bg-white/5 backdrop-blur-sm rounded-xl">
                       <Quote className="h-10 w-10 text-blue-400 mb-6 opacity-50" />
                       
@@ -115,7 +116,7 @@ const Testimonials = () => {
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
+                  </div>
                 </div>
               ))}
             </div>
@@ -137,37 +138,20 @@ const Testimonials = () => {
         </div>
       </div>
 
-      {/* Add styles for neon border effect */}
-      <style jsx>{`
-        .testimonial-card {
-          position: relative;
-        }
-        
-        .testimonial-card::before {
-          content: '';
-          position: absolute;
-          top: -2px;
-          left: -2px;
-          right: -2px;
-          bottom: -2px;
-          background: linear-gradient(45deg, #3B82F6, #60A5FA, #3B82F6);
-          border-radius: inherit;
-          z-index: -1;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        
-        .testimonial-card:hover::before {
-          opacity: 1;
-          animation: borderAnimate 2s linear infinite;
-        }
-        
-        @keyframes borderAnimate {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-      `}</style>
+      {/* Add keyframes for gradient animation */}
+      <style>
+        {`
+          @keyframes gradient-x {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-gradient-x {
+            animation: gradient-x 2s linear infinite;
+            background-size: 200% 200%;
+          }
+        `}
+      </style>
     </section>
   );
 };
