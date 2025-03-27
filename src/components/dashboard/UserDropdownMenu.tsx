@@ -5,14 +5,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { User, BarChart2, CreditCard, Code } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
-
 interface UserDropdownMenuProps {
   onSignOut: () => void;
   showUserInfo?: boolean;
 }
-
-const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ onSignOut, showUserInfo = false }) => {
-  const { user } = useAuth();
+const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
+  onSignOut,
+  showUserInfo = false
+}) => {
+  const {
+    user
+  } = useAuth();
 
   // Get avatar URL from user metadata
   const getAvatarUrl = () => {
@@ -23,7 +26,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ onSignOut, showUser
     }
     return null;
   };
-  
+
   // Get user initials for avatar fallback
   const getUserInitials = () => {
     if (user?.user_metadata?.full_name) {
@@ -33,9 +36,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ onSignOut, showUser
     }
     return "U";
   };
-
-  return (
-    <div className="flex items-center gap-3">
+  return <div className="flex items-center gap-3">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">
@@ -58,7 +59,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ onSignOut, showUser
               <User className="h-4 w-4 text-blue-500" />
             </div>
             <div>
-              <p className="font-medium">Profile</p>
+              <p className="font-medium">Mon Compte</p>
             </div>
           </Link>
 
@@ -90,17 +91,12 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({ onSignOut, showUser
           </Link>
 
           <div className="mt-4 pt-4 border-t">
-            <button 
-              onClick={onSignOut}
-              className="w-full text-left text-sm text-red-500 hover:text-red-600 px-3 py-2 rounded-md hover:bg-red-50/10"
-            >
+            <button onClick={onSignOut} className="w-full text-left text-sm text-red-500 hover:text-red-600 px-3 py-2 rounded-md hover:bg-red-50/10">
               Log out
             </button>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
-  );
+    </div>;
 };
-
-export default UserDropdownMenu; 
+export default UserDropdownMenu;
