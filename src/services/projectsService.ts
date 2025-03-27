@@ -51,7 +51,7 @@ export const createProject = async (data: ProjectFormData) => {
     const projectData = {
       ...data,
       activeContent: data.activeContent ? activeContentToJson(data.activeContent) : null,
-      generatedContents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : []
+      generatedContents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : ([] as unknown as Json)
     };
     
     return await store.dispatch(createProjectAction(projectData)).unwrap();
@@ -71,7 +71,7 @@ export const updateProject = async (id: string, data: Partial<ProjectFormData>) 
     }
     
     if (data.generatedContents !== undefined) {
-      updateData.generatedContents = data.generatedContents ? activeContentArrayToJson(data.generatedContents) : [];
+      updateData.generatedContents = data.generatedContents ? activeContentArrayToJson(data.generatedContents) : ([] as unknown as Json);
     }
     
     return await store.dispatch(updateProjectAction({ id, data: updateData })).unwrap();
@@ -87,11 +87,11 @@ export const getProjectById = async (id: string) => {
     
     // Convert Json to ActiveContent after fetching from Redux
     if (project.generated_contents) {
-      project.generated_contents = jsonToActiveContentArray(project.generated_contents);
+      project.generated_contents = jsonToActiveContentArray(project.generated_contents as Json);
     }
     
     if (project.active_content) {
-      project.active_content = jsonToActiveContent(project.active_content);
+      project.active_content = jsonToActiveContent(project.active_content as Json);
     }
     
     return project;

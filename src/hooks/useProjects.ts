@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +20,7 @@ import {
   activeContentToJson,
   activeContentArrayToJson
 } from '@/hooks/useActiveContent';
+import { Json } from '@/integrations/supabase/types';
 
 export interface ProjectUIModel {
   id: string;
@@ -126,7 +128,7 @@ export const useProjects = () => {
       const preparedData = {
         ...data,
         activeContent: data.activeContent ? activeContentToJson(data.activeContent) : null,
-        generatedContents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : []
+        generatedContents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : ([] as unknown as Json)
       };
       
       const project = await dispatch(createProject(preparedData)).unwrap();
@@ -160,7 +162,7 @@ export const useProjects = () => {
       }
       
       if (data.generatedContents !== undefined) {
-        updateData.generatedContents = data.generatedContents ? activeContentArrayToJson(data.generatedContents) : [];
+        updateData.generatedContents = data.generatedContents ? activeContentArrayToJson(data.generatedContents) : ([] as unknown as Json);
       }
       
       const project = await dispatch(updateProject({ id, data: updateData })).unwrap();
@@ -238,7 +240,7 @@ export const useProjects = () => {
     try {
       const project = await dispatch(fetchProjectById(projectId)).unwrap();
       
-      const existingContents = jsonToActiveContentArray(project.generated_contents);
+      const existingContents = jsonToActiveContentArray(project.generated_contents as Json);
       
       const newContents = [...existingContents, content];
       

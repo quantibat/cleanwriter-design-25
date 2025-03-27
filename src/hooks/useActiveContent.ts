@@ -75,6 +75,7 @@ export const jsonToActiveContentArray = (json: Json): ActiveContent[] => {
 // Helper to convert ActiveContent[] to Json compatible array
 export const activeContentArrayToJson = (contents: ActiveContent[]): Json => {
   if (!contents || contents.length === 0) return [] as unknown as Json;
+  
   return contents.map(content => ({
     topicId: content.topicId,
     subject: content.subject,
