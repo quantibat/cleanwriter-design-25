@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -46,6 +46,15 @@ const Testimonials = () => {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
+  // Auto-scroll effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextTestimonial();
+    }, 8000); // Change testimonial every 8 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section id="testimonials" className="py-20 px-6 bg-gradient-to-b from-transparent to-blue-950/10">
       <div className="max-w-5xl mx-auto">
@@ -77,7 +86,7 @@ const Testimonials = () => {
           {/* Testimonial card */}
           <div className="overflow-hidden">
             <div 
-              className="flex transition-transform duration-500 ease-out" 
+              className="flex transition-transform duration-1000 ease-in-out" 
               style={{ transform: `translateX(-${activeIndex * 100}%)` }}
             >
               {testimonials.map((testimonial, index) => (
