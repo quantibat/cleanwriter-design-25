@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Youtube, FileText, CheckCircle } from 'lucide-react';
@@ -120,6 +119,7 @@ const CreateDCE = () => {
     subject: string;
     body: string;
   } | null>(null);
+  const [selectedContents, setSelectedContents] = useState<any[]>([]);
   const { toast } = useToast();
   const { notifySuccess } = useNotificationsManager();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
@@ -256,23 +256,31 @@ const CreateDCE = () => {
   const handleSelectTopic = (topicId: string) => {
     setSelectedTopics(prev => {
       if (prev.includes(topicId)) {
+        setSelectedContents(prevContents => prevContents.filter(content => content.topicId !== topicId));
         return prev.filter(id => id !== topicId);
       }
+      
+      setGeneratingContent(true);
+      const wordCount = 500;
+      setUsedCredits(prev => prev + wordCount);
+      
+      setTimeout(() => {
+        const content = MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT];
+        if (content) {
+          setSelectedContents(prevContents => [
+            ...prevContents, 
+            {
+              topicId: topicId,
+              subject: content.subject,
+              body: content.body
+            }
+          ]);
+        }
+        setGeneratingContent(false);
+      }, 1000);
+      
       return [...prev, topicId];
     });
-    setGeneratingContent(true);
-    const wordCount = 500;
-    setUsedCredits(prev => prev + wordCount);
-    setTimeout(() => {
-      const content = MOCK_CONTENT[topicId as keyof typeof MOCK_CONTENT];
-      if (content) {
-        setActiveContent({
-          subject: content.subject,
-          body: content.body
-        });
-      }
-      setGeneratingContent(false);
-    }, 1000);
   };
 
   const breadcrumbs = [{
@@ -587,7 +595,10 @@ const CreateDCE = () => {
                       Tout le contenu apparaîtra ici.
                     </p>
                   </div>
-                </div> : <ContentDisplay content={activeContent} isLoading={generatingContent} />}
+                </div> : <ContentDisplay 
+                  contents={selectedContents} 
+                  isLoading={generatingContent} 
+                />}
             </ResizablePanel>
           </ResizablePanelGroup>
         </main>

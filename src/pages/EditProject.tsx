@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Sparkles, Youtube, Clock, RefreshCw, FileText, CheckCircle } from 'lucide-react';
@@ -38,7 +37,7 @@ const EditProject = () => {
   const [currentTab, setCurrentTab] = useState("edit");
   const [topics, setTopics] = useState<any[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [activeContent, setActiveContent] = useState<any>(null);
+  const [selectedContents, setSelectedContents] = useState<any[]>([]);
   const [generatedContents, setGeneratedContents] = useState<any[]>([]);
   
   const form = useForm({
@@ -76,7 +75,6 @@ const EditProject = () => {
             });
             setProgress(fetchedProject.progress || 0);
             
-            // Load topics and selected topics if they exist
             if (fetchedProject.topics) {
               const topicsArray = Array.isArray(fetchedProject.topics) 
                 ? fetchedProject.topics 
@@ -90,12 +88,6 @@ const EditProject = () => {
               setSelectedTopics(fetchedProject.selected_topics);
             }
 
-            // Load active content if it exists
-            if (fetchedProject.active_content) {
-              setActiveContent(fetchedProject.active_content);
-            }
-
-            // Load generated contents if they exist
             if (fetchedProject.generated_contents) {
               const contentsArray = Array.isArray(fetchedProject.generated_contents) 
                 ? fetchedProject.generated_contents 
@@ -103,12 +95,18 @@ const EditProject = () => {
                   ? Object.values(fetchedProject.generated_contents) 
                   : [];
               setGeneratedContents(contentsArray);
+              
+              if (fetchedProject.selected_topics && contentsArray.length > 0) {
+                const selectedContentsList = contentsArray.filter(content => 
+                  content.topicId && fetchedProject.selected_topics.includes(content.topicId)
+                );
+                setSelectedContents(selectedContentsList);
+              }
             }
             
             if (fetchedProject.youtube_link) {
               setIsValidYoutubeLink(true);
               
-              // Handle video metadata correctly
               const metadata = fetchedProject.video_metadata as Json || {};
               setVideoMetadata({
                 title: typeof metadata === 'object' && metadata !== null ? (metadata as any).title || 'Titre de la vidéo' : 'Titre de la vidéo',
@@ -153,7 +151,6 @@ const EditProject = () => {
     
     setIsLoading(true);
     try {
-      // Update database project
       const updated = await updateExistingProject(id, {
         title: data.title,
         option_type: data.option,
@@ -169,7 +166,6 @@ const EditProject = () => {
       });
       
       if (updated) {
-        // Transform updated project to UI format for state navigation
         const updatedProject = {
           ...project,
           ...data,
@@ -199,23 +195,19 @@ const EditProject = () => {
   const handleSelectTopic = (topicId: string) => {
     setSelectedTopics(prevSelected => {
       if (prevSelected.includes(topicId)) {
-        // Remove topic if already selected
+        setSelectedContents(prevContents => prevContents.filter(content => content.topicId !== topicId));
         return prevSelected.filter(id => id !== topicId);
       } else {
-        // Add topic
+        const content = generatedContents.find(content => content.topicId === topicId);
+        if (content) {
+          setSelectedContents(prevContents => [...prevContents, content]);
+        }
         return [...prevSelected, topicId];
       }
     });
-
-    // Find the content associated with this topic
-    const content = generatedContents.find(content => content.topicId === topicId);
-    if (content) {
-      setActiveContent(content);
-    }
   };
 
   const handleDownloadPDF = () => {
-    // Implement PDF download functionality if needed
     toast({
       title: "Téléchargement",
       description: "Fonction de téléchargement en cours d'implémentation"
@@ -488,7 +480,7 @@ const EditProject = () => {
                   <h3 className="text-lg font-medium mb-4">Contenu</h3>
                   <div className="border rounded-lg overflow-hidden">
                     <ContentDisplay 
-                      content={activeContent} 
+                      contents={selectedContents} 
                       isLoading={false}
                       onDownloadPDF={handleDownloadPDF}
                     />
