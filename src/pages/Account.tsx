@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { useAuth } from '@/contexts/AuthContext';
@@ -38,6 +39,15 @@ const formSchema = z.object({
   siret: z.string().min(9, { message: "Le SIRET doit contenir au moins 9 caractères" })
 });
 
+const passwordFormSchema = z.object({
+  currentPassword: z.string().min(6, { message: "Le mot de passe doit contenir au moins 6 caractères" }),
+  newPassword: z.string().min(6, { message: "Le mot de passe doit contenir au moins 6 caractères" }),
+  confirmPassword: z.string().min(6, { message: "Le mot de passe doit contenir au moins 6 caractères" })
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Les mots de passe ne correspondent pas",
+  path: ["confirmPassword"],
+});
+
 const Account = () => {
   const { user } = useAuth();
   const [isIncomplete, setIsIncomplete] = useState(false);
@@ -74,6 +84,15 @@ const Account = () => {
     defaultValues: {
       enterprise: userData.enterprise,
       siret: userData.siret
+    },
+  });
+
+  const passwordForm = useForm<z.infer<typeof passwordFormSchema>>({
+    resolver: zodResolver(passwordFormSchema),
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
     },
   });
 
@@ -268,6 +287,40 @@ const Account = () => {
     }
   };
 
+  const onSubmitPassword = async (data: z.infer<typeof passwordFormSchema>) => {
+    try {
+      setIsSaving({ ...isSaving, security: true });
+      
+      // Update user password
+      const { error } = await supabase.auth.updateUser({
+        password: data.newPassword
+      });
+      
+      if (error) throw error;
+      
+      // Reset form fields
+      passwordForm.reset({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+      
+      toast({
+        title: "Mot de passe mis à jour",
+        description: "Votre mot de passe a été modifié avec succès",
+      });
+    } catch (error: any) {
+      console.error("Erreur lors de la mise à jour du mot de passe:", error);
+      toast({
+        title: "Erreur",
+        description: error.message || "Une erreur est survenue lors de la modification du mot de passe",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSaving({ ...isSaving, security: false });
+    }
+  };
+
   return (
     <DashboardLayout activeTab="account" breadcrumbs={[{ label: 'Mon Compte' }]}>
       <div className="w-full">
@@ -459,23 +512,60 @@ const Account = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 w-full">
-                <div className="w-full">
-                  <Label htmlFor="current-password">Mot de passe actuel</Label>
-                  <Input id="current-password" type="password" className="w-full" />
-                </div>
-                <div className="w-full">
-                  <Label htmlFor="new-password">Nouveau mot de passe</Label>
-                  <Input id="new-password" type="password" className="w-full" />
-                </div>
-                <div className="w-full">
-                  <Label htmlFor="confirm-password">Confirmer le mot de passe</Label>
-                  <Input id="confirm-password" type="password" className="w-full" />
-                </div>
-                <div className="flex justify-end w-full">
-                  <Button disabled={isSaving.security}>
-                    {isSaving.security ? "Modification..." : "Modifier le mot de passe"}
-                  </Button>
-                </div>
+                <Form {...passwordForm}>
+                  <form onSubmit={passwordForm.handleSubmit(onSubmitPassword)} className="space-y-4 w-full">
+                    <div className="w-full">
+                      <FormField
+                        control={passwordForm.control}
+                        name="currentPassword"
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormLabel>Mot de passe actuel</FormLabel>
+                            <FormControl>
+                              <Input type="password" showPasswordToggle={true} {...field} className="w-full" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <FormField
+                        control={passwordForm.control}
+                        name="newPassword"
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormLabel>Nouveau mot de passe</FormLabel>
+                            <FormControl>
+                              <Input type="password" showPasswordToggle={true} {...field} className="w-full" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <FormField
+                        control={passwordForm.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormLabel>Confirmer le mot de passe</FormLabel>
+                            <FormControl>
+                              <Input type="password" showPasswordToggle={true} {...field} className="w-full" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="flex justify-end w-full">
+                      <Button type="submit" disabled={isSaving.security}>
+                        {isSaving.security ? "Modification..." : "Modifier le mot de passe"}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
               </CardContent>
             </Card>
           </div>
