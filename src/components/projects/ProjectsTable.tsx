@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon, Database } from "lucide-react";
+import { Trash2, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon, Database } from "lucide-react";
 
 interface ProjectsTableProps {
   projects: any[];
