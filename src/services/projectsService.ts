@@ -81,3 +81,24 @@ export const deleteProject = async (id: string) => {
     throw error;
   }
 };
+
+// New utility function to extract YouTube video information
+export const extractYoutubeInfo = (url: string) => {
+  let videoId = '';
+  
+  // Extract video ID from different YouTube URL formats
+  if (url.includes('youtube.com/watch')) {
+    const urlParams = new URLSearchParams(url.split('?')[1]);
+    videoId = urlParams.get('v') || '';
+  } else if (url.includes('youtu.be/')) {
+    videoId = url.split('youtu.be/')[1].split('?')[0];
+  }
+  
+  if (!videoId) return null;
+  
+  return {
+    videoId,
+    thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+    embedUrl: `https://www.youtube.com/embed/${videoId}`
+  };
+};

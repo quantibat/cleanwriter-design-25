@@ -13,9 +13,10 @@ import TopicsList from '@/components/youtube-newsletter/TopicsList';
 import ContentDisplay from '@/components/youtube-newsletter/ContentDisplay';
 import { useNotificationsManager } from '@/hooks/useNotificationsManager';
 import { Textarea } from "@/components/ui/textarea";
-import { createProject } from '@/services/projectsService';
+import { createProject, extractYoutubeInfo } from '@/services/projectsService';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+
 const MOCK_CONTENT = {
   '1': {
     subject: 'La clé des vidéos virales : êtes-vous prêt ? ✨ 🚀',
@@ -96,6 +97,7 @@ Souvenez-vous que la richesse véritable se mesure à la qualité de vos relatio
 Cordialement,`
   }
 };
+
 type FormData = {
   title: string;
   youtubeLink: string;
@@ -103,12 +105,11 @@ type FormData = {
   language: string;
   aiModel: string;
 };
+
 const CreateDCE = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [generatingTopics, setGeneratingTopics] = useState(false);
   const [generatingContent, setGeneratingContent] = useState(false);
@@ -118,15 +119,16 @@ const CreateDCE = () => {
     subject: string;
     body: string;
   } | null>(null);
-  const {
-    toast
-  } = useToast();
-  const {
-    notifySuccess
-  } = useNotificationsManager();
+  const { toast } = useToast();
+  const { notifySuccess } = useNotificationsManager();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
   const [title, setTitle] = useState("Untitled Youtube to Newsletter");
   const [cardTitle, setCardTitle] = useState("Ma sélection de cartes");
+  
+  const [videoMetadata, setVideoMetadata] = useState<any>(null);
+  const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
+  const [youtubeInfo, setYoutubeInfo] = useState<any>(null);
+  
   const form = useForm<FormData>({
     defaultValues: {
       title: 'Untitled Youtube to Newsletter',
@@ -136,6 +138,7 @@ const CreateDCE = () => {
       aiModel: 'gpt-4o'
     }
   });
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const titleParam = params.get('title');
@@ -148,38 +151,51 @@ const CreateDCE = () => {
       setIsSocialMediaOnly(isSocialMediaParam === 'true');
     }
   }, [location.search, form]);
+
   const totalCredits = 30000;
   const [usedCredits, setUsedCredits] = useState(0);
   const remainingCredits = totalCredits - usedCredits;
   const percentUsed = Math.round(usedCredits / totalCredits * 100);
-  const [videoMetadata, setVideoMetadata] = useState<any>(null);
-  const [isValidYoutubeLink, setIsValidYoutubeLink] = useState(false);
+
+  const fetchVideoMetadata = async (videoId: string) => {
+    try {
+      setVideoMetadata({
+        title: "YouTube Video: " + videoId,
+        channel: "Channel Name",
+        views: "0 vues",
+        duration: "00:00"
+      });
+    } catch (error) {
+      console.error("Error fetching video metadata:", error);
+    }
+  };
+
   const handleYoutubeLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const link = e.target.value;
     form.setValue('youtubeLink', link);
-    const isValid = link.includes('youtube.com/watch') || link.includes('youtu.be/');
-    setIsValidYoutubeLink(isValid);
-    if (isValid) {
-      setVideoMetadata({
-        title: '"DÉMOLITION" de JP Fanguin par Jm Corda',
-        channel: 'Jm Corda Business',
-        views: '0 vues',
-        duration: '39:49'
-      });
+    
+    const info = extractYoutubeInfo(link);
+    setYoutubeInfo(info);
+    
+    if (info) {
+      setIsValidYoutubeLink(true);
+      fetchVideoMetadata(info.videoId);
     } else {
+      setIsValidYoutubeLink(false);
       setVideoMetadata(null);
     }
   };
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
     form.setValue('title', newTitle);
   };
+
   const handleCardTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(e.target.value);
   };
 
-  // Modified function to use OpenAI API through Supabase Edge Function
   const generateTopics = async () => {
     if (!isValidYoutubeLink) {
       toast({
@@ -193,7 +209,6 @@ const CreateDCE = () => {
     try {
       const formData = form.getValues();
 
-      // Call Supabase Edge Function
       const {
         data,
         error
@@ -228,6 +243,7 @@ const CreateDCE = () => {
       setGeneratingTopics(false);
     }
   };
+
   const handleSelectTopic = (topicId: string) => {
     setSelectedTopics(prev => {
       if (prev.includes(topicId)) {
@@ -249,6 +265,7 @@ const CreateDCE = () => {
       setGeneratingContent(false);
     }, 1000);
   };
+
   const breadcrumbs = [{
     label: 'Projets',
     path: '/projects'
@@ -258,6 +275,7 @@ const CreateDCE = () => {
   }, {
     label: title
   }];
+
   const handleSubmit = async (data: FormData) => {
     if (!isValidYoutubeLink) {
       toast({
@@ -268,11 +286,9 @@ const CreateDCE = () => {
       return;
     }
 
-    // First generate topics if none exist
     if (topics.length === 0) {
       setGeneratingTopics(true);
       try {
-        // Call the generate topics function
         await generateTopics();
       } catch (error) {
         console.error("Error generating topics:", error);
@@ -294,7 +310,6 @@ const CreateDCE = () => {
         selectedTopics: [],
         videoMetadata: videoMetadata,
         usedCredits: 250,
-        // Initial credits used for topic generation
         progress: 10,
         elements: topics.length
       };
@@ -302,7 +317,6 @@ const CreateDCE = () => {
       if (project) {
         notifySuccess('Projet créé', 'Votre projet a été créé avec succès et les sujets ont été générés.');
 
-        // Redirect to edit page with the project data
         navigate(`/edit-project/${project.id}`, {
           state: {
             project: {
@@ -326,10 +340,13 @@ const CreateDCE = () => {
       setIsLoading(false);
     }
   };
+
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
-  return <DashboardLayout breadcrumbs={breadcrumbs} activeTab="projects">
+
+  return (
+    <DashboardLayout breadcrumbs={breadcrumbs} activeTab="projects">
       <div className="min-h-screen bg-[#0c101b]">
         <main className="w-full">
           <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-150px)]">
@@ -344,37 +361,52 @@ const CreateDCE = () => {
                   <Input type="text" value={cardTitle} onChange={handleCardTitleChange} className="w-full py-2 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40" placeholder="Entrez le titre de votre sélection de cartes" />
                 </div>
                 
-                {topics.length === 0 ? <div className="space-y-6">
+                {topics.length === 0 ? (
+                  <div className="space-y-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Lien de la vidéo Youtube</label>
                       <div className="relative">
-                        <Input type="text" placeholder="Paste a youtube video link here" className="pl-10 py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40" onChange={handleYoutubeLinkChange} value={form.watch('youtubeLink')} />
+                        <Input 
+                          type="text" 
+                          placeholder="Paste a youtube video link here" 
+                          className="pl-10 py-5 bg-[#171a2e] border border-[#2a2f45] text-gray-200 rounded-md focus-visible:ring-blue-500/40" 
+                          onChange={handleYoutubeLinkChange} 
+                          value={form.watch('youtubeLink')} 
+                        />
                         <Youtube className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
-                        {isValidYoutubeLink && <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />}
+                        {isValidYoutubeLink && (
+                          <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 h-5 w-5" />
+                        )}
                       </div>
                     </div>
                     
-                    {videoMetadata && <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3">
+                    {isValidYoutubeLink && youtubeInfo && (
+                      <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3">
                         <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
-                          <img src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg" alt="Video thumbnail" className="w-full h-full object-cover" />
+                          <img 
+                            src={youtubeInfo.thumbnailUrl} 
+                            alt="Video thumbnail" 
+                            className="w-full h-full object-cover" 
+                          />
                           <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
-                            {videoMetadata.duration}
+                            {videoMetadata?.duration || "00:00"}
                           </div>
                         </div>
                         <div className="flex flex-col justify-between">
                           <div>
                             <h3 className="text-sm font-medium text-white line-clamp-2">
-                              {videoMetadata.title}
+                              {videoMetadata?.title || "Loading title..."}
                             </h3>
                             <p className="text-xs text-gray-400">
-                              {videoMetadata.channel}
+                              {videoMetadata?.channel || "Loading channel..."}
                             </p>
                           </div>
                           <div className="text-xs text-gray-500">
-                            {videoMetadata.views} •
+                            {videoMetadata?.views || "0 vues"} •
                           </div>
                         </div>
-                      </div>}
+                      </div>
+                    )}
                     
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-300">Option</label>
@@ -438,17 +470,32 @@ const CreateDCE = () => {
                     </div>
                     
                     <div className="pt-4">
-                      <Button type="button" className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md" onClick={() => generateTopics()} disabled={generatingTopics || !isValidYoutubeLink || isLoading}>
-                        {generatingTopics || isLoading ? <>Génération en cours...</> : <>
+                      <Button 
+                        type="button" 
+                        className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md" 
+                        onClick={() => generateTopics()} 
+                        disabled={generatingTopics || !isValidYoutubeLink || isLoading}
+                      >
+                        {generatingTopics || isLoading ? (
+                          <>Génération en cours...</>
+                        ) : (
+                          <>
                             <Sparkles size={18} className="mr-2" />
                             Générez une newsletter
-                          </>}
+                          </>
+                        )}
                       </Button>
                     </div>
-                  </div> : <div className="space-y-4">
+                  </div>
+                ) : (
+                  <div className="space-y-4">
                     <div className="bg-[#171a2e] border border-[#2a2f45] rounded-md p-3 flex gap-3 mb-4">
                       <div className="relative w-24 h-16 flex-shrink-0 bg-black rounded overflow-hidden">
-                        <img src="https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg" alt="Video thumbnail" className="w-full h-full object-cover" />
+                        <img 
+                          src={youtubeInfo?.thumbnailUrl || "https://i.ytimg.com/vi/XLnGAzg2MuA/hqdefault.jpg"} 
+                          alt="Video thumbnail" 
+                          className="w-full h-full object-cover" 
+                        />
                         <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 rounded">
                           {videoMetadata?.duration || "39:49"}
                         </div>
@@ -474,45 +521,43 @@ const CreateDCE = () => {
                     <TopicsList topics={topics} selectedTopics={selectedTopics} onSelectTopic={handleSelectTopic} isLoading={generatingTopics} />
                     
                     <Button className="w-full py-6 bg-[#0099ff] hover:bg-[#0088ee] text-white flex items-center justify-center rounded-md mt-4" onClick={async () => {
-                  setIsLoading(true);
-                  try {
-                    // Save the project with selected topics and content
-                    const projectData = {
-                      title: title,
-                      youtubeLink: form.getValues().youtubeLink,
-                      option: form.getValues().option,
-                      language: form.getValues().language,
-                      aiModel: form.getValues().aiModel,
-                      cardTitle: cardTitle,
-                      isSocialMediaOnly: isSocialMediaOnly,
-                      topics: topics,
-                      selectedTopics: selectedTopics,
-                      activeContent: activeContent,
-                      videoMetadata: videoMetadata,
-                      usedCredits: usedCredits,
-                      progress: 60,
-                      // More progress now that topics are selected
-                      elements: selectedTopics.length
-                    };
-                    const project = await createProject(projectData);
-                    if (project) {
-                      toast({
-                        title: "Génération terminée",
-                        description: `${selectedTopics.length} newsletter(s) générée(s) avec succès`
-                      });
+                      setIsLoading(true);
+                      try {
+                        const projectData = {
+                          title: title,
+                          youtubeLink: form.getValues().youtubeLink,
+                          option: form.getValues().option,
+                          language: form.getValues().language,
+                          aiModel: form.getValues().aiModel,
+                          cardTitle: cardTitle,
+                          isSocialMediaOnly: isSocialMediaOnly,
+                          topics: topics,
+                          selectedTopics: selectedTopics,
+                          activeContent: activeContent,
+                          videoMetadata: videoMetadata,
+                          usedCredits: usedCredits,
+                          progress: 60,
+                          elements: selectedTopics.length
+                        };
+                        const project = await createProject(projectData);
+                        if (project) {
+                          toast({
+                            title: "Génération terminée",
+                            description: `${selectedTopics.length} newsletter(s) générée(s) avec succès`
+                          });
 
-                      // Redirect to projects page
-                      navigate('/projects');
-                    }
-                  } catch (error) {
-                    console.error('Error saving project:', error);
-                  } finally {
-                    setIsLoading(false);
-                  }
-                }} disabled={selectedTopics.length === 0 || isLoading}>
+                          navigate('/projects');
+                        }
+                      } catch (error) {
+                        console.error('Error saving project:', error);
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }} disabled={selectedTopics.length === 0 || isLoading}>
                       {isLoading ? 'Enregistrement...' : `Générer le contenu pour ${selectedTopics.length} sujet(s)`}
                     </Button>
-                  </div>}
+                  </div>
+                )}
               </div>
             </ResizablePanel>
             
@@ -533,6 +578,8 @@ const CreateDCE = () => {
           </ResizablePanelGroup>
         </main>
       </div>
-    </DashboardLayout>;
+    </DashboardLayout>
+  );
 };
+
 export default CreateDCE;
