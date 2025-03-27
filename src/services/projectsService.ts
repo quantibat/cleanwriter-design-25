@@ -20,13 +20,20 @@ export interface ProjectFormData {
   isSocialMediaOnly?: boolean;
   topics?: any[];
   selectedTopics?: string[];
+  selected_topics?: string[];
   activeContent?: any;
+  active_content?: any;
   generatedContents?: any[];
+  generated_contents?: any[];
   videoMetadata?: any;
+  video_metadata?: any;
   usedCredits?: number;
   progress?: number;
   elements?: number;
   details?: string;
+  option_type?: string;
+  card_title?: string;
+  youtube_link?: string;
 }
 
 // Add better error handling to these service methods
