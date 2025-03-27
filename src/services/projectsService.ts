@@ -7,7 +7,13 @@ import {
   updateProject as updateProjectAction,
   deleteProject as deleteProjectAction
 } from '@/store/slices/projectsSlice';
-import { ActiveContent, activeContentToJson, jsonArrayToActiveContent } from '@/hooks/useActiveContent';
+import { 
+  ActiveContent, 
+  activeContentToJson, 
+  jsonToActiveContent, 
+  jsonToActiveContentArray,
+  activeContentArrayToJson 
+} from '@/hooks/useActiveContent';
 import { Json } from '@/integrations/supabase/types';
 
 export interface ProjectFormData {
@@ -45,7 +51,7 @@ export const createProject = async (data: ProjectFormData) => {
     const projectData = {
       ...data,
       activeContent: data.activeContent ? activeContentToJson(data.activeContent) : null,
-      generatedContents: data.generatedContents ? data.generatedContents.map(c => activeContentToJson(c)) : []
+      generatedContents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : []
     };
     
     return await store.dispatch(createProjectAction(projectData)).unwrap();
@@ -65,7 +71,7 @@ export const updateProject = async (id: string, data: Partial<ProjectFormData>) 
     }
     
     if (data.generatedContents !== undefined) {
-      updateData.generatedContents = data.generatedContents.map(c => activeContentToJson(c));
+      updateData.generatedContents = activeContentArrayToJson(data.generatedContents);
     }
     
     return await store.dispatch(updateProjectAction({ id, data: updateData })).unwrap();
@@ -81,7 +87,7 @@ export const getProjectById = async (id: string) => {
     
     // Convert Json to ActiveContent after fetching from Redux
     if (project.generated_contents) {
-      project.generated_contents = jsonArrayToActiveContent(project.generated_contents);
+      project.generated_contents = jsonToActiveContentArray(project.generated_contents);
     }
     
     return project;

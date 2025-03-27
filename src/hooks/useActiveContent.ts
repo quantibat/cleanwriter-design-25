@@ -11,7 +11,11 @@ export interface ActiveContent {
 // Helper to convert ActiveContent to Json compatible object
 export const activeContentToJson = (content: ActiveContent | null): Json => {
   if (!content) return null;
-  return content as unknown as Json;
+  return {
+    topicId: content.topicId,
+    subject: content.subject,
+    body: content.body
+  } as unknown as Json;
 };
 
 // Helper to convert Json to ActiveContent
@@ -31,13 +35,13 @@ export const jsonToActiveContent = (json: Json): ActiveContent | null => {
   return null;
 };
 
-// Helper to convert Json[] to ActiveContent[]
-export const jsonArrayToActiveContent = (jsonArray: Json | null): ActiveContent[] => {
-  if (!jsonArray) return [];
+// Helper to convert Json to ActiveContent[]
+export const jsonToActiveContentArray = (json: Json): ActiveContent[] => {
+  if (!json) return [];
   
   // Handle array case
-  if (Array.isArray(jsonArray)) {
-    return jsonArray.map(item => {
+  if (Array.isArray(json)) {
+    return json.map(item => {
       const contentObj = item as any;
       if (typeof contentObj === 'object' && contentObj !== null && 'subject' in contentObj && 'body' in contentObj) {
         return {
@@ -51,8 +55,8 @@ export const jsonArrayToActiveContent = (jsonArray: Json | null): ActiveContent[
   }
   
   // Handle object case (if stored as an object with numeric keys)
-  if (typeof jsonArray === 'object' && jsonArray !== null) {
-    return Object.values(jsonArray).map(item => {
+  if (typeof json === 'object' && json !== null) {
+    return Object.values(json).map(item => {
       const contentObj = item as any;
       if (typeof contentObj === 'object' && contentObj !== null && 'subject' in contentObj && 'body' in contentObj) {
         return {
@@ -66,6 +70,12 @@ export const jsonArrayToActiveContent = (jsonArray: Json | null): ActiveContent[
   }
   
   return [];
+};
+
+// Helper to convert ActiveContent[] to Json compatible array
+export const activeContentArrayToJson = (contents: ActiveContent[]): Json => {
+  if (!contents || contents.length === 0) return [];
+  return contents.map(content => activeContentToJson(content)) as unknown as Json;
 };
 
 export const useActiveContent = (initialContent: ActiveContent | null) => {

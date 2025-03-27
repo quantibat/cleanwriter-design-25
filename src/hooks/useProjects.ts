@@ -12,7 +12,13 @@ import {
 } from '@/store/slices/projectsSlice';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { ActiveContent, jsonArrayToActiveContent, activeContentToJson } from '@/hooks/useActiveContent';
+import { 
+  ActiveContent, 
+  jsonToActiveContent, 
+  jsonToActiveContentArray, 
+  activeContentToJson,
+  activeContentArrayToJson
+} from '@/hooks/useActiveContent';
 
 export interface ProjectUIModel {
   id: string;
@@ -90,7 +96,7 @@ export const useProjects = () => {
       const project = await dispatch(fetchProjectById(id)).unwrap();
       
       if (project.generated_contents) {
-        project.generated_contents = jsonArrayToActiveContent(project.generated_contents);
+        project.generated_contents = jsonToActiveContentArray(project.generated_contents);
       }
       
       setIsLoading(false);
@@ -212,13 +218,13 @@ export const useProjects = () => {
     try {
       const project = await dispatch(fetchProjectById(projectId)).unwrap();
       
-      const existingContents = jsonArrayToActiveContent(project.generated_contents);
+      const existingContents = jsonToActiveContentArray(project.generated_contents);
       
       const newContents = [...existingContents, content];
       
       const updatedProject = await dispatch(updateProject({ 
         id: projectId, 
-        data: { generated_contents: newContents.map(c => activeContentToJson(c)) } 
+        data: { generated_contents: activeContentArrayToJson(newContents) } 
       })).unwrap();
       
       setIsLoading(false);
@@ -243,7 +249,7 @@ export const useProjects = () => {
     try {
       const updatedProject = await dispatch(updateProject({ 
         id: projectId, 
-        data: { generated_contents: contents.map(c => activeContentToJson(c)) } 
+        data: { generated_contents: activeContentArrayToJson(contents) } 
       })).unwrap();
       
       setIsLoading(false);

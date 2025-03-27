@@ -92,8 +92,8 @@ export const createProject = createAsyncThunk(
         is_social_media_only: data.isSocialMediaOnly || false,
         topics: data.topics || [],
         selected_topics: data.selectedTopics || [],
-        active_content: data.activeContent as Json,
-        generated_contents: data.generatedContents as Json,
+        active_content: data.activeContent as unknown as Json,
+        generated_contents: data.generatedContents as unknown as Json,
         video_metadata: data.videoMetadata || null,
         used_credits: data.usedCredits || 0,
         progress: data.progress || 0,
@@ -132,8 +132,8 @@ export const updateProject = createAsyncThunk(
       if (data.isSocialMediaOnly !== undefined) updateData.is_social_media_only = data.isSocialMediaOnly;
       if (data.topics !== undefined) updateData.topics = data.topics;
       if (data.selectedTopics !== undefined) updateData.selected_topics = data.selectedTopics;
-      if (data.activeContent !== undefined) updateData.active_content = data.activeContent as Json;
-      if (data.generatedContents !== undefined) updateData.generated_contents = data.generatedContents as Json;
+      if (data.activeContent !== undefined) updateData.active_content = data.activeContent as unknown as Json;
+      if (data.generatedContents !== undefined) updateData.generated_contents = data.generatedContents as unknown as Json;
       if (data.videoMetadata !== undefined) updateData.video_metadata = data.videoMetadata;
       if (data.usedCredits !== undefined) updateData.used_credits = data.usedCredits;
       if (data.progress !== undefined) updateData.progress = data.progress;
