@@ -62,7 +62,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({ projects }) => {
                       navigate(`/edit-project/${project.id}`, { state: { project } });
                     }}
                   >
-                    <Edit className="h-4 w-4" />
+                    Ouvrir
                   </Button>
                   <Button 
                     variant="ghost" 
