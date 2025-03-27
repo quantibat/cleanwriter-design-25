@@ -1,4 +1,3 @@
-
 import { store } from '@/store';
 import { 
   fetchProjects as fetchProjectsAction,
@@ -7,6 +6,7 @@ import {
   updateProject as updateProjectAction,
   deleteProject as deleteProjectAction
 } from '@/store/slices/projectsSlice';
+import { ActiveContent } from '@/hooks/useActiveContent';
 
 export interface ProjectFormData {
   title: string;
@@ -21,10 +21,10 @@ export interface ProjectFormData {
   topics?: any[];
   selectedTopics?: string[];
   selected_topics?: string[];
-  activeContent?: any;
-  active_content?: any;
-  generatedContents?: any[];
-  generated_contents?: any[];
+  activeContent?: ActiveContent | null;
+  active_content?: ActiveContent | null;
+  generatedContents?: ActiveContent[];
+  generated_contents?: ActiveContent[];
   videoMetadata?: any;
   video_metadata?: any;
   usedCredits?: number;
@@ -82,6 +82,44 @@ export const deleteProject = async (id: string) => {
   }
 };
 
+// Function to save generated content to a project
+export const saveGeneratedContent = async (projectId: string, content: ActiveContent) => {
+  try {
+    const project = await getProjectById(projectId);
+    
+    // Get existing generated contents or initialize as empty array
+    const existingContents = project.generated_contents || [];
+    const typedContents: ActiveContent[] = Array.isArray(existingContents) 
+      ? existingContents 
+      : typeof existingContents === 'object' && existingContents !== null 
+        ? Object.values(existingContents) 
+        : [];
+    
+    // Add the new content
+    const newContents = [...typedContents, content];
+    
+    // Update the project with the new contents
+    return await updateProject(projectId, {
+      generated_contents: newContents
+    });
+  } catch (error) {
+    console.error('Error saving generated content:', error);
+    throw error;
+  }
+};
+
+// Function to save multiple generated contents to a project
+export const saveGeneratedContents = async (projectId: string, contents: ActiveContent[]) => {
+  try {
+    return await updateProject(projectId, {
+      generated_contents: contents
+    });
+  } catch (error) {
+    console.error('Error saving generated contents:', error);
+    throw error;
+  }
+};
+
 // Enhanced utility function to extract YouTube video information
 export const extractYoutubeInfo = async (url: string) => {
   let videoId = '';
@@ -130,4 +168,3 @@ export const extractYoutubeInfo = async (url: string) => {
     duration: 'Duration unavailable'
   };
 };
-

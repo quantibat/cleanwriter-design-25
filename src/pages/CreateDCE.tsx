@@ -120,6 +120,7 @@ const CreateDCE = () => {
     body: string;
   } | null>(null);
   const [selectedContents, setSelectedContents] = useState<any[]>([]);
+  const [generatedContents, setGeneratedContents] = useState<any[]>([]);
   const { toast } = useToast();
   const { notifySuccess } = useNotificationsManager();
   const [isSocialMediaOnly, setIsSocialMediaOnly] = useState(false);
@@ -233,10 +234,21 @@ const CreateDCE = () => {
       if (error) {
         throw new Error(error.message);
       }
+
       if (data && data.topics && Array.isArray(data.topics)) {
         setTopics(data.topics);
         const wordCount = data.topics.reduce((count: number, topic: any) => count + (topic.title?.length || 0) + (topic.description?.length || 0), 0);
         setUsedCredits(prev => prev + wordCount);
+        
+        if (data.contents && Array.isArray(data.contents)) {
+          const typedContents = data.contents.map((content: any) => ({
+            topicId: content.topicId,
+            subject: content.subject,
+            body: content.body
+          }));
+          setGeneratedContents(typedContents);
+        }
+        
         notifySuccess('Sujets générés', `${data.topics.length} sujets ont été générés avec succès à partir de la vidéo YouTube.`);
       } else {
         throw new Error("Format de réponse inattendu");
@@ -324,13 +336,18 @@ const CreateDCE = () => {
         cardTitle: cardTitle,
         isSocialMediaOnly: isSocialMediaOnly,
         topics: topics,
-        selectedTopics: [],
+        selectedTopics: selectedTopics,
+        activeContent: activeContent,
+        generatedContents: selectedContents.length > 0 ? selectedContents : generatedContents,
         videoMetadata: videoMetadata,
-        usedCredits: 250,
+        usedCredits: usedCredits,
         progress: 10,
         elements: topics.length
       };
+      
+      console.log("Saving project with generated contents:", projectData.generatedContents);
       const project = await createProject(projectData);
+      
       if (project) {
         notifySuccess('Projet créé', 'Votre projet a été créé avec succès et les sujets ont été générés.');
 
@@ -556,6 +573,7 @@ const CreateDCE = () => {
                           topics: topics,
                           selectedTopics: selectedTopics,
                           activeContent: activeContent,
+                          generatedContents: selectedContents.length > 0 ? selectedContents : generatedContents,
                           videoMetadata: videoMetadata,
                           usedCredits: usedCredits,
                           progress: 60,

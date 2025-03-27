@@ -14,9 +14,14 @@ export const useActiveContent = (initialContent: ActiveContent | null) => {
     setActiveContent(null);
   };
 
+  const updateActiveContent = (content: Partial<ActiveContent>) => {
+    setActiveContent(prev => prev ? { ...prev, ...content } : null);
+  };
+
   return {
     activeContent,
     setActiveContent,
+    updateActiveContent,
     clearActiveContent,
   };
 };

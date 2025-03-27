@@ -12,6 +12,7 @@ import {
 } from '@/store/slices/projectsSlice';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { ActiveContent } from '@/hooks/useActiveContent';
 
 export interface ProjectUIModel {
   id: string;
@@ -89,6 +90,21 @@ export const useProjects = () => {
     
     try {
       const project = await dispatch(fetchProjectById(id)).unwrap();
+      
+      if (project.generated_contents) {
+        const contentsArray = Array.isArray(project.generated_contents) 
+          ? project.generated_contents 
+          : typeof project.generated_contents === 'object' && project.generated_contents !== null 
+            ? Object.values(project.generated_contents) 
+            : [];
+            
+        project.generated_contents = contentsArray.map((content: any) => ({
+          topicId: content.topicId || undefined,
+          subject: content.subject || '',
+          body: content.body || ''
+        }));
+      }
+      
       setIsLoading(false);
       return project;
     } catch (error: any) {
@@ -201,6 +217,67 @@ export const useProjects = () => {
     navigate('/create-dce');
   };
 
+  const saveGeneratedContent = async (projectId: string, content: ActiveContent) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const project = await dispatch(fetchProjectById(projectId)).unwrap();
+      
+      const existingContents = project.generated_contents || [];
+      const typedContents: ActiveContent[] = Array.isArray(existingContents) 
+        ? existingContents 
+        : typeof existingContents === 'object' && existingContents !== null 
+          ? Object.values(existingContents) 
+          : [];
+      
+      const newContents = [...typedContents, content];
+      
+      const updatedProject = await dispatch(updateProject({ 
+        id: projectId, 
+        data: { generated_contents: newContents } 
+      })).unwrap();
+      
+      setIsLoading(false);
+      return updatedProject;
+    } catch (error: any) {
+      console.error('Error saving generated content:', error);
+      setError(error.message || 'Une erreur est survenue lors de la sauvegarde du contenu');
+      toast({
+        title: 'Erreur',
+        description: error.message || 'Impossible de sauvegarder le contenu',
+        variant: 'destructive'
+      });
+      setIsLoading(false);
+      return null;
+    }
+  };
+
+  const saveGeneratedContents = async (projectId: string, contents: ActiveContent[]) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const updatedProject = await dispatch(updateProject({ 
+        id: projectId, 
+        data: { generated_contents: contents } 
+      })).unwrap();
+      
+      setIsLoading(false);
+      return updatedProject;
+    } catch (error: any) {
+      console.error('Error saving generated contents:', error);
+      setError(error.message || 'Une erreur est survenue lors de la sauvegarde des contenus');
+      toast({
+        title: 'Erreur',
+        description: error.message || 'Impossible de sauvegarder les contenus',
+        variant: 'destructive'
+      });
+      setIsLoading(false);
+      return null;
+    }
+  };
+
   return {
     isLoading,
     error,
@@ -213,6 +290,8 @@ export const useProjects = () => {
     editProject,
     deleteProjectNavigate,
     goToCreateProject,
-    transformDbProjectToUiModel
+    transformDbProjectToUiModel,
+    saveGeneratedContent,
+    saveGeneratedContents
   };
 };

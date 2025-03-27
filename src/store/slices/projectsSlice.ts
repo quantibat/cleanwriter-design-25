@@ -1,3 +1,4 @@
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { supabase } from '@/integrations/supabase/client';
 import { ProjectFormData } from '@/services/projectsService';
@@ -64,6 +65,7 @@ export const fetchProjectById = createAsyncThunk(
         .single();
       
       if (error) throw error;
+      console.log('Project fetched successfully:', project);
       return project;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Une erreur est survenue lors de la récupération du projet');
@@ -93,13 +95,14 @@ export const createProject = createAsyncThunk(
         topics: data.topics || [],
         selected_topics: data.selectedTopics || [],
         active_content: data.activeContent || null,
-        generated_contents: data.generatedContents || null,
+        generated_contents: data.generatedContents || [],
         video_metadata: data.videoMetadata || null,
         used_credits: data.usedCredits || 0,
         progress: data.progress || 0,
         elements: data.elements || 0
       };
 
+      console.log('Creating project with data:', projectData);
       const { data: project, error } = await supabase
         .from('projects')
         .insert(projectData)
@@ -108,6 +111,7 @@ export const createProject = createAsyncThunk(
 
       if (error) throw error;
       
+      console.log('Project created successfully:', project);
       return project;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Une erreur est survenue lors de la création du projet');
@@ -137,6 +141,7 @@ export const updateProject = createAsyncThunk(
       if (data.progress !== undefined) updateData.progress = data.progress;
       if (data.elements !== undefined) updateData.elements = data.elements;
       
+      console.log('Updating project with data:', updateData);
       const { data: project, error } = await supabase
         .from('projects')
         .update(updateData)
@@ -146,6 +151,7 @@ export const updateProject = createAsyncThunk(
 
       if (error) throw error;
       
+      console.log('Project updated successfully:', project);
       return project;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Une erreur est survenue lors de la mise à jour du projet');
