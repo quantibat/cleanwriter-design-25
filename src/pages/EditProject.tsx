@@ -39,6 +39,7 @@ const EditProject = () => {
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [selectedContents, setSelectedContents] = useState<any[]>([]);
   const [generatedContents, setGeneratedContents] = useState<any[]>([]);
+  const [activeContent, setActiveContent] = useState<any>(null);
   
   const form = useForm({
     defaultValues: {
@@ -195,10 +196,20 @@ const EditProject = () => {
   const handleSelectTopic = (topicId: string) => {
     setSelectedTopics(prevSelected => {
       if (prevSelected.includes(topicId)) {
-        setSelectedContents(prevContents => prevContents.filter(content => content.topicId !== topicId));
+        setSelectedContents(prevContents => prevContents.filter(content => {
+          if (typeof content === 'object' && content !== null && 'topicId' in content) {
+            return content.topicId !== topicId;
+          }
+          return true;
+        }));
         return prevSelected.filter(id => id !== topicId);
       } else {
-        const content = generatedContents.find(content => content.topicId === topicId);
+        const content = generatedContents.find(content => {
+          if (typeof content === 'object' && content !== null && 'topicId' in content) {
+            return content.topicId === topicId;
+          }
+          return false;
+        });
         if (content) {
           setSelectedContents(prevContents => [...prevContents, content]);
         }

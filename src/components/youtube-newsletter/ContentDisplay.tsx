@@ -4,19 +4,25 @@ import { Copy, ThumbsUp, ThumbsDown, Save, Download } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
+export interface ContentItem {
+  topicId?: string;
+  subject: string;
+  body: string;
+}
+
 interface ContentDisplayProps {
-  contents: {
-    topicId?: string;
-    subject: string;
-    body: string;
-  }[] | null;
+  contents: ContentItem[] | null;
+  content?: ContentItem | null; // Single content option
   isLoading: boolean;
   onDownloadPDF?: () => void;
 }
 
-const ContentDisplay: React.FC<ContentDisplayProps> = ({ contents, isLoading, onDownloadPDF }) => {
+const ContentDisplay: React.FC<ContentDisplayProps> = ({ contents, content, isLoading, onDownloadPDF }) => {
   const { toast } = useToast();
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // Convert single content to array if provided
+  const contentItems = content ? [content] : contents;
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -39,7 +45,7 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ contents, isLoading, on
     );
   }
 
-  if (!contents || contents.length === 0) {
+  if (!contentItems || contentItems.length === 0) {
     return (
       <div className="h-full p-6 overflow-auto border border-dashed border-[#1d2535] rounded-lg flex flex-col items-center justify-center">
         <div className="text-center max-w-md">
@@ -54,16 +60,16 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ contents, isLoading, on
 
   return (
     <div className="h-full flex flex-col overflow-auto">
-      {contents.map((content, index) => (
+      {contentItems.map((item, index) => (
         <div key={index} className="mb-8 border border-[#1d2535] rounded-lg overflow-hidden">
           <div className="p-4 border-b border-[#1d2535]">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-medium text-white">
-                <span className="text-gray-400 mr-2">Subject:</span> {content.subject} 
+                <span className="text-gray-400 mr-2">Subject:</span> {item.subject} 
                 <span className="ml-2 text-yellow-400">✨</span>
               </h2>
               <div className="flex gap-2">
-                <Button variant="ghost" size="sm" onClick={() => handleCopy(content.body)}>
+                <Button variant="ghost" size="sm" onClick={() => handleCopy(item.body)}>
                   <Copy size={16} className="mr-1" /> Copier
                 </Button>
                 {onDownloadPDF && (
@@ -102,14 +108,14 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ contents, isLoading, on
           </div>
           <div className="p-6" ref={contentRef}>
             <div className="prose prose-invert max-w-full">
-              {content.body.split('\n\n').map((paragraph, pIndex) => (
+              {item.body.split('\n\n').map((paragraph, pIndex) => (
                 <p key={pIndex} className="mb-4 text-gray-200">
                   {paragraph}
                 </p>
               ))}
             </div>
             <div className="mt-8 pt-4 border-t border-[#1d2535] text-sm flex justify-between text-gray-500">
-              <div>{content.body.split(/\s+/).length} mots - {Math.max(1, Math.round(content.body.split(/\s+/).length / 200))} min de lecture</div>
+              <div>{item.body.split(/\s+/).length} mots - {Math.max(1, Math.round(item.body.split(/\s+/).length / 200))} min de lecture</div>
               <div className="flex items-center gap-2">
                 <span>16171 Crédits utilisés (1590 pour l'analyse de contenu et 270 pour la génération)</span>
               </div>

@@ -727,7 +727,7 @@ const EditDCE = () => {
             <ResizablePanel defaultSize={50} minSize={30}>
               {activeContent ? (
                 <ContentDisplay 
-                  content={activeContent} 
+                  contents={[activeContent]} 
                   isLoading={generatingContent}
                 />
               ) : (

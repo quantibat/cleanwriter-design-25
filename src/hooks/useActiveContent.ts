@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 export interface ActiveContent {
+  topicId?: string;
   subject: string;
   body: string;
 }
