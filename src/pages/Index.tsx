@@ -69,7 +69,15 @@ const Index = () => {
 
   return <div className="bg-[#06071b] min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden">
+      <section className="relative py-32 overflow-hidden neon-grid-background">
+        {/* Grid overlay */}
+        <div className="absolute inset-0 neon-grid z-0"></div>
+        
+        {/* Neon glow effects */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
+        
         {/* Background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
@@ -399,6 +407,46 @@ const Index = () => {
         .icon-container:hover .blur-[8px] {
           background-color: rgba(59, 130, 246, 0.5);
           filter: blur(12px);
+        }
+        
+        /* Neon grid styling */
+        .neon-grid-background {
+          background-color: #06071b;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .neon-grid {
+          background-image: 
+            linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+          background-size: 40px 40px;
+          width: 100%;
+          height: 100%;
+          opacity: 0.6;
+          z-index: 0;
+        }
+        
+        .neon-grid::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        
+        .neon-grid::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(0deg, rgba(6, 7, 27, 1) 0%, rgba(6, 7, 27, 0) 20%, rgba(6, 7, 27, 0) 80%, rgba(6, 7, 27, 1) 100%);
+          pointer-events: none;
         }
         `
     }} />
