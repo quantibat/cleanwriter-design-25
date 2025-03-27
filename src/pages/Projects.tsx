@@ -13,19 +13,12 @@ import ProjectsTable from '@/components/projects/ProjectsTable';
 const Projects = () => {
   const navigate = useNavigate();
   const { getUserProjects, isLoading, error } = useProjects();
-  const [projects, setProjects] = useState<any[]>([]);
   const [retryCount, setRetryCount] = useState(0);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
 
-  const fetchProjects = async () => {
-    const projectsList = await getUserProjects();
-    if (projectsList) {
-      setProjects(projectsList);
-    }
-  };
 
   useEffect(() => {
-    fetchProjects();
+    getUserProjects();
   }, [retryCount]);
 
   const handleRetry = () => {
@@ -97,15 +90,15 @@ const Projects = () => {
 
         {isLoading ? (
           <div className="text-center py-8">Chargement des projets...</div>
-        ) : projects.length === 0 && !error ? (
+        ) :  getUserProjects().length === 0 && !error ? (
           <div className="border rounded-md p-8 text-center">
             <p className="text-muted-foreground">Aucun projet trouvé. Créez votre premier projet en cliquant sur "Nouveau projet".</p>
           </div>
         ) : (
           viewMode === 'grid' ? (
-            <ProjectsGrid projects={projects} />
+            <ProjectsGrid projects={ getUserProjects()} />
           ) : (
-            <ProjectsTable projects={projects} />
+            <ProjectsTable projects={ getUserProjects()} />
           )
         )}
       </div>

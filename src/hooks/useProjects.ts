@@ -205,7 +205,11 @@ export const useProjects = () => {
 
   // Add navigation helpers for ProjectsTab
   const getUserProjects = () => {
-    return projects;
+    if(projects.length > 0) {
+      return projects; 
+    }else {
+      return projects
+    }
   };
 
   const viewProject = (id: string) => {
