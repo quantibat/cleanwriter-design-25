@@ -15,7 +15,7 @@ export const activeContentToJson = (content: ActiveContent | null): Json => {
     topicId: content.topicId,
     subject: content.subject,
     body: content.body
-  } as Json;
+  } as unknown as Json;
 };
 
 // Helper to convert Json to ActiveContent
@@ -79,7 +79,7 @@ export const activeContentArrayToJson = (contents: ActiveContent[]): Json => {
     topicId: content.topicId,
     subject: content.subject,
     body: content.body
-  })) as Json;
+  })) as unknown as Json;
 };
 
 export const useActiveContent = (initialContent: ActiveContent | null) => {
