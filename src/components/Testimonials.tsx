@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
 
 interface Testimonial {
   content: string;
@@ -37,13 +37,23 @@ const Testimonials = () => {
   ];
   
   const [activeIndex, setActiveIndex] = useState(0);
+  const testimonialsRef = useRef<HTMLDivElement>(null);
+  
+  const scrollToTestimonial = (index: number) => {
+    setActiveIndex(index);
+    if (testimonialsRef.current) {
+      testimonialsRef.current.style.transform = `translateX(-${index * 100}%)`;
+    }
+  };
   
   const nextTestimonial = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
+    const newIndex = (activeIndex + 1) % testimonials.length;
+    scrollToTestimonial(newIndex);
   };
   
   const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    const newIndex = (activeIndex - 1 + testimonials.length) % testimonials.length;
+    scrollToTestimonial(newIndex);
   };
 
   // Auto-scroll effect
@@ -53,102 +63,132 @@ const Testimonials = () => {
     }, 8000); // Change testimonial every 8 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [activeIndex]);
 
   return (
-    <section id="testimonials" className="py-20 px-6 bg-gradient-to-b from-transparent to-blue-950/10">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16 fade-up">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Ce que disent nos clients</h2>
-          <p className="text-blue-100/80 max-w-2xl mx-auto">
-            Découvrez comment DCE Manager aide les professionnels à optimiser leur gestion documentaire.
+    <section id="testimonials" className="py-24 px-6 relative overflow-hidden bg-gradient-to-b from-[#030712] via-[#070f2a] to-[#040918]">
+      {/* Background blur effects */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full filter blur-[120px] opacity-50"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full filter blur-[120px] opacity-50"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/5 rounded-full filter blur-[150px]"></div>
+      
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      
+      <Container>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-blue-400">
+            Ce que disent nos clients
+          </h2>
+          <p className="text-lg text-blue-100/70 max-w-2xl mx-auto">
+            Découvrez comment DCE Manager aide les professionnels à optimiser leur gestion documentaire et à simplifier leurs processus d'appels d'offres.
           </p>
         </div>
         
-        <div className="relative px-10">
-          {/* Navigation arrows */}
-          <button 
-            onClick={prevTestimonial}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/5 hover:bg-white/10 p-2 rounded-full border border-white/10 text-white"
-            aria-label="Témoignage précédent"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          
-          <button 
-            onClick={nextTestimonial}
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/5 hover:bg-white/10 p-2 rounded-full border border-white/10 text-white"
-            aria-label="Témoignage suivant"
-          >
-            <ChevronRight size={20} />
-          </button>
-          
-          {/* Testimonial card */}
-          <div className="overflow-hidden">
+        <div className="relative mt-20">
+          {/* Testimonial cards */}
+          <div className="relative mx-auto max-w-4xl overflow-hidden rounded-2xl">
             <div 
-              className="flex transition-transform duration-1000 ease-in-out" 
-              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+              ref={testimonialsRef}
+              className="flex transition-transform duration-700 ease-out"
             >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-4">
-                  <div className="relative border border-transparent bg-transparent hover:scale-[1.02] transition-transform duration-300 testimonial-card group">
-                    <div className="absolute -inset-[2px] bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 rounded-xl opacity-0 group-hover:opacity-100 z-[-1] animate-gradient-x"></div>
-                    <CardContent className="p-8 md:p-10 flex flex-col items-center text-center bg-white/5 backdrop-blur-sm rounded-xl">
-                      <Quote className="h-10 w-10 text-blue-400 mb-6 opacity-50" />
-                      
-                      <p className="text-lg text-blue-100/90 mb-8 italic">
-                        "{testimonial.content}"
-                      </p>
-                      
-                      <div className="mt-auto pt-6 border-t border-white/5 flex flex-col items-center">
-                        <div className="w-16 h-16 rounded-full overflow-hidden mb-4 border-2 border-blue-500/30">
-                          <img 
-                            src={testimonial.avatar} 
-                            alt={testimonial.author} 
-                            className="w-full h-full object-cover"
-                          />
+                  <div className="transform transition-all duration-500 hover:scale-[1.02] h-full">
+                    <div className="relative p-1 rounded-2xl bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 backdrop-blur-sm h-full">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-0 hover:opacity-20 transition-opacity duration-300 rounded-2xl"></div>
+                      <div className="bg-[#080e22]/80 backdrop-blur-sm rounded-xl p-8 md:p-10 h-full border border-white/5">
+                        <div className="mb-8 flex justify-center">
+                          <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-500/20 to-indigo-500/20">
+                            <Quote className="h-6 w-6 text-blue-400" />
+                          </span>
                         </div>
-                        <div>
-                          <h4 className="font-medium text-white">{testimonial.author}</h4>
-                          <p className="text-sm text-blue-100/70">
-                            {testimonial.position}, {testimonial.company}
-                          </p>
+                        
+                        <p className="text-xl leading-relaxed text-blue-100/90 mb-8 relative">
+                          <span className="absolute -top-4 -left-2 text-6xl text-blue-500/10">"</span>
+                          {testimonial.content}
+                          <span className="absolute -bottom-10 -right-2 text-6xl text-blue-500/10">"</span>
+                        </p>
+                        
+                        <div className="mt-10 flex items-center justify-center">
+                          <div className="mr-4 h-14 w-14 overflow-hidden rounded-full border-2 border-blue-500/30 bg-gradient-to-b from-blue-500/10 to-indigo-500/10">
+                            <img 
+                              src={testimonial.avatar} 
+                              alt={testimonial.author}
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <div className="text-left">
+                            <h4 className="font-semibold text-white text-lg">{testimonial.author}</h4>
+                            <p className="text-blue-400/80 text-sm">
+                              {testimonial.position}, <span className="text-blue-200/60">{testimonial.company}</span>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </CardContent>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           
-          {/* Indicators */}
-          <div className="flex justify-center mt-8 space-x-2">
+          {/* Navigation buttons with improved styling */}
+          <div className="flex justify-center mt-10 space-x-4">
+            <button 
+              onClick={prevTestimonial}
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all hover:bg-white/10 hover:border-white/20"
+              aria-label="Témoignage précédent"
+            >
+              <ChevronLeft className="h-5 w-5 text-white group-hover:text-blue-400 transition-colors" />
+            </button>
+            
+            <button 
+              onClick={nextTestimonial}
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all hover:bg-white/10 hover:border-white/20"
+              aria-label="Témoignage suivant"
+            >
+              <ChevronRight className="h-5 w-5 text-white group-hover:text-blue-400 transition-colors" />
+            </button>
+          </div>
+          
+          {/* Indicators - redesigned */}
+          <div className="flex justify-center mt-8 space-x-3">
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`h-2 rounded-full transition-all ${
-                  activeIndex === index ? 'w-8 bg-blue-500' : 'w-2 bg-white/20'
+                onClick={() => scrollToTestimonial(index)}
+                className={`relative h-3 rounded-full transition-all ${
+                  activeIndex === index 
+                    ? 'w-10 bg-gradient-to-r from-blue-500 to-indigo-500' 
+                    : 'w-3 bg-white/20 hover:bg-white/40'
                 }`}
                 aria-label={`Aller au témoignage ${index + 1}`}
-              />
+              >
+                {activeIndex === index && (
+                  <span className="absolute inset-0 rounded-full animate-pulse-light"></span>
+                )}
+              </button>
             ))}
           </div>
         </div>
-      </div>
+      </Container>
 
-      {/* Add keyframes for gradient animation */}
+      {/* Add keyframes for custom animations */}
       <style>
         {`
-          @keyframes gradient-x {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+          @keyframes pulse-light {
+            0%, 100% { opacity: 0.7; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            50% { opacity: 1; box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
           }
-          .animate-gradient-x {
-            animation: gradient-x 2s linear infinite;
-            background-size: 200% 200%;
+          .animate-pulse-light {
+            animation: pulse-light 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          }
+          .bg-grid-pattern {
+            background-image: 
+              linear-gradient(to right, rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
           }
         `}
       </style>
