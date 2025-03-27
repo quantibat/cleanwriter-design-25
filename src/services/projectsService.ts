@@ -90,6 +90,10 @@ export const getProjectById = async (id: string) => {
       project.generated_contents = jsonToActiveContentArray(project.generated_contents);
     }
     
+    if (project.active_content) {
+      project.active_content = jsonToActiveContent(project.active_content);
+    }
+    
     return project;
   } catch (error) {
     console.error('Error fetching project by ID:', error);
@@ -133,7 +137,7 @@ export const saveGeneratedContent = async (projectId: string, content: ActiveCon
     
     // Update the project with the new contents - already converted to Json in updateProject
     return await updateProject(projectId, {
-      generated_contents: newContents
+      generatedContents: newContents
     });
   } catch (error) {
     console.error('Error saving generated content:', error);
@@ -146,7 +150,7 @@ export const saveGeneratedContents = async (projectId: string, contents: ActiveC
   try {
     // Contents are already converted to Json in updateProject
     return await updateProject(projectId, {
-      generated_contents: contents
+      generatedContents: contents
     });
   } catch (error) {
     console.error('Error saving generated contents:', error);

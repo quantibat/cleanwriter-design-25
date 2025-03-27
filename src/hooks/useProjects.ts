@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { useAppDispatch } from '@/store/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -99,6 +100,10 @@ export const useProjects = () => {
         project.generated_contents = jsonToActiveContentArray(project.generated_contents);
       }
       
+      if (project.active_content) {
+        project.active_content = jsonToActiveContent(project.active_content);
+      }
+      
       setIsLoading(false);
       return project;
     } catch (error: any) {
@@ -119,7 +124,14 @@ export const useProjects = () => {
     setError(null);
     
     try {
-      const project = await dispatch(createProject(data)).unwrap();
+      // Prepare the data with proper type conversions
+      const preparedData = {
+        ...data,
+        activeContent: data.activeContent ? activeContentToJson(data.activeContent) : null,
+        generatedContents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : []
+      };
+      
+      const project = await dispatch(createProject(preparedData)).unwrap();
       notifySuccess(
         'Projet créé', 
         'Votre projet a été créé avec succès'
@@ -143,7 +155,18 @@ export const useProjects = () => {
     setError(null);
     
     try {
-      const project = await dispatch(updateProject({ id, data })).unwrap();
+      // Prepare the data with proper type conversions
+      const updateData: any = { ...data };
+      
+      if (data.activeContent !== undefined) {
+        updateData.activeContent = activeContentToJson(data.activeContent);
+      }
+      
+      if (data.generatedContents !== undefined) {
+        updateData.generatedContents = activeContentArrayToJson(data.generatedContents);
+      }
+      
+      const project = await dispatch(updateProject({ id, data: updateData })).unwrap();
       notifySuccess(
         'Projet mis à jour', 
         'Votre projet a été mis à jour avec succès'
@@ -218,13 +241,18 @@ export const useProjects = () => {
     try {
       const project = await dispatch(fetchProjectById(projectId)).unwrap();
       
+      // Convert JSON to ActiveContent array
       const existingContents = jsonToActiveContentArray(project.generated_contents);
       
+      // Add the new content
       const newContents = [...existingContents, content];
+      
+      // Convert back to JSON for storage
+      const jsonContents = activeContentArrayToJson(newContents);
       
       const updatedProject = await dispatch(updateProject({ 
         id: projectId, 
-        data: { generated_contents: activeContentArrayToJson(newContents) } 
+        data: { generated_contents: jsonContents } 
       })).unwrap();
       
       setIsLoading(false);
@@ -247,9 +275,12 @@ export const useProjects = () => {
     setError(null);
     
     try {
+      // Convert to JSON for storage
+      const jsonContents = activeContentArrayToJson(contents);
+      
       const updatedProject = await dispatch(updateProject({ 
         id: projectId, 
-        data: { generated_contents: activeContentArrayToJson(contents) } 
+        data: { generated_contents: jsonContents } 
       })).unwrap();
       
       setIsLoading(false);
