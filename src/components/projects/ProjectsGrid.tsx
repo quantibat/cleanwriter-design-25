@@ -41,7 +41,6 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
                 {getIconForType(project.option_type)}
                 <h3 className="font-semibold">{project.title}</h3>
               </div>
-              <span className="text-sm text-muted-foreground">{project.progress}%</span>
             </div>
             
             <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{project.card_title || ''}</p>

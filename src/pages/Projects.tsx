@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { FolderPlus, Database, Clock, RefreshCw, LayoutGrid, Table as TableIcon } from "lucide-react";
+import { FolderPlus, Database, RefreshCw, LayoutGrid, Table as TableIcon } from "lucide-react";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useProjects } from '@/hooks/useProjects';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

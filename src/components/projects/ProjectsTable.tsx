@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Eye, Edit, Trash2, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon, Database } from "lucide-react";
+import { Edit, Trash2, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon, Database } from "lucide-react";
 
 interface ProjectsTableProps {
   projects: any[];
@@ -36,14 +36,13 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({ projects }) => {
             <TableHead>Titre</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Éléments</TableHead>
-            <TableHead>Progression</TableHead>
             <TableHead>Date de modification</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {projects.map((project) => (
-            <TableRow key={project.id} className="cursor-pointer hover:bg-accent/50">
+            <TableRow key={project.id} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/view-project/${project.id}`, { state: { project } })}>
               <TableCell className="font-medium">{project.title}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
@@ -52,20 +51,9 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({ projects }) => {
                 </div>
               </TableCell>
               <TableCell>{project.elements || 0}</TableCell>
-              <TableCell>{project.progress || 0}%</TableCell>
               <TableCell>{new Date(project.updated_at).toLocaleDateString('fr-FR')}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-1">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/view-project/${project.id}`, { state: { project } });
-                    }}
-                  >
-                    <Eye className="h-4 w-4" />
-                  </Button>
                   <Button 
                     variant="ghost" 
                     size="sm" 
