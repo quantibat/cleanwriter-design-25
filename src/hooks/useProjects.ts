@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Project, ProjectInsert, ProjectUpdate } from '@/types';
@@ -11,8 +12,10 @@ import {
   jsonToActiveContent,
   jsonToActiveContentArray
 } from "@/types/contentTypes";
+import { useNavigate } from 'react-router-dom';
 
 export const useProjects = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   const [projects, setProjects] = useState<Project[]>([]);
@@ -97,6 +100,15 @@ export const useProjects = () => {
         ...project,
         user_id: user.id,
       };
+
+      // Handle ActiveContent conversion
+      if (projectToInsert.active_content && typeof projectToInsert.active_content !== 'string' && !(projectToInsert.active_content instanceof Array)) {
+        projectToInsert.active_content = activeContentToJson(projectToInsert.active_content as unknown as ActiveContent);
+      }
+      
+      if (projectToInsert.generated_contents && Array.isArray(projectToInsert.generated_contents)) {
+        projectToInsert.generated_contents = activeContentArrayToJson(projectToInsert.generated_contents as unknown as ActiveContent[]);
+      }
 
       const { data, error } = await supabase
         .from('projects')
@@ -191,6 +203,27 @@ export const useProjects = () => {
     }
   };
 
+  // Add navigation helpers for ProjectsTab
+  const getUserProjects = () => {
+    return projects;
+  };
+
+  const viewProject = (id: string) => {
+    navigate(`/view-project/${id}`);
+  };
+
+  const editProject = (id: string) => {
+    navigate(`/edit-project/${id}`);
+  };
+
+  const deleteProjectNavigate = (id: string) => {
+    navigate(`/delete-project/${id}`);
+  };
+
+  const goToCreateProject = () => {
+    navigate('/create-dce');
+  };
+
   const transformDbProjectToUiModel = (project: any) => {
     return {
       id: project.id,
@@ -221,6 +254,12 @@ export const useProjects = () => {
     createNewProject,
     updateExistingProject,
     deleteProject,
-    transformDbProjectToUiModel
+    transformDbProjectToUiModel,
+    // Add the new functions for ProjectsTab
+    getUserProjects,
+    viewProject,
+    editProject,
+    deleteProjectNavigate,
+    goToCreateProject
   };
 };

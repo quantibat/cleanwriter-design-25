@@ -1,9 +1,8 @@
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { supabase } from '@/integrations/supabase/client';
 import { ProjectFormData } from '@/services/projectsService';
 import { Json } from '@/integrations/supabase/types';
-import { ActiveContent, activeContentToJson, activeContentArrayToJson } from '@/hooks/useActiveContent';
+import { ActiveContent, activeContentToJson, activeContentArrayToJson } from '@/types/contentTypes';
 
 interface ProjectsState {
   projects: any[];
@@ -75,7 +74,7 @@ export const fetchProjectById = createAsyncThunk(
 
 export const createProject = createAsyncThunk(
   'projects/createProject',
-  async (data: any, { rejectWithValue }) => {
+  async (data: ProjectFormData, { rejectWithValue }) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -95,8 +94,8 @@ export const createProject = createAsyncThunk(
         is_social_media_only: data.isSocialMediaOnly || false,
         topics: data.topics || [],
         selected_topics: data.selectedTopics || [],
-        active_content: data.activeContent as Json,
-        generated_contents: data.generatedContents as Json,
+        active_content: data.activeContent ? activeContentToJson(data.activeContent) : null,
+        generated_contents: data.generatedContents ? activeContentArrayToJson(data.generatedContents) : null,
         video_metadata: data.videoMetadata || null,
         used_credits: data.usedCredits || 0,
         progress: data.progress || 0,
