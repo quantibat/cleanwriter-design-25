@@ -12,6 +12,7 @@ import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useForm } from "react-hook-form";
 import { useProjects } from '@/hooks/useProjects';
 import { useToast } from "@/hooks/use-toast";
+import { Json } from '@/integrations/supabase/types';
 
 const EditProject = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const EditProject = () => {
               title: fetchedProject.title || '',
               youtubeLink: fetchedProject.youtube_link || '',
               option: fetchedProject.option_type || 'Youtube to Newsletter',
-              language: fetchedProject.language || 'french',
+              language: fetchedProject.output_language || 'french',
               aiModel: fetchedProject.ai_model || 'gpt-4o',
               description: fetchedProject.card_title || '',
               details: transformedProject.details || '',
@@ -69,11 +70,14 @@ const EditProject = () => {
             
             if (fetchedProject.youtube_link) {
               setIsValidYoutubeLink(true);
+              
+              // Handle video metadata correctly
+              const metadata = fetchedProject.video_metadata as Json || {};
               setVideoMetadata({
-                title: fetchedProject.video_title || 'Titre de la vidéo',
-                channel: fetchedProject.video_channel || 'Chaîne YouTube',
-                views: fetchedProject.video_views || '0 vues',
-                duration: fetchedProject.video_duration || '00:00'
+                title: typeof metadata === 'object' && metadata !== null ? (metadata as any).title || 'Titre de la vidéo' : 'Titre de la vidéo',
+                channel: typeof metadata === 'object' && metadata !== null ? (metadata as any).channel || 'Chaîne YouTube' : 'Chaîne YouTube',
+                views: typeof metadata === 'object' && metadata !== null ? (metadata as any).views || '0 vues' : '0 vues',
+                duration: typeof metadata === 'object' && metadata !== null ? (metadata as any).duration || '00:00' : '00:00'
               });
             }
           } else {

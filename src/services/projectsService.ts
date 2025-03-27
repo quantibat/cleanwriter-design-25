@@ -13,8 +13,10 @@ export interface ProjectFormData {
   youtubeLink?: string;
   option?: string;
   language?: string;
+  output_language?: string;
   aiModel?: string;
   cardTitle?: string;
+  description?: string;
   isSocialMediaOnly?: boolean;
   topics?: any[];
   selectedTopics?: string[];
@@ -24,6 +26,7 @@ export interface ProjectFormData {
   usedCredits?: number;
   progress?: number;
   elements?: number;
+  details?: string;
 }
 
 // Add better error handling to these service methods
