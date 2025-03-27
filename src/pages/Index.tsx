@@ -69,7 +69,7 @@ const Index = () => {
 
   return <div className="bg-[#06071b] min-h-screen">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 overflow-hidden px-6">
+      <section className="relative py-32 overflow-hidden">
         {/* Background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
