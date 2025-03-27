@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -277,7 +278,7 @@ const Index = () => {
           }} transition={{
             duration: 0.6,
             delay: index * 0.1
-          }} className="bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/8 transition-all duration-300 animate-on-scroll">
+          }} className="bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/8 transition-all duration-300 animate-on-scroll feature-card">
                 <div className="h-14 w-14 bg-blue-600/20 rounded-lg flex items-center justify-center mb-6">
                   {feature.icon}
                 </div>
@@ -454,6 +455,45 @@ const Index = () => {
           bottom: 0;
           background: linear-gradient(0deg, rgba(6, 7, 27, 1) 0%, rgba(6, 7, 27, 0) 20%, rgba(6, 7, 27, 0) 80%, rgba(6, 7, 27, 1) 100%);
           pointer-events: none;
+        }
+
+        /* Feature card neon effect */
+        .feature-card {
+          position: relative;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          box-shadow: 0 0 5px rgba(59, 130, 246, 0.1);
+        }
+
+        .feature-card::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          border-radius: inherit;
+          background: linear-gradient(90deg, #3B82F6, #60A5FA, #3B82F6);
+          background-size: 200% 100%;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          z-index: -1;
+        }
+
+        .feature-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 0 15px rgba(59, 130, 246, 0.3), 0 0 30px rgba(59, 130, 246, 0.1);
+        }
+
+        .feature-card:hover::before {
+          opacity: 1;
+          animation: animateGradient 2s linear infinite;
+        }
+
+        @keyframes animateGradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
         `
     }} />
