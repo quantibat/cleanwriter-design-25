@@ -1,3 +1,4 @@
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { supabase } from '@/integrations/supabase/client';
 import { ProjectFormData } from '@/services/projectsService';
@@ -82,6 +83,7 @@ export const createProject = createAsyncThunk(
         throw new Error('Utilisateur non authentifié');
       }
       
+      // Ensure we're passing Json compatible objects
       const projectData = {
         user_id: user.id,
         title: data.title || 'Untitled Youtube to Newsletter',
@@ -124,6 +126,7 @@ export const updateProject = createAsyncThunk(
     try {
       const updateData: Record<string, any> = {};
       
+      // Convert data to appropriate formats before updating
       if (data.title !== undefined) updateData.title = data.title;
       if (data.youtubeLink !== undefined) updateData.youtube_link = data.youtubeLink;
       if (data.option !== undefined) updateData.option_type = data.option;

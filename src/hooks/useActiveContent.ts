@@ -15,7 +15,7 @@ export const activeContentToJson = (content: ActiveContent | null): Json => {
     topicId: content.topicId,
     subject: content.subject,
     body: content.body
-  } as unknown as Json;
+  } as Json;
 };
 
 // Helper to convert Json to ActiveContent
@@ -74,8 +74,12 @@ export const jsonToActiveContentArray = (json: Json): ActiveContent[] => {
 
 // Helper to convert ActiveContent[] to Json compatible array
 export const activeContentArrayToJson = (contents: ActiveContent[]): Json => {
-  if (!contents || contents.length === 0) return [];
-  return contents.map(content => activeContentToJson(content)) as unknown as Json;
+  if (!contents || contents.length === 0) return [] as Json;
+  return contents.map(content => ({
+    topicId: content.topicId,
+    subject: content.subject,
+    body: content.body
+  })) as Json;
 };
 
 export const useActiveContent = (initialContent: ActiveContent | null) => {

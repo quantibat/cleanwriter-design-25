@@ -67,11 +67,11 @@ export const updateProject = async (id: string, data: Partial<ProjectFormData>) 
     const updateData: any = { ...data };
     
     if (data.activeContent !== undefined) {
-      updateData.activeContent = activeContentToJson(data.activeContent);
+      updateData.activeContent = data.activeContent ? activeContentToJson(data.activeContent) : null;
     }
     
     if (data.generatedContents !== undefined) {
-      updateData.generatedContents = activeContentArrayToJson(data.generatedContents);
+      updateData.generatedContents = data.generatedContents ? activeContentArrayToJson(data.generatedContents) : [];
     }
     
     return await store.dispatch(updateProjectAction({ id, data: updateData })).unwrap();

@@ -159,11 +159,11 @@ export const useProjects = () => {
       const updateData: any = { ...data };
       
       if (data.activeContent !== undefined) {
-        updateData.activeContent = activeContentToJson(data.activeContent);
+        updateData.activeContent = data.activeContent ? activeContentToJson(data.activeContent) : null;
       }
       
       if (data.generatedContents !== undefined) {
-        updateData.generatedContents = activeContentArrayToJson(data.generatedContents);
+        updateData.generatedContents = data.generatedContents ? activeContentArrayToJson(data.generatedContents) : [];
       }
       
       const project = await dispatch(updateProject({ id, data: updateData })).unwrap();
