@@ -29,16 +29,16 @@ const ToolsTab = () => {
 
   
   return (
-    <div className="space-y-12 w-full">
-      <section className='gap-4'>
+    <div className="space-y-20 w-full">
+      <section className='gap-4 space-y-6'>
         <h2 className="text-3xl font-bold flex items-center gap-2 text-white mb-3">
         🔍 Repérez vos futurs chantiers 
         </h2>
-        <div className="col-start-auto items-center mb-3">
+        <div className="col-start-auto items-center mb-6">
           <p className="text-sm text-gray-300">
-            Gagnez du temps en ciblant les appels d’offres les plus pertinents.</p>
+            Gagnez du temps en ciblant les appels d'offres les plus pertinents.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <Card 
             className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
             onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
