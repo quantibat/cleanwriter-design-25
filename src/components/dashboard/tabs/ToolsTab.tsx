@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-
-
 const ToolsTab = () => {
-  const { isPremiumUser } = useAuth();
+  const {
+    isPremiumUser
+  } = useAuth();
   const navigate = useNavigate();
-  
-
   const handleCardClick = (title: string, isSocialMedia: boolean = false) => {
     if (isPremiumUser) {
       // Redirect to CreateDCE page with parameters
@@ -26,10 +24,7 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
-
-  
-  return (
-    <div className="space-y-20 w-full">
+  return <div className="space-y-20 w-full">
       <section className='gap-4 space-y-6'>
         <h2 className="text-3xl font-bold flex items-center gap-2 text-white mb-3">
         🔍 Repérez vos futurs chantiers 
@@ -39,10 +34,7 @@ const ToolsTab = () => {
             Gagnez du temps en ciblant les appels d'offres les plus pertinents.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>🔎 Veille des Appels d'Offres</strong>
@@ -53,10 +45,7 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Recevez une liste ciblée et actualisée des AO correspondant à votre activité, votre zone géographique et vos spécialités.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>🧐 Analyse du DCE
@@ -69,10 +58,7 @@ const ToolsTab = () => {
               Visualisez immédiatement les points clés et les exigences techniques pour décider rapidement et sereinement.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>⏳ Estimation de l’Effort d’Étude
@@ -86,6 +72,7 @@ const ToolsTab = () => {
           </Card>
         </div>
       </section>
+      
       <section className='gap-4'>
         <h2 className="text-3xl font-bold flex items-center gap-2 text-white mb-3">
         📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace
@@ -96,10 +83,7 @@ const ToolsTab = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>🗂️ Réorganisation du DCE</strong>
@@ -110,10 +94,7 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Disposez immédiatement d’un dossier clair, complet et ordonné, prêt à l'emploi.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>📑 Élaboration DPGF
@@ -126,10 +107,7 @@ const ToolsTab = () => {
               Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>💡 Analyse Technique du Lot
@@ -141,67 +119,7 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.</p>
             </CardContent>
           </Card>
-        </div>
-      </section>
-      <section className='gap-4'>
-        <h2 className="text-3xl font-bold flex items-center gap-2 text-white mb-3">
-        📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace
-        </h2>
-        <div className="col-start-auto items-center mb-3">
-          <p className="text-sm text-gray-300">
-          Vos documents classés, votre dossier enrichi, vos échanges simplifiés
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
-            <CardHeader className="pb-2 w-full">
-              <div className="flex space-x-2">
-                <strong className='text-lg'>🗂️ Réorganisation du DCE</strong>
-              </div>
-            </CardHeader>
-            <CardContent className='space-y-2 w-full'>
-              <p className='font-bold text-sm '>Classez votre DCE automatiquement</p>
-              <p className="text-sm text-gray-300">Disposez immédiatement d’un dossier clair, complet et ordonné, prêt à l'emploi.</p>
-            </CardContent>
-          </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
-            <CardHeader className="pb-2 w-full">
-              <div className="flex space-x-2">
-                <strong className='text-lg'>📑 Élaboration DPGF
-                </strong>
-              </div>
-            </CardHeader>
-            <CardContent className='space-y-2 w-full'>
-              <p className='font-bold text-sm '>Créez une DPGF claire et prête à l’usage</p>
-              <p className="text-sm text-gray-300">
-              Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.</p>
-            </CardContent>
-          </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
-            <CardHeader className="pb-2 w-full">
-              <div className="flex space-x-2">
-                <strong className='text-lg'>💡 Analyse Technique du Lot
-                </strong>
-              </div>
-            </CardHeader>
-            <CardContent className='space-y-2 w-full'>
-              <p className='font-bold text-sm'>Repérez les points techniques essentiels en un instant</p>
-              <p className="text-sm text-gray-300">Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.</p>
-            </CardContent>
-          </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>🤝 Consultation Fournisseurs
@@ -225,10 +143,7 @@ const ToolsTab = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>📏 Réalisation des Métrés </strong>
@@ -239,10 +154,7 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Obtenez rapidement des métrés fiables grâce à l’appui de l’intelligence artificielle.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>📅 Planning Prévisionnel
@@ -255,10 +167,7 @@ const ToolsTab = () => {
               Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>💲 Chiffrage
@@ -282,10 +191,7 @@ const ToolsTab = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>🖋️ Mémoire Technique </strong>
@@ -296,10 +202,7 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d’ouvrage, précis et convaincant</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>✅ Dossier Administratif
@@ -312,10 +215,7 @@ const ToolsTab = () => {
               Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irréprochable du premier coup.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>📬 Relecture & Dépôt de l’Offre
@@ -339,10 +239,7 @@ const ToolsTab = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>📑 Complétion Pièces Administratives</strong>
@@ -353,10 +250,7 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Complétez sans effort les documents requis pour répondre efficacement à chaque AO.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>💬 Négociation & Ajustements
@@ -369,10 +263,7 @@ const ToolsTab = () => {
               Modifiez simplement votre proposition selon les retours du maître d’ouvrage et optimisez vos chances de succès.</p>
             </CardContent>
           </Card>
-          <Card 
-            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
-            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
-          >
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4" onClick={() => handleCardClick("Veille des Appels d’Offres", false)}>
             <CardHeader className="pb-2 w-full">
               <div className="flex space-x-2">
                 <strong className='text-lg'>⌛ Attente & Attribution</strong>
@@ -385,8 +276,6 @@ const ToolsTab = () => {
           </Card>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default ToolsTab;
