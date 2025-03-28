@@ -77,7 +77,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
               <CreditCard className="h-4 w-4 text-green-500" />
             </div>
             <div>
-              <p className="font-medium">Facturation</p>
+              <p className="font-medium">Facturations</p>
             </div>
           </Link>
 
