@@ -68,7 +68,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
               <BarChart2 className="h-4 w-4 text-purple-500" />
             </div>
             <div>
-              <p className="font-medium">Usage</p>
+              <p className="font-medium">Utilisabilite</p>
             </div>
           </Link>
 
@@ -77,22 +77,13 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
               <CreditCard className="h-4 w-4 text-green-500" />
             </div>
             <div>
-              <p className="font-medium">Plan & Billing</p>
-            </div>
-          </Link>
-
-          <Link to="/api" className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent cursor-pointer">
-            <div className="bg-amber-500/10 p-2 rounded-md">
-              <Code className="h-4 w-4 text-amber-500" />
-            </div>
-            <div>
-              <p className="font-medium">API</p>
+              <p className="font-medium">Facturation</p>
             </div>
           </Link>
 
           <div className="mt-4 pt-4 border-t">
             <button onClick={onSignOut} className="w-full text-left text-sm text-red-500 hover:text-red-600 px-3 py-2 rounded-md hover:bg-red-50/10">
-              Log out
+              Déconnexion
             </button>
           </div>
         </DropdownMenuContent>
