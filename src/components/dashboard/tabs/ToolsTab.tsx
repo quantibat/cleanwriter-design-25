@@ -58,12 +58,12 @@ const ToolsTab = () => {
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Youtube className="h-5 w-5 text-white bg-red-600 rounded-md p-1" />
-          YouTube vers ce que vous souhaitez
+          Transformation de contenu YouTube
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Convertissez l'audience YouTube en abonnés Twitter", false)}
+            onClick={() => handleCardClick("Stratégie Twitter à partir de vidéos YouTube", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -76,13 +76,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Convertissez l'audience YouTube en abonnés Twitter</p>
+              <p className="text-sm text-gray-300">Stratégie Twitter à partir de vidéos YouTube</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Transformez des vues YouTube en leads LinkedIn", false)}
+            onClick={() => handleCardClick("Contenu LinkedIn dérivé de YouTube", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -95,13 +95,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Transformez des vues YouTube en leads LinkedIn</p>
+              <p className="text-sm text-gray-300">Contenu LinkedIn dérivé de YouTube</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Dirigez le trafic YouTube vers votre site web", false)}
+            onClick={() => handleCardClick("Optimisation site web avec vidéos", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -114,13 +114,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Dirigez le trafic YouTube vers votre site web</p>
+              <p className="text-sm text-gray-300">Optimisation site web avec vidéos</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Collectez des emails depuis vos vidéos YouTube", false)}
+            onClick={() => handleCardClick("Campagne d'emailing basée sur YouTube", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -133,7 +133,7 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Collectez des emails depuis vos vidéos YouTube</p>
+              <p className="text-sm text-gray-300">Campagne d'emailing basée sur YouTube</p>
             </CardContent>
           </Card>
         </div>
@@ -142,12 +142,12 @@ const ToolsTab = () => {
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Mail className="h-5 w-5 text-white bg-blue-500 rounded-md p-1" />
-          Dynamisez votre newsletter
+          Stratégies d'emailing avancées
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Convertissez des abonnés en followers Twitter", false)}
+            onClick={() => handleCardClick("Intégration Twitter dans vos newsletters", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -160,13 +160,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Convertissez des abonnés en followers Twitter</p>
+              <p className="text-sm text-gray-300">Intégration Twitter dans vos newsletters</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Augmentez vos connexions LinkedIn", false)}
+            onClick={() => handleCardClick("Génération de leads via newsletters", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -179,7 +179,7 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Augmentez vos connexions LinkedIn</p>
+              <p className="text-sm text-gray-300">Génération de leads via newsletters</p>
             </CardContent>
           </Card>
         </div>
@@ -188,12 +188,12 @@ const ToolsTab = () => {
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Twitter className="h-5 w-5 text-white bg-blue-400 rounded-md p-1" />
-          Développez votre compte Twitter
+          Stratégies avancées pour Twitter
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Convertissez des followers en connexions pro", true)}
+            onClick={() => handleCardClick("Acquisition B2B via Twitter", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -206,13 +206,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Convertissez des followers en connexions pro</p>
+              <p className="text-sm text-gray-300">Acquisition B2B via Twitter</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Collectez des emails depuis Twitter", true)}
+            onClick={() => handleCardClick("Génération d'emails qualifiés via Twitter", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -225,7 +225,7 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Collectez des emails depuis Twitter</p>
+              <p className="text-sm text-gray-300">Génération d'emails qualifiés via Twitter</p>
             </CardContent>
           </Card>
         </div>
@@ -234,12 +234,12 @@ const ToolsTab = () => {
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Mail className="h-5 w-5 text-white bg-blue-500 rounded-md p-1" />
-          Vendez via email
+          Conversion par email
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("De l'email au follow Instagram pour plus de ventes", true)}
+            onClick={() => handleCardClick("Synergie Instagram-Email pour la vente", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -252,13 +252,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">De l'email au follow Instagram pour plus de ventes</p>
+              <p className="text-sm text-gray-300">Synergie Instagram-Email pour la vente</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Email automation pour convertir et vendre", true)}
+            onClick={() => handleCardClick("Séquences d'emails automatisées pour conversion", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -271,7 +271,7 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Email automation pour convertir et vendre</p>
+              <p className="text-sm text-gray-300">Séquences d'emails automatisées pour conversion</p>
             </CardContent>
           </Card>
         </div>
@@ -280,12 +280,12 @@ const ToolsTab = () => {
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Linkedin className="h-5 w-5 text-white bg-blue-700 rounded-md p-1" />
-          Brillez sur LinkedIn
+          Expertise LinkedIn
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Convertissez des contacts en abonnés", false)}
+            onClick={() => handleCardClick("Croissance de newsletter via LinkedIn", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -298,13 +298,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Convertissez des contacts en abonnés</p>
+              <p className="text-sm text-gray-300">Croissance de newsletter via LinkedIn</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Générez du trafic qualifié vers votre site", false)}
+            onClick={() => handleCardClick("Trafic web qualifié depuis LinkedIn", false)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -317,7 +317,7 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Générez du trafic qualifié vers votre site</p>
+              <p className="text-sm text-gray-300">Trafic web qualifié depuis LinkedIn</p>
             </CardContent>
           </Card>
         </div>
@@ -332,12 +332,12 @@ const ToolsTab = () => {
       <section>
         <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-white">
           <Globe className="h-5 w-5 text-white bg-blue-500 rounded-md p-1" />
-          Shine on Social Media
+          Stratégies multicanal
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("De YouTube à Instagram en un clic", true)}
+            onClick={() => handleCardClick("YouTube vers Instagram: contenu optimisé", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -350,13 +350,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">De YouTube à Instagram en un clic</p>
+              <p className="text-sm text-gray-300">YouTube vers Instagram: contenu optimisé</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Transformez vos tweets en contenu vidéo", true)}
+            onClick={() => handleCardClick("Tweets vers vidéos à fort engagement", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -369,13 +369,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Transformez vos tweets en contenu vidéo</p>
+              <p className="text-sm text-gray-300">Tweets vers vidéos à fort engagement</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Maximisez l'impact de vos vidéos sur Facebook", true)}
+            onClick={() => handleCardClick("Stratégie vidéo optimisée pour Facebook", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -388,13 +388,13 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Maximisez l'impact de vos vidéos sur Facebook</p>
+              <p className="text-sm text-gray-300">Stratégie vidéo optimisée pour Facebook</p>
             </CardContent>
           </Card>
           
           <Card 
             className="bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer"
-            onClick={() => handleCardClick("Synchronisez vos campagnes Twitter et Facebook", true)}
+            onClick={() => handleCardClick("Coordination Twitter-Facebook efficace", true)}
           >
             <CardHeader className="pb-2">
               <div className="flex space-x-2">
@@ -407,7 +407,7 @@ const ToolsTab = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">Synchronisez vos campagnes Twitter et Facebook</p>
+              <p className="text-sm text-gray-300">Coordination Twitter-Facebook efficace</p>
             </CardContent>
           </Card>
         </div>
@@ -470,4 +470,3 @@ const ToolsTab = () => {
 };
 
 export default ToolsTab;
-
