@@ -1,9 +1,9 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-import { Badge } from "@/components/ui/badge";
 
 const ToolsTab = () => {
   const {
@@ -32,8 +32,7 @@ const ToolsTab = () => {
       <section className='space-y-8'>
         <div className="space-y-4">
           <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
-            🔍 Repérez vos futurs chantiers 
-            <Badge className="ml-2 bg-orange-500/90 text-white text-xs px-2 py-0.5">À venir</Badge>
+          🔍 Repérez vos futurs chantiers 
           </h2>
           <div className="items-center">
             <p className="text-sm text-gray-300">
@@ -90,8 +89,7 @@ const ToolsTab = () => {
       <section className='space-y-8'>
         <div className="space-y-4">
           <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
-            📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace
-            <Badge className="ml-2 bg-orange-500/90 text-white text-xs px-2 py-0.5">À venir</Badge>
+          📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace
           </h2>
           <div className="items-center">
             <p className="text-sm text-gray-300">
@@ -163,8 +161,7 @@ const ToolsTab = () => {
       <section className='space-y-8'>
         <div className="space-y-4">
           <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
-            💹 Affinez précisément vos quantités, coûts et plannings
-            <Badge className="ml-2 bg-orange-500/90 text-white text-xs px-2 py-0.5">À venir</Badge>
+          💹 Affinez précisément vos quantités, coûts et plannings
           </h2>
           <div className="items-center">
             <p className="text-sm text-gray-300">
@@ -222,8 +219,7 @@ const ToolsTab = () => {
       <section className='space-y-8'>
         <div className="space-y-4">
           <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
-            ✒️ Formalisez une offre percutante
-            <Badge className="ml-2 bg-orange-500/90 text-white text-xs px-2 py-0.5">À venir</Badge>
+          ✒️ Formalisez une offre percutante
           </h2>
           <div className="items-center">
             <p className="text-sm text-gray-300">
@@ -281,8 +277,7 @@ const ToolsTab = () => {
       <section className='space-y-8'>
         <div className="space-y-4">
           <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
-            🤲 Concluez efficacement pour remporter vos marchés
-            <Badge className="ml-2 bg-orange-500/90 text-white text-xs px-2 py-0.5">À venir</Badge>
+          🤲 Concluez efficacement pour remporter vos marchés
           </h2>
           <div className="items-center">
             <p className="text-sm text-gray-300">
