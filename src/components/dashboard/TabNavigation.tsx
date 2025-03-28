@@ -10,7 +10,7 @@ interface TabNavigationProps {
 
 const TabNavigation = ({ activeTab, onTabChange }: TabNavigationProps) => {
   return (
-    <div className="w-full border-b border-white/5 bg-background/20 backdrop-blur-md">
+    <div className="w-full border-b border-white/5 dark:bg-background/20 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
           <TabsList className="w-full justify-start bg-transparent h-14 p-0 space-x-2">

@@ -68,11 +68,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     if (isDarkMode) {
-      // Apply light theme
       document.documentElement.classList.add('light-theme');
       document.documentElement.classList.remove('dark-theme');
 
-      // Set light theme colors
       document.documentElement.style.setProperty('--background', '#FFFFFF');
       document.documentElement.style.setProperty('--foreground', '#000000');
       document.documentElement.style.setProperty('--card', '#FFFFFF');
@@ -90,29 +88,24 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       document.documentElement.style.setProperty('--border', '#E4E4E7');
       document.documentElement.style.setProperty('--sidebar-border', '#E4E4E7');
 
-      // Update TopBar specific styles
       document.documentElement.style.setProperty('--topbar-background', '#FFFFFF');
       document.documentElement.style.setProperty('--topbar-border', '#E4E4E7');
       document.documentElement.style.setProperty('--topbar-text', '#000000');
       document.documentElement.style.setProperty('--topbar-text-muted', '#71717A');
       document.documentElement.style.setProperty('--topbar-hover', '#F9FAFB');
 
-      // Update Dashboard specific styles
       document.documentElement.style.setProperty('--dashboard-background', '#FFFFFF');
       document.documentElement.style.setProperty('--dashboard-text', '#000000');
       document.documentElement.style.setProperty('--dashboard-text-muted', '#71717A');
       document.documentElement.style.setProperty('--dashboard-border', '#E4E4E7');
       document.documentElement.style.setProperty('--dashboard-hover', '#F9FAFB');
 
-      // Remove background image and transparency effects
       document.body.style.backgroundImage = 'none';
       document.body.style.backgroundColor = '#FFFFFF';
     } else {
-      // Maintain dark theme
       document.documentElement.classList.add('dark-theme');
       document.documentElement.classList.remove('light-theme');
 
-      // Reset to default dark theme values
       document.documentElement.style.removeProperty('--background');
       document.documentElement.style.removeProperty('--foreground');
       document.documentElement.style.removeProperty('--card');
@@ -130,14 +123,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       document.documentElement.style.removeProperty('--border');
       document.documentElement.style.removeProperty('--sidebar-border');
 
-      // Reset TopBar specific styles
       document.documentElement.style.removeProperty('--topbar-background');
       document.documentElement.style.removeProperty('--topbar-border');
       document.documentElement.style.removeProperty('--topbar-text');
       document.documentElement.style.removeProperty('--topbar-text-muted');
       document.documentElement.style.removeProperty('--topbar-hover');
 
-      // Reset Dashboard specific styles
       document.documentElement.style.removeProperty('--dashboard-background');
       document.documentElement.style.removeProperty('--dashboard-text');
       document.documentElement.style.removeProperty('--dashboard-text-muted');
