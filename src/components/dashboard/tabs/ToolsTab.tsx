@@ -11,16 +11,7 @@ const ToolsTab = () => {
   } = useAuth();
   const navigate = useNavigate();
   
-  const handleCardClick = (title: string, isSocialMedia: boolean = false, isInDevelopment: boolean = false) => {
-    if (isInDevelopment) {
-      toast({
-        title: "Fonctionnalité à venir",
-        description: "Cette fonctionnalité sera bientôt disponible. Restez à l'écoute !",
-        variant: "default"
-      });
-      return;
-    }
-    
+  const handleCardClick = (title: string, isSocialMedia: boolean = false) => {
     if (isPremiumUser) {
       // Redirect to CreateDCE page with parameters
       const params = new URLSearchParams();
@@ -40,7 +31,7 @@ const ToolsTab = () => {
   return <div className="space-y-24 w-full pb-12">
       <section className='space-y-8'>
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold flex items-center gap-2 text-white dark:text-white">
+          <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
           🔍 Repérez vos futurs chantiers 
           </h2>
           <div className="items-center">
@@ -49,7 +40,7 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -60,10 +51,10 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Trouvez directement les AO faits pour vous</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Recevez une liste ciblée et actualisée des AO correspondant à votre activité, votre zone géographique et vos spécialités.</p>
+              <p className="text-sm text-gray-300">Recevez une liste ciblée et actualisée des AO correspondant à votre activité, votre zone géographique et vos spécialités.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Analyse du DCE", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -74,14 +65,11 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Identifiez l'essentiel du lot sans perdre de temps</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">
+              <p className="text-sm text-gray-300">
               Visualisez immédiatement les points clés et les exigences techniques pour décider rapidement et sereinement.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Estimation de l'Effort d'Étude", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -92,7 +80,7 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Obtenez rapidement une estimation fiable du temps et des ressources nécessaires</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Identifiez l'essentiel du lot sans perdre de temps</p>
+              <p className="text-sm text-gray-300">Identifiez l'essentiel du lot sans perdre de temps</p>
             </CardContent>
           </Card>
         </div>
@@ -100,7 +88,7 @@ const ToolsTab = () => {
       
       <section className='space-y-8'>
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold flex items-center gap-2 text-black dark:text-white">
+          <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
           📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace
           </h2>
           <div className="items-center">
@@ -110,10 +98,7 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Réorganisation du DCE", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -124,13 +109,10 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Classez votre DCE automatiquement</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi.</p>
+              <p className="text-sm text-gray-300">Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Élaboration DPGF", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -141,14 +123,11 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Créez une DPGF claire et prête à l'usage</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">
+              <p className="text-sm text-gray-300">
               Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Analyse Technique du Lot", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -159,13 +138,10 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Repérez les points techniques essentiels en un instant</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.</p>
+              <p className="text-sm text-gray-300">Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Consultation Fournisseurs", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -176,7 +152,7 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Préparez facilement vos consultations</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Accédez immédiatement aux informations techniques nécessaires pour solliciter rapidement vos fournisseurs et sous-traitants.</p>
+              <p className="text-sm text-gray-300">Accédez immédiatement aux informations techniques nécessaires pour solliciter rapidement vos fournisseurs et sous-traitants.</p>
             </CardContent>
           </Card>
         </div>
@@ -184,7 +160,7 @@ const ToolsTab = () => {
       
       <section className='space-y-8'>
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold flex items-center gap-2 text-black dark:text-white">
+          <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
           💹 Affinez précisément vos quantités, coûts et plannings
           </h2>
           <div className="items-center">
@@ -194,10 +170,7 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Réalisation des Métrés", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -208,13 +181,10 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Quantifiez précisément, sans effort</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle.</p>
+              <p className="text-sm text-gray-300">Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Planning Prévisionnel", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -225,14 +195,11 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Établissez un planning clair en quelques clics</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">
+              <p className="text-sm text-gray-300">
               Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Chiffrage", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -243,7 +210,7 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Chiffrez rapidement en toute confiance</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Élaborez facilement des propositions cohérentes et compétitives, avec des alertes automatiques sur les points à surveiller.</p>
+              <p className="text-sm text-gray-300">Élaborez facilement des propositions cohérentes et compétitives, avec des alertes automatiques sur les points à surveiller.</p>
             </CardContent>
           </Card>
         </div>
@@ -251,7 +218,7 @@ const ToolsTab = () => {
       
       <section className='space-y-8'>
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold flex items-center gap-2 text-black dark:text-white">
+          <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
           ✒️ Formalisez une offre percutante
           </h2>
           <div className="items-center">
@@ -261,10 +228,7 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Mémoire Technique", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -275,13 +239,10 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Rédigez un mémoire qui séduit immédiatement</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant</p>
+              <p className="text-sm text-gray-300">Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Dossier Administratif", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -292,14 +253,11 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Constituez facilement un dossier impeccable</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">
+              <p className="text-sm text-gray-300">
               Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irréprochable du premier coup.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Relecture & Dépôt de l'Offre", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -310,7 +268,7 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Déposez une offre irréprochable sereinement</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Dernières vérifications automatisées pour vous assurer de la cohérence et du respect complet des exigences.</p>
+              <p className="text-sm text-gray-300">Dernières vérifications automatisées pour vous assurer de la cohérence et du respect complet des exigences.</p>
             </CardContent>
           </Card>
         </div>
@@ -318,7 +276,7 @@ const ToolsTab = () => {
       
       <section className='space-y-8'>
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold flex items-center gap-2 text-black dark:text-white">
+          <h2 className="text-3xl font-bold flex items-center gap-2 text-white">
           🤲 Concluez efficacement pour remporter vos marchés
           </h2>
           <div className="items-center">
@@ -328,10 +286,7 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Complétion Pièces Administratives", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -342,13 +297,10 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Préparez instantanément vos pièces administratives</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Complétez sans effort les documents requis pour répondre efficacement à chaque AO.</p>
+              <p className="text-sm text-gray-300">Complétez sans effort les documents requis pour répondre efficacement à chaque AO.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Négociation & Ajustements", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -359,14 +311,11 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Ajustez rapidement votre offre après remise</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">
+              <p className="text-sm text-gray-300">
               Modifiez simplement votre proposition selon les retours du maître d'ouvrage et optimisez vos chances de succès.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-white dark:bg-[#1A1F2C] border-white/5 hover:bg-gray-50 dark:hover:bg-[#232836] transition-colors cursor-pointer shadow-md relative" onClick={() => handleCardClick("Attente & Attribution", false, true)}>
-            <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-bl">
-              À venir
-            </div>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
               <div className="flex space-x-2 items-center">
                 <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
@@ -377,7 +326,7 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
               <p className='font-bold text-sm text-blue-300'>Soyez prêt dès l'attribution</p>
-              <p className="text-sm text-gray-300 dark:text-gray-300">Recevez des notifications en temps réel pour démarrer immédiatement en cas de succès et tirer des conclusions rapides en cas contraire.</p>
+              <p className="text-sm text-gray-300">Recevez des notifications en temps réel pour démarrer immédiatement en cas de succès et tirer des conclusions rapides en cas contraire.</p>
             </CardContent>
           </Card>
         </div>
