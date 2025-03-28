@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Wrench, Briefcase, UsersRound } from "lucide-react";
+import { Grid, FolderArchive, UsersRound } from "lucide-react";
 
 interface TabNavigationProps {
   activeTab: string;
@@ -18,14 +18,14 @@ const TabNavigation = ({ activeTab, onTabChange }: TabNavigationProps) => {
               value="tools" 
               className="flex items-center data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:border-b-2 data-[state=active]:border-blue-400 rounded-none px-4 h-full"
             >
-              <Wrench className="h-4 w-4 mr-2" />
+              <Grid className="h-4 w-4 mr-2" />
               Outils
             </TabsTrigger>
             <TabsTrigger 
               value="projects" 
               className="flex items-center data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:border-b-2 data-[state=active]:border-blue-400 rounded-none px-4 h-full"
             >
-              <Briefcase className="h-4 w-4 mr-2" />
+              <FolderArchive className="h-4 w-4 mr-2" />
               Projets
             </TabsTrigger>
             <TabsTrigger 

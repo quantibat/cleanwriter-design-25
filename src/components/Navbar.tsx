@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X, Zap, Grid, FolderArchive, UsersRound } from "lucide-react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
@@ -44,15 +45,18 @@ const Navbar = () => {
 
         {/* Navigation Menu (Center) - Updated to be centered */}
         <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
-          <a href="#home" className="text-sm font-medium transition-colors hover:text-blue-400">
-            Accueil
+          <a href="#home" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+            <Grid className="h-4 w-4" />
+            <span>Accueil</span>
           </a>
           
-          <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400">
-            Tarifs
+          <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+            <FolderArchive className="h-4 w-4" />
+            <span>Tarifs</span>
           </a>
-          <Link to="/affiliate" className="text-sm font-medium transition-colors hover:text-blue-400">
-            Affiliation
+          <Link to="/affiliate" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+            <UsersRound className="h-4 w-4" />
+            <span>Affiliation</span>
           </Link>
         </div>
 
@@ -76,17 +80,21 @@ const Navbar = () => {
       {/* Mobile Navigation */}
       {isMenuOpen && <div className="md:hidden absolute top-[72px] left-0 right-0 bg-card/95 backdrop-blur-md border-b border-white/5 animate-fade-in">
           <div className="py-4 px-6 space-y-4 flex flex-col">
-            <a href="#home" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              Accueil
+            <a href="#home" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+              <Grid className="h-4 w-4" />
+              <span>Accueil</span>
             </a>
-            <a href="#features" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              Fonctionnalités
+            <a href="#features" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              <span>Fonctionnalités</span>
             </a>
-            <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              Tarifs
+            <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+              <FolderArchive className="h-4 w-4" />
+              <span>Tarifs</span>
             </a>
-            <Link to="/affiliate" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              Affiliation
+            <Link to="/affiliate" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+              <UsersRound className="h-4 w-4" />
+              <span>Affiliation</span>
             </Link>
             <Link to="/privacy-policy" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
               Politique de confidentialité
