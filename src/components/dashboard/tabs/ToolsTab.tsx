@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 
@@ -69,13 +70,16 @@ const ToolsTab = () => {
               Visualisez immédiatement les points clés et les exigences techniques pour décider rapidement et sereinement.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>⏳</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>⏳</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Estimation de l'Effort d'Étude</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Estimation de l'Effort d'Étude</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -98,13 +102,16 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>🗂️</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>🗂️</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Réorganisation du DCE</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Réorganisation du DCE</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -112,13 +119,16 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>📑</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>📑</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Élaboration DPGF</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Élaboration DPGF</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -127,13 +137,16 @@ const ToolsTab = () => {
               Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>💡</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>💡</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Analyse Technique du Lot</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Analyse Technique du Lot</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -141,13 +154,16 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>🤝</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>🤝</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Consultation Fournisseurs</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Consultation Fournisseurs</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -170,13 +186,16 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>📏</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>📏</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Réalisation des Métrés</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Réalisation des Métrés</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -184,13 +203,16 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>📅</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>📅</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Planning Prévisionnel</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Planning Prévisionnel</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -199,13 +221,16 @@ const ToolsTab = () => {
               Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>💲</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>💲</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Chiffrage</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Chiffrage</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -228,13 +253,16 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>🖋️</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>🖋️</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Mémoire Technique</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Mémoire Technique</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -242,13 +270,16 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>✅</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>✅</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Dossier Administratif</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Dossier Administratif</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -257,13 +288,16 @@ const ToolsTab = () => {
               Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irréprochable du premier coup.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>📬</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>📬</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Relecture & Dépôt de l'Offre</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Relecture & Dépôt de l'Offre</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -286,13 +320,16 @@ const ToolsTab = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>📑</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>📑</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Complétion Pièces Administratives</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Complétion Pièces Administratives</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -300,13 +337,16 @@ const ToolsTab = () => {
               <p className="text-sm text-gray-300">Complétez sans effort les documents requis pour répondre efficacement à chaque AO.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>💬</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>💬</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Négociation & Ajustements</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Négociation & Ajustements</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>
@@ -315,13 +355,16 @@ const ToolsTab = () => {
               Modifiez simplement votre proposition selon les retours du maître d'ouvrage et optimisez vos chances de succès.</p>
             </CardContent>
           </Card>
-          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 w-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-b border-white/10">
-              <div className="flex space-x-2 items-center">
-                <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
-                  <span className='text-xl'>⌛</span>
+              <div className="flex justify-between items-center">
+                <div className="flex space-x-2 items-center">
+                  <div className="p-2 rounded-full bg-blue-500/20 flex-shrink-0">
+                    <span className='text-xl'>⌛</span>
+                  </div>
+                  <strong className='text-lg font-bold text-blue-100'>Attente & Attribution</strong>
                 </div>
-                <strong className='text-lg font-bold text-blue-100'>Attente & Attribution</strong>
+                <Badge variant="coming" className="ml-2">A venir</Badge>
               </div>
             </CardHeader>
             <CardContent className='space-y-4 w-full p-4'>

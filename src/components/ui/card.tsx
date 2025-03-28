@@ -20,11 +20,11 @@ Card.displayName = "Card"
 
 const CardHeader = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { showComingSoon?: boolean }
+>(({ className, showComingSoon, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1 p-4 border-b border-black/10 dark:border-white/10", className)}
+    className={cn("flex flex-col space-y-1 p-4 border-b border-black/10 dark:border-white/10 relative", className)}
     {...props}
   />
 ))
