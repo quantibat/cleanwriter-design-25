@@ -168,6 +168,63 @@ const ToolsTab = () => {
           </Card>
         </div>
       </section>
+      <section className='gap-4'>
+        <h2 className="text-3xl font-bold flex items-center gap-2 text-white mb-3">
+        📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace
+        </h2>
+        <div className="col-start-auto items-center mb-3">
+          <p className="text-sm text-gray-300">
+          Vos documents classés, votre dossier enrichi, vos échanges simplifiés
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card 
+            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
+            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
+          >
+            <CardHeader className="pb-2 w-full">
+              <div className="flex space-x-2">
+                <strong className='text-lg'>🗂️ Réorganisation du DCE</strong>
+              </div>
+            </CardHeader>
+            <CardContent className='space-y-2 w-full'>
+              <p className='font-bold text-sm '>Classez votre DCE automatiquement</p>
+              <p className="text-sm text-gray-300">Disposez immédiatement d’un dossier clair, complet et ordonné, prêt à l'emploi.</p>
+            </CardContent>
+          </Card>
+          <Card 
+            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
+            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
+          >
+            <CardHeader className="pb-2 w-full">
+              <div className="flex space-x-2">
+                <strong className='text-lg'>📑 Élaboration DPGF
+                </strong>
+              </div>
+            </CardHeader>
+            <CardContent className='space-y-2 w-full'>
+              <p className='font-bold text-sm '>Créez une DPGF claire et prête à l’usage</p>
+              <p className="text-sm text-gray-300">
+              Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.</p>
+            </CardContent>
+          </Card>
+          <Card 
+            className="rounded-sm bg-[#1A1F2C] border-white/5 hover:bg-[#232836] transition-colors cursor-pointer  space-y-4"
+            onClick={() => handleCardClick("Veille des Appels d’Offres", false)}
+          >
+            <CardHeader className="pb-2 w-full">
+              <div className="flex space-x-2">
+                <strong className='text-lg'>💡 Analyse Technique du Lot
+                </strong>
+              </div>
+            </CardHeader>
+            <CardContent className='space-y-2 w-full'>
+              <p className='font-bold text-sm'>Repérez les points techniques essentiels en un instant</p>
+              <p className="text-sm text-gray-300">Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
     </div>
   );
 };
