@@ -251,9 +251,9 @@ const ToolsTab = () => {
       
       <section className='space-y-6'>
         <div className="space-y-2">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <div className="p-2 rounded-full">
-              <span className="text-2xl">✒️</span>
+              <span className="text-5xl">✒️</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
               Formalisez une offre percutante
