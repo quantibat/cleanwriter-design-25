@@ -47,7 +47,7 @@ const ToolsTab = () => {
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
-                  <span className="text-4xl">🕵️‍♂️</span>
+                  <span className="text-5xl">🕵️‍♂️</span>
                 </div>
                 <div className="absolute top-3 right-3">
                   
