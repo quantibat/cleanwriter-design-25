@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { Search } from 'lucide-react';
 
 const ToolsTab = () => {
   const {
@@ -52,7 +53,7 @@ const ToolsTab = () => {
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
-                  <img src="/lovable-uploads/5ae1f930-740e-4eee-874a-ce2949a7c012.png" alt="Detective" className="w-14 h-14" />
+                  <Search size={56} className="text-white" />
                 </div>
                 <div className="absolute top-3 right-3">
                   <Badge variant="new">New</Badge>
