@@ -5,13 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { Search } from 'lucide-react';
-
 const ToolsTab = () => {
   const {
     isPremiumUser
   } = useAuth();
   const navigate = useNavigate();
-  
   const handleCardClick = (title: string, isSocialMedia: boolean = false) => {
     if (isPremiumUser) {
       // Redirect to CreateDCE page with parameters
@@ -28,7 +26,6 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
-  
   return <div className="space-y-16 w-full pb-12">
       <section className='space-y-6'>
         <div className="space-y-2">
@@ -46,17 +43,14 @@ const ToolsTab = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Card 
-            className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" 
-            onClick={() => handleCardClick("Veille des Appels d'Offres", false)}
-          >
+          <Card className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
                   <Search size={56} className="text-white" />
                 </div>
                 <div className="absolute top-3 right-3">
-                  <Badge variant="new">New</Badge>
+                  
                 </div>
               </div>
               <CardTitle className="text-xl">Veille des Appels d'Offres</CardTitle>
@@ -68,10 +62,7 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
 
-          <Card 
-            className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" 
-            onClick={() => handleCardClick("Analyse du DCE", false)}
-          >
+          <Card className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Analyse du DCE", false)}>
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
@@ -87,9 +78,7 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
 
-          <Card 
-            className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md"
-          >
+          <Card className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
@@ -411,5 +400,4 @@ const ToolsTab = () => {
       </section>
     </div>;
 };
-
 export default ToolsTab;
