@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { Search } from 'lucide-react';
+
 const ToolsTab = () => {
   const {
     isPremiumUser
@@ -47,7 +48,7 @@ const ToolsTab = () => {
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
-                  <Search size={56} className="text-white" />
+                  <span className="text-4xl">🔍</span>
                 </div>
                 <div className="absolute top-3 right-3">
                   
@@ -400,4 +401,5 @@ const ToolsTab = () => {
       </section>
     </div>;
 };
+
 export default ToolsTab;
