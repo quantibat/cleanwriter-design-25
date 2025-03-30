@@ -31,7 +31,7 @@ const ToolsTab = () => {
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-full py-0 px-0">
-              <span className="text-4xl">🔍</span>
+              <span className="text-5xl">🔍</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
               Repérez vos futurs chantiers
