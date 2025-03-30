@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { Search } from 'lucide-react';
+
 const ToolsTab = () => {
   const {
     isPremiumUser
@@ -30,7 +31,7 @@ const ToolsTab = () => {
       <section className='space-y-6'>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-400/20 p-2 rounded-full">
+            <div className="p-2 rounded-full">
               <span className="text-2xl">🔍</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
@@ -102,7 +103,7 @@ const ToolsTab = () => {
       <section className='space-y-6'>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-400/20 p-2 rounded-full">
+            <div className="p-2 rounded-full">
               <span className="text-2xl">📂</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
@@ -177,7 +178,7 @@ const ToolsTab = () => {
       <section className='space-y-6'>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-400/20 p-2 rounded-full">
+            <div className="p-2 rounded-full">
               <span className="text-2xl">💹</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
@@ -252,7 +253,7 @@ const ToolsTab = () => {
       <section className='space-y-6'>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-400/20 p-2 rounded-full">
+            <div className="p-2 rounded-full">
               <span className="text-2xl">✒️</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
@@ -327,7 +328,7 @@ const ToolsTab = () => {
       <section className='space-y-6'>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-400/20 p-2 rounded-full">
+            <div className="p-2 rounded-full">
               <span className="text-2xl">🤲</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
@@ -400,4 +401,5 @@ const ToolsTab = () => {
       </section>
     </div>;
 };
+
 export default ToolsTab;
