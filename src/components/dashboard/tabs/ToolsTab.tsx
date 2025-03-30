@@ -27,12 +27,13 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
+  
   return <div className="space-y-16 w-full pb-12">
       <section className='space-y-6'>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-full">
-              <span className="text-4xl">🔍</span>
+              <span className="text-4xl">🕵️‍♂️</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
               Repérez vos futurs chantiers
@@ -48,7 +49,7 @@ const ToolsTab = () => {
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
-                  <span className="text-4xl">🔍</span>
+                  <span className="text-4xl">🕵️‍♂️</span>
                 </div>
                 <div className="absolute top-3 right-3">
                   
@@ -299,7 +300,7 @@ const ToolsTab = () => {
             </CardHeader>
             <CardContent className='space-y-2 text-gray-300'>
               <p className="text-sm">
-                Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irr��prochable du premier coup.
+                Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irrprochable du premier coup.
               </p>
             </CardContent>
           </Card>
