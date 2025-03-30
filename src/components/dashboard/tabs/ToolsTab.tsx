@@ -29,7 +29,7 @@ const ToolsTab = () => {
   return <div className="space-y-16 w-full pb-12">
       <section className='space-y-6'>
         <div className="space-y-2">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2\n">
             <div className="p-2 rounded-full py-0 px-0">
               <span className="text-5xl">🔍</span>
             </div>
