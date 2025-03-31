@@ -3,8 +3,8 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-card/50 pt-20 pb-10 px-6 border-t border-white/5">
-      <div className="max-w-7xl mx-auto">
+    <footer className="bg-card/50 pt-20 pb-10 px-6 border-t border-white/5 w-full">
+      <div className="w-[85%] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <a href="#" className="text-xl font-bold text-foreground inline-block mb-4">

@@ -46,18 +46,21 @@ const Navbar = () => {
         {/* Navigation Menu (Center) - Updated to be centered */}
         <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
           <a href="#home" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
-            <Grid className="h-4 w-4" />
             <span>Accueil</span>
+          </a>
+
+          <a href="#features" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+            <span>Fonctionnalités</span>
           </a>
           
           <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
-            <FolderArchive className="h-4 w-4" />
             <span>Tarifs</span>
           </a>
-          <Link to="/affiliate" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
-            <UsersRound className="h-4 w-4" />
-            <span>Affiliation</span>
-          </Link>
+
+          <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+            <span>Contact</span>
+          </a>
+
         </div>
 
         {/* Action Buttons (Right) */}
@@ -66,7 +69,7 @@ const Navbar = () => {
             <UserDropdownMenu onSignOut={signOut} showUserInfo={false} />
           ) : (
             <Button variant="outline" onClick={handleTrialButtonClick} className="bg-blue-600 hover:bg-blue-500">
-              Démarrer un essai
+              Essayez gratuitement
             </Button>
           )}
         </div>

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users, TrendingUp, Activity, Gauge, LineChart, PercentCircle, Award } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Container } from "@/components/ui/container";
@@ -68,9 +67,8 @@ const Index = () => {
   }, []);
 
   return <div className="bg-[#06071b] min-h-screen w-full">
-    <div className='mx-auto w-[85%]'>
-            {/* Hero Section */}
-            <section className="relative py-32 overflow-hidden neon-grid-background">
+      {/* Hero Section */}
+      <section className="relative py-32 overflow-hidden neon-grid-background ">
         {/* Grid overlay */}
         <div className="absolute inset-0 neon-grid z-0"></div>
         
@@ -85,8 +83,8 @@ const Index = () => {
           <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
         </div>
         
-        <Container className="relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <Container className="relative z-10 mx-auto w-[85%]">
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-16 items-center justify-center">
             {/* Left Column - Text Content */}
             <motion.div initial={{
             opacity: 0,
@@ -96,7 +94,7 @@ const Index = () => {
             y: 0
           }} transition={{
             duration: 0.8
-          }} className="text-center lg:text-left">
+          }} className="text-center ">
               <span className="inline-block px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium mb-6">
                 Solution SaaS pour les marchés publics
               </span>
@@ -105,23 +103,12 @@ const Index = () => {
                 Générez et gérez vos DCE en toute simplicité
               </h1>
               
-              <p className="text-lg md:text-xl text-blue-100/80 mb-8 max-w-xl mx-auto lg:mx-0">
+              <p className="text-lg md:text-xl text-blue-100/80 mb-8 w-full mx-auto lg:mx-0">
                 Un SaaS complet pour automatiser la création, la gestion et l'export de vos Dossiers de Consultation des Entreprises
               </p>
               
-              {/* Quick Sign-up Form */}
-              <form onSubmit={handleSubmit} className="mb-8 max-w-md mx-auto lg:mx-0">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <div className="flex-1">
-                    
-                    {!isEmailValid}
-                  </div>
-                  
-                </div>
-              </form>
-              
               {/* Stats */}
-              <div className="flex flex-wrap justify-center lg:justify-start gap-x-8 gap-y-3">
+              <div className="flex flex-wrap justify-center  gap-x-8 gap-y-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-blue-400" />
                   <span className="text-white">+15,000 utilisateurs</span>
@@ -137,7 +124,6 @@ const Index = () => {
               </div>
             </motion.div>
             
-            {/* Right Column - App Screenshot */}
             
           </div>
         </Container>
@@ -145,7 +131,7 @@ const Index = () => {
       
       {/* Social Proof Section */}
       <section className="py-16 px-6 bg-[#070823]">
-        <Container>
+        <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -222,7 +208,7 @@ const Index = () => {
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
         
-        <Container>
+        <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -292,7 +278,7 @@ const Index = () => {
       
       {/* Testimonials Section */}
       <section className="py-24 px-6 bg-[#070823]">
-        <Container>
+        <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -359,7 +345,7 @@ const Index = () => {
       {/* CTA Section */}
       <section className="py-24 px-6 bg-[#06071b] relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-20"></div>
-        <Container className="relative">
+        <Container className="relative mx-auto w-[85%]">
           <motion.div initial={{
           opacity: 0,
           y: 20
@@ -398,7 +384,6 @@ const Index = () => {
           </motion.div>
         </Container>
       </section>
-    </div>
       
       {/* Using a style tag correctly without the invalid jsx attribute */}
       <style dangerouslySetInnerHTML={{
