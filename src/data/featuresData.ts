@@ -146,7 +146,6 @@ const featuresData = {
       }
     ]
   },
-  // Add more detailed data for each feature here
   'estimation-effort-etude': {
     title: 'Estimation de l\'Effort d\'Étude',
     description: 'Obtenez rapidement une estimation fiable du temps et des ressources nécessaires pour répondre efficacement à l\'appel d\'offres.',
@@ -201,7 +200,106 @@ const featuresData = {
       }
     ]
   },
-  // We can add the rest of the features here with similar structures
+  'reorganisation-dce': {
+    title: 'Réorganisation du DCE',
+    description: 'Disposez immédiatement d\'un dossier clair, complet et ordonné, prêt à l\'emploi pour faciliter votre analyse.',
+    icon: createIcon(FolderOpen),
+    sections: [
+      {
+        title: 'Classement automatique des documents',
+        content: 'L\'outil identifie et classe automatiquement tous les documents du DCE selon leur nature (administratif, technique, financier) pour une navigation simplifiée.'
+      },
+      {
+        title: 'Extraction et indexation du contenu',
+        content: 'Le contenu de chaque document est analysé, indexé et rendu accessible via un système de recherche performant qui vous permet de retrouver instantanément n\'importe quelle information.'
+      },
+      {
+        title: 'Organisation hiérarchique intelligente',
+        content: 'Le système crée une arborescence logique des documents, mettant en évidence les relations entre eux et facilitant la compréhension globale du dossier.'
+      }
+    ],
+    benefits: [
+      'Gain de temps considérable dans l\'organisation préalable',
+      'Réduction des risques d\'oubli de documents importants',
+      'Facilité de partage et de collaboration au sein de l\'équipe',
+      'Amélioration de la qualité d\'analyse globale',
+      'Conformité assurée avec toutes les exigences du DCE'
+    ],
+    stats: [
+      {
+        label: 'Temps d\'organisation réduit',
+        value: '85%'
+      },
+      {
+        label: 'Précision du classement',
+        value: '99%'
+      },
+      {
+        label: 'Satisfaction utilisateurs',
+        value: '96%'
+      }
+    ],
+    faq: [
+      {
+        question: 'Comment les documents sont-ils organisés ?',
+        answer: 'Les documents sont automatiquement classés par catégories (administratif, technique, financier) puis sous-catégories selon leur nature spécifique, créant une arborescence intuitive.'
+      },
+      {
+        question: 'Est-il possible de personnaliser l\'organisation ?',
+        answer: 'Oui, vous pouvez définir votre propre structure de classement et l\'appliquer automatiquement à tous vos projets futurs.'
+      }
+    ]
+  },
+  'elaboration-dpgf': {
+    title: 'Élaboration DPGF',
+    description: 'Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable pour gagner un temps précieux.',
+    icon: createIcon(FileSpreadsheet),
+    sections: [
+      {
+        title: 'Extraction automatique des ouvrages',
+        content: 'Notre technologie identifie et extrait automatiquement tous les ouvrages mentionnés dans le CCTP, les organise par lots et créé une structure claire pour votre DPGF.'
+      },
+      {
+        title: 'Quantification assistée',
+        content: 'Le système propose des estimations de quantités basées sur l\'analyse des descriptions, des plans et utilise l\'intelligence artificielle pour détecter les incohérences potentielles.'
+      },
+      {
+        title: 'Format prêt au chiffrage',
+        content: 'La DPGF générée est immédiatement exploitable dans vos outils habituels (Excel, logiciels métiers) et prête à recevoir vos prix unitaires.'
+      }
+    ],
+    benefits: [
+      'Réduction drastique du temps d\'élaboration (de plusieurs jours à quelques heures)',
+      'Diminution des risques d\'oublis d\'ouvrages',
+      'Cohérence parfaite entre CCTP et DPGF',
+      'Détection des ambiguïtés et incohérences dans le DCE',
+      'Structure optimisée pour faciliter le chiffrage ultérieur'
+    ],
+    stats: [
+      {
+        label: 'Gain de temps',
+        value: '75%'
+      },
+      {
+        label: 'Réduction des oublis',
+        value: '90%'
+      },
+      {
+        label: 'Précision des quantités',
+        value: '88%'
+      }
+    ],
+    faq: [
+      {
+        question: 'Comment les quantités sont-elles estimées ?',
+        answer: 'L\'IA analyse les descriptions des ouvrages, croise les informations avec les plans quand ils sont disponibles, et utilise des modèles prédictifs basés sur des projets similaires.'
+      },
+      {
+        question: 'Puis-je modifier facilement la DPGF générée ?',
+        answer: 'Absolument, la DPGF est entièrement modifiable et vous pouvez ajuster les quantités, ajouter ou supprimer des postes selon vos besoins.'
+      }
+    ]
+  }
 };
 
 export default featuresData;
