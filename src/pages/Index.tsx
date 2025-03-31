@@ -93,7 +93,8 @@ const Index = () => {
 
   return <div className="bg-[#06071b] min-h-screen w-full">
       {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden" id='hero'>
+      <section className="relative py-32  neon-grid-background" id='hero'>
+      <div className="absolute inset-0 neon-grid z-0"></div>
         {/* Neon glow effects */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
@@ -337,6 +338,7 @@ const Index = () => {
       
       {/* FAQ Section */}
       <FAQ items={faqItems} />
+        
       
       {/* Using a style tag correctly without the invalid jsx attribute */}
       <style dangerouslySetInnerHTML={{
@@ -437,6 +439,9 @@ const Index = () => {
         `
     }} />
     </div>;
+
 };
 
 export default Index;
+
+

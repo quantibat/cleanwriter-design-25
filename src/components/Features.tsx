@@ -16,9 +16,10 @@ const FeatureCard = ({
   icon,
   color,
   slug
-}: FeatureCardProps) => <div className={`bg-white/5 backdrop-blur-sm border border-${color}/20 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group relative h-full flex flex-col`} style={{
-  boxShadow: `0 0 10px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.05)`
-}}>
+}: FeatureCardProps) => 
+<div className={`bg-white/5 backdrop-blur-sm border border-${color}/20 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group relative h-full flex flex-col bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/8 transition-all duration-300 animate-on-scroll feature-card`} style={{
+  boxShadow: `0 0 5px rgba(255, 255, 255, 0.1), 0 0 20px rgba(26, 7, 139, 0.05)`
+  }}>
     <div className={`h-12 w-12 bg-${color}/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-${color}/30 transition-colors duration-300`}>
       <div className={`text-${color}`}>{icon}</div>
     </div>
@@ -32,7 +33,14 @@ const FeatureCard = ({
         </Button>
       </Link>
     </div>
-  </div>;
+</div>; 
+{/* <div className="bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/8 transition-all duration-300 animate-on-scroll feature-card">
+  <div className="h-14 w-14 bg-blue-600/20 rounded-lg flex items-center justify-center mb-6">
+    {feature.icon}
+  </div>
+  <h3 className="text-xl font-semibold mb-4 text-white">{feature.title}</h3>
+  <p className="text-blue-100/70">{feature.description}</p>
+</div>  */}
 const Features = () => {
   const allFeatures = [
   // Category 1: Repérez vos futurs chantiers
@@ -47,14 +55,14 @@ const Features = () => {
     title: "Analyse du DCE",
     description: "Identifiez l'essentiel du lot sans perdre de temps. Visualisez immédiatement les points clés et les exigences techniques pour décider rapidement et sereinement.",
     icon: <BarChart2 size={24} />,
-    color: "neon-pink",
+    color: "neon-purple",
     slug: "analyse-rapide-dce",
     category: "search"
   }, {
     title: "Estimation de l'Effort d'Étude",
     description: "Évaluez instantanément vos besoins. Obtenez rapidement une estimation fiable du temps et des ressources nécessaires pour répondre efficacement.",
     icon: <Clock size={24} />,
-    color: "neon-blue",
+    color: "neon-purple",
     slug: "estimation-effort-etude",
     category: "search"
   },
@@ -70,14 +78,14 @@ const Features = () => {
     title: "Élaboration DPGF",
     description: "Créez une DPGF claire et prête à l'usage. Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.",
     icon: <FileSpreadsheet size={24} />,
-    color: "neon-pink",
+    color: "neon-purple",
     slug: "elaboration-dpgf",
     category: "organize"
   }, {
     title: "Analyse Technique du Lot",
     description: "Repérez les points techniques essentiels en un instant. Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.",
     icon: <Lightbulb size={24} />,
-    color: "neon-blue",
+    color: "neon-purple",
     slug: "analyse-technique-lot",
     category: "organize"
   }, {
@@ -100,14 +108,14 @@ const Features = () => {
     title: "Planning Prévisionnel",
     description: "Établissez un planning clair en quelques clics. Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable.",
     icon: <CalendarClock size={24} />,
-    color: "neon-pink",
+    color: "neon-purple",
     slug: "planning-previsionnel",
     category: "costs"
   }, {
     title: "Chiffrage",
     description: "Chiffrez rapidement en toute confiance. Élaborez facilement des propositions cohérentes et compétitives, avec des alertes automatiques sur les points à surveiller.",
     icon: <DollarSign size={24} />,
-    color: "neon-blue",
+    color: "neon-purple",
     slug: "chiffrage",
     category: "costs"
   },
@@ -123,14 +131,14 @@ const Features = () => {
     title: "Dossier Administratif",
     description: "Constituez facilement un dossier impeccable. Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irréprochable du premier coup.",
     icon: <ClipboardCheck size={24} />,
-    color: "neon-pink",
+    color: "neon-purple",
     slug: "dossier-administratif",
     category: "formalize"
   }, {
     title: "Relecture & Dépôt de l'Offre",
     description: "Déposez une offre irréprochable sereinement. Dernières vérifications automatisées pour vous assurer de la cohérence et du respect complet des exigences.",
     icon: <Send size={24} />,
-    color: "neon-blue",
+    color: "neon-purple",
     slug: "relecture-depot-offre",
     category: "formalize"
   },
@@ -146,14 +154,14 @@ const Features = () => {
     title: "Négociation & Ajustements",
     description: "Ajustez rapidement votre offre après remise. Modifiez simplement votre proposition selon les retours du maître d'ouvrage et optimisez vos chances de succès.",
     icon: <MessageSquare size={24} />,
-    color: "neon-pink",
+    color: "neon-purple",
     slug: "negociation-ajustements",
     category: "conclude"
   }, {
     title: "Attente & Attribution",
     description: "Soyez prêt dès l'attribution. Recevez des notifications en temps réel pour démarrer immédiatement en cas de succès et tirer des conclusions rapides en cas contraire.",
     icon: <Clock size={24} />,
-    color: "neon-blue",
+    color: "neon-purple",
     slug: "attente-attribution",
     category: "conclude"
   }, {
@@ -165,36 +173,21 @@ const Features = () => {
     category: "conclude"
   }];
 
-  // Group features by category
-  const featuresGroups = [{
-    title: "🔍 Repérez vos futurs chantiers",
-    icon: <Compass className="w-5 h-5 mr-2" />,
-    description: "Gagnez du temps en ciblant les appels d'offres les plus pertinents",
-    features: allFeatures.filter(feature => feature.category === "search")
-  }, {
-    title: "📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace",
-    icon: <FolderOpen className="w-5 h-5 mr-2" />,
-    description: "Vos documents classés, votre dossier enrichi, vos échanges simplifiés",
-    features: allFeatures.filter(feature => feature.category === "organize")
-  }, {
-    title: "💹 Affinez précisément vos quantités, coûts et plannings",
-    icon: <DollarSign className="w-5 h-5 mr-2" />,
-    description: "Des métrés fiables, des chiffrages précis, des plannings réalistes",
-    features: allFeatures.filter(feature => feature.category === "costs")
-  }, {
-    title: "✒️ Formalisez une offre percutante",
-    icon: <PenTool className="w-5 h-5 mr-2" />,
-    description: "Votre mémoire technique sur-mesure, votre administratif simplifié",
-    features: allFeatures.filter(feature => feature.category === "formalize")
-  }, {
-    title: "🤲 Concluez efficacement pour remporter vos marchés",
-    icon: <ShieldCheck className="w-5 h-5 mr-2" />,
-    description: "Finalisez avec confiance, ajustez avec facilité, décrochez sereinement",
-    features: allFeatures.filter(feature => feature.category === "conclude")
-  }];
+
   return <section id="features" className="py-24 px-6 relative">
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
+       {/* Neon glow effects */}
+       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
+        
+        {/* Background elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
+          <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
+        </div>
+      <div className=" relative z-10">
+          
+        <div className="text-center mb-16 ">
           <span className="px-4 py-1.5 bg-neon-pink/10 rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto text-blue-400">
             <Sparkles className="w-4 h-4 mr-2" /> Fonctionnalités
           </span>
@@ -206,14 +199,12 @@ const Features = () => {
           </p>
         </div>
         
-        {/* Feature category headers */}
-        
         
         {/* Single carousel with all features */}
         <Carousel opts={{
         align: "start",
         loop: true
-      }} className="w-full mb-16">
+      }} className="mx-auto w-[85%] h-auto">
           <CarouselContent>
             {allFeatures.map((feature, index) => <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3 pl-4">
                 <FeatureCard key={index} title={feature.title} description={feature.description} icon={feature.icon} color={feature.color} slug={feature.slug} />

@@ -132,7 +132,7 @@ const Pricing = () => {
 
   return (
     <section id="pricing" className="py-24 px-6 bg-[#06071b]">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-[85%] mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Plans for all businesses, Suitable for Personal, Agencies, Startups.</h2>
           <p className="text-blue-100/80 max-w-2xl mx-auto">
