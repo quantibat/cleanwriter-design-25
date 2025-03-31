@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck,
 import { Link } from 'react-router-dom';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
+
 interface FeatureCardProps {
   title: string;
   description: string;
@@ -12,6 +13,7 @@ interface FeatureCardProps {
   slug: string;
   index: number;
 }
+
 const FeatureCard = ({
   title,
   description,
@@ -61,6 +63,7 @@ const FeatureCard = ({
       </motion.div>
     </motion.div>;
 };
+
 const Features = () => {
   const allFeatures = [{
     title: "Veille des Appels d'Offres",
@@ -215,6 +218,86 @@ const Features = () => {
             Découvrez comment DCE Manager peut transformer votre gestion documentaire et améliorer l'efficacité de vos appels d'offres.
           </p>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="flex items-center justify-center">
+            <img src="/placeholder.svg" alt="Gestion des appels d'offres" className="rounded-lg max-w-full h-auto shadow-lg" />
+          </div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-3xl font-bold mb-4 text-white">Gestion des appels d'offres</h2>
+            <p className="text-blue-100/70 mb-6">
+              Notre solution vous permet de gérer efficacement tous vos appels d'offres, de la veille à la soumission, en un seul endroit sécurisé.
+            </p>
+            <Button variant="blue" className="self-start">
+              Découvrir
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="flex items-center justify-center">
+            <img src="/placeholder.svg" alt="Analyse automatique des DCE" className="rounded-lg max-w-full h-auto shadow-lg" />
+          </div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-3xl font-bold mb-4 text-white">Analyse automatique des DCE</h2>
+            <p className="text-blue-100/70 mb-6">
+              Notre technologie d'IA avancée analyse vos dossiers de consultation pour en extraire les informations essentielles et vous faire gagner du temps.
+            </p>
+            <Button variant="blue" className="self-start">
+              Découvrir
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="flex items-center justify-center">
+            <img src="/placeholder.svg" alt="Collaboration d'équipe" className="rounded-lg max-w-full h-auto shadow-lg" />
+          </div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-3xl font-bold mb-4 text-white">Collaboration d'équipe</h2>
+            <p className="text-blue-100/70 mb-6">
+              Travaillez en temps réel avec votre équipe sur les appels d'offres, partagez des commentaires et assignez des tâches pour une efficacité maximale.
+            </p>
+            <Button variant="blue" className="self-start">
+              Découvrir
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="flex items-center justify-center">
+            <img src="/placeholder.svg" alt="Suivi des échéances" className="rounded-lg max-w-full h-auto shadow-lg" />
+          </div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-3xl font-bold mb-4 text-white">Suivi des échéances</h2>
+            <p className="text-blue-100/70 mb-6">
+              Ne manquez plus jamais une date limite importante grâce à notre système de rappels et de notifications personnalisables.
+            </p>
+            <Button variant="blue" className="self-start">
+              Découvrir
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="flex items-center justify-center">
+            <img src="/placeholder.svg" alt="Sécurité des données" className="rounded-lg max-w-full h-auto shadow-lg" />
+          </div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-3xl font-bold mb-4 text-white">Sécurité des données</h2>
+            <p className="text-blue-100/70 mb-6">
+              Vos données sensibles sont protégées grâce à notre infrastructure sécurisée et conforme aux normes RGPD les plus strictes.
+            </p>
+            <Button variant="blue" className="self-start">
+              Découvrir
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
         
         <Carousel ref={carouselRef} opts={{
         align: "start",
@@ -235,4 +318,5 @@ const Features = () => {
       </div>
     </section>;
 };
+
 export default Features;
