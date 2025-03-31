@@ -1,14 +1,18 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Database, Clock, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon } from "lucide-react";
+
 interface ProjectsGridProps {
   projects: any[];
 }
+
 const ProjectsGrid: React.FC<ProjectsGridProps> = ({
   projects
 }) => {
   const navigate = useNavigate();
+  
   const getIconForType = (type: string) => {
     switch (type) {
       case "newsletter":
@@ -24,12 +28,19 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({
         return <Database className="h-5 w-5 text-muted-foreground" />;
     }
   };
-  return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.map(project => <Card key={project.id} onClick={() => navigate(`/view-project/${project.id}`, {
-      state: {
-        project
-      }
-    })} className="hover:bg-accent/50 transition-colors cursor-pointer  bg-accent/50">
+  
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      {projects.map(project => (
+        <Card 
+          key={project.id} 
+          onClick={() => navigate(`/view-project/${project.id}`, {
+            state: {
+              project
+            }
+          })} 
+          className="hover:bg-accent/50 transition-colors cursor-pointer bg-accent/50"
+        >
           <CardContent className="p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-2">
@@ -51,7 +62,10 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({
               </div>
             </div>
           </CardContent>
-        </Card>)}
-    </div>;
+        </Card>
+      ))}
+    </div>
+  );
 };
+
 export default ProjectsGrid;

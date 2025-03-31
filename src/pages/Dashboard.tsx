@@ -29,13 +29,13 @@ const Dashboard = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'tools':
-        return <div className="w-full mt-4"><ToolsTab /></div>;
+        return <div className="w-full mt-6"><ToolsTab /></div>;
       case 'projects':
-        return <div className="w-full mt-4"><ProjectsTab /></div>;
+        return <div className="w-full mt-6"><ProjectsTab /></div>;
       case 'contribute':
-        return <div className="w-full mt-4"><ContributeTab /></div>;
+        return <div className="w-full mt-6"><ContributeTab /></div>;
       default:
-        return <div className="w-full mt-4"><ToolsTab /></div>;
+        return <div className="w-full mt-6"><ToolsTab /></div>;
     }
   };
 
