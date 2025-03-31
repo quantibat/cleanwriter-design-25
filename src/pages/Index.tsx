@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users, TrendingUp, Activity, Gauge, LineChart, PercentCircle, Award } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Container } from "@/components/ui/container";
+import FAQ from "@/components/FAQ";
 
 const Index = () => {
   const [email, setEmail] = useState('');
@@ -66,6 +66,29 @@ const Index = () => {
     };
   }, []);
   
+  const faqItems = [
+    {
+      question: "What do I need to get started?",
+      answer: "To get started, simply share your project details and goals with us. We'll guide you through the process and provide the tools and support needed to bring your vision to life."
+    },
+    {
+      question: "What kind of customization is available?",
+      answer: "DCE Manager offers comprehensive customization options for all documents. You can create custom templates, modify existing ones, add your branding elements, and configure workflows to match your organization's processes."
+    },
+    {
+      question: "How easy is it to edit for beginners?",
+      answer: "Very easy! Our interface is designed to be intuitive even for users with no technical background. We offer guided walkthroughs, tooltips, and a comprehensive help center to get you started. Most users can create their first document within minutes of signing up."
+    },
+    {
+      question: "Is there a free trial available?",
+      answer: "Yes, we offer a 14-day free trial with full access to all features. No credit card is required to start your trial, and you can upgrade to a paid plan at any time if you decide DCE Manager is right for you."
+    },
+    {
+      question: "How secure is my data on your platform?",
+      answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
+    }
+  ];
+
   return <div className="bg-[#06071b] min-h-screen w-full">
       {/* Hero Section */}
       <section className="relative py-32 overflow-hidden neon-grid-background" id='hero'>
@@ -384,6 +407,9 @@ const Index = () => {
           </motion.div>
         </Container>
       </section>
+      
+      {/* FAQ Section */}
+      <FAQ items={faqItems} />
       
       {/* Using a style tag correctly without the invalid jsx attribute */}
       <style dangerouslySetInnerHTML={{

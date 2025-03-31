@@ -1,325 +1,384 @@
 
 import React from 'react';
-import { Compass, BarChart2, Clock, FolderOpen, FileSpreadsheet, Lightbulb, RulerSquare, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileText, MessageSquare } from 'lucide-react';
+import { FileText, Shield, BarChart3, Users, CheckCircle } from 'lucide-react';
 
-// This function creates React elements for the icons
-const createIcon = (Icon: any) => React.createElement(Icon, { size: 24 });
-
-const featuresData: Record<string, {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  sections: {
+// Define the structure of the feature data
+interface FeatureDataType {
+  [key: string]: {
     title: string;
-    content: string;
-    image?: string;
-  }[];
-  benefits: string[];
-  testimonials?: {
-    quote: string;
-    author: string;
-    position: string;
-  }[];
-  stats?: {
-    label: string;
-    value: string;
-  }[];
-  faq?: {
-    question: string;
-    answer: string;
-  }[];
-}> = {
-  'veille-appels-offres': {
-    title: 'Veille des Appels d'Offres',
-    description: 'Une liste ciblée d'appels d'offres adaptés à votre entreprise pour repérer en un clin d'œil les opportunités qui comptent pour vous.',
-    icon: createIcon(Compass),
+    description: string;
+    icon: React.ReactNode;
+    sections: {
+      title: string;
+      content: string;
+      image?: string;
+    }[];
+    benefits: string[];
+    testimonials?: {
+      quote: string;
+      author: string;
+      position: string;
+    }[];
+    faq?: {
+      question: string;
+      answer: string;
+    }[];
+    stats?: {
+      label: string;
+      value: string;
+    }[];
+  };
+}
+
+// Create the data object
+const featuresData: FeatureDataType = {
+  "generation-automatisee": {
+    title: "Génération automatisée",
+    description: "Créez des documents standardisés et personnalisables en quelques clics, en respectant la réglementation en vigueur.",
+    icon: <FileText className="h-8 w-8 text-blue-400" />,
     sections: [
       {
-        title: 'Surveillance automatisée des appels d'offres',
-        content: 'Notre technologie avancée analyse en continu les nouveaux marchés publiés et les filtre selon vos critères spécifiques. Vous recevez uniquement les opportunités qui correspondent à votre activité, votre zone géographique et vos capacités.',
+        title: "Création de documents en un clic",
+        content: "Notre système de génération automatisée vous permet de créer tous les documents nécessaires pour vos appels d'offres en quelques instants, en vous assurant qu'ils respectent les dernières normes et réglementations en vigueur."
       },
       {
-        title: 'Alertes personnalisées en temps réel',
-        content: 'Définissez vos préférences de notification et recevez des alertes dès qu'un appel d'offres correspondant à vos critères est publié. Ne manquez plus jamais une opportunité commerciale importante.',
+        title: "Modèles personnalisables",
+        content: "Utilisez nos modèles prédéfinis ou créez les vôtres pour générer rapidement des documents adaptés à vos besoins spécifiques. Notre système intelligent s'adapte à vos préférences et à votre historique d'utilisation."
       },
       {
-        title: 'Tableau de bord intuitif',
-        content: 'Visualisez en un coup d'œil l'ensemble des appels d'offres pertinents pour votre entreprise, avec un système de prioritisation intelligent qui met en avant les opportunités les plus prometteuses.',
+        title: "Validation automatique",
+        content: "Notre système vérifie automatiquement vos documents pour éviter les erreurs et omissions. Vous êtes ainsi assuré que vos dossiers sont complets et conformes aux exigences légales."
       }
     ],
     benefits: [
-      'Gain de temps considérable dans la recherche d'appels d'offres',
-      'Ciblage précis évitant les réponses aux appels d'offres inadaptés',
-      'Augmentation significative du taux de transformation',
-      'Vue d'ensemble du marché dans votre secteur d'activité',
-      'Identification précoce des tendances et nouvelles opportunités'
+      "Gain de temps considérable dans la création de documents",
+      "Réduction des erreurs et des risques juridiques",
+      "Conformité garantie avec la réglementation en vigueur",
+      "Interface intuitive accessible à tous les niveaux d'expertise",
+      "Possibilité de créer des modèles personnalisés réutilisables"
     ],
     testimonials: [
       {
-        quote: 'Grâce à la veille automatisée de DCE Manager, nous avons augmenté de 40% le nombre d'appels d'offres auxquels nous répondons, tout en ciblant mieux. Notre taux de transformation a doublé en six mois.',
-        author: 'Sophie Mercier',
-        position: 'Directrice commerciale, BTP Solutions'
+        quote: "Depuis que nous utilisons la fonction de génération automatisée de DCE Manager, nous avons réduit de 70% le temps passé à créer nos documents d'appels d'offres.",
+        author: "Jean Dupont",
+        position: "Directeur des achats, Ville de Bordeaux"
       },
       {
-        quote: 'Avant DCE Manager, nous passions des heures à chercher des appels d'offres pertinents. Maintenant, ils arrivent directement dans notre tableau de bord, parfaitement filtrés.',
-        author: 'Thomas Leroy',
-        position: 'Responsable des marchés publics, Constructions Durables'
-      }
-    ],
-    stats: [
-      {
-        label: 'Gain de temps',
-        value: '78%'
-      },
-      {
-        label: 'Opportunités identifiées',
-        value: '+65%'
-      },
-      {
-        label: 'Taux de transformation',
-        value: 'x2.4'
-      },
-      {
-        label: 'Satisfaction client',
-        value: '96%'
+        quote: "La simplicité d'utilisation combinée à la fiabilité des documents générés font de cet outil un allié précieux pour notre service juridique.",
+        author: "Sophie Martin",
+        position: "Responsable juridique, BTP Solutions"
       }
     ],
     faq: [
       {
-        question: 'Comment personnaliser mes critères de recherche ?',
-        answer: 'Vous pouvez définir vos critères par secteur d'activité, zone géographique, montant estimé, type de procédure et mots-clés spécifiques. Ces paramètres sont modifiables à tout moment depuis votre espace personnel.'
+        question: "Les documents générés sont-ils conformes au Code de la commande publique ?",
+        answer: "Oui, tous nos modèles sont régulièrement mis à jour pour rester en conformité avec les dernières évolutions du Code de la commande publique et des autres réglementations applicables."
       },
       {
-        question: 'Les appels d'offres privés sont-ils inclus ?',
-        answer: 'Oui, notre solution surveille à la fois les marchés publics et les appels d'offres privés auxquels nous avons accès via notre réseau de partenaires.'
+        question: "Puis-je personnaliser les modèles de documents ?",
+        answer: "Absolument ! Vous pouvez modifier tous nos modèles ou créer les vôtres à partir de zéro, puis les sauvegarder pour une utilisation future."
       },
       {
-        question: 'Puis-je partager les opportunités avec mon équipe ?',
-        answer: 'Absolument, vous pouvez attribuer des appels d'offres à différents membres de votre équipe et suivre leur progression directement dans l'outil.'
+        question: "Combien de temps faut-il pour générer un DCE complet ?",
+        answer: "En fonction de la complexité de votre projet, cela peut prendre de quelques minutes à une heure. Cependant, sans notre outil, le même travail pourrait vous prendre plusieurs jours."
+      }
+    ],
+    stats: [
+      {
+        label: "Réduction du temps",
+        value: "-70%"
+      },
+      {
+        label: "Erreurs évitées",
+        value: "-85%"
+      },
+      {
+        label: "Conformité",
+        value: "100%"
+      },
+      {
+        label: "Satisfaction",
+        value: "96%"
       }
     ]
   },
-  'analyse-rapide-dce': {
-    title: 'Analyse rapide du DCE',
-    description: 'Un résumé clair et personnalisé des points clés et exigences techniques du DCE pour le comprendre sans y passer la journée.',
-    icon: createIcon(BarChart2),
+  "collaboration-simplifiee": {
+    title: "Collaboration simplifiée",
+    description: "Partagez facilement vos DCE avec votre équipe et vos partenaires, avec un contrôle précis des accès.",
+    icon: <Users className="h-8 w-8 text-blue-400" />,
     sections: [
       {
-        title: 'Synthèse automatique des exigences clés',
-        content: 'Notre technologie d\'intelligence artificielle analyse l\'intégralité du DCE pour en extraire les informations essentielles : délais, critères de sélection, exigences techniques spécifiques, et pièces administratives requises.',
+        title: "Travail d'équipe efficace",
+        content: "Notre plateforme de collaboration permet à plusieurs utilisateurs de travailler simultanément sur le même dossier, avec un suivi en temps réel des modifications et des commentaires pour faciliter les échanges."
       },
       {
-        title: 'Identification des risques et opportunités',
-        content: 'Le système détecte automatiquement les clauses inhabituelles, les exigences particulièrement contraignantes ou les opportunités spécifiques liées à vos domaines d\'expertise.',
+        title: "Gestion fine des accès",
+        content: "Définissez précisément qui peut voir, modifier ou commenter chaque document. Attribuez des rôles spécifiques à vos collaborateurs et partenaires pour un contrôle total sur vos informations sensibles."
       },
       {
-        title: 'Comparaison avec vos projets antérieurs',
-        content: 'L\'analyse établit des parallèles avec vos précédents appels d\'offres pour identifier les similitudes, les différences notables et vous permettre de capitaliser sur votre expérience.',
+        title: "Notifications intelligentes",
+        content: "Restez informé des modifications importantes grâce à notre système de notifications personnalisables. Ne manquez plus jamais une mise à jour cruciale ou une échéance importante."
       }
     ],
     benefits: [
-      'Réduction drastique du temps d\'analyse des DCE (de plusieurs heures à quelques minutes)',
-      'Détection des points critiques nécessitant une attention particulière',
-      'Meilleure compréhension des attentes du maître d\'ouvrage',
-      'Prise de décision éclairée sur l\'opportunité de répondre',
-      'Préparation optimisée de votre réponse technique'
+      "Collaboration en temps réel entre tous les intervenants",
+      "Contrôle précis des droits d'accès et des permissions",
+      "Historique complet des modifications et des versions",
+      "Réduction des délais de validation et d'approbation",
+      "Centralisation de toutes les communications liées au projet"
     ],
     testimonials: [
       {
-        quote: 'L\'analyse rapide du DCE a transformé notre approche. Nous identifions immédiatement les appels d\'offres qui correspondent vraiment à nos compétences et évitons ceux où nous serions moins compétitifs.',
-        author: 'Jean Dupont',
-        position: 'Directeur commercial, Innovations Construction'
+        quote: "La fonction de collaboration nous permet de faire travailler ensemble nos services techniques, juridiques et financiers sans effort. C'est un gain de temps incroyable.",
+        author: "Marie Lefort",
+        position: "Cheffe de projet, Métropole de Lyon"
       },
       {
-        quote: 'Avec cette fonctionnalité, nous avons réduit de 70% le temps consacré à l\'étude préliminaire des DCE. Notre équipe peut désormais se concentrer sur l\'élaboration de réponses de qualité.',
-        author: 'Marie Laurent',
-        position: 'Responsable des appels d\'offres, Groupe BTI'
-      }
-    ],
-    stats: [
-      {
-        label: 'Temps économisé',
-        value: '70%'
-      },
-      {
-        label: 'Précision de l\'analyse',
-        value: '95%'
-      },
-      {
-        label: 'Réactivité améliorée',
-        value: 'x3'
-      },
-      {
-        label: 'Taux de pertinence',
-        value: '92%'
+        quote: "Grâce à DCE Manager, je peux facilement collaborer avec nos partenaires externes tout en gardant un contrôle total sur les accès aux documents sensibles.",
+        author: "Thomas Rivière",
+        position: "Responsable des marchés publics, SNCF"
       }
     ],
     faq: [
       {
-        question: 'Quels types de documents l\'outil peut-il analyser ?',
-        answer: 'Notre solution analyse tous les formats courants : PDF, Word, Excel, ainsi que les fichiers ZIP contenant plusieurs documents.'
+        question: "Combien d'utilisateurs peuvent collaborer sur un même projet ?",
+        answer: "Selon votre forfait, vous pouvez avoir de 5 à un nombre illimité de collaborateurs sur chaque projet. Chaque utilisateur peut avoir des droits d'accès différents."
       },
       {
-        question: 'Comment l\'IA reconnaît-elle les informations importantes ?',
-        answer: 'Notre système a été entraîné sur des milliers de DCE et affine continuellement sa compréhension grâce au machine learning. Il identifie les patterns récurrents et les éléments critiques propres à chaque secteur d\'activité.'
+        question: "Comment sont gérées les modifications simultanées ?",
+        answer: "Notre système utilise une technologie de fusion intelligente qui permet à plusieurs personnes de travailler sur le même document sans conflit. En cas de modification conflictuelle, vous êtes alerté et pouvez choisir quelle version conserver."
       },
       {
-        question: 'Est-il possible d\'adapter l\'analyse à mon domaine d\'activité ?',
-        answer: 'Oui, le système apprend progressivement de vos interactions et s\'adapte à votre secteur spécifique pour une analyse toujours plus pertinente.'
+        question: "Les collaborateurs externes doivent-ils avoir un compte payant ?",
+        answer: "Non, vous pouvez inviter des collaborateurs externes avec un accès limité sans coût supplémentaire. Seuls les utilisateurs avec des droits d'édition complets nécessitent une licence."
+      }
+    ],
+    stats: [
+      {
+        label: "Temps de validation",
+        value: "-60%"
+      },
+      {
+        label: "Échanges d'emails",
+        value: "-75%"
+      },
+      {
+        label: "Collaboration",
+        value: "+90%"
+      },
+      {
+        label: "Productivité",
+        value: "+40%"
       }
     ]
   },
-  'estimation-effort-etude': {
-    title: 'Estimation de l\'Effort d\'Étude',
-    description: 'Obtenez rapidement une estimation fiable du temps et des ressources nécessaires pour répondre efficacement à l\'appel d\'offres.',
-    icon: createIcon(Clock),
+  "analyses-suivi": {
+    title: "Analyses et suivi",
+    description: "Suivez l'avancement de vos projets et générez des rapports détaillés pour prendre les meilleures décisions.",
+    icon: <BarChart3 className="h-8 w-8 text-blue-400" />,
     sections: [
       {
-        title: 'Évaluation intelligente de la complexité',
-        content: 'Notre algorithme analyse la complexité technique du projet, le volume documentaire, les exigences spécifiques et les délais pour calculer précisément le niveau d\'effort requis.',
+        title: "Tableaux de bord personnalisables",
+        content: "Créez des tableaux de bord sur mesure pour visualiser en un coup d'œil l'état d'avancement de vos projets, les échéances à venir et les indicateurs clés de performance que vous aurez définis."
       },
       {
-        title: 'Planification des ressources nécessaires',
-        content: 'En fonction de l\'analyse, le système propose une répartition optimale des ressources humaines et techniques, avec une estimation des heures de travail par profil et par phase.',
+        title: "Rapports automatisés",
+        content: "Générez des rapports détaillés sur vos activités, vos délais, vos budgets ou tout autre aspect de vos projets. Exportez-les facilement dans différents formats pour vos réunions ou présentations."
       },
       {
-        title: 'Comparaison avec des projets similaires',
-        content: 'L\'estimation s\'appuie sur l\'historique de vos précédentes réponses pour des projets comparables, garantissant ainsi une prévision réaliste basée sur votre expérience.',
+        title: "Analyse prédictive",
+        content: "Bénéficiez d'analyses avancées basées sur l'intelligence artificielle pour anticiper les retards potentiels, optimiser vos processus et améliorer continuellement vos performances."
       }
     ],
     benefits: [
-      'Anticipation précise du temps nécessaire à la préparation',
-      'Allocation optimisée des ressources internes',
-      'Évaluation fiable du retour sur investissement potentiel',
-      'Meilleure priorisation des appels d\'offres',
-      'Réduction des risques de surcharge ou de sous-estimation'
+      "Visibilité complète sur l'avancement de tous vos projets",
+      "Identification rapide des goulets d'étranglement et des risques",
+      "Rapports détaillés pour faciliter la prise de décision",
+      "Analyse des tendances pour améliorer vos processus",
+      "Alertes proactives avant que les problèmes ne surviennent"
     ],
-    stats: [
+    testimonials: [
       {
-        label: 'Précision moyenne',
-        value: '89%'
+        quote: "Les tableaux de bord nous permettent de suivre en temps réel l'état de nos appels d'offres et d'anticiper les actions à mener. C'est devenu indispensable pour notre direction.",
+        author: "Philippe Moreau",
+        position: "Directeur général, BTP Constructions"
       },
       {
-        label: 'Projets abandonnés à temps',
-        value: '+45%'
-      },
-      {
-        label: 'Planification améliorée',
-        value: '+62%'
-      },
-      {
-        label: 'Satisfaction équipes',
-        value: '91%'
+        quote: "Grâce aux rapports automatisés, je peux présenter des données précises à ma direction en quelques clics. Cela m'économise des heures de préparation chaque semaine.",
+        author: "Claire Dubois",
+        position: "Acheteuse publique, Département du Rhône"
       }
     ],
     faq: [
       {
-        question: 'Comment l\'outil calcule-t-il le temps nécessaire ?',
-        answer: 'Le système analyse plusieurs paramètres : volume documentaire, complexité technique, exigences particulières, et s\'appuie sur les données historiques de projets similaires pour affiner son estimation.'
+        question: "Puis-je créer mes propres indicateurs de performance ?",
+        answer: "Oui, notre plateforme vous permet de définir et suivre vos propres KPIs en fonction de vos objectifs spécifiques et de la nature de vos projets."
       },
       {
-        question: 'Est-ce adaptable selon la taille de mon entreprise ?',
-        answer: 'Absolument, l\'outil prend en compte vos capacités internes et s\'ajuste en fonction de l\'expérience et de la productivité de votre équipe.'
+        question: "Les rapports sont-ils exportables ?",
+        answer: "Absolument ! Vous pouvez exporter vos rapports et tableaux de bord aux formats PDF, Excel ou PowerPoint pour les partager facilement avec votre équipe ou votre direction."
+      },
+      {
+        question: "L'outil propose-t-il des prévisions basées sur les données historiques ?",
+        answer: "Oui, notre système d'analyse prédictive utilise vos données historiques pour anticiper les délais réels, les risques potentiels et proposer des optimisations de processus."
+      }
+    ],
+    stats: [
+      {
+        label: "Visibilité projet",
+        value: "+85%"
+      },
+      {
+        label: "Temps de reporting",
+        value: "-80%"
+      },
+      {
+        label: "Délais respectés",
+        value: "+65%"
+      },
+      {
+        label: "ROI moyen",
+        value: "x4"
       }
     ]
   },
-  'reorganisation-dce': {
-    title: 'Réorganisation du DCE',
-    description: 'Disposez immédiatement d\'un dossier clair, complet et ordonné, prêt à l\'emploi pour faciliter votre analyse.',
-    icon: createIcon(FolderOpen),
+  "securite-renforcee": {
+    title: "Sécurité renforcée",
+    description: "Protégez vos données sensibles avec un chiffrement de bout en bout et des sauvegardes automatiques.",
+    icon: <Shield className="h-8 w-8 text-blue-400" />,
     sections: [
       {
-        title: 'Classement automatique des documents',
-        content: 'L\'outil identifie et classe automatiquement tous les documents du DCE selon leur nature (administratif, technique, financier) pour une navigation simplifiée.',
+        title: "Protection de vos données",
+        content: "Nous utilisons les technologies de chiffrement les plus avancées pour protéger vos informations sensibles. Toutes vos données sont chiffrées en transit et au repos, garantissant leur confidentialité en toutes circonstances."
       },
       {
-        title: 'Extraction et indexation du contenu',
-        content: 'Le contenu de chaque document est analysé, indexé et rendu accessible via un système de recherche performant qui vous permet de retrouver instantanément n\'importe quelle information.',
+        title: "Sauvegardes automatiques",
+        content: "Vos documents sont automatiquement sauvegardés en temps réel. Vous pouvez également configurer des sauvegardes planifiées et restaurer facilement des versions antérieures en cas de besoin."
       },
       {
-        title: 'Organisation hiérarchique intelligente',
-        content: 'Le système crée une arborescence logique des documents, mettant en évidence les relations entre eux et facilitant la compréhension globale du dossier.',
+        title: "Conformité RGPD",
+        content: "Notre solution est entièrement conforme au Règlement Général sur la Protection des Données (RGPD) et aux autres réglementations en vigueur, vous permettant de respecter vos obligations légales sans effort supplémentaire."
       }
     ],
     benefits: [
-      'Gain de temps considérable dans l\'organisation préalable',
-      'Réduction des risques d\'oubli de documents importants',
-      'Facilité de partage et de collaboration au sein de l\'équipe',
-      'Amélioration de la qualité d\'analyse globale',
-      'Conformité assurée avec toutes les exigences du DCE'
+      "Protection maximale de vos données sensibles",
+      "Tranquillité d'esprit grâce aux sauvegardes automatiques",
+      "Conformité aux réglementations facilitée",
+      "Traçabilité complète des accès et actions",
+      "Restauration facile en cas d'incident"
     ],
-    stats: [
+    testimonials: [
       {
-        label: 'Temps d\'organisation réduit',
-        value: '85%'
+        quote: "La sécurité était notre préoccupation principale lors du choix d'une solution. DCE Manager a dépassé toutes nos attentes avec son chiffrement de bout en bout.",
+        author: "Nicolas Blanc",
+        position: "DSI, Mairie de Nantes"
       },
       {
-        label: 'Précision du classement',
-        value: '99%'
-      },
-      {
-        label: 'Satisfaction utilisateurs',
-        value: '96%'
+        quote: "Après une panne informatique majeure, nous avons pu récupérer toutes nos données grâce au système de sauvegarde. Un stress énorme évité !",
+        author: "Isabelle Petit",
+        position: "Responsable administrative, Cabinet d'architecture Durand"
       }
     ],
     faq: [
       {
-        question: 'Comment les documents sont-ils organisés ?',
-        answer: 'Les documents sont automatiquement classés par catégories (administratif, technique, financier) puis sous-catégories selon leur nature spécifique, créant une arborescence intuitive.'
+        question: "Où sont stockées nos données ?",
+        answer: "Toutes vos données sont stockées sur des serveurs sécurisés situés en France, dans des centres de données certifiés qui respectent les plus hauts standards de sécurité."
       },
       {
-        question: 'Est-il possible de personnaliser l\'organisation ?',
-        answer: 'Oui, vous pouvez définir votre propre structure de classement et l\'appliquer automatiquement à tous vos projets futurs.'
+        question: "Comment fonctionne le chiffrement des données ?",
+        answer: "Nous utilisons un chiffrement AES-256 bits, la norme de l'industrie pour les données sensibles. Vos données sont chiffrées sur votre appareil avant d'être transmises à nos serveurs, garantissant qu'elles restent protégées à tout moment."
+      },
+      {
+        question: "Pendant combien de temps les sauvegardes sont-elles conservées ?",
+        answer: "Par défaut, les sauvegardes sont conservées pendant 30 jours, mais vous pouvez configurer cette durée selon vos besoins, jusqu'à 7 ans pour répondre aux exigences d'archivage légal."
+      }
+    ],
+    stats: [
+      {
+        label: "Niveau de sécurité",
+        value: "Tier 4"
+      },
+      {
+        label: "Temps de restauration",
+        value: "-95%"
+      },
+      {
+        label: "Disponibilité",
+        value: "99.9%"
+      },
+      {
+        label: "Conformité RGPD",
+        value: "100%"
       }
     ]
   },
-  'elaboration-dpgf': {
-    title: 'Élaboration DPGF',
-    description: 'Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable pour gagner un temps précieux.',
-    icon: createIcon(FileSpreadsheet),
+  "conformite-garantie": {
+    title: "Conformité garantie",
+    description: "Assurez-vous que vos DCE respectent toutes les exigences légales et réglementaires actuelles.",
+    icon: <CheckCircle className="h-8 w-8 text-blue-400" />,
     sections: [
       {
-        title: 'Extraction automatique des ouvrages',
-        content: 'Notre technologie identifie et extrait automatiquement tous les ouvrages mentionnés dans le CCTP, les organise par lots et créé une structure claire pour votre DPGF.',
+        title: "Veille réglementaire continue",
+        content: "Notre équipe juridique surveille en permanence les évolutions du droit de la commande publique pour mettre à jour nos modèles et nos contrôles. Vous êtes ainsi assuré de toujours respecter les dernières réglementations en vigueur."
       },
       {
-        title: 'Quantification assistée',
-        content: 'Le système propose des estimations de quantités basées sur l\'analyse des descriptions, des plans et utilise l\'intelligence artificielle pour détecter les incohérences potentielles.',
+        title: "Validation automatique de conformité",
+        content: "Avant chaque finalisation, nos algorithmes vérifient automatiquement la conformité de vos documents avec les exigences légales applicables et vous alertent en cas de problème potentiel."
       },
       {
-        title: 'Format prêt au chiffrage',
-        content: 'La DPGF générée est immédiatement exploitable dans vos outils habituels (Excel, logiciels métiers) et prête à recevoir vos prix unitaires.',
+        title: "Accompagnement juridique",
+        content: "En cas de question complexe, nos experts juridiques spécialisés dans les marchés publics sont disponibles pour vous conseiller et vous assurer que vos procédures sont inattaquables."
       }
     ],
     benefits: [
-      'Réduction drastique du temps d\'élaboration (de plusieurs jours à quelques heures)',
-      'Diminution des risques d\'oublis d\'ouvrages',
-      'Cohérence parfaite entre CCTP et DPGF',
-      'Détection des ambiguïtés et incohérences dans le DCE',
-      'Structure optimisée pour faciliter le chiffrage ultérieur'
+      "Sécurisation juridique de vos procédures d'appel d'offres",
+      "Réduction des risques de contentieux",
+      "Mise à jour automatique selon les évolutions législatives",
+      "Alertes préventives en cas de non-conformité",
+      "Accompagnement par des experts en droit des marchés publics"
     ],
-    stats: [
+    testimonials: [
       {
-        label: 'Gain de temps',
-        value: '75%'
+        quote: "Depuis que nous utilisons DCE Manager, aucun de nos marchés n'a été contesté pour vice de procédure. La tranquillité d'esprit que cela nous apporte est inestimable.",
+        author: "François Lemaire",
+        position: "Responsable juridique, Communauté de communes du Val de Loire"
       },
       {
-        label: 'Réduction des oublis',
-        value: '90%'
-      },
-      {
-        label: 'Précision des quantités',
-        value: '88%'
+        quote: "La fonction de validation automatique de conformité nous a permis d'identifier et de corriger plusieurs erreurs qui auraient pu invalider notre procédure. Un outil vraiment précieux.",
+        author: "Aurélie Rousseau",
+        position: "Juriste marchés publics, Hôpital Universitaire de Strasbourg"
       }
     ],
     faq: [
       {
-        question: 'Comment les quantités sont-elles estimées ?',
-        answer: 'L\'IA analyse les descriptions des ouvrages, croise les informations avec les plans quand ils sont disponibles, et utilise des modèles prédictifs basés sur des projets similaires.'
+        question: "À quelle fréquence les modèles sont-ils mis à jour ?",
+        answer: "Nos modèles sont mis à jour immédiatement après chaque changement réglementaire significatif, et nous effectuons une révision complète au moins une fois par mois pour intégrer les évolutions de jurisprudence."
       },
       {
-        question: 'Puis-je modifier facilement la DPGF générée ?',
-        answer: 'Absolument, la DPGF est entièrement modifiable et vous pouvez ajuster les quantités, ajouter ou supprimer des postes selon vos besoins.'
+        question: "Votre système prend-il en compte les spécificités locales ?",
+        answer: "Oui, notre solution intègre les particularités réglementaires applicables aux différentes catégories d'acheteurs publics (État, collectivités territoriales, établissements publics, etc.) ainsi que les spécificités sectorielles."
+      },
+      {
+        question: "Comment être alerté des changements réglementaires ?",
+        answer: "Vous recevez automatiquement des notifications concernant les évolutions réglementaires qui pourraient impacter vos projets en cours. Nous publions également une newsletter mensuelle résumant les changements importants."
+      }
+    ],
+    stats: [
+      {
+        label: "Réduction contentieux",
+        value: "-90%"
+      },
+      {
+        label: "Mise à jour",
+        value: "<24h"
+      },
+      {
+        label: "Couverture juridique",
+        value: "100%"
+      },
+      {
+        label: "Sécurité juridique",
+        value: "+95%"
       }
     ]
   }
