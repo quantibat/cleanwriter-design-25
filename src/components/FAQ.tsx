@@ -19,7 +19,7 @@ interface FAQProps {
 
 const FAQ: React.FC<FAQProps> = ({ items }) => {
   return (
-    <section className="relative py-24 px-6 overflow-hidden bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-90" id="faq">
+    <section className="relative py-24 px-6 overflow-hidden bg-gradient-to-r from-blue-600/20 to-indigo-600/20" id="faq">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row gap-12">
           {/* Left Column - Heading and intro */}
@@ -35,12 +35,11 @@ const FAQ: React.FC<FAQProps> = ({ items }) => {
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-              Frequently<br />Asked Questions
+              Questions<br />fréquentes
             </h2>
             
             <p className="text-blue-100/70 mb-8">
-              Have questions? Our FAQ section has you covered with
-              quick answers to the most common inquiries.
+              Découvrez les réponses aux questions les plus courantes sur notre plateforme et nos services.
             </p>
           </motion.div>
           
@@ -59,8 +58,8 @@ const FAQ: React.FC<FAQProps> = ({ items }) => {
                   value={`item-${index}`} 
                   className="border-0"
                 >
-                  <AccordionTrigger className="bg-[#0d0d17] hover:bg-[#0f0f1a] border border-white/10 rounded-xl px-6 py-5 text-white hover:no-underline group">
-                    <span>{item.question}</span>
+                  <AccordionTrigger className="bg-[#0d0d17] hover:bg-[#0f0f1a] border border-white/10 rounded-xl px-6 py-5 text-white hover:no-underline text-left">
+                    {item.question}
                   </AccordionTrigger>
                   <AccordionContent className="bg-[#0d0d17] mt-1 px-6 py-5 text-blue-100/80 border border-white/10 rounded-xl">
                     {item.answer}

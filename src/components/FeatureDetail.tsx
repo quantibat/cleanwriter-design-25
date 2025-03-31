@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -55,7 +56,6 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-indigo-600/5 to-transparent"></div>
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
         
         <Container className="relative z-10">
           <Link to="/#features" className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mb-6">

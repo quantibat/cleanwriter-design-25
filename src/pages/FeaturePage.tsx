@@ -87,7 +87,7 @@ const getIconForSlug = (slug?: string) => {
     case 'analyse-technique-lot':
       return <Lightbulb className="w-6 h-6" />;
     case 'realisation-metres':
-      return <Users className="w-6 h-6" />; // Changed from RulerSquare
+      return <Users className="w-6 h-6" />;
     case 'planning-previsionnel':
       return <CalendarClock className="w-6 h-6" />;
     case 'chiffrage':
@@ -104,6 +104,10 @@ const getIconForSlug = (slug?: string) => {
       return <MessageSquare className="w-6 h-6" />;
     case 'attente-attribution':
       return <Clock className="w-6 h-6" />;
+    case 'doe-diuo-apres-travaux':
+      return <FileText className="w-6 h-6" />;
+    case 'consultation-fournisseurs':
+      return <Users className="w-6 h-6" />;
     default:
       return <FileText className="w-6 h-6" />;
   }

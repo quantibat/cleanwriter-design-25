@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -59,15 +60,15 @@ const Features = () => {
     // Category 1: Repérez vos futurs chantiers
     {
       title: "Veille des Appels d'Offres",
-      description: "Une liste ciblée d'appels d'offres adaptés à votre entreprise pour repérer en un clin d'œil les opportunités qui comptent pour vous.",
+      description: "Trouvez directement les AO faits pour vous. Recevez une liste ciblée et actualisée des AO correspondant à votre activité, votre zone géographique et vos spécialités.",
       icon: <Compass size={24} />,
       color: "neon-purple",
       slug: "veille-appels-offres",
       category: "search"
     },
     {
-      title: "Analyse rapide du DCE",
-      description: "Un résumé clair et personnalisé des points clés et exigences techniques du DCE pour le comprendre sans y passer la journée.",
+      title: "Analyse du DCE",
+      description: "Identifiez l'essentiel du lot sans perdre de temps. Visualisez immédiatement les points clés et les exigences techniques pour décider rapidement et sereinement.",
       icon: <BarChart2 size={24} />,
       color: "neon-pink",
       slug: "analyse-rapide-dce",
@@ -75,7 +76,7 @@ const Features = () => {
     },
     {
       title: "Estimation de l'Effort d'Étude",
-      description: "Obtenez rapidement une estimation fiable du temps et des ressources nécessaires pour répondre efficacement à l'appel d'offres.",
+      description: "Évaluez instantanément vos besoins. Obtenez rapidement une estimation fiable du temps et des ressources nécessaires pour répondre efficacement.",
       icon: <Clock size={24} />,
       color: "neon-blue",
       slug: "estimation-effort-etude",
@@ -85,7 +86,7 @@ const Features = () => {
     // Category 2: Organisez clairement vos documents
     {
       title: "Réorganisation du DCE",
-      description: "Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi pour faciliter votre analyse.",
+      description: "Classez votre DCE automatiquement. Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi.",
       icon: <FolderOpen size={24} />,
       color: "neon-purple",
       slug: "reorganisation-dce",
@@ -93,7 +94,7 @@ const Features = () => {
     },
     {
       title: "Élaboration DPGF",
-      description: "Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable pour gagner un temps précieux.",
+      description: "Créez une DPGF claire et prête à l'usage. Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.",
       icon: <FileSpreadsheet size={24} />,
       color: "neon-pink",
       slug: "elaboration-dpgf",
@@ -101,17 +102,25 @@ const Features = () => {
     },
     {
       title: "Analyse Technique du Lot",
-      description: "Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre sans rien manquer.",
+      description: "Repérez les points techniques essentiels en un instant. Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.",
       icon: <Lightbulb size={24} />,
       color: "neon-blue",
       slug: "analyse-technique-lot",
+      category: "organize"
+    },
+    {
+      title: "Consultation Fournisseurs",
+      description: "Préparez facilement vos consultations. Accédez immédiatement aux informations techniques nécessaires pour solliciter rapidement vos fournisseurs et sous-traitants.",
+      icon: <Users size={24} />,
+      color: "neon-purple",
+      slug: "consultation-fournisseurs",
       category: "organize"
     },
     
     // Category 3: Affinez précisément vos quantités, coûts et plannings
     {
       title: "Réalisation des Métrés",
-      description: "Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle et gagnez en précision.",
+      description: "Quantifiez précisément, sans effort. Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle.",
       icon: <Users size={24} />,
       color: "neon-purple",
       slug: "realisation-metres",
@@ -119,7 +128,7 @@ const Features = () => {
     },
     {
       title: "Planning Prévisionnel",
-      description: "Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable à votre organisation.",
+      description: "Établissez un planning clair en quelques clics. Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable.",
       icon: <CalendarClock size={24} />,
       color: "neon-pink",
       slug: "planning-previsionnel",
@@ -127,7 +136,7 @@ const Features = () => {
     },
     {
       title: "Chiffrage",
-      description: "Élaborez facilement des propositions cohérentes et compétitives, avec des alertes automatiques sur les points à surveiller.",
+      description: "Chiffrez rapidement en toute confiance. Élaborez facilement des propositions cohérentes et compétitives, avec des alertes automatiques sur les points à surveiller.",
       icon: <DollarSign size={24} />,
       color: "neon-blue",
       slug: "chiffrage",
@@ -137,7 +146,7 @@ const Features = () => {
     // Category 4: Formalisez une offre percutante
     {
       title: "Mémoire Technique",
-      description: "Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant.",
+      description: "Rédigez un mémoire qui séduit immédiatement. Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant.",
       icon: <PenTool size={24} />,
       color: "neon-purple",
       slug: "memoire-technique",
@@ -145,7 +154,7 @@ const Features = () => {
     },
     {
       title: "Dossier Administratif",
-      description: "Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irrprochable du premier coup.",
+      description: "Constituez facilement un dossier impeccable. Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irréprochable du premier coup.",
       icon: <ClipboardCheck size={24} />,
       color: "neon-pink",
       slug: "dossier-administratif",
@@ -153,7 +162,7 @@ const Features = () => {
     },
     {
       title: "Relecture & Dépôt de l'Offre",
-      description: "Dernières vérifications automatisées pour vous assurer de la cohérence et du respect complet des exigences de l'appel d'offres.",
+      description: "Déposez une offre irréprochable sereinement. Dernières vérifications automatisées pour vous assurer de la cohérence et du respect complet des exigences.",
       icon: <Send size={24} />,
       color: "neon-blue",
       slug: "relecture-depot-offre",
@@ -163,7 +172,7 @@ const Features = () => {
     // Category 5: Concluez efficacement pour remporter vos marchés
     {
       title: "Complétion Pièces Administratives",
-      description: "Complétez sans effort les documents requis pour répondre efficacement à chaque AO et maximisez vos chances de succès.",
+      description: "Préparez instantanément vos pièces administratives. Complétez sans effort les documents requis pour répondre efficacement à chaque AO.",
       icon: <FileText size={24} />,
       color: "neon-purple",
       slug: "completion-pieces-administratives",
@@ -171,7 +180,7 @@ const Features = () => {
     },
     {
       title: "Négociation & Ajustements",
-      description: "Modifiez simplement votre proposition selon les retours du maître d'ouvrage et optimisez vos chances de succès.",
+      description: "Ajustez rapidement votre offre après remise. Modifiez simplement votre proposition selon les retours du maître d'ouvrage et optimisez vos chances de succès.",
       icon: <MessageSquare size={24} />,
       color: "neon-pink",
       slug: "negociation-ajustements",
@@ -179,10 +188,18 @@ const Features = () => {
     },
     {
       title: "Attente & Attribution",
-      description: "Recevez des notifications en temps réel pour démarrer immédiatement en cas de succès et tirer des conclusions rapides en cas contraire.",
+      description: "Soyez prêt dès l'attribution. Recevez des notifications en temps réel pour démarrer immédiatement en cas de succès et tirer des conclusions rapides en cas contraire.",
       icon: <Clock size={24} />,
       color: "neon-blue",
       slug: "attente-attribution",
+      category: "conclude"
+    },
+    {
+      title: "DOE & DIUO après Travaux",
+      description: "Constituez facilement vos dossiers finaux. Générez simplement votre DOE et DIUO, livrez un dossier professionnel facilitant la maintenance future.",
+      icon: <FileText size={24} />,
+      color: "neon-purple",
+      slug: "doe-diuo-apres-travaux",
       category: "conclude"
     },
   ];
@@ -190,31 +207,31 @@ const Features = () => {
   // Group features by category
   const featuresGroups = [
     {
-      title: "Repérez vos futurs chantiers",
+      title: "🔍 Repérez vos futurs chantiers",
       icon: <Compass className="w-5 h-5 mr-2" />,
-      description: "Optimisez vos recherches, économisez du temps et de l'argent en ciblant les appels d'offres les plus pertinents.",
+      description: "Gagnez du temps en ciblant les appels d'offres les plus pertinents",
       features: allFeatures.filter(feature => feature.category === "search")
     },
     {
-      title: "Organisez clairement vos documents",
+      title: "📂 Organisez clairement vos documents et appuyez-vous sur un suivi efficace",
       icon: <FolderOpen className="w-5 h-5 mr-2" />,
       description: "Vos documents classés, votre dossier enrichi, vos échanges simplifiés",
       features: allFeatures.filter(feature => feature.category === "organize")
     },
     {
-      title: "Affinez précisément vos quantités, coûts et plannings",
+      title: "💹 Affinez précisément vos quantités, coûts et plannings",
       icon: <DollarSign className="w-5 h-5 mr-2" />,
       description: "Des métrés fiables, des chiffrages précis, des plannings réalistes",
       features: allFeatures.filter(feature => feature.category === "costs")
     },
     {
-      title: "Formalisez une offre percutante",
+      title: "✒️ Formalisez une offre percutante",
       icon: <PenTool className="w-5 h-5 mr-2" />,
       description: "Votre mémoire technique sur-mesure, votre administratif simplifié",
       features: allFeatures.filter(feature => feature.category === "formalize")
     },
     {
-      title: "Concluez efficacement pour remporter vos marchés",
+      title: "🤲 Concluez efficacement pour remporter vos marchés",
       icon: <ShieldCheck className="w-5 h-5 mr-2" />,
       description: "Finalisez avec confiance, ajustez avec facilité, décrochez sereinement",
       features: allFeatures.filter(feature => feature.category === "conclude")
