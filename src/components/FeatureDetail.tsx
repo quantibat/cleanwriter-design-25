@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -34,14 +33,11 @@ interface FeatureData {
 }
 
 interface FeatureDetailProps {
-  featureData: Record<string, FeatureData>;
+  featureData: FeatureData | null;
 }
 
 const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
-  const { slug } = useParams<{ slug: string }>();
-  const feature = slug ? featureData[slug] : null;
-  
-  if (!feature) {
+  if (!featureData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -72,7 +68,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
             <ChevronRight className="w-4 h-4 mx-1" />
             <Link to="/#features" className="hover:text-blue-300">Fonctionnalités</Link>
             <ChevronRight className="w-4 h-4 mx-1" />
-            <span className="text-blue-300">{feature.title}</span>
+            <span className="text-blue-300">{featureData.title}</span>
           </div>
           
           <motion.div 
@@ -81,8 +77,8 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">{feature.title}</h1>
-            <p className="text-xl text-blue-100/80 mb-10 max-w-3xl">{feature.description}</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">{featureData.title}</h1>
+            <p className="text-xl text-blue-100/80 mb-10 max-w-3xl">{featureData.description}</p>
             
             <div className="flex flex-wrap gap-4">
               <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 rounded-full">
@@ -99,7 +95,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
       {/* Main Content */}
       <Container className="relative z-10">
         {/* Detailed Sections */}
-        {feature.sections.map((section, index) => (
+        {featureData.sections.map((section, index) => (
           <motion.section 
             key={index}
             initial={{ opacity: 0, y: 20 }}
@@ -144,7 +140,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
           <h2 className="text-3xl font-bold text-white mb-10 text-center">Principaux avantages</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {feature.benefits.map((benefit, index) => (
+            {featureData.benefits.map((benefit, index) => (
               <motion.div 
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -163,12 +159,12 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
         </section>
         
         {/* Stats */}
-        {feature.stats && (
+        {featureData.stats && (
           <section className="py-16 border-t border-white/5">
             <h2 className="text-3xl font-bold text-white mb-10 text-center">Résultats obtenus</h2>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {feature.stats.map((stat, index) => (
+              {featureData.stats.map((stat, index) => (
                 <motion.div 
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -186,12 +182,12 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
         )}
         
         {/* Testimonials */}
-        {feature.testimonials && feature.testimonials.length > 0 && (
+        {featureData.testimonials && featureData.testimonials.length > 0 && (
           <section className="py-16 border-t border-white/5">
             <h2 className="text-3xl font-bold text-white mb-10 text-center">Ce qu'en disent nos clients</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {feature.testimonials.map((testimonial, index) => (
+              {featureData.testimonials.map((testimonial, index) => (
                 <motion.div 
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -217,12 +213,12 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
         )}
         
         {/* FAQ */}
-        {feature.faq && feature.faq.length > 0 && (
+        {featureData.faq && featureData.faq.length > 0 && (
           <section className="py-16 border-t border-white/5">
             <h2 className="text-3xl font-bold text-white mb-10 text-center">Questions fréquentes</h2>
             
             <div className="space-y-6 max-w-3xl mx-auto">
-              {feature.faq.map((item, index) => (
+              {featureData.faq.map((item, index) => (
                 <motion.div 
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -242,7 +238,7 @@ const FeatureDetail: React.FC<FeatureDetailProps> = ({ featureData }) => {
         {/* CTA */}
         <section className="py-16 border-t border-white/5">
           <div className="bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-2xl p-10 text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">Prêt à essayer {feature.title}?</h2>
+            <h2 className="text-3xl font-bold text-white mb-6">Prêt à essayer {featureData.title}?</h2>
             <p className="text-xl text-blue-100/80 mb-8 max-w-2xl mx-auto">
               Rejoignez des centaines d'entreprises qui font confiance à DCE Manager pour simplifier leurs processus d'appels d'offres.
             </p>

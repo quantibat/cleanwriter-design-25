@@ -8,7 +8,7 @@ const FeaturePage = () => {
   const { slug } = useParams<{ slug: string }>();
   
   // Find the specific feature data using the slug param
-  const featureData = slug ? featuresData[slug] : null;
+  const featureData = slug && featuresData[slug] ? featuresData[slug] : null;
   
   return <FeatureDetail featureData={featureData} />;
 };
