@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock, Badge } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
@@ -197,14 +197,6 @@ const Features = () => {
     return () => clearInterval(interval);
   }, []);
   return <section id="features" className="pt-24 pb-0 px-6 relative">
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
-      
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
-      </div>
       
       <div className="relative z-10">
         <div className="text-center mb-16">
@@ -212,90 +204,95 @@ const Features = () => {
             <Sparkles className="w-4 h-4 mr-2" /> Fonctionnalités
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white">
-            Tout ce dont vous avez besoin
+            Grâce à DCE Manager
           </h2>
           <p className="text-blue-100/70 max-w-2xl mx-auto text-lg">
-            Découvrez comment DCE Manager peut transformer votre gestion documentaire et améliorer l'efficacité de vos appels d'offres.
+            Découvrez comment DCE Manager peut transformer votre gestion recherche d'appel d'offre et améliorer l'efficacité de vos candidatures.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <div className="flex items-center justify-center">
-            <img src="/placeholder.svg" alt="Gestion des appels d'offres" className="rounded-lg max-w-full h-auto shadow-lg" />
-          </div>
-          <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-bold mb-4 text-white">Gestion des appels d'offres</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
+        <div className="flex flex-col">
+            <h2 className="text-3xl font-bold mb-4 text-white">Repérez vos futurs chantiers</h2>
+
             <p className="text-blue-100/70 mb-6">
-              Notre solution vous permet de gérer efficacement tous vos appels d'offres, de la veille à la soumission, en un seul endroit sécurisé.
+              DCE Manager vous permet de trouver efficacement les appels d'offres qui vous correspondent de la veille à la soumission, en un seul endroit sécurisé.
             </p>
             <Button variant="blue" className="self-start">
-              Découvrir
+              Comment ca marche ?
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
+          <div className="flex items-center ">
+            <img src="/placeholder.svg" alt="Gestion des appels d'offres" className="rounded-lg max-w-full h-auto shadow-lg" />
+          </div>
+          
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <div className="flex items-center justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
+          <div className="flex items-center ">
             <img src="/placeholder.svg" alt="Analyse automatique des DCE" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
-          <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-bold mb-4 text-white">Analyse automatique des DCE</h2>
+          <div className="flex flex-col ">
+            <h2 className="text-3xl font-bold mb-4 text-white">Organisez clairement vos documents et appuyez-vous sur un suivi efficace
+            </h2>
             <p className="text-blue-100/70 mb-6">
               Notre technologie d'IA avancée analyse vos dossiers de consultation pour en extraire les informations essentielles et vous faire gagner du temps.
             </p>
             <Button variant="blue" className="self-start">
-              Découvrir
+              Comment ca marche ?
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <div className="flex items-center justify-center">
-            <img src="/placeholder.svg" alt="Collaboration d'équipe" className="rounded-lg max-w-full h-auto shadow-lg" />
-          </div>
-          <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-bold mb-4 text-white">Collaboration d'équipe</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
+
+          <div className="flex flex-col ">
+            <h2 className="text-3xl font-bold mb-4 text-white">Affinez précisément vos quantités, coûts et plannings</h2>
             <p className="text-blue-100/70 mb-6">
               Travaillez en temps réel avec votre équipe sur les appels d'offres, partagez des commentaires et assignez des tâches pour une efficacité maximale.
             </p>
             <Button variant="blue" className="self-start">
-              Découvrir
+              Comment ca marche ?
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
+          <div className="flex items-center ">
+            <img src="/placeholder.svg" alt="Collaboration d'équipe" className="rounded-lg max-w-full h-auto shadow-lg" />
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <div className="flex items-center justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
+          <div className="flex items-center ">
             <img src="/placeholder.svg" alt="Suivi des échéances" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
-          <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-bold mb-4 text-white">Suivi des échéances</h2>
+          <div className="flex flex-col ">
+            <h2 className="text-3xl font-bold mb-4 text-white">Concluez efficacement pour remporter vos marchés</h2>
             <p className="text-blue-100/70 mb-6">
               Ne manquez plus jamais une date limite importante grâce à notre système de rappels et de notifications personnalisables.
             </p>
             <Button variant="blue" className="self-start">
-              Découvrir
+              Comment ca marche ?
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <div className="flex items-center justify-center">
-            <img src="/placeholder.svg" alt="Sécurité des données" className="rounded-lg max-w-full h-auto shadow-lg" />
-          </div>
-          <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-bold mb-4 text-white">Sécurité des données</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
+
+          <div className="flex flex-col ">
+            <h2 className="text-3xl font-bold mb-4 text-white">Négocez et Ajustez</h2>
             <p className="text-blue-100/70 mb-6">
               Vos données sensibles sont protégées grâce à notre infrastructure sécurisée et conforme aux normes RGPD les plus strictes.
             </p>
             <Button variant="blue" className="self-start">
-              Découvrir
+             Comment ca marche ?
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
+          </div>
+          <div className="flex items-center ">
+            <img src="/placeholder.svg" alt="Sécurité des données" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
         </div>
         
