@@ -4,7 +4,6 @@ import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck,
 import { Link } from 'react-router-dom';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
-
 interface FeatureCardProps {
   title: string;
   description: string;
@@ -13,7 +12,6 @@ interface FeatureCardProps {
   slug: string;
   index: number;
 }
-
 const FeatureCard = ({
   title,
   description,
@@ -63,154 +61,151 @@ const FeatureCard = ({
       </motion.div>
     </motion.div>;
 };
-
 const Features = () => {
-  const allFeatures = [
-    {
-      title: "Veille des Appels d'Offres",
-      description: "Trouvez directement les AO faits pour vous. Recevez une liste ciblée et actualisée des AO correspondant à votre activité, votre zone géographique et vos spécialités.",
-      icon: <Compass size={24} />,
-      color: "neon-purple",
-      slug: "veille-appels-offres",
-      category: "search"
-    }, {
-      title: "Analyse du DCE",
-      description: "Identifiez l'essentiel du lot sans perdre de temps. Visualisez immédiatement les points clés et les exigences techniques pour décider rapidement et sereinement.",
-      icon: <BarChart2 size={24} />,
-      color: "neon-purple",
-      slug: "analyse-rapide-dce",
-      category: "search"
-    }, {
-      title: "Estimation de l'Effort d'Étude",
-      description: "Évaluez instantanément vos besoins. Obtenez rapidement une estimation fiable du temps et des ressources nécessaires pour répondre efficacement.",
-      icon: <Clock size={24} />,
-      color: "neon-purple",
-      slug: "estimation-effort-etude",
-      category: "search"
-    },
-    {
-      title: "Réorganisation du DCE",
-      description: "Classez votre DCE automatiquement. Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi.",
-      icon: <FolderOpen size={24} />,
-      color: "neon-purple",
-      slug: "reorganisation-dce",
-      category: "organize"
-    }, {
-      title: "Élaboration DPGF",
-      description: "Créez une DPGF claire et prête à l'usage. Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.",
-      icon: <FileSpreadsheet size={24} />,
-      color: "neon-purple",
-      slug: "elaboration-dpgf",
-      category: "organize"
-    }, {
-      title: "Analyse Technique du Lot",
-      description: "Repérez les points techniques essentiels en un instant. Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.",
-      icon: <Lightbulb size={24} />,
-      color: "neon-purple",
-      slug: "analyse-technique-lot",
-      category: "organize"
-    }, {
-      title: "Consultation Fournisseurs",
-      description: "Préparez facilement vos consultations. Accédez immédiatement aux informations techniques nécessaires pour solliciter rapidement vos fournisseurs et sous-traitants.",
-      icon: <Users size={24} />,
-      color: "neon-purple",
-      slug: "consultation-fournisseurs",
-      category: "organize"
-    },
-    {
-      title: "Réalisation des Métrés",
-      description: "Quantifiez précisément, sans effort. Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle.",
-      icon: <Users size={24} />,
-      color: "neon-purple",
-      slug: "realisation-metres",
-      category: "costs"
-    }, {
-      title: "Planning Prévisionnel",
-      description: "Établissez un planning clair en quelques clics. Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable.",
-      icon: <CalendarClock size={24} />,
-      color: "neon-purple",
-      slug: "planning-previsionnel",
-      category: "costs"
-    }, {
-      title: "Chiffrage",
-      description: "Chiffrez rapidement en toute confiance. Élaborez facilement des propositions cohérentes et compétitives, avec des alertes automatiques sur les points à surveiller.",
-      icon: <DollarSign size={24} />,
-      color: "neon-purple",
-      slug: "chiffrage",
-      category: "costs"
-    },
-    {
-      title: "Mémoire Technique",
-      description: "Rédigez un mémoire qui séduit immédiatement. Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant.",
-      icon: <PenTool size={24} />,
-      color: "neon-purple",
-      slug: "memoire-technique",
-      category: "formalize"
-    }, {
-      title: "Dossier Administratif",
-      description: "Constituez facilement un dossier impeccable. Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irréprochable du premier coup.",
-      icon: <ClipboardCheck size={24} />,
-      color: "neon-purple",
-      slug: "dossier-administratif",
-      category: "formalize"
-    }, {
-      title: "Relecture & Dépôt de l'Offre",
-      description: "Déposez une offre irréprochable sereinement. Dernières vérifications automatisées pour vous assurer de la cohérence et du respect complet des exigences.",
-      icon: <Send size={24} />,
-      color: "neon-purple",
-      slug: "relecture-depot-offre",
-      category: "formalize"
-    },
-    {
-      title: "Complétion Pièces Administratives",
-      description: "Préparez instantanément vos pièces administratives. Complétez sans effort les documents requis pour répondre efficacement à chaque AO.",
-      icon: <FileText size={24} />,
-      color: "neon-purple",
-      slug: "completion-pieces-administratives",
-      category: "conclude"
-    }, {
-      title: "Négociation & Ajustements",
-      description: "Ajustez rapidement votre offre après remise. Modifiez simplement votre proposition selon les retours du maître d'ouvrage et optimisez vos chances de succès.",
-      icon: <MessageSquare size={24} />,
-      color: "neon-purple",
-      slug: "negociation-ajustements",
-      category: "conclude"
-    }, {
-      title: "Attente & Attribution",
-      description: "Soyez prêt dès l'attribution. Recevez des notifications en temps réel pour démarrer immédiatement en cas de succès et tirer des conclusions rapides en cas contraire.",
-      icon: <Clock size={24} />,
-      color: "neon-purple",
-      slug: "attente-attribution",
-      category: "conclude"
-    }, {
-      title: "DOE & DIUO après Travaux",
-      description: "Constituez facilement vos dossiers finaux. Générez simplement votre DOE et DIUO, livrez un dossier professionnel facilitant la maintenance future.",
-      icon: <FileText size={24} />,
-      color: "neon-purple",
-      slug: "doe-diuo-apres-travaux",
-      category: "conclude"
-    }
-  ];
-
+  const allFeatures = [{
+    title: "Veille des Appels d'Offres",
+    description: "Trouvez directement les AO faits pour vous. Recevez une liste ciblée et actualisée des AO correspondant à votre activité, votre zone géographique et vos spécialités.",
+    icon: <Compass size={24} />,
+    color: "neon-purple",
+    slug: "veille-appels-offres",
+    category: "search"
+  }, {
+    title: "Analyse du DCE",
+    description: "Identifiez l'essentiel du lot sans perdre de temps. Visualisez immédiatement les points clés et les exigences techniques pour décider rapidement et sereinement.",
+    icon: <BarChart2 size={24} />,
+    color: "neon-purple",
+    slug: "analyse-rapide-dce",
+    category: "search"
+  }, {
+    title: "Estimation de l'Effort d'Étude",
+    description: "Évaluez instantanément vos besoins. Obtenez rapidement une estimation fiable du temps et des ressources nécessaires pour répondre efficacement.",
+    icon: <Clock size={24} />,
+    color: "neon-purple",
+    slug: "estimation-effort-etude",
+    category: "search"
+  }, {
+    title: "Réorganisation du DCE",
+    description: "Classez votre DCE automatiquement. Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi.",
+    icon: <FolderOpen size={24} />,
+    color: "neon-purple",
+    slug: "reorganisation-dce",
+    category: "organize"
+  }, {
+    title: "Élaboration DPGF",
+    description: "Créez une DPGF claire et prête à l'usage. Transformez simplement votre CCTP en DPGF détaillée et immédiatement chiffrable.",
+    icon: <FileSpreadsheet size={24} />,
+    color: "neon-purple",
+    slug: "elaboration-dpgf",
+    category: "organize"
+  }, {
+    title: "Analyse Technique du Lot",
+    description: "Repérez les points techniques essentiels en un instant. Identifiez directement contraintes et spécificités techniques pour adapter efficacement votre offre.",
+    icon: <Lightbulb size={24} />,
+    color: "neon-purple",
+    slug: "analyse-technique-lot",
+    category: "organize"
+  }, {
+    title: "Consultation Fournisseurs",
+    description: "Préparez facilement vos consultations. Accédez immédiatement aux informations techniques nécessaires pour solliciter rapidement vos fournisseurs et sous-traitants.",
+    icon: <Users size={24} />,
+    color: "neon-purple",
+    slug: "consultation-fournisseurs",
+    category: "organize"
+  }, {
+    title: "Réalisation des Métrés",
+    description: "Quantifiez précisément, sans effort. Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle.",
+    icon: <Users size={24} />,
+    color: "neon-purple",
+    slug: "realisation-metres",
+    category: "costs"
+  }, {
+    title: "Planning Prévisionnel",
+    description: "Établissez un planning clair en quelques clics. Générez simplement un planning prévisionnel réaliste, immédiatement présentable et adaptable.",
+    icon: <CalendarClock size={24} />,
+    color: "neon-purple",
+    slug: "planning-previsionnel",
+    category: "costs"
+  }, {
+    title: "Chiffrage",
+    description: "Chiffrez rapidement en toute confiance. Élaborez facilement des propositions cohérentes et compétitives, avec des alertes automatiques sur les points à surveiller.",
+    icon: <DollarSign size={24} />,
+    color: "neon-purple",
+    slug: "chiffrage",
+    category: "costs"
+  }, {
+    title: "Mémoire Technique",
+    description: "Rédigez un mémoire qui séduit immédiatement. Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant.",
+    icon: <PenTool size={24} />,
+    color: "neon-purple",
+    slug: "memoire-technique",
+    category: "formalize"
+  }, {
+    title: "Dossier Administratif",
+    description: "Constituez facilement un dossier impeccable. Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irréprochable du premier coup.",
+    icon: <ClipboardCheck size={24} />,
+    color: "neon-purple",
+    slug: "dossier-administratif",
+    category: "formalize"
+  }, {
+    title: "Relecture & Dépôt de l'Offre",
+    description: "Déposez une offre irréprochable sereinement. Dernières vérifications automatisées pour vous assurer de la cohérence et du respect complet des exigences.",
+    icon: <Send size={24} />,
+    color: "neon-purple",
+    slug: "relecture-depot-offre",
+    category: "formalize"
+  }, {
+    title: "Complétion Pièces Administratives",
+    description: "Préparez instantanément vos pièces administratives. Complétez sans effort les documents requis pour répondre efficacement à chaque AO.",
+    icon: <FileText size={24} />,
+    color: "neon-purple",
+    slug: "completion-pieces-administratives",
+    category: "conclude"
+  }, {
+    title: "Négociation & Ajustements",
+    description: "Ajustez rapidement votre offre après remise. Modifiez simplement votre proposition selon les retours du maître d'ouvrage et optimisez vos chances de succès.",
+    icon: <MessageSquare size={24} />,
+    color: "neon-purple",
+    slug: "negociation-ajustements",
+    category: "conclude"
+  }, {
+    title: "Attente & Attribution",
+    description: "Soyez prêt dès l'attribution. Recevez des notifications en temps réel pour démarrer immédiatement en cas de succès et tirer des conclusions rapides en cas contraire.",
+    icon: <Clock size={24} />,
+    color: "neon-purple",
+    slug: "attente-attribution",
+    category: "conclude"
+  }, {
+    title: "DOE & DIUO après Travaux",
+    description: "Constituez facilement vos dossiers finaux. Générez simplement votre DOE et DIUO, livrez un dossier professionnel facilitant la maintenance future.",
+    icon: <FileText size={24} />,
+    color: "neon-purple",
+    slug: "doe-diuo-apres-travaux",
+    category: "conclude"
+  }];
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
   const emblaApiRef = useRef(null);
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (emblaApiRef.current) {
         emblaApiRef.current.scrollNext();
       }
     }, 5000);
-
     return () => clearInterval(interval);
   }, []);
-
-  return <section id="features" className="py-24 px-6 relative">
+  return <section id="features" className="pt-24 pb-0 px-6 relative">
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
+      
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
+      </div>
       
       <div className="relative z-10">
         <div className="text-center mb-16">
-          <span className="px-4 py-1.5 bg-neon-blue/10 rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto text-blue-400">
+          <span className="px-4 py-1.5 bg-neon-pink/10 rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto text-blue-400">
             <Sparkles className="w-4 h-4 mr-2" /> Fonctionnalités
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white">
@@ -221,31 +216,16 @@ const Features = () => {
           </p>
         </div>
         
-        <Carousel 
-          ref={carouselRef} 
-          opts={{
-            align: "start",
-            loop: true
-          }} 
-          className="mx-auto w-[85%] h-auto"
-          setApi={(api) => {
-            emblaApiRef.current = api;
-          }}
-        >
+        <Carousel ref={carouselRef} opts={{
+        align: "start",
+        loop: true
+      }} className="mx-auto w-[85%] h-auto" setApi={api => {
+        emblaApiRef.current = api;
+      }}>
           <CarouselContent>
-            {allFeatures.map((feature, index) => (
-              <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3 pl-4">
-                <FeatureCard 
-                  key={index} 
-                  title={feature.title} 
-                  description={feature.description} 
-                  icon={feature.icon} 
-                  color={feature.color} 
-                  slug={feature.slug} 
-                  index={index} 
-                />
-              </CarouselItem>
-            ))}
+            {allFeatures.map((feature, index) => <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3 pl-4">
+                <FeatureCard key={index} title={feature.title} description={feature.description} icon={feature.icon} color={feature.color} slug={feature.slug} index={index} />
+              </CarouselItem>)}
           </CarouselContent>
           <div className="flex justify-end gap-2 mt-8">
             <CarouselPrevious className="relative static h-10 w-10 bg-blue-500/20 border-blue-500/40 text-white hover:bg-blue-500/30 transition-colors" />
@@ -255,5 +235,4 @@ const Features = () => {
       </div>
     </section>;
 };
-
 export default Features;
