@@ -26,10 +26,10 @@ const PricingCard = ({
   projectsCount,
   revisionsCount
 }: PricingCardProps) => (
-  <div className={`relative rounded-xl p-8 flex flex-col h-full border ${popular ? 'border-blue-400/30' : 'border-white/5'} bg-[#0d0d17] overflow-hidden`}>
+  <div className={`relative rounded-xl p-8 flex flex-col h-full border ${popular ? 'border-blue-400/30' : 'border-white/5'} bg-transparent backdrop-blur-sm overflow-hidden transition-all duration-300 hover:bg-white/5`}>
     {popular && (
       <div className="absolute top-0 right-0 bg-blue-500 text-xs font-medium text-white px-3 py-1">
-        Most Pick
+        Recommandé
       </div>
     )}
     
@@ -50,13 +50,13 @@ const PricingCard = ({
         {projectsCount && (
           <div className="bg-blue-500/10 rounded-lg px-3 py-2 text-center flex-1">
             <div className="text-lg font-bold text-white">{projectsCount}</div>
-            <div className="text-xs text-blue-100/70">Projects</div>
+            <div className="text-xs text-blue-100/70">Projets</div>
           </div>
         )}
         {revisionsCount && (
           <div className="bg-blue-500/10 rounded-lg px-3 py-2 text-center flex-1">
             <div className="text-lg font-bold text-white">{revisionsCount}</div>
-            <div className="text-xs text-blue-100/70">Revisions</div>
+            <div className="text-xs text-blue-100/70">Révisions</div>
           </div>
         )}
       </div>
@@ -74,7 +74,7 @@ const PricingCard = ({
     <div className="mt-auto">
       <Button variant={popular ? "default" : "outline"} 
         className={`w-full ${popular ? 'bg-blue-500 hover:bg-blue-600' : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}>
-        Book an Appointment
+        Réserver un rendez-vous
       </Button>
     </div>
   </div>
@@ -83,49 +83,49 @@ const PricingCard = ({
 const Pricing = () => {
   const pricingPlans = [
     {
-      title: "Basic",
-      price: "$99",
-      originalPrice: "$450",
-      period: "Month",
-      description: "Our basic pricing plan is designed to offer great value while providing the essential features you need to get started.",
+      title: "Basique",
+      price: "99€",
+      originalPrice: "450€",
+      period: "mois",
+      description: "Notre forfait basique est conçu pour offrir une excellente valeur tout en fournissant les fonctionnalités essentielles pour bien démarrer.",
       projectsCount: "100+",
       revisionsCount: "75+",
       features: [
-        "All templates unlocked",
-        "Unlimited Licenses",
-        "Lifetime Updates",
-        "Email support",
-        "30-Days Money-back Guarantee"
+        "Tous les modèles débloqués",
+        "Licences illimitées",
+        "Mises à jour à vie",
+        "Support par email",
+        "Garantie satisfait ou remboursé de 30 jours"
       ]
     },
     {
       title: "Premium",
-      price: "$2,599",
-      period: "Month",
-      description: "Our pro pricing plan is designed for businesses looking for advanced features and premium support.",
+      price: "2 599€",
+      period: "mois",
+      description: "Notre forfait premium est conçu pour les entreprises à la recherche de fonctionnalités avancées et d'un support premium.",
       projectsCount: "650+",
       revisionsCount: "250+",
       features: [
-        "All templates unlocked",
-        "Unlimited Licenses",
-        "Lifetime Updates",
-        "Email support",
-        "30-Days Money-back Guarantee"
+        "Tous les modèles débloqués",
+        "Licences illimitées",
+        "Mises à jour à vie",
+        "Support par email",
+        "Garantie satisfait ou remboursé de 30 jours"
       ],
       popular: true
     },
     {
-      title: "Enterprise",
-      price: "Custom",
-      period: "Quote",
-      description: "Tailored solutions for organizations with specific needs and requirements for large-scale implementations.",
+      title: "Entreprise",
+      price: "Sur mesure",
+      period: "devis",
+      description: "Solutions personnalisées pour les organisations ayant des besoins spécifiques et des exigences pour des implémentations à grande échelle.",
       features: [
-        "All premium features included",
-        "Dedicated account manager",
-        "Custom integrations",
-        "Priority support 24/7",
-        "Training and onboarding",
-        "Custom SLA agreements"
+        "Toutes les fonctionnalités premium incluses",
+        "Gestionnaire de compte dédié",
+        "Intégrations personnalisées",
+        "Support prioritaire 24/7",
+        "Formation et intégration",
+        "Accords SLA personnalisés"
       ]
     }
   ];
@@ -134,9 +134,9 @@ const Pricing = () => {
     <section id="pricing" className="py-24 px-6 bg-[#06071b]">
       <div className="w-[85%] mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Plans for all businesses, Suitable for Personal, Agencies, Startups.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Des forfaits pour toutes les entreprises, adaptés aux particuliers, agences et startups.</h2>
           <p className="text-blue-100/80 max-w-2xl mx-auto">
-            Our pricing plans are designed to make getting started as effortless as possible. With flexible options tailored to suit a variety of needs and budgets.
+            Nos forfaits tarifaires sont conçus pour rendre le démarrage aussi simple que possible. Avec des options flexibles adaptées à une variété de besoins et de budgets.
           </p>
         </div>
         
