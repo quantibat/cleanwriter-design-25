@@ -131,10 +131,10 @@ const Pricing = () => {
   ];
 
   return (
-    <section id="pricing" className="py-24 px-6 bg-[#06071b]">
+    <section id="pricing" className="py-24 px-6">
       <div className="w-[85%] mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Des forfaits pour toutes les entreprises, adaptés aux particuliers, agences et startups.</h2>
+          <h2 className="text-5xl md:text-4xl font-bold mb-4 text-white">Forfaits tarifaires</h2>
           <p className="text-blue-100/80 max-w-2xl mx-auto">
             Nos forfaits tarifaires sont conçus pour rendre le démarrage aussi simple que possible. Avec des options flexibles adaptées à une variété de besoins et de budgets.
           </p>

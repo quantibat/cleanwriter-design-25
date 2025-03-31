@@ -163,6 +163,11 @@ const Index = () => {
                   <span className="text-white">Support 7j/7</span>
                 </div>
               </div>
+              <div className='pt-8'>
+                  <video className="w-full rounded-lg" controls>
+                    <source src="https://flowbite.com/docs/components/video/" type=""/>
+                  </video>
+              </div>
             </motion.div>
             
             
