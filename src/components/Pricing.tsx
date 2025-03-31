@@ -1,8 +1,6 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-
 interface PricingCardProps {
   title: string;
   price: string;
@@ -14,7 +12,6 @@ interface PricingCardProps {
   projectsCount?: string;
   revisionsCount?: string;
 }
-
 const PricingCard = ({
   title,
   price,
@@ -25,13 +22,10 @@ const PricingCard = ({
   popular = false,
   projectsCount,
   revisionsCount
-}: PricingCardProps) => (
-  <div className={`relative rounded-xl p-8 flex flex-col h-full border ${popular ? 'border-blue-400/30' : 'border-white/5'} bg-transparent backdrop-blur-sm overflow-hidden transition-all duration-300 hover:bg-white/5`}>
-    {popular && (
-      <div className="absolute top-0 right-0 bg-blue-500 text-xs font-medium text-white px-3 py-1">
+}: PricingCardProps) => <div className={`relative rounded-xl p-8 flex flex-col h-full border ${popular ? 'border-blue-400/30' : 'border-white/5'} bg-transparent backdrop-blur-sm overflow-hidden transition-all duration-300 hover:bg-white/5`}>
+    {popular && <div className="absolute top-0 right-0 bg-blue-500 text-xs font-medium text-white px-3 py-1">
         Recommandé
-      </div>
-    )}
+      </div>}
     
     <h3 className="text-xl font-semibold mb-2 text-white">{title}</h3>
     
@@ -45,41 +39,30 @@ const PricingCard = ({
     
     <p className="text-blue-100/70 mb-6 text-sm">{description}</p>
     
-    {(projectsCount || revisionsCount) && (
-      <div className="flex gap-4 mb-6">
-        {projectsCount && (
-          <div className="bg-blue-500/10 rounded-lg px-3 py-2 text-center flex-1">
+    {(projectsCount || revisionsCount) && <div className="flex gap-4 mb-6">
+        {projectsCount && <div className="bg-blue-500/10 rounded-lg px-3 py-2 text-center flex-1">
             <div className="text-lg font-bold text-white">{projectsCount}</div>
             <div className="text-xs text-blue-100/70">Projets</div>
-          </div>
-        )}
-        {revisionsCount && (
-          <div className="bg-blue-500/10 rounded-lg px-3 py-2 text-center flex-1">
+          </div>}
+        {revisionsCount && <div className="bg-blue-500/10 rounded-lg px-3 py-2 text-center flex-1">
             <div className="text-lg font-bold text-white">{revisionsCount}</div>
             <div className="text-xs text-blue-100/70">Révisions</div>
-          </div>
-        )}
-      </div>
-    )}
+          </div>}
+      </div>}
     
     <ul className="space-y-3 mb-8">
-      {features.map((feature, index) => (
-        <li key={index} className="flex items-start text-blue-100/90">
+      {features.map((feature, index) => <li key={index} className="flex items-start text-blue-100/90">
           <Check className="h-5 w-5 text-blue-400 mr-2 flex-shrink-0 mt-0.5" />
           <span className="text-sm">{feature}</span>
-        </li>
-      ))}
+        </li>)}
     </ul>
     
     <div className="mt-auto">
-      <Button variant={popular ? "default" : "outline"} 
-        className={`w-full ${popular ? 'bg-blue-500 hover:bg-blue-600' : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}>
+      <Button variant={popular ? "default" : "outline"} className={`w-full ${popular ? 'bg-blue-500 hover:bg-blue-600' : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}>
         Réserver un rendez-vous
       </Button>
     </div>
-  </div>
-);
-
+  </div>;
 const Pricing = () => {
   const pricingPlans = [
     {
@@ -141,13 +124,9 @@ const Pricing = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {pricingPlans.map((plan, index) => (
-            <PricingCard key={index} {...plan} />
-          ))}
+          {pricingPlans.map((plan, index) => <PricingCard key={index} {...plan} />)}
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Pricing;

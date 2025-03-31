@@ -23,39 +23,37 @@ const FeatureCard = ({
   index
 }: FeatureCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  
-  return (
-    <motion.div 
-      className={`bg-white/5 backdrop-blur-sm border border-${color}/20 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group relative h-full flex flex-col bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/8 transition-all duration-300 animate-on-scroll feature-card`} 
-      style={{
-        boxShadow: `0 0 5px rgba(255, 255, 255, 0.1), 0 0 20px rgba(26, 7, 139, 0.05)`
-      }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      <motion.div 
-        className={`h-12 w-12 bg-${color}/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-${color}/30 transition-colors duration-300`}
-        animate={{ 
-          scale: isHovered ? 1.1 : 1,
-          rotate: isHovered ? 5 : 0 
-        }}
-        transition={{ duration: 0.3 }}
-      >
+  return <motion.div className={`bg-white/5 backdrop-blur-sm border border-${color}/20 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group relative h-full flex flex-col bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/8 transition-all duration-300 animate-on-scroll feature-card`} style={{
+    boxShadow: `0 0 5px rgba(255, 255, 255, 0.1), 0 0 20px rgba(26, 7, 139, 0.05)`
+  }} initial={{
+    opacity: 0,
+    y: 20
+  }} animate={{
+    opacity: 1,
+    y: 0
+  }} transition={{
+    duration: 0.5,
+    delay: index * 0.1
+  }} onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)}>
+      <motion.div className={`h-12 w-12 bg-${color}/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-${color}/30 transition-colors duration-300`} animate={{
+      scale: isHovered ? 1.1 : 1,
+      rotate: isHovered ? 5 : 0
+    }} transition={{
+      duration: 0.3
+    }}>
         <div className={`text-${color}`}>{icon}</div>
       </motion.div>
       
       <h3 className={`text-xl font-semibold mb-3 text-white`}>{title}</h3>
       <p className="text-blue-100/70 mb-4">{description}</p>
       
-      <motion.div 
-        className="mt-auto"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-      >
+      <motion.div className="mt-auto" initial={{
+      opacity: 0
+    }} animate={{
+      opacity: isHovered ? 1 : 0
+    }} transition={{
+      duration: 0.3
+    }}>
         <Link to={`/features/${slug}`}>
           <Button variant="blue" size="sm" className="w-full">
             Découvrir
@@ -63,13 +61,11 @@ const FeatureCard = ({
           </Button>
         </Link>
       </motion.div>
-    </motion.div>
-  );
-}; 
+    </motion.div>;
+};
 
 const Features = () => {
   const allFeatures = [
-    // Category 1: Repérez vos futurs chantiers
     {
       title: "Veille des Appels d'Offres",
       description: "Trouvez directement les AO faits pour vous. Recevez une liste ciblée et actualisée des AO correspondant à votre activité, votre zone géographique et vos spécialités.",
@@ -92,7 +88,6 @@ const Features = () => {
       slug: "estimation-effort-etude",
       category: "search"
     },
-    // Category 2: Organisez clairement vos documents
     {
       title: "Réorganisation du DCE",
       description: "Classez votre DCE automatiquement. Disposez immédiatement d'un dossier clair, complet et ordonné, prêt à l'emploi.",
@@ -122,7 +117,6 @@ const Features = () => {
       slug: "consultation-fournisseurs",
       category: "organize"
     },
-    // Category 3: Affinez précisément vos quantités, coûts et plannings
     {
       title: "Réalisation des Métrés",
       description: "Quantifiez précisément, sans effort. Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle.",
@@ -145,7 +139,6 @@ const Features = () => {
       slug: "chiffrage",
       category: "costs"
     },
-    // Category 4: Formalisez une offre percutante
     {
       title: "Mémoire Technique",
       description: "Rédigez un mémoire qui séduit immédiatement. Obtenez en quelques clics un mémoire parfaitement adapté aux attentes du maître d'ouvrage, précis et convaincant.",
@@ -168,7 +161,6 @@ const Features = () => {
       slug: "relecture-depot-offre",
       category: "formalize"
     },
-    // Category 5: Concluez efficacement pour remporter vos marchés
     {
       title: "Complétion Pièces Administratives",
       description: "Préparez instantanément vos pièces administratives. Complétez sans effort les documents requis pour répondre efficacement à chaque AO.",
@@ -197,24 +189,24 @@ const Features = () => {
       color: "neon-purple",
       slug: "doe-diuo-apres-travaux",
       category: "conclude"
-    }];
-  
+    }
+  ];
+
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
-  
+  const emblaApiRef = useRef(null);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => {
-        const nextIndex = (prev + 1) % allFeatures.length;
-        return nextIndex;
-      });
+      if (emblaApiRef.current) {
+        emblaApiRef.current.scrollNext();
+      }
     }, 5000);
-    
-    return () => clearInterval(interval);
-  }, [allFeatures.length]);
 
-  return (
-    <section id="features" className="py-24 px-6 relative">
+    return () => clearInterval(interval);
+  }, []);
+
+  return <section id="features" className="py-24 px-6 relative">
       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
@@ -238,12 +230,15 @@ const Features = () => {
         </div>
         
         <Carousel 
-          ref={carouselRef}
+          ref={carouselRef} 
           opts={{
             align: "start",
             loop: true
           }} 
           className="mx-auto w-[85%] h-auto"
+          setApi={(api) => {
+            emblaApiRef.current = api;
+          }}
         >
           <CarouselContent>
             {allFeatures.map((feature, index) => (
@@ -254,7 +249,7 @@ const Features = () => {
                   description={feature.description} 
                   icon={feature.icon} 
                   color={feature.color} 
-                  slug={feature.slug}
+                  slug={feature.slug} 
                   index={index} 
                 />
               </CarouselItem>
@@ -264,25 +259,9 @@ const Features = () => {
             <CarouselPrevious className="relative static h-10 w-10 bg-blue-500/20 border-blue-500/40 text-white hover:bg-blue-500/30 transition-colors" />
             <CarouselNext className="relative static h-10 w-10 bg-blue-500/20 border-blue-500/40 text-white hover:bg-blue-500/30 transition-colors" />
           </div>
-          
-          <div className="flex justify-center gap-2 mt-6">
-            {allFeatures.map((_, index) => (
-              <button
-                key={index}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === activeIndex ? "w-6 bg-blue-500" : "w-2 bg-blue-500/30"
-                }`}
-                onClick={() => {
-                  setActiveIndex(index);
-                }}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
         </Carousel>
       </div>
-    </section>
-  );
+    </section>;
 };
 
 export default Features;
