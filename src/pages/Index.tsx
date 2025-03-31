@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users, TrendingUp, Activity, Gauge, LineChart, PercentCircle, Award } from "lucide-react";
+import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users, TrendingUp, Activity, Gauge, LineChart, PercentCircle, Award, Sparkles } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Container } from "@/components/ui/container";
 import FAQ from "@/components/FAQ";
 import Pricing from "@/components/Pricing";
+import Features from "@/components/Features";
 
 const Index = () => {
   const [email, setEmail] = useState('');
@@ -92,10 +93,7 @@ const Index = () => {
 
   return <div className="bg-[#06071b] min-h-screen w-full">
       {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden neon-grid-background" id='hero'>
-        {/* Grid overlay */}
-        <div className="absolute inset-0 neon-grid z-0"></div>
-        
+      <section className="relative py-32 overflow-hidden" id='hero'>
         {/* Neon glow effects */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
@@ -223,82 +221,7 @@ const Index = () => {
       </section>
       
       {/* Features Section */}
-      <section className="py-24 px-6 bg-[#06071b] relative neon-grid-background" id='features'>
-        {/* Grid overlay */}
-        <div className="absolute inset-0 neon-grid z-0"></div>
-        
-        {/* Neon glow effects */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
-        
-        <Container className='mx-auto w-[85%]'>
-          <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.8
-        }} className="text-center mb-16 animate-on-scroll relative z-10">
-            <span className="inline-block px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium mb-4">
-              Fonctionnalités
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Tout ce dont vous avez besoin pour vos DCE
-            </h2>
-            <p className="text-blue-100/70 max-w-3xl mx-auto text-lg">Une suite complète d'outils pour créer, gérer et optimiser vos dossiers de consultation des entreprises</p>
-          </motion.div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
-            {[{
-            icon: <FileText className="h-8 w-8 text-blue-400" />,
-            title: "Génération automatisée",
-            description: "Créez des documents standardisés et personnalisables en quelques clics, en respectant la réglementation en vigueur."
-          }, {
-            icon: <Users className="h-8 w-8 text-blue-400" />,
-            title: "Collaboration simplifiée",
-            description: "Partagez facilement vos DCE avec votre équipe et vos partenaires, avec un contrôle précis des accès."
-          }, {
-            icon: <BarChart3 className="h-8 w-8 text-blue-400" />,
-            title: "Analyses et suivi",
-            description: "Suivez l'avancement de vos projets et générez des rapports détaillés pour prendre les meilleures décisions."
-          }, {
-            icon: <Shield className="h-8 w-8 text-blue-400" />,
-            title: "Sécurité renforcée",
-            description: "Protégez vos données sensibles avec un chiffrement de bout en bout et des sauvegardes automatiques."
-          }, {
-            icon: <CheckCircle className="h-8 w-8 text-blue-400" />,
-            title: "Conformité garantie",
-            description: "Assurez-vous que vos DCE respectent toutes les exigences légales et réglementaires actuelles."
-          }, {
-            icon: <ArrowRight className="h-8 w-8 text-blue-400" />,
-            title: "Export multi-format",
-            description: "Exportez vos documents dans différents formats (PDF, Word, Excel) pour faciliter le partage et l'archivage."
-          }].map((feature, index) => <motion.div key={index} initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.6,
-            delay: index * 0.1
-          }} className="bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/8 transition-all duration-300 animate-on-scroll feature-card">
-                <div className="h-14 w-14 bg-blue-600/20 rounded-lg flex items-center justify-center mb-6">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-4 text-white">{feature.title}</h3>
-                <p className="text-blue-100/70">{feature.description}</p>
-              </motion.div>)}
-          </div>
-        </Container>
-      </section>
+      <Features />
       
       {/* Pricing Section */}
       <Pricing />
