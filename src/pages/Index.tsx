@@ -98,19 +98,8 @@ const Index = () => {
     question: "How secure is my data on your platform?",
     answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
   }];
-<<<<<<< HEAD
-  return <div className="bg-[#06071b] min-h-screen w-full">
-      {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden" id='hero'>
-        {/* Grid overlay */}
-        <div className="absolute inset-0 neon-grid z-0"></div>
-        
-        {/* Neon glow effects */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
-=======
   return <div className=" min-h-screen w-full relative">
     <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
->>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
         
@@ -169,12 +158,7 @@ const Index = () => {
         </Container>
       </section>
       
-<<<<<<< HEAD
-      {/* Social Proof Section */}
-      <section className="py-16 px-6">
-=======
       <section className="py-16 px-6 ">
->>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
@@ -246,10 +230,6 @@ const Index = () => {
       
       <Pricing />
       
-<<<<<<< HEAD
-      {/* Testimonials Section */}
-=======
->>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
       <section className="py-24 px-6" id="testimonials">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
@@ -315,14 +295,8 @@ const Index = () => {
         </Container>
       </section>
       
-<<<<<<< HEAD
-      {/* CTA Section */}
-      <section className="py-24 px-6 relative" id='cta'>
-        <div className="absolute inset-0 "></div>
-=======
       <section className="py-24 px-6  relative" id='cta'>
         <div className="absolute"></div>
->>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
         <Container className="relative mx-auto w-[85%]">
           <motion.div initial={{
           opacity: 0,
