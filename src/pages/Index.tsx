@@ -65,7 +65,7 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
+  
   return <div className="bg-[#06071b] min-h-screen w-full">
       {/* Hero Section */}
       <section className="relative py-32 overflow-hidden neon-grid-background" id='hero'>
