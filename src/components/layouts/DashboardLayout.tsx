@@ -165,7 +165,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   </BreadcrumbList>
                 </Breadcrumb>
               </div>}
-            <div className="w-full px-12">
+            <div className="w-full">
               {children}
             </div>
           </div>
