@@ -1,4 +1,3 @@
-
 import React, { ReactNode } from 'react';
 import TopBar from '@/components/dashboard/TopBar';
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -139,7 +138,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <div className="flex flex-col h-screen overflow-hidden w-full">
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab} />
           <div className="flex-1 w-full p-0 overflow-auto">
-            {dynamicBreadcrumbs.length > 0 && <div className="px-12 pt-8 pb-2">
+            {dynamicBreadcrumbs.length > 0 && <div className="px-10 pt-8 pb-2">
                 <Breadcrumb>
                   <BreadcrumbList className="flex items-center space-x-2 text-[var(--dashboard-text-muted,#9CA3AF)]">
                     <BreadcrumbItem>
@@ -162,7 +161,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   </BreadcrumbList>
                 </Breadcrumb>
               </div>}
-            <div className="w-full max-w-full px-12">
+            <div className="w-full max-w-full px-10">
               {children}
             </div>
           </div>
