@@ -142,9 +142,7 @@ const Pricing = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {pricingPlans.map((plan, index) => (
-            <div key={index} className="fade-up" style={{ animationDelay: `${index * 0.1}s` }}>
-              <PricingCard {...plan} />
-            </div>
+            <PricingCard key={index} {...plan} />
           ))}
         </div>
       </div>
