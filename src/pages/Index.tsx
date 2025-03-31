@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,7 +8,6 @@ import { Container } from "@/components/ui/container";
 import FAQ from "@/components/FAQ";
 import Pricing from "@/components/Pricing";
 import Features from "@/components/Features";
-
 const Index = () => {
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -18,18 +16,11 @@ const Index = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
   const [textIndex, setTextIndex] = useState(0);
-  
-  const textArray = [
-    "Générez et gérez vos DCE en toute simplicité",
-    "Solution révolutionnaire pour les marchés publics"
-  ];
-  
+  const textArray = ["Générez et gérez vos DCE en toute simplicité", "Solution révolutionnaire pour les marchés publics"];
   const currentText = textArray[loopNum % textArray.length];
   const navigate = useNavigate();
-
   useEffect(() => {
     const typingDelay = isDeleting ? 50 : 100;
-    
     if (!isDeleting && textIndex === currentText.length) {
       // Pause at end of typing
       setTimeout(() => setIsDeleting(true), 1500);
@@ -40,7 +31,6 @@ const Index = () => {
       setLoopNum(loopNum + 1);
       return;
     }
-    
     const timer = setTimeout(() => {
       setTextIndex(prevTextIndex => {
         const newIndex = isDeleting ? prevTextIndex - 1 : prevTextIndex + 1;
@@ -48,15 +38,12 @@ const Index = () => {
         return newIndex;
       });
     }, typingDelay);
-    
     return () => clearTimeout(timer);
   }, [textIndex, isDeleting, loopNum, currentText]);
-
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -79,7 +66,6 @@ const Index = () => {
       });
     }, 1000);
   };
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -104,30 +90,22 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const faqItems = [
-    {
-      question: "What do I need to get started?",
-      answer: "To get started, simply share your project details and goals with us. We'll guide you through the process and provide the tools and support needed to bring your vision to life."
-    },
-    {
-      question: "What kind of customization is available?",
-      answer: "DCE Manager offers comprehensive customization options for all documents. You can create custom templates, modify existing ones, add your branding elements, and configure workflows to match your organization's processes."
-    },
-    {
-      question: "How easy is it to edit for beginners?",
-      answer: "Very easy! Our interface is designed to be intuitive even for users with no technical background. We offer guided walkthroughs, tooltips, and a comprehensive help center to get you started. Most users can create their first document within minutes of signing up."
-    },
-    {
-      question: "Is there a free trial available?",
-      answer: "Yes, we offer a 14-day free trial with full access to all features. No credit card is required to start your trial, and you can upgrade to a paid plan at any time if you decide DCE Manager is right for you."
-    },
-    {
-      question: "How secure is my data on your platform?",
-      answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
-    }
-  ];
-
+  const faqItems = [{
+    question: "What do I need to get started?",
+    answer: "To get started, simply share your project details and goals with us. We'll guide you through the process and provide the tools and support needed to bring your vision to life."
+  }, {
+    question: "What kind of customization is available?",
+    answer: "DCE Manager offers comprehensive customization options for all documents. You can create custom templates, modify existing ones, add your branding elements, and configure workflows to match your organization's processes."
+  }, {
+    question: "How easy is it to edit for beginners?",
+    answer: "Very easy! Our interface is designed to be intuitive even for users with no technical background. We offer guided walkthroughs, tooltips, and a comprehensive help center to get you started. Most users can create their first document within minutes of signing up."
+  }, {
+    question: "Is there a free trial available?",
+    answer: "Yes, we offer a 14-day free trial with full access to all features. No credit card is required to start your trial, and you can upgrade to a paid plan at any time if you decide DCE Manager is right for you."
+  }, {
+    question: "How secure is my data on your platform?",
+    answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
+  }];
   return <div className="bg-[#06071b] min-h-screen w-full">
       {/* Hero Section */}
       <section className="relative py-32  neon-grid-background" id='hero'>
@@ -355,15 +333,13 @@ const Index = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
               <Link to="/dashboard">
-                <Button className="h-14 px-8 bg-blue-600 hover:bg-blue-700 rounded-full text-lg">
+                <Button className="h-14 bg-blue-600 hover:bg-blue-700 rounded-full text-lg px-[33px] py-0">
                   Essayer gratuitement
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link to="/pricing">
-                <Button variant="outline" className="h-14 px-8 border-white/10 bg-white/5 hover:bg-white/10 rounded-full text-lg">
-                  Voir les tarifs
-                </Button>
+                
               </Link>
             </div>
             
@@ -477,8 +453,5 @@ const Index = () => {
         `
     }} />
     </div>;
-
 };
-
 export default Index;
-
