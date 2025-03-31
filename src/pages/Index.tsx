@@ -460,7 +460,6 @@ const Index = () => {
           right: -2px;
           bottom: -2px;
           border-radius: inherit;
-          background: linear-gradient(90deg, #3B82F6, #60A5FA, #3B82F6);
           background-size: 200% 100%;
           opacity: 0;
           transition: opacity 0.3s ease;
