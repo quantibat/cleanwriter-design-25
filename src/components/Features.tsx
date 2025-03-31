@@ -207,7 +207,7 @@ const Features = () => {
             Grâce à DCE Manager
           </h2>
           <p className="text-blue-100/70 max-w-2xl mx-auto text-lg">
-            Découvrez comment DCE Manager peut transformer votre gestion recherche d'appel d'offre et améliorer l'efficacité de vos candidatures.
+            Découvrez comment vous pouvez transformer votre recherche d'appel d'offre et améliorer l'efficacité de vos candidatures.
           </p>
         </div>
 
@@ -277,6 +277,8 @@ const Features = () => {
           </div>
         </div>
 
+
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
           <div className="flex flex-col">
             <h2 className="text-3xl font-bold mb-4 text-white">Négocez et Ajustez</h2>
@@ -292,6 +294,11 @@ const Features = () => {
             <img src="/lovable-uploads/e6f0fdd2-99e2-4f60-9d62-311ab47faec6.png" alt="Poignée de main" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
         </div>
+
+        <h2 className="text-3xl font-bold mt-4 mb-4 text-white text-center py-6">
+            L'analyse d'un projet sur DCE Manager, c'est
+        </h2>
+        
         
         <Carousel ref={carouselRef} opts={{
         align: "start",
