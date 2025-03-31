@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, RulerSquare, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
 import { Link } from 'react-router-dom';
 import {
   Carousel,
@@ -113,7 +112,7 @@ const Features = () => {
     {
       title: "Réalisation des Métrés",
       description: "Obtenez rapidement des métrés fiables grâce à l'appui de l'intelligence artificielle et gagnez en précision.",
-      icon: <RulerSquare size={24} />,
+      icon: <Users size={24} />,
       color: "neon-purple",
       slug: "realisation-metres",
       category: "costs"
