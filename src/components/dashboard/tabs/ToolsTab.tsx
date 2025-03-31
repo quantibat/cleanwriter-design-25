@@ -26,6 +26,7 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
+  
   return <div className="space-y-12 w-full pb-12">
       <section className='space-y-6'>
         <div className="space-y-3">
