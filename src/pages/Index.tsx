@@ -158,6 +158,9 @@ const Index = () => {
         </Container>
       </section>
       
+      <Features />
+    
+
       <section className="py-16 px-6 ">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
@@ -225,10 +228,6 @@ const Index = () => {
           </div>
         </Container>
       </section>
-      
-      <Features />
-      
-      <Pricing />
       
       <section className="py-24 px-6" id="testimonials">
         <Container className='mx-auto w-[85%]'>
@@ -334,6 +333,9 @@ const Index = () => {
           </motion.div>
         </Container>
       </section>
+
+      <Pricing />
+
       
       <FAQ items={faqItems} />
         
