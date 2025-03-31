@@ -83,25 +83,18 @@ const Navbar = () => {
       {/* Mobile Navigation */}
       {isMenuOpen && <div className="md:hidden absolute top-[72px] left-0 right-0 bg-card/95 backdrop-blur-md border-b border-white/5 animate-fade-in">
           <div className="py-4 px-6 space-y-4 flex flex-col">
-            <a href="#home" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
-              <Grid className="h-4 w-4" />
+            <a href="./#home" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
               <span>Accueil</span>
             </a>
-            <a href="#features" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
-              <Zap className="h-4 w-4" />
+            <a href="./#features" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
               <span>Fonctionnalités</span>
             </a>
-            <a href="#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
-              <FolderArchive className="h-4 w-4" />
+            <a href="./#pricing" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
               <span>Tarifs</span>
             </a>
-            <Link to="/affiliate" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
-              <UsersRound className="h-4 w-4" />
-              <span>Affiliation</span>
-            </Link>
-            <Link to="/privacy-policy" className="py-2 text-base font-medium transition-colors hover:text-blue-400">
-              Politique de confidentialité
-            </Link>
+            <a href="./#contact" className="py-2 text-base font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+              <span>Contact</span> 
+              </a>
             {user ? (
               <UserDropdownMenu onSignOut={signOut} showUserInfo={true} />
             ) : (

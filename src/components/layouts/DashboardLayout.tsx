@@ -141,7 +141,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     <BreadcrumbItem>
                       <BreadcrumbLink href="/dashboard" className="flex items-center text-blue-400 hover:text-blue-300 transition-colors">
                         <Home size={16} className="mr-1" />
-                        <span>Dashboard</span>
+                        <span>Tableau de bord</span>
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     
