@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,20 +15,42 @@ const Index = () => {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
   const [textIndex, setTextIndex] = useState(0);
-  const fullText = "Générez et gérez vos DCE en toute simplicité";
+  
+  const textArray = [
+    "Générez et gérez vos DCE en toute simplicité",
+    "Solution révolutionnaire pour les marchés publics"
+  ];
+  
+  const currentText = textArray[loopNum % textArray.length];
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (textIndex < fullText.length) {
-      const typingTimer = setTimeout(() => {
-        setDisplayText(displayText + fullText.charAt(textIndex));
-        setTextIndex(textIndex + 1);
-      }, 60);
-
-      return () => clearTimeout(typingTimer);
+    const typingDelay = isDeleting ? 50 : 100;
+    
+    if (!isDeleting && textIndex === currentText.length) {
+      // Pause at end of typing
+      setTimeout(() => setIsDeleting(true), 1500);
+      return;
+    } else if (isDeleting && textIndex === 0) {
+      // Move to next text in array after completely deleted
+      setIsDeleting(false);
+      setLoopNum(loopNum + 1);
+      return;
     }
-  }, [displayText, textIndex, fullText]);
+    
+    const timer = setTimeout(() => {
+      setTextIndex(prevTextIndex => {
+        const newIndex = isDeleting ? prevTextIndex - 1 : prevTextIndex + 1;
+        setDisplayText(currentText.substring(0, newIndex));
+        return newIndex;
+      });
+    }, typingDelay);
+    
+    return () => clearTimeout(timer);
+  }, [textIndex, isDeleting, loopNum, currentText]);
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -458,3 +481,4 @@ const Index = () => {
 };
 
 export default Index;
+
