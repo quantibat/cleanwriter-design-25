@@ -10,6 +10,11 @@ const Hero = () => {
       {/* Background gradient with neon effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/10 via-neon-pink/5 to-transparent pointer-events-none"></div>
       
+      {/* Grid Background - Increased opacity for better visibility */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="h-full w-full bg-[linear-gradient(#1A1F2C_1.5px,transparent_1.5px),linear-gradient(to_right,#1A1F2C_1.5px,transparent_1.5px)] bg-[size:40px_40px] opacity-50"></div>
+      </div>
+      
       {/* Background stars/dots */}
       <div className="stars absolute inset-0 overflow-hidden pointer-events-none">
         {Array.from({length: 70}).map((_, i) => (
