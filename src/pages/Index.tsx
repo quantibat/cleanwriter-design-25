@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,51 +15,19 @@ const Index = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [displayText, setDisplayText] = useState('');
   const [textIndex, setTextIndex] = useState(0);
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const texts = [
-    "Générez et gérez vos DCE en toute simplicité",
-    "Solution révolutionnaire pour les marchés publics"
-  ];
-  const [fullText, setFullText] = useState(texts[0]);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const fullText = "Générez et gérez vos DCE en toute simplicité";
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleTyping = () => {
-      // Current text from the array
-      const current = texts[currentTextIndex];
-      
-      // If deleting, remove a character
-      if (isDeleting) {
-        setDisplayText(current.substring(0, displayText.length - 1));
-      } else {
-        // If typing, add a character
-        setDisplayText(current.substring(0, displayText.length + 1));
-      }
+    if (textIndex < fullText.length) {
+      const typingTimer = setTimeout(() => {
+        setDisplayText(displayText + fullText.charAt(textIndex));
+        setTextIndex(textIndex + 1);
+      }, 60);
 
-      // Typing speed
-      let typingSpeed = isDeleting ? 30 : 60;
-
-      // If completed typing the current text
-      if (!isDeleting && displayText === current) {
-        // Pause at the end of typing
-        typingSpeed = 2000;
-        setIsDeleting(true);
-      } else if (isDeleting && displayText === '') {
-        // Move to the next text after deletion is complete
-        setIsDeleting(false);
-        setCurrentTextIndex((currentTextIndex + 1) % texts.length);
-        // No delay needed when starting to type the next text
-        typingSpeed = 60;
-      }
-
-      const timer = setTimeout(handleTyping, typingSpeed);
-      return () => clearTimeout(timer);
-    };
-
-    const timer = setTimeout(handleTyping, 60);
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, currentTextIndex, texts]);
+      return () => clearTimeout(typingTimer);
+    }
+  }, [displayText, textIndex, fullText]);
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
