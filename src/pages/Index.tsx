@@ -13,7 +13,21 @@ const Index = () => {
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const [textIndex, setTextIndex] = useState(0);
+  const fullText = "Générez et gérez vos DCE en toute simplicité";
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (textIndex < fullText.length) {
+      const typingTimer = setTimeout(() => {
+        setDisplayText(displayText + fullText.charAt(textIndex));
+        setTextIndex(textIndex + 1);
+      }, 60);
+
+      return () => clearTimeout(typingTimer);
+    }
+  }, [displayText, textIndex, fullText]);
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,7 +81,7 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
+
   const faqItems = [
     {
       question: "What do I need to get started?",
@@ -122,8 +136,9 @@ const Index = () => {
                 Solution SaaS pour les marchés publics
               </span>
               
-              <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight">
-                Générez et gérez vos DCE en toute simplicité
+              <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight min-h-[3.5rem] md:min-h-[4rem] xl:min-h-[5rem]">
+                {displayText}
+                <span className="animate-pulse">|</span>
               </h1>
               
               <p className="text-lg md:text-xl text-blue-100/80 mb-8 w-full mx-auto lg:mx-0">
@@ -443,5 +458,3 @@ const Index = () => {
 };
 
 export default Index;
-
-
