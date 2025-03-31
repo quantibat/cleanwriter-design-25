@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
 import { Link } from 'react-router-dom';
@@ -200,10 +200,14 @@ const Features = () => {
     }];
   
   const [activeIndex, setActiveIndex] = useState(0);
+  const carouselRef = useRef(null);
   
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % allFeatures.length);
+      setActiveIndex((prev) => {
+        const nextIndex = (prev + 1) % allFeatures.length;
+        return nextIndex;
+      });
     }, 5000);
     
     return () => clearInterval(interval);
@@ -234,13 +238,12 @@ const Features = () => {
         </div>
         
         <Carousel 
+          ref={carouselRef}
           opts={{
             align: "start",
             loop: true
           }} 
           className="mx-auto w-[85%] h-auto"
-          value={activeIndex.toString()}
-          onValueChange={(value) => setActiveIndex(parseInt(value))}
         >
           <CarouselContent>
             {allFeatures.map((feature, index) => (
@@ -269,7 +272,9 @@ const Features = () => {
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === activeIndex ? "w-6 bg-blue-500" : "w-2 bg-blue-500/30"
                 }`}
-                onClick={() => setActiveIndex(index)}
+                onClick={() => {
+                  setActiveIndex(index);
+                }}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
