@@ -68,7 +68,7 @@ const Index = () => {
   
   return <div className="bg-[#06071b] min-h-screen w-full">
       {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden neon-grid-background" id='hero'>
+      <section className="relative py-32 overflow-hidden" id='hero'>
         {/* Grid overlay */}
         <div className="absolute inset-0 neon-grid z-0"></div>
         
@@ -130,7 +130,7 @@ const Index = () => {
       </section>
       
       {/* Social Proof Section */}
-      <section className="py-16 px-6 bg-[#070823]">
+      <section className="py-16 px-6">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
@@ -199,7 +199,7 @@ const Index = () => {
       </section>
       
       {/* Features Section */}
-      <section className="py-24 px-6 bg-[#06071b] relative neon-grid-background" id='features'>
+      <section className="py-24 px-6 relative" id='features'>
         {/* Grid overlay */}
         <div className="absolute inset-0 neon-grid z-0"></div>
         
@@ -277,7 +277,7 @@ const Index = () => {
       </section>
       
       {/* Testimonials Section */}
-      <section className="py-24 px-6 bg-[#070823]" id="testimonials">
+      <section className="py-24 px-6" id="testimonials">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
@@ -343,8 +343,8 @@ const Index = () => {
       </section>
       
       {/* CTA Section */}
-      <section className="py-24 px-6 bg-[#06071b] relative" id='cta'>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-20"></div>
+      <section className="py-24 px-6 relative" id='cta'>
+        <div className="absolute inset-0 "></div>
         <Container className="relative mx-auto w-[85%]">
           <motion.div initial={{
           opacity: 0,
@@ -406,7 +406,7 @@ const Index = () => {
         
         /* Neon grid styling */
         .neon-grid-background {
-          background-color: #06071b;
+          background-color: #06071b; 
           position: relative;
           overflow: hidden;
         }
