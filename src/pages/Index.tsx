@@ -241,7 +241,7 @@ const Index = () => {
             <span className="inline-block px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium mb-4">
               Témoignages
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-3xl font-bold text-white mb-6 md:text-5xl">
               Ce que disent nos clients
             </h2>
             <p className="text-blue-100/70 max-w-3xl mx-auto">
