@@ -98,6 +98,7 @@ const Index = () => {
     question: "How secure is my data on your platform?",
     answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
   }];
+<<<<<<< HEAD
   return <div className="bg-[#06071b] min-h-screen w-full">
       {/* Hero Section */}
       <section className="relative py-32 overflow-hidden" id='hero'>
@@ -106,6 +107,10 @@ const Index = () => {
         
         {/* Neon glow effects */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
+=======
+  return <div className=" min-h-screen w-full relative">
+    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
+>>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
         
@@ -113,6 +118,8 @@ const Index = () => {
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
           <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
         </div>
+      <section className="relative py-32" id='hero'>
+        <div className="absolute inset-0 z-0"></div>
         
         <Container className="relative z-10 mx-auto w-[85%]">
           <div className="grid grid-cols-1 lg:grid-cols-1 gap-16 items-center justify-center">
@@ -162,8 +169,12 @@ const Index = () => {
         </Container>
       </section>
       
+<<<<<<< HEAD
       {/* Social Proof Section */}
       <section className="py-16 px-6">
+=======
+      <section className="py-16 px-6 ">
+>>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
@@ -176,7 +187,7 @@ const Index = () => {
         }} transition={{
           duration: 0.8
         }} className="text-center mb-12 animate-on-scroll">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            <h2 className="text-5xl md:text-5xl font-bold text-white mb-4">
               Déjà utilisé par des centaines d'entreprises pour simplifier leurs DCE
             </h2>
             <p className="text-blue-100/70 max-w-3xl mx-auto">
@@ -235,7 +246,10 @@ const Index = () => {
       
       <Pricing />
       
+<<<<<<< HEAD
       {/* Testimonials Section */}
+=======
+>>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
       <section className="py-24 px-6" id="testimonials">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
@@ -301,9 +315,14 @@ const Index = () => {
         </Container>
       </section>
       
+<<<<<<< HEAD
       {/* CTA Section */}
       <section className="py-24 px-6 relative" id='cta'>
         <div className="absolute inset-0 "></div>
+=======
+      <section className="py-24 px-6  relative" id='cta'>
+        <div className="absolute"></div>
+>>>>>>> 1de78a8a7489fc7fe44c457a1796f629f32d5b31
         <Container className="relative mx-auto w-[85%]">
           <motion.div initial={{
           opacity: 0,

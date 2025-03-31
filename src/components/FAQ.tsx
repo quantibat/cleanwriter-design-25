@@ -12,7 +12,7 @@ interface FAQProps {
 const FAQ: React.FC<FAQProps> = ({
   items
 }) => {
-  return <section id="faq" className="relative py-24 px-6 overflow-hidden bg-[#06071b]">
+  return <section id="faq" className="relative py-24 px-6 overflow-hidden">
       <div className="w-[85%] mx-auto relative z-10">
         <div className="flex flex-col md:flex-row gap-12">
           {/* Left Column - Heading and intro */}

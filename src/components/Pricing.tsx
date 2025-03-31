@@ -64,60 +64,35 @@ const PricingCard = ({
     </div>
   </div>;
 const Pricing = () => {
-  const pricingPlans = [
-    {
-      title: "Basique",
-      price: "99€",
-      originalPrice: "450€",
-      period: "mois",
-      description: "Notre forfait basique est conçu pour offrir une excellente valeur tout en fournissant les fonctionnalités essentielles pour bien démarrer.",
-      projectsCount: "100+",
-      revisionsCount: "75+",
-      features: [
-        "Tous les modèles débloqués",
-        "Licences illimitées",
-        "Mises à jour à vie",
-        "Support par email",
-        "Garantie satisfait ou remboursé de 30 jours"
-      ]
-    },
-    {
-      title: "Premium",
-      price: "2 599€",
-      period: "mois",
-      description: "Notre forfait premium est conçu pour les entreprises à la recherche de fonctionnalités avancées et d'un support premium.",
-      projectsCount: "650+",
-      revisionsCount: "250+",
-      features: [
-        "Tous les modèles débloqués",
-        "Licences illimitées",
-        "Mises à jour à vie",
-        "Support par email",
-        "Garantie satisfait ou remboursé de 30 jours"
-      ],
-      popular: true
-    },
-    {
-      title: "Entreprise",
-      price: "Sur mesure",
-      period: "devis",
-      description: "Solutions personnalisées pour les organisations ayant des besoins spécifiques et des exigences pour des implémentations à grande échelle.",
-      features: [
-        "Toutes les fonctionnalités premium incluses",
-        "Gestionnaire de compte dédié",
-        "Intégrations personnalisées",
-        "Support prioritaire 24/7",
-        "Formation et intégration",
-        "Accords SLA personnalisés"
-      ]
-    }
-  ];
-
-  return (
-    <section id="pricing" className="py-24 px-6">
+  const pricingPlans = [{
+    title: "Basique",
+    price: "99€",
+    originalPrice: "450€",
+    period: "mois",
+    description: "Notre forfait basique est conçu pour offrir une excellente valeur tout en fournissant les fonctionnalités essentielles pour bien démarrer.",
+    projectsCount: "100+",
+    revisionsCount: "75+",
+    features: ["Tous les modèles débloqués", "Licences illimitées", "Mises à jour à vie", "Support par email", "Garantie satisfait ou remboursé de 30 jours"]
+  }, {
+    title: "Premium",
+    price: "2 599€",
+    period: "mois",
+    description: "Notre forfait premium est conçu pour les entreprises à la recherche de fonctionnalités avancées et d'un support premium.",
+    projectsCount: "650+",
+    revisionsCount: "250+",
+    features: ["Tous les modèles débloqués", "Licences illimitées", "Mises à jour à vie", "Support par email", "Garantie satisfait ou remboursé de 30 jours"],
+    popular: true
+  }, {
+    title: "Entreprise",
+    price: "Sur mesure",
+    period: "devis",
+    description: "Solutions personnalisées pour les organisations ayant des besoins spécifiques et des exigences pour des implémentations à grande échelle.",
+    features: ["Toutes les fonctionnalités premium incluses", "Gestionnaire de compte dédié", "Intégrations personnalisées", "Support prioritaire 24/7", "Formation et intégration", "Accords SLA personnalisés"]
+  }];
+  return <section id="pricing" className="py-24 px-6 ">
       <div className="w-[85%] mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-4xl font-bold mb-4 text-white">Forfaits tarifaires</h2>
+          <h2 className="text-3xl font-bold mb-4 text-white md:text-5xl">Tarifs</h2>
           <p className="text-blue-100/80 max-w-2xl mx-auto">
             Nos forfaits tarifaires sont conçus pour rendre le démarrage aussi simple que possible. Avec des options flexibles adaptées à une variété de besoins et de budgets.
           </p>

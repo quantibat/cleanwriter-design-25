@@ -207,18 +207,10 @@ const Features = () => {
   }, []);
 
   return <section id="features" className="py-24 px-6 relative">
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
-      
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
-      </div>
       
       <div className="relative z-10">
         <div className="text-center mb-16">
-          <span className="px-4 py-1.5 bg-neon-pink/10 rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto text-blue-400">
+          <span className="px-4 py-1.5 bg-neon-blue/10 rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto text-blue-400">
             <Sparkles className="w-4 h-4 mr-2" /> Fonctionnalités
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white">
