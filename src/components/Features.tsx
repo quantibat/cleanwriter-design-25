@@ -195,7 +195,7 @@ const Features = () => {
   return <section id="features" className="py-24 px-6 relative">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <span className="px-4 py-1.5 bg-neon-pink/10 text-neon-pink rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto">
+          <span className="px-4 py-1.5 bg-neon-pink/10 rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto text-blue-400">
             <Sparkles className="w-4 h-4 mr-2" /> Fonctionnalités
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white">
