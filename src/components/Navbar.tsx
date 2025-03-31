@@ -45,19 +45,19 @@ const Navbar = () => {
 
         {/* Navigation Menu (Center) - Updated to be centered */}
         <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
-          <a href="#home" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+          <a href="./" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
             <span>Accueil</span>
           </a>
 
-          <a href="#features" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+          <a href="./#features" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
             <span>Fonctionnalités</span>
           </a>
           
-          <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+          <a href="./#pricing" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
             <span>Tarifs</span>
           </a>
 
-          <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
+          <a href="./#contact" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
             <span>Contact</span>
           </a>
 
