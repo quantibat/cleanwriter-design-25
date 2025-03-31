@@ -1,3 +1,4 @@
+
 import React, { ReactNode } from 'react';
 import TopBar from '@/components/dashboard/TopBar';
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -5,16 +6,19 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbS
 import { useLocation } from 'react-router-dom';
 import { Home } from 'lucide-react';
 import { Container } from "@/components/ui/container";
+
 interface BreadcrumbItem {
   label: string;
   path?: string;
 }
+
 interface DashboardLayoutProps {
   children: ReactNode;
   activeTab?: string;
   breadcrumbs?: BreadcrumbItem[];
   toolType?: string;
 }
+
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   activeTab,
@@ -24,6 +28,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [isDarkMode, setIsDarkMode] = React.useState(true);
   const location = useLocation();
   const [dynamicBreadcrumbs, setDynamicBreadcrumbs] = React.useState<BreadcrumbItem[]>(breadcrumbs);
+
   React.useEffect(() => {
     if (!toolType) {
       setDynamicBreadcrumbs(breadcrumbs);
@@ -66,6 +71,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     }
     setDynamicBreadcrumbs(updatedBreadcrumbs);
   }, [location.pathname, toolType, breadcrumbs]);
+
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     if (isDarkMode) {
@@ -130,6 +136,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       document.documentElement.style.removeProperty('--dashboard-hover');
     }
   };
+
   return <div className="min-h-screen bg-[var(--dashboard-background,#0c101b)] w-full">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-auto w-full">
@@ -158,7 +165,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   </BreadcrumbList>
                 </Breadcrumb>
               </div>}
-            <div className="w-full">
+            <div className="w-full px-12">
               {children}
             </div>
           </div>
@@ -166,4 +173,5 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </SidebarProvider>
     </div>;
 };
+
 export default DashboardLayout;
