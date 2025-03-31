@@ -35,10 +35,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       updatedBreadcrumbs = [{
         label: 'Projets',
         path: '/projects'
-      }, {
-        label: 'YouTube à Newsletter',
-        path: '/youtube-to-newsletter'
-      }, {
+      },{
         label: 'Nouveau document'
       }];
     } else if (path.includes('/edit/') || path.includes('/create')) {
@@ -135,10 +132,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   };
   return <div className="min-h-screen bg-[var(--dashboard-background,#0c101b)] w-full">
       <SidebarProvider defaultOpen={true}>
-        <div className="flex flex-col h-screen overflow-hidden w-full">
+        <div className="flex flex-col h-screen overflow-auto w-full">
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab} />
-          <div className="flex-1 w-full p-0 overflow-auto">
-            {dynamicBreadcrumbs.length > 0 && <div className="px-10 pt-8 pb-2">
+          <div className="flex-1 mx-auto w-[85%] p-0">
+            {dynamicBreadcrumbs.length > 0 && <div className="pt-4">
                 <Breadcrumb>
                   <BreadcrumbList className="flex items-center space-x-2 text-[var(--dashboard-text-muted,#9CA3AF)]">
                     <BreadcrumbItem>
@@ -161,7 +158,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   </BreadcrumbList>
                 </Breadcrumb>
               </div>}
-            <div className="w-full max-w-full px-10">
+            <div className="w-full">
               {children}
             </div>
           </div>

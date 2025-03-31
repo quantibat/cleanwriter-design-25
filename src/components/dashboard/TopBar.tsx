@@ -1,14 +1,11 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Sun, Moon, LogOut, Globe, User, CreditCard, Settings, HelpCircle, Grid, FolderArchive, UsersRound } from "lucide-react";
+import { Sun, Moon,  Globe,  Grid, FolderArchive, UsersRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/components/ui/sidebar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Progress } from "@/components/ui/progress";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import UserDropdownMenu from './UserDropdownMenu';
 import { Container } from "@/components/ui/container";
 
@@ -127,8 +124,8 @@ const TopBar = ({
   };
   return <div className="flex flex-col w-full border-b border-[var(--topbar-border)] bg-[var(--topbar-background)]">
       {/* Top div with logo and user controls */}
-      <Container className="py-3">
-        <div className="flex items-center justify-between w-full">
+      <Container className="py-3 px-0">
+        <div className="flex items-center justify-between mx-auto w-[85%]">
           {/* Left: Logo */}
           <div className="flex items-center">
             <Link to="/dashboard" className="flex items-center gap-2">
@@ -169,11 +166,12 @@ const TopBar = ({
       </Container>
 
       {/* Bottom div with navigation and credits */}
-      <Container className="py-3 bg-[var(--topbar-background)]">
-        <div className="flex items-center justify-between w-full">
+      <Container className="py-3 bg-[var(--topbar-background)] px-0">
+        <div className="flex items-center justify-between mx-auto w-[85%]">
           {/* Left: Navigation Links */}
           <div className="flex items-center space-x-8">
-            <Link to="/dashboard" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-[var(--topbar-text-transparent)] hover:text-[var(--topbar-text)] ${activeTab === 'tools' && "text-[var(--topbar-text)] border-b-2 border-[#00a2ff]"}`}>
+            <Link to="/dashboard" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-[var(--topbar-text-transparent)] hover:text-[var(--topbar-text)] 
+              ${activeTab === 'tools' && "text-[var(--topbar-text)] border-b-2 border-[#00a2ff]"}`}>
               <Grid className="h-4 w-4" />
               <span>Outils</span>
             </Link>
