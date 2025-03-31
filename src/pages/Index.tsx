@@ -8,7 +8,6 @@ import { Container } from "@/components/ui/container";
 import FAQ from "@/components/FAQ";
 import Pricing from "@/components/Pricing";
 import Features from "@/components/Features";
-
 const Index = () => {
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -20,7 +19,6 @@ const Index = () => {
   const textArray = ["Générez et gérez vos DCE en toute simplicité", "Solution révolutionnaire pour les marchés publics"];
   const currentText = textArray[loopNum % textArray.length];
   const navigate = useNavigate();
-
   useEffect(() => {
     const typingDelay = isDeleting ? 50 : 100;
     if (!isDeleting && textIndex === currentText.length) {
@@ -40,12 +38,10 @@ const Index = () => {
     }, typingDelay);
     return () => clearTimeout(timer);
   }, [textIndex, isDeleting, loopNum, currentText]);
-
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -53,7 +49,6 @@ const Index = () => {
       return;
     }
     setIsSubmitting(true);
-
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
@@ -67,16 +62,13 @@ const Index = () => {
       });
     }, 1000);
   };
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-
       const heroImage = document.querySelector('.hero-image') as HTMLElement | null;
       if (heroImage) {
         heroImage.style.transform = `translateY(${scrollY * 0.1}px)`;
       }
-
       const elements = document.querySelectorAll('.animate-on-scroll');
       elements.forEach(element => {
         const position = element.getBoundingClientRect();
@@ -90,26 +82,22 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const faqItems = [
-    {
-      question: "What do I need to get started?",
-      answer: "To get started, simply share your project details and goals with us. We'll guide you through the process and provide the tools and support needed to bring your vision to life."
-    }, {
-      question: "What kind of customization is available?",
-      answer: "DCE Manager offers comprehensive customization options for all documents. You can create custom templates, modify existing ones, add your branding elements, and configure workflows to match your organization's processes."
-    }, {
-      question: "How easy is it to edit for beginners?",
-      answer: "Very easy! Our interface is designed to be intuitive even for users with no technical background. We offer guided walkthroughs, tooltips, and a comprehensive help center to get you started. Most users can create their first document within minutes of signing up."
-    }, {
-      question: "Is there a free trial available?",
-      answer: "Yes, we offer a 14-day free trial with full access to all features. No credit card is required to start your trial, and you can upgrade to a paid plan at any time if you decide DCE Manager is right for you."
-    }, {
-      question: "How secure is my data on your platform?",
-      answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
-    }
-  ];
-
+  const faqItems = [{
+    question: "What do I need to get started?",
+    answer: "To get started, simply share your project details and goals with us. We'll guide you through the process and provide the tools and support needed to bring your vision to life."
+  }, {
+    question: "What kind of customization is available?",
+    answer: "DCE Manager offers comprehensive customization options for all documents. You can create custom templates, modify existing ones, add your branding elements, and configure workflows to match your organization's processes."
+  }, {
+    question: "How easy is it to edit for beginners?",
+    answer: "Very easy! Our interface is designed to be intuitive even for users with no technical background. We offer guided walkthroughs, tooltips, and a comprehensive help center to get you started. Most users can create their first document within minutes of signing up."
+  }, {
+    question: "Is there a free trial available?",
+    answer: "Yes, we offer a 14-day free trial with full access to all features. No credit card is required to start your trial, and you can upgrade to a paid plan at any time if you decide DCE Manager is right for you."
+  }, {
+    question: "How secure is my data on your platform?",
+    answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
+  }];
   return <div className="bg-[#06071b] min-h-screen w-full">
       <section className="relative py-32 bg-[#06071b]" id='hero'>
         <div className="absolute inset-0 neon-grid z-0"></div>
@@ -303,7 +291,7 @@ const Index = () => {
       </section>
       
       <section className="py-24 px-6 bg-[#06071b] relative" id='cta'>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-20"></div>
+        <div className="absolute"></div>
         <Container className="relative mx-auto w-[85%]">
           <motion.div initial={{
           opacity: 0,
@@ -444,5 +432,4 @@ const Index = () => {
     }} />
     </div>;
 };
-
 export default Index;
