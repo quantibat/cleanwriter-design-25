@@ -304,7 +304,7 @@ const Index = () => {
         }} transition={{
           duration: 0.8
         }} className="text-center space-y-8 animate-on-scroll">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-3xl font-bold text-white mb-6 md:text-5xl">
               Prêt à transformer votre gestion des DCE ?
             </h2>
             <p className="text-blue-100/80 max-w-2xl mx-auto text-lg">
