@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
 interface FeatureCardProps {
   title: string;
   description: string;
@@ -10,6 +11,7 @@ interface FeatureCardProps {
   color: string;
   slug: string;
 }
+
 const FeatureCard = ({
   title,
   description,
@@ -42,6 +44,26 @@ const FeatureCard = ({
   <p className="text-blue-100/70">{feature.description}</p>
 </div>  */}
 const Features = () => {
+  // Carousel API state
+  const [api, setApi] = useState<any>(null);
+  
+  // Auto-scroll effect
+  const scrollNext = useCallback(() => {
+    if (api) {
+      api.scrollNext();
+    }
+  }, [api]);
+  
+  useEffect(() => {
+    // Set up auto-scrolling interval
+    if (api) {
+      const autoScrollInterval = setInterval(scrollNext, 3000); // Change slide every 3 seconds
+      
+      // Clean up the interval on component unmount
+      return () => clearInterval(autoScrollInterval);
+    }
+  }, [api, scrollNext]);
+
   const allFeatures = [
   // Category 1: Repérez vos futurs chantiers
   {
@@ -222,4 +244,5 @@ const Features = () => {
       </div>
     </section>;
 };
+
 export default Features;
