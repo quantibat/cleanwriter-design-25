@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/container";
 import FAQ from "@/components/FAQ";
 import Pricing from "@/components/Pricing";
 import Features from "@/components/Features";
+
 const Index = () => {
   const [email, setEmail] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -19,14 +20,13 @@ const Index = () => {
   const textArray = ["Générez et gérez vos DCE en toute simplicité", "Solution révolutionnaire pour les marchés publics"];
   const currentText = textArray[loopNum % textArray.length];
   const navigate = useNavigate();
+
   useEffect(() => {
     const typingDelay = isDeleting ? 50 : 100;
     if (!isDeleting && textIndex === currentText.length) {
-      // Pause at end of typing
       setTimeout(() => setIsDeleting(true), 1500);
       return;
     } else if (isDeleting && textIndex === 0) {
-      // Move to next text in array after completely deleted
       setIsDeleting(false);
       setLoopNum(loopNum + 1);
       return;
@@ -40,10 +40,12 @@ const Index = () => {
     }, typingDelay);
     return () => clearTimeout(timer);
   }, [textIndex, isDeleting, loopNum, currentText]);
+
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -52,7 +54,6 @@ const Index = () => {
     }
     setIsSubmitting(true);
 
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
@@ -66,17 +67,16 @@ const Index = () => {
       });
     }, 1000);
   };
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
-      // Apply parallax effect to hero image
       const heroImage = document.querySelector('.hero-image') as HTMLElement | null;
       if (heroImage) {
         heroImage.style.transform = `translateY(${scrollY * 0.1}px)`;
       }
 
-      // Animate elements on scroll
       const elements = document.querySelectorAll('.animate-on-scroll');
       elements.forEach(element => {
         const position = element.getBoundingClientRect();
@@ -90,32 +90,33 @@ const Index = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  const faqItems = [{
-    question: "What do I need to get started?",
-    answer: "To get started, simply share your project details and goals with us. We'll guide you through the process and provide the tools and support needed to bring your vision to life."
-  }, {
-    question: "What kind of customization is available?",
-    answer: "DCE Manager offers comprehensive customization options for all documents. You can create custom templates, modify existing ones, add your branding elements, and configure workflows to match your organization's processes."
-  }, {
-    question: "How easy is it to edit for beginners?",
-    answer: "Very easy! Our interface is designed to be intuitive even for users with no technical background. We offer guided walkthroughs, tooltips, and a comprehensive help center to get you started. Most users can create their first document within minutes of signing up."
-  }, {
-    question: "Is there a free trial available?",
-    answer: "Yes, we offer a 14-day free trial with full access to all features. No credit card is required to start your trial, and you can upgrade to a paid plan at any time if you decide DCE Manager is right for you."
-  }, {
-    question: "How secure is my data on your platform?",
-    answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
-  }];
+
+  const faqItems = [
+    {
+      question: "What do I need to get started?",
+      answer: "To get started, simply share your project details and goals with us. We'll guide you through the process and provide the tools and support needed to bring your vision to life."
+    }, {
+      question: "What kind of customization is available?",
+      answer: "DCE Manager offers comprehensive customization options for all documents. You can create custom templates, modify existing ones, add your branding elements, and configure workflows to match your organization's processes."
+    }, {
+      question: "How easy is it to edit for beginners?",
+      answer: "Very easy! Our interface is designed to be intuitive even for users with no technical background. We offer guided walkthroughs, tooltips, and a comprehensive help center to get you started. Most users can create their first document within minutes of signing up."
+    }, {
+      question: "Is there a free trial available?",
+      answer: "Yes, we offer a 14-day free trial with full access to all features. No credit card is required to start your trial, and you can upgrade to a paid plan at any time if you decide DCE Manager is right for you."
+    }, {
+      question: "How secure is my data on your platform?",
+      answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
+    }
+  ];
+
   return <div className="bg-[#06071b] min-h-screen w-full">
-      {/* Hero Section */}
-      <section className="relative py-32  neon-grid-background" id='hero'>
-      <div className="absolute inset-0 neon-grid z-0"></div>
-        {/* Neon glow effects */}
+      <section className="relative py-32 bg-[#06071b]" id='hero'>
+        <div className="absolute inset-0 neon-grid z-0"></div>
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
         
-        {/* Background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
           <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
@@ -123,7 +124,6 @@ const Index = () => {
         
         <Container className="relative z-10 mx-auto w-[85%]">
           <div className="grid grid-cols-1 lg:grid-cols-1 gap-16 items-center justify-center">
-            {/* Left Column - Text Content */}
             <motion.div initial={{
             opacity: 0,
             y: 20
@@ -146,7 +146,6 @@ const Index = () => {
                 Un SaaS complet pour automatiser la création, la gestion et l'export de vos Dossiers de Consultation des Entreprises
               </p>
               
-              {/* Stats */}
               <div className="flex flex-wrap justify-center  gap-x-8 gap-y-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-blue-400" />
@@ -162,14 +161,11 @@ const Index = () => {
                 </div>
               </div>
             </motion.div>
-            
-            
           </div>
         </Container>
       </section>
       
-      {/* Social Proof Section */}
-      <section className="py-16 px-6 bg-[#070823]">
+      <section className="py-16 px-6 bg-[#06071b]">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
@@ -237,14 +233,11 @@ const Index = () => {
         </Container>
       </section>
       
-      {/* Features Section */}
       <Features />
       
-      {/* Pricing Section */}
       <Pricing />
       
-      {/* Testimonials Section */}
-      <section className="py-24 px-6 bg-[#070823]" id="testimonials">
+      <section className="py-24 px-6 bg-[#06071b]" id="testimonials">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
@@ -309,7 +302,6 @@ const Index = () => {
         </Container>
       </section>
       
-      {/* CTA Section */}
       <section className="py-24 px-6 bg-[#06071b] relative" id='cta'>
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-20"></div>
         <Container className="relative mx-auto w-[85%]">
@@ -350,11 +342,9 @@ const Index = () => {
         </Container>
       </section>
       
-      {/* FAQ Section */}
       <FAQ items={faqItems} />
         
       
-      {/* Using a style tag correctly without the invalid jsx attribute */}
       <style dangerouslySetInnerHTML={{
       __html: `
         .animate-on-scroll {
@@ -454,4 +444,5 @@ const Index = () => {
     }} />
     </div>;
 };
+
 export default Index;
