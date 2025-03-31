@@ -14,7 +14,7 @@ const Contribute = () => {
       activeTab="contribute" 
       breadcrumbs={breadcrumbs}
     >
-      <div className="w-full max-w-full grid grid-cols-1 gap-8">
+      <div className="w-full max-w-full grid grid-cols-1 gap-8 pt-4">
         <ContributeForm />
         <ContributeTab />
       </div>

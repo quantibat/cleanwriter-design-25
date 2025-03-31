@@ -34,8 +34,8 @@ const Navbar = () => {
     }
   };
 
-  return <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+  return <nav className="py-6 px-6 md:px-10 w-full bg-background/20 backdrop-blur-md fixed top-0 z-50 border-b border-white/5 w-full">
+      <div className="mx-auto w-[85%] flex items-center justify-between">
         {/* Logo (Left) */}
         <div className="flex items-center">
           <Link to="/" className="text-xl font-bold text-foreground flex items-center">
@@ -107,7 +107,7 @@ const Navbar = () => {
               </Link>
             )}
           </div>
-        </div>}
+      </div>}
     </nav>;
 };
 

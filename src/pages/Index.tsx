@@ -67,9 +67,10 @@ const Index = () => {
     };
   }, []);
 
-  return <div className="bg-[#06071b] min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden neon-grid-background">
+  return <div className="bg-[#06071b] min-h-screen w-full">
+    <div className='mx-auto w-[85%]'>
+            {/* Hero Section */}
+            <section className="relative py-32 overflow-hidden neon-grid-background">
         {/* Grid overlay */}
         <div className="absolute inset-0 neon-grid z-0"></div>
         
@@ -397,6 +398,7 @@ const Index = () => {
           </motion.div>
         </Container>
       </section>
+    </div>
       
       {/* Using a style tag correctly without the invalid jsx attribute */}
       <style dangerouslySetInnerHTML={{

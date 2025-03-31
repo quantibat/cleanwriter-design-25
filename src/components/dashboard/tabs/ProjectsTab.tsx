@@ -53,7 +53,7 @@ const ProjectsTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-y-4">
-        <div>
+        <div className='py-4'>
           <h2 className="text-2xl font-bold mb-8">Tous vos projets</h2>
           <p className="text-muted-foreground py-[10px]">Liste complète des projets et contenus associés à votre compte</p>
         </div>

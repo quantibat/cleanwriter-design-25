@@ -122,7 +122,7 @@ const TopBar = ({
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-  return <div className="flex flex-col w-full border-b border-[var(--topbar-border)] bg-[var(--topbar-background)]">
+  return <div className="flex flex-col w-full border-b ">
       {/* Top div with logo and user controls */}
       <Container className="py-3 px-0">
         <div className="flex items-center justify-between mx-auto w-[85%]">

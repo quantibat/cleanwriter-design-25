@@ -2,11 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { FolderPlus, Database, RefreshCw, LayoutGrid, Table as TableIcon } from "lucide-react";
+import { FolderPlus,  RefreshCw, LayoutGrid, Table as TableIcon } from "lucide-react";
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import { useProjects } from '@/hooks/useProjects';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import ProjectsGrid from '@/components/projects/ProjectsGrid';
 import ProjectsTable from '@/components/projects/ProjectsTable';
 
@@ -33,7 +32,7 @@ const Projects = () => {
     <DashboardLayout activeTab="projects" breadcrumbs={breadcrumbs}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <div>
+          <div className='space-y-2 pt-4'>
             <h1 className="text-2xl font-bold">Tous vos projets</h1>
             <p className="text-muted-foreground">Liste complète des projets et contenus associés à votre compte</p>
           </div>

@@ -135,7 +135,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <div className="flex flex-col h-screen overflow-auto w-full">
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab} />
           <div className="flex-1 mx-auto w-[85%] p-0">
-            {dynamicBreadcrumbs.length > 0 && <div className="pt-4">
+            {dynamicBreadcrumbs.length > 0 && <div className="pt-8">
                 <Breadcrumb>
                   <BreadcrumbList className="flex items-center space-x-2 text-[var(--dashboard-text-muted,#9CA3AF)]">
                     <BreadcrumbItem>
