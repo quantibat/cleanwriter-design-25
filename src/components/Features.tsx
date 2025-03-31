@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
 interface FeatureCardProps {
   title: string;
   description: string;
@@ -10,6 +11,7 @@ interface FeatureCardProps {
   color: string;
   slug: string;
 }
+
 const FeatureCard = ({
   title,
   description,
@@ -33,7 +35,28 @@ const FeatureCard = ({
       </Link>
     </div>
   </div>;
+
 const Features = () => {
+  // Carousel API state
+  const [api, setApi] = useState<any>(null);
+  
+  // Auto-scroll effect
+  const scrollNext = useCallback(() => {
+    if (api) {
+      api.scrollNext();
+    }
+  }, [api]);
+  
+  useEffect(() => {
+    // Set up auto-scrolling interval
+    if (api) {
+      const autoScrollInterval = setInterval(scrollNext, 3000); // Change slide every 3 seconds
+      
+      // Clean up the interval on component unmount
+      return () => clearInterval(autoScrollInterval);
+    }
+  }, [api, scrollNext]);
+
   const allFeatures = [
   // Category 1: Repérez vos futurs chantiers
   {
@@ -192,6 +215,7 @@ const Features = () => {
     description: "Finalisez avec confiance, ajustez avec facilité, décrochez sereinement",
     features: allFeatures.filter(feature => feature.category === "conclude")
   }];
+
   return <section id="features" className="py-24 px-6 relative">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
@@ -206,14 +230,15 @@ const Features = () => {
           </p>
         </div>
         
-        {/* Feature category headers */}
-        
-        
         {/* Single carousel with all features */}
-        <Carousel opts={{
-        align: "start",
-        loop: true
-      }} className="w-full mb-16">
+        <Carousel 
+          opts={{
+            align: "start",
+            loop: true
+          }} 
+          setApi={setApi}
+          className="w-full mb-16"
+        >
           <CarouselContent>
             {allFeatures.map((feature, index) => <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3 pl-4">
                 <FeatureCard key={index} title={feature.title} description={feature.description} icon={feature.icon} color={feature.color} slug={feature.slug} />
@@ -231,4 +256,5 @@ const Features = () => {
       </div>
     </section>;
 };
+
 export default Features;
