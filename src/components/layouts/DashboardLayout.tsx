@@ -142,49 +142,47 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-hidden w-full">
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab}/>
-          <div className="flex-1 w-full p-8 overflow-auto">
-            <Container>
-              {dynamicBreadcrumbs.length > 0 && (
-                <div className="mb-6">
-                  <Breadcrumb>
-                    <BreadcrumbList className="flex items-center space-x-2 text-[var(--dashboard-text-muted,#9CA3AF)]">
-                      <BreadcrumbItem>
-                        <BreadcrumbLink 
-                          href="/dashboard" 
-                          className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
-                        >
-                          <Home size={16} className="mr-1" />
-                          <span>Dashboard</span>
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                      
-                      {dynamicBreadcrumbs.map((item, index) => (
-                        <React.Fragment key={index}>
-                          <BreadcrumbSeparator className="text-[var(--dashboard-text-muted,#71717A)]" />
-                          {item.path ? (
-                            <BreadcrumbItem>
-                              <BreadcrumbLink 
-                                href={item.path} 
-                                className="text-[var(--dashboard-text,#FFFFFF)] hover:text-blue-300 transition-colors"
-                              >
-                                {item.label}
-                              </BreadcrumbLink>
-                            </BreadcrumbItem>
-                          ) : (
-                            <BreadcrumbItem>
-                              <BreadcrumbPage className="text-[var(--dashboard-text-muted,#71717A)] font-medium">{item.label}</BreadcrumbPage>
-                            </BreadcrumbItem>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-              )}
-              <div className="w-full max-w-full">
-                {children}
+          <div className="flex-1 w-full p-0 overflow-auto">
+            {dynamicBreadcrumbs.length > 0 && (
+              <div className="px-8 pt-8 pb-2">
+                <Breadcrumb>
+                  <BreadcrumbList className="flex items-center space-x-2 text-[var(--dashboard-text-muted,#9CA3AF)]">
+                    <BreadcrumbItem>
+                      <BreadcrumbLink 
+                        href="/dashboard" 
+                        className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+                      >
+                        <Home size={16} className="mr-1" />
+                        <span>Dashboard</span>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    
+                    {dynamicBreadcrumbs.map((item, index) => (
+                      <React.Fragment key={index}>
+                        <BreadcrumbSeparator className="text-[var(--dashboard-text-muted,#71717A)]" />
+                        {item.path ? (
+                          <BreadcrumbItem>
+                            <BreadcrumbLink 
+                              href={item.path} 
+                              className="text-[var(--dashboard-text,#FFFFFF)] hover:text-blue-300 transition-colors"
+                            >
+                              {item.label}
+                            </BreadcrumbLink>
+                          </BreadcrumbItem>
+                        ) : (
+                          <BreadcrumbItem>
+                            <BreadcrumbPage className="text-[var(--dashboard-text-muted,#71717A)] font-medium">{item.label}</BreadcrumbPage>
+                          </BreadcrumbItem>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </BreadcrumbList>
+                </Breadcrumb>
               </div>
-            </Container>
+            )}
+            <div className="w-full max-w-full px-8">
+              {children}
+            </div>
           </div>
         </div>
       </SidebarProvider>

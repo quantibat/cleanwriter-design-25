@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from "@/lib/utils";
 
@@ -11,7 +12,7 @@ const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
       <div
         ref={ref}
         className={cn(
-          "w-full max-w-6xl mx-auto px-8 sm:px-12 lg:px-16",
+          "w-full max-w-[1400px] mx-auto px-8",
           className
         )}
         {...props}
