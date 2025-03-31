@@ -5,7 +5,30 @@ import { Compass, BarChart2, Clock, FolderOpen, FileSpreadsheet, Lightbulb, Rule
 // This function creates React elements for the icons
 const createIcon = (Icon: any) => React.createElement(Icon, { size: 24 });
 
-const featuresData = {
+const featuresData: Record<string, {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  sections: {
+    title: string;
+    content: string;
+    image?: string;
+  }[];
+  benefits: string[];
+  testimonials?: {
+    quote: string;
+    author: string;
+    position: string;
+  }[];
+  stats?: {
+    label: string;
+    value: string;
+  }[];
+  faq?: {
+    question: string;
+    answer: string;
+  }[];
+}> = {
   'veille-appels-offres': {
     title: 'Veille des Appels d'Offres',
     description: 'Une liste ciblée d'appels d'offres adaptés à votre entreprise pour repérer en un clin d'œil les opportunités qui comptent pour vous.',
