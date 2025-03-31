@@ -8,11 +8,13 @@ interface ProjectsGridProps {
   projects: any[];
 }
 
-const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
+const ProjectsGrid: React.FC<ProjectsGridProps> = ({
+  projects
+}) => {
   const navigate = useNavigate();
-
+  
   const getIconForType = (type: string) => {
-    switch(type) {
+    switch (type) {
       case "newsletter":
       case "Youtube to Newsletter":
         return <YoutubeIcon className="h-5 w-5 text-red-500" />;
@@ -26,14 +28,18 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
         return <Database className="h-5 w-5 text-muted-foreground" />;
     }
   };
-
+  
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.map((project) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      {projects.map(project => (
         <Card 
           key={project.id} 
-          className="hover:bg-accent/50 transition-colors cursor-pointer" 
-          onClick={() => navigate(`/view-project/${project.id}`, { state: { project } })}
+          onClick={() => navigate(`/view-project/${project.id}`, {
+            state: {
+              project
+            }
+          })} 
+          className="hover:bg-accent/50 transition-colors cursor-pointer bg-accent/50"
         >
           <CardContent className="p-6">
             <div className="flex items-start justify-between mb-4">

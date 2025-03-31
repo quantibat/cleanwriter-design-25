@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,12 +26,12 @@ const ToolsTab = () => {
       navigate('/upgrade-plan');
     }
   };
-  return <div className="space-y-16 w-full pb-12">
-      <section className='space-y-6'>
-        <div className="space-y-2">
+  return <div className="space-y-12 w-full pb-12">
+      <section className='space-y-4'>
+        <div className="space-y-1">
           <div className="flex items-center gap-2\n">
             <div className="p-2 rounded-full py-0 px-0">
-              <span className="text-5xl">🔍</span>
+              <span className="text-5xl">🕵️‍♂️</span>
             </div>
             <h2 className="text-3xl font-bold text-white">
               Repérez vos futurs chantiers
@@ -42,7 +43,7 @@ const ToolsTab = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Card className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
+          <Card className="rounded-lg bg-[#2C3C53] text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
@@ -61,7 +62,7 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
 
-          <Card className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Analyse du DCE", false)}>
+          <Card className="rounded-lg bg-[#2C3C53] text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md" onClick={() => handleCardClick("Analyse du DCE", false)}>
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
@@ -77,7 +78,7 @@ const ToolsTab = () => {
             </CardContent>
           </Card>
 
-          <Card className="rounded-lg bg-[#2C3C53] border-none text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md">
+          <Card className="rounded-lg bg-[#2C3C53] text-white hover:bg-[#344562] transition-colors cursor-pointer shadow-md">
             <CardHeader className="pb-3 relative">
               <div className="flex items-start mb-4">
                 <div className="mr-2">
