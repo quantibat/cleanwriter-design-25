@@ -22,11 +22,9 @@ const Index = () => {
   useEffect(() => {
     const typingDelay = isDeleting ? 50 : 100;
     if (!isDeleting && textIndex === currentText.length) {
-      // Pause at end of typing
       setTimeout(() => setIsDeleting(true), 1500);
       return;
     } else if (isDeleting && textIndex === 0) {
-      // Move to next text in array after completely deleted
       setIsDeleting(false);
       setLoopNum(loopNum + 1);
       return;
@@ -51,8 +49,6 @@ const Index = () => {
       return;
     }
     setIsSubmitting(true);
-
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
@@ -69,14 +65,10 @@ const Index = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-
-      // Apply parallax effect to hero image
       const heroImage = document.querySelector('.hero-image') as HTMLElement | null;
       if (heroImage) {
         heroImage.style.transform = `translateY(${scrollY * 0.1}px)`;
       }
-
-      // Animate elements on scroll
       const elements = document.querySelectorAll('.animate-on-scroll');
       elements.forEach(element => {
         const position = element.getBoundingClientRect();
@@ -106,26 +98,20 @@ const Index = () => {
     question: "How secure is my data on your platform?",
     answer: "Security is our top priority. All data is encrypted both in transit and at rest using enterprise-grade encryption. We use secure data centers in France, implement regular security audits, and are fully GDPR compliant to ensure your data remains protected."
   }];
-  return <div className="bg-[#06071b] min-h-screen w-full">
-      {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden" id='hero'>
-        {/* Grid overlay */}
-        <div className="absolute inset-0 neon-grid z-0"></div>
-        
-        {/* Neon glow effects */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
+  return <div className=" min-h-screen w-full relative">
+    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
         
-        {/* Background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
           <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
         </div>
+      <section className="relative py-32" id='hero'>
+        <div className="absolute inset-0 z-0"></div>
         
         <Container className="relative z-10 mx-auto w-[85%]">
           <div className="grid grid-cols-1 lg:grid-cols-1 gap-16 items-center justify-center">
-            {/* Left Column - Text Content */}
             <motion.div initial={{
             opacity: 0,
             y: 20
@@ -148,7 +134,6 @@ const Index = () => {
                 Un SaaS complet pour automatiser la création, la gestion et l'export de vos Dossiers de Consultation des Entreprises
               </p>
               
-              {/* Stats */}
               <div className="flex flex-wrap justify-center  gap-x-8 gap-y-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-blue-400" />
@@ -169,14 +154,11 @@ const Index = () => {
                   </video>
               </div>
             </motion.div>
-            
-            
           </div>
         </Container>
       </section>
       
-      {/* Social Proof Section */}
-      <section className="py-16 px-6">
+      <section className="py-16 px-6 ">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
           opacity: 0,
@@ -189,7 +171,7 @@ const Index = () => {
         }} transition={{
           duration: 0.8
         }} className="text-center mb-12 animate-on-scroll">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            <h2 className="text-5xl md:text-5xl font-bold text-white mb-4">
               Déjà utilisé par des centaines d'entreprises pour simplifier leurs DCE
             </h2>
             <p className="text-blue-100/70 max-w-3xl mx-auto">
@@ -244,13 +226,10 @@ const Index = () => {
         </Container>
       </section>
       
-      {/* Features Section */}
       <Features />
       
-      {/* Pricing Section */}
       <Pricing />
       
-      {/* Testimonials Section */}
       <section className="py-24 px-6" id="testimonials">
         <Container className='mx-auto w-[85%]'>
           <motion.div initial={{
@@ -267,7 +246,7 @@ const Index = () => {
             <span className="inline-block px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium mb-4">
               Témoignages
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-3xl font-bold text-white mb-6 md:text-5xl">
               Ce que disent nos clients
             </h2>
             <p className="text-blue-100/70 max-w-3xl mx-auto">
@@ -316,9 +295,8 @@ const Index = () => {
         </Container>
       </section>
       
-      {/* CTA Section */}
-      <section className="py-24 px-6 relative" id='cta'>
-        <div className="absolute inset-0 "></div>
+      <section className="py-24 px-6  relative" id='cta'>
+        <div className="absolute"></div>
         <Container className="relative mx-auto w-[85%]">
           <motion.div initial={{
           opacity: 0,
@@ -331,7 +309,7 @@ const Index = () => {
         }} transition={{
           duration: 0.8
         }} className="text-center space-y-8 animate-on-scroll">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-3xl font-bold text-white mb-6 md:text-5xl">
               Prêt à transformer votre gestion des DCE ?
             </h2>
             <p className="text-blue-100/80 max-w-2xl mx-auto text-lg">
@@ -357,11 +335,9 @@ const Index = () => {
         </Container>
       </section>
       
-      {/* FAQ Section */}
       <FAQ items={faqItems} />
         
       
-      {/* Using a style tag correctly without the invalid jsx attribute */}
       <style dangerouslySetInnerHTML={{
       __html: `
         .animate-on-scroll {
