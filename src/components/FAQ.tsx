@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { X, Plus } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -20,16 +19,7 @@ interface FAQProps {
 
 const FAQ: React.FC<FAQProps> = ({ items }) => {
   return (
-    <section className="relative py-24 px-6 overflow-hidden" id="faq">
-      {/* Background neon effects */}
-      <div className="absolute inset-0 bg-[#06071b]"></div>
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-600/10 via-indigo-600/5 to-transparent pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
-      
-      {/* Neon glows */}
-      <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-purple-500/20 blur-[80px] rounded-full"></div>
-      <div className="absolute bottom-1/3 left-1/3 w-96 h-96 bg-blue-600/20 blur-[100px] rounded-full"></div>
-      
+    <section className="relative py-24 px-6 overflow-hidden bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-90" id="faq">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row gap-12">
           {/* Left Column - Heading and intro */}
@@ -71,10 +61,6 @@ const FAQ: React.FC<FAQProps> = ({ items }) => {
                 >
                   <AccordionTrigger className="bg-[#0d0d17] hover:bg-[#0f0f1a] border border-white/10 rounded-xl px-6 py-5 text-white hover:no-underline group">
                     <span>{item.question}</span>
-                    <div className="flex items-center justify-center h-6 w-6 rounded-full bg-transparent relative">
-                      <Plus className="h-5 w-5 text-blue-400 absolute group-data-[state=open]:opacity-0 transition-opacity" />
-                      <X className="h-5 w-5 text-blue-400 absolute opacity-0 group-data-[state=open]:opacity-100 transition-opacity" />
-                    </div>
                   </AccordionTrigger>
                   <AccordionContent className="bg-[#0d0d17] mt-1 px-6 py-5 text-blue-100/80 border border-white/10 rounded-xl">
                     {item.answer}

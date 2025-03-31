@@ -6,6 +6,7 @@ import { ArrowRight, CheckCircle, Shield, BarChart3, FileText, Users, TrendingUp
 import { toast } from "@/hooks/use-toast";
 import { Container } from "@/components/ui/container";
 import FAQ from "@/components/FAQ";
+import Pricing from "@/components/Pricing";
 
 const Index = () => {
   const [email, setEmail] = useState('');
@@ -298,6 +299,9 @@ const Index = () => {
           </div>
         </Container>
       </section>
+      
+      {/* Pricing Section */}
+      <Pricing />
       
       {/* Testimonials Section */}
       <section className="py-24 px-6 bg-[#070823]" id="testimonials">
