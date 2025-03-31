@@ -212,7 +212,7 @@ const Features = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
-        <div className="flex flex-col">
+          <div className="flex flex-col">
             <h2 className="text-3xl font-bold mb-4 text-white">Repérez vos futurs chantiers</h2>
 
             <p className="text-blue-100/70 mb-6">
@@ -223,17 +223,16 @@ const Features = () => {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <div className="flex items-center ">
-            <img src="/placeholder.svg" alt="Gestion des appels d'offres" className="rounded-lg max-w-full h-auto shadow-lg" />
+          <div className="flex items-center">
+            <img src="/lovable-uploads/d78aaf3f-ab9f-4537-9cbb-425f831d0433.png" alt="Appel d'offres" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
-          
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
-          <div className="flex items-center ">
-            <img src="/placeholder.svg" alt="Analyse automatique des DCE" className="rounded-lg max-w-full h-auto shadow-lg" />
+          <div className="flex items-center">
+            <img src="/lovable-uploads/8ca1fb05-d35d-4395-b8b7-4271a0037e42.png" alt="DCE document" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <h2 className="text-3xl font-bold mb-4 text-white">Organisez clairement vos documents et appuyez-vous sur un suivi efficace
             </h2>
             <p className="text-blue-100/70 mb-6">
@@ -247,8 +246,7 @@ const Features = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
-
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <h2 className="text-3xl font-bold mb-4 text-white">Affinez précisément vos quantités, coûts et plannings</h2>
             <p className="text-blue-100/70 mb-6">
               Travaillez en temps réel avec votre équipe sur les appels d'offres, partagez des commentaires et assignez des tâches pour une efficacité maximale.
@@ -258,16 +256,16 @@ const Features = () => {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <div className="flex items-center ">
-            <img src="/placeholder.svg" alt="Collaboration d'équipe" className="rounded-lg max-w-full h-auto shadow-lg" />
+          <div className="flex items-center">
+            <img src="/lovable-uploads/72d76f1f-a73c-4a67-b966-4a863242c8e1.png" alt="Chantier et construction" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
-          <div className="flex items-center ">
-            <img src="/placeholder.svg" alt="Suivi des échéances" className="rounded-lg max-w-full h-auto shadow-lg" />
+          <div className="flex items-center">
+            <img src="/lovable-uploads/d415e730-0f39-4cb8-8092-d1db1540be5e.png" alt="Value proposition" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <h2 className="text-3xl font-bold mb-4 text-white">Concluez efficacement pour remporter vos marchés</h2>
             <p className="text-blue-100/70 mb-6">
               Ne manquez plus jamais une date limite importante grâce à notre système de rappels et de notifications personnalisables.
@@ -280,7 +278,7 @@ const Features = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <h2 className="text-3xl font-bold mb-4 text-white">Négocez et Ajustez</h2>
             <p className="text-blue-100/70 mb-6">
               Vos données sensibles sont protégées grâce à notre infrastructure sécurisée et conforme aux normes RGPD les plus strictes.
@@ -290,8 +288,8 @@ const Features = () => {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <div className="flex items-center ">
-            <img src="/placeholder.svg" alt="Sécurité des données" className="rounded-lg max-w-full h-auto shadow-lg" />
+          <div className="flex items-center">
+            <img src="/lovable-uploads/e6f0fdd2-99e2-4f60-9d62-311ab47faec6.png" alt="Poignée de main" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
         </div>
         
