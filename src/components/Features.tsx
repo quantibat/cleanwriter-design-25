@@ -1,6 +1,4 @@
-
-import React, { useState } from 'react';
-import { motion } from "framer-motion";
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
 import { Link } from 'react-router-dom';
@@ -16,7 +14,6 @@ interface FeatureCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
-  delay: number;
   color: string;
   slug: string;
 }
@@ -25,16 +22,11 @@ const FeatureCard = ({
   title,
   description,
   icon,
-  delay,
   color,
   slug
 }: FeatureCardProps) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ delay: delay * 0.1, duration: 0.6 }}
-    className={`neon-border bg-white/5 backdrop-blur-sm border border-${color}/20 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group relative h-full flex flex-col`}
+  <div 
+    className={`bg-white/5 backdrop-blur-sm border border-${color}/20 rounded-xl p-6 hover:bg-white/8 transition-all duration-300 group relative h-full flex flex-col`}
     style={{
       boxShadow: `0 0 10px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.05)`
     }}
@@ -42,7 +34,7 @@ const FeatureCard = ({
     <div className={`h-12 w-12 bg-${color}/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-${color}/30 transition-colors duration-300`}>
       <div className={`text-${color}`}>{icon}</div>
     </div>
-    <h3 className={`text-xl font-semibold mb-3 text-white neon-text-${color === 'neon-purple' ? 'purple' : (color === 'neon-pink' ? 'pink' : 'blue')}`}>{title}</h3>
+    <h3 className={`text-xl font-semibold mb-3 text-white`}>{title}</h3>
     <p className="text-blue-100/70 mb-4">{description}</p>
     <div className="mt-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300">
       <Link to={`/features/${slug}`}>
@@ -52,7 +44,7 @@ const FeatureCard = ({
         </Button>
       </Link>
     </div>
-  </motion.div>
+  </div>
 );
 
 const Features = () => {
@@ -239,28 +231,19 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-24 px-6 relative bg-[#06071b]">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/5 via-neon-pink/5 to-transparent pointer-events-none"></div>
-      
+    <section id="features" className="py-24 px-6 relative">
       <div className="max-w-7xl mx-auto relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <span className="px-4 py-1.5 bg-neon-pink/10 text-neon-pink rounded-full text-sm font-medium inline-flex items-center justify-center mx-auto">
             <Sparkles className="w-4 h-4 mr-2" /> Fonctionnalités
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white neon-text-pink">
+          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4 text-white">
             Tout ce dont vous avez besoin
           </h2>
           <p className="text-blue-100/70 max-w-2xl mx-auto text-lg">
             Découvrez comment DCE Manager peut transformer votre gestion documentaire et améliorer l'efficacité de vos appels d'offres.
           </p>
-        </motion.div>
+        </div>
         
         {featuresGroups.map((group, groupIndex) => (
           <div key={groupIndex} className="mb-16 last:mb-0">
@@ -293,7 +276,6 @@ const Features = () => {
                       title={feature.title}
                       description={feature.description}
                       icon={feature.icon}
-                      delay={index}
                       color={feature.color}
                       slug={feature.slug}
                     />
@@ -309,8 +291,8 @@ const Features = () => {
         ))}
         
         <div className="mt-16 text-center">
-          <Button className="neon-button px-8 py-6 rounded-full text-white flex items-center mx-auto">
-            <Zap className="mr-2 h-5 w-5 text-neon-pink" />
+          <Button className="px-8 py-6 rounded-full text-white flex items-center mx-auto bg-blue-600 hover:bg-blue-700">
+            <Zap className="mr-2 h-5 w-5" />
             Découvrir toutes les fonctionnalités
           </Button>
         </div>
