@@ -12,7 +12,7 @@ const FAQ: React.FC<FAQProps> = ({
   items
 }) => {
   return <section id="faq" className="relative py-24 px-6 overflow-hidden from-blue-600/20 to-indigo-600/20 bg-[brand-blue-dark] bg-slate-950">
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="w-[85%] mx-auto relative z-10">
         <div className="flex flex-col md:flex-row gap-12">
           {/* Left Column - Heading and intro */}
           <motion.div initial={{
