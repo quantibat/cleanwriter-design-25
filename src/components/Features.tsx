@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Compass, BarChart2, UsersRound, ShieldCheck, FolderOpen, FileText, Lightbulb, Users, CalendarClock, DollarSign, PenTool, ClipboardCheck, Send, FileSpreadsheet, MessageSquare, Clock } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-
 interface FeatureCardProps {
   title: string;
   description: string;
@@ -12,7 +10,6 @@ interface FeatureCardProps {
   color: string;
   slug: string;
 }
-
 const FeatureCard = ({
   title,
   description,
@@ -36,7 +33,6 @@ const FeatureCard = ({
       </Link>
     </div>
   </div>;
-
 const Features = () => {
   const allFeatures = [
   // Category 1: Repérez vos futurs chantiers
@@ -196,7 +192,6 @@ const Features = () => {
     description: "Finalisez avec confiance, ajustez avec facilité, décrochez sereinement",
     features: allFeatures.filter(feature => feature.category === "conclude")
   }];
-
   return <section id="features" className="py-24 px-6 relative">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
@@ -212,39 +207,17 @@ const Features = () => {
         </div>
         
         {/* Feature category headers */}
-        <div className="mb-10 space-y-4">
-          {featuresGroups.map((group, index) => (
-            <div key={index} className="border-b border-white/10 pb-2">
-              <h3 className="text-2xl font-semibold text-white flex items-center">
-                {group.icon}
-                {group.title}
-              </h3>
-              <p className="text-blue-100/70">{group.description}</p>
-            </div>
-          ))}
-        </div>
+        
         
         {/* Single carousel with all features */}
-        <Carousel 
-          opts={{
-            align: "start",
-            loop: true
-          }} 
-          className="w-full mb-16"
-        >
+        <Carousel opts={{
+        align: "start",
+        loop: true
+      }} className="w-full mb-16">
           <CarouselContent>
-            {allFeatures.map((feature, index) => (
-              <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3 pl-4">
-                <FeatureCard 
-                  key={index} 
-                  title={feature.title} 
-                  description={feature.description} 
-                  icon={feature.icon} 
-                  color={feature.color} 
-                  slug={feature.slug} 
-                />
-              </CarouselItem>
-            ))}
+            {allFeatures.map((feature, index) => <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3 pl-4">
+                <FeatureCard key={index} title={feature.title} description={feature.description} icon={feature.icon} color={feature.color} slug={feature.slug} />
+              </CarouselItem>)}
           </CarouselContent>
           <div className="flex justify-end gap-2 mt-4">
             <CarouselPrevious className="relative static h-10 w-10 bg-blue-500/20 border-blue-500/40 text-white" />
@@ -253,13 +226,9 @@ const Features = () => {
         </Carousel>
         
         <div className="mt-8 text-center">
-          <Button className="px-8 py-6 rounded-full text-white flex items-center mx-auto bg-blue-600 hover:bg-blue-700">
-            <Zap className="mr-2 h-5 w-5" />
-            Découvrir toutes les fonctionnalités
-          </Button>
+          
         </div>
       </div>
     </section>;
 };
-
 export default Features;
