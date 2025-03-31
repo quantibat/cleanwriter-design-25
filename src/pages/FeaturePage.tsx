@@ -7,7 +7,10 @@ import featuresData from '@/data/featuresData';
 const FeaturePage = () => {
   const { slug } = useParams<{ slug: string }>();
   
-  return <FeatureDetail featureData={featuresData} />;
+  // Find the specific feature data using the slug param
+  const featureData = slug ? featuresData[slug] : null;
+  
+  return <FeatureDetail featureData={featureData} />;
 };
 
 export default FeaturePage;

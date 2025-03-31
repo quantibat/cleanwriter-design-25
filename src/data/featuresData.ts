@@ -207,15 +207,15 @@ const featuresData = {
     sections: [
       {
         title: 'Classement automatique des documents',
-        content: 'L\'outil identifie et classe automatiquement tous les documents du DCE selon leur nature (administratif, technique, financier) pour une navigation simplifiée.'
+        content: 'L\'outil identifie et classe automatiquement tous les documents du DCE selon leur nature (administratif, technique, financier) pour une navigation simplifiée.',
       },
       {
         title: 'Extraction et indexation du contenu',
-        content: 'Le contenu de chaque document est analysé, indexé et rendu accessible via un système de recherche performant qui vous permet de retrouver instantanément n\'importe quelle information.'
+        content: 'Le contenu de chaque document est analysé, indexé et rendu accessible via un système de recherche performant qui vous permet de retrouver instantanément n\'importe quelle information.',
       },
       {
         title: 'Organisation hiérarchique intelligente',
-        content: 'Le système crée une arborescence logique des documents, mettant en évidence les relations entre eux et facilitant la compréhension globale du dossier.'
+        content: 'Le système crée une arborescence logique des documents, mettant en évidence les relations entre eux et facilitant la compréhension globale du dossier.',
       }
     ],
     benefits: [
@@ -257,15 +257,15 @@ const featuresData = {
     sections: [
       {
         title: 'Extraction automatique des ouvrages',
-        content: 'Notre technologie identifie et extrait automatiquement tous les ouvrages mentionnés dans le CCTP, les organise par lots et créé une structure claire pour votre DPGF.'
+        content: 'Notre technologie identifie et extrait automatiquement tous les ouvrages mentionnés dans le CCTP, les organise par lots et créé une structure claire pour votre DPGF.',
       },
       {
         title: 'Quantification assistée',
-        content: 'Le système propose des estimations de quantités basées sur l\'analyse des descriptions, des plans et utilise l\'intelligence artificielle pour détecter les incohérences potentielles.'
+        content: 'Le système propose des estimations de quantités basées sur l\'analyse des descriptions, des plans et utilise l\'intelligence artificielle pour détecter les incohérences potentielles.',
       },
       {
         title: 'Format prêt au chiffrage',
-        content: 'La DPGF générée est immédiatement exploitable dans vos outils habituels (Excel, logiciels métiers) et prête à recevoir vos prix unitaires.'
+        content: 'La DPGF générée est immédiatement exploitable dans vos outils habituels (Excel, logiciels métiers) et prête à recevoir vos prix unitaires.',
       }
     ],
     benefits: [
