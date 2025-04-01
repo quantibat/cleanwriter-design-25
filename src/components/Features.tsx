@@ -226,7 +226,6 @@ const Features = () => {
             <img src="/lovable-uploads/d78aaf3f-ab9f-4537-9cbb-425f831d0433.png" alt="Appel d'offres" className="rounded-lg max-w-full h-auto shadow-lg" />
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mx-auto w-[85%]">
           <div className="flex items-center">
             <img src="/lovable-uploads/8ca1fb05-d35d-4395-b8b7-4271a0037e42.png" alt="DCE document" className="rounded-lg max-w-full h-auto shadow-lg" />
