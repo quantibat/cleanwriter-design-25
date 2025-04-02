@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
@@ -13,8 +12,17 @@ const ToolsTab = () => {
 
   const addToFavorites = (card) => {
     setFavorites((prevFavorites) => {
-      const exists = prevFavorites.some((fav) => fav.title === card.title);
-      return exists ? prevFavorites : [...prevFavorites, card];
+      const existingIndex = prevFavorites.findIndex((fav) => fav.title === card.title);
+      
+      if (existingIndex !== -1 && card.isFavorite) {
+        return prevFavorites.filter((_, index) => index !== existingIndex);
+      }
+      
+      if (existingIndex === -1 && !card.isFavorite) {
+        return [...prevFavorites, { ...card, isFavorite: true }];
+      }
+      
+      return prevFavorites;
     });
   };
   
@@ -26,7 +34,6 @@ const ToolsTab = () => {
   
   const handleCardClick = (title: string, isSocialMedia: boolean = false) => {
     if (isPremiumUser) {
-      // Redirect to CreateDCE page with parameters
       const params = new URLSearchParams();
       params.append('title', title);
       params.append('isSocialMedia', isSocialMedia.toString());
