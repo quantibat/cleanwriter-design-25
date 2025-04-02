@@ -297,7 +297,8 @@ const ToolsTab = () => {
               <p className="line-clamp-3 flex-1 text-gray-400 dark:text-gray-400">
                 Remplissage rapide et vérifications automatiques vous assurent un dossier administratif irrprochable du premier coup.
               </p>
-            </CardContent>
+            </CardContent> 
+            
           </Card>
 
           <Card className="cursor-pointer h-[16rem]  group relative pb-6 flex flex-col justify-center rounded-2xl bg-gray-200 pl-3 pr-3 shadow-sm ring-0 ring-gray-200 transition-all duration-150 hover:shadow-lg hover:ring-2 hover:ring-white focus:shadow-xl focus:ring-gray-600 dark:bg-gray-700 dark:hover:ring-gray-300 dark:focus:ring-gray-400 bg-[#384454] " onClick={() => handleCardClick("Veille des Appels d'Offres", false)}>
