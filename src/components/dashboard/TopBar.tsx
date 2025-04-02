@@ -138,9 +138,9 @@ const TopBar = ({
           {/* Right: User controls */}
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
-            <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
+            {/* <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
               {isDarkMode ? <Sun className="h-5 w-5 text-[var(--topbar-text-transparent)]" /> : <Moon className="h-5 w-5 text-[var(--topbar-text-transparent)]" />}
-            </Button>
+            </Button> */}
 
             {/* Language Selector */}
             <DropdownMenu>
