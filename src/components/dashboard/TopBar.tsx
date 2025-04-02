@@ -173,7 +173,7 @@ const TopBar = ({
             <Link to="/dashboard" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-[var(--topbar-text-transparent)] hover:text-[var(--topbar-text)] 
               ${activeTab === 'tools' && "text-[var(--topbar-text)] border-b-2 border-[#00a2ff]"}`}>
               <Grid className="h-4 w-4" />
-              <span>Outils</span>
+              <span>Actions rapides</span>
             </Link>
             
             <Link to="/projects" className={`flex items-center gap-2 text-sm font-medium py-2 px-1 text-[var(--topbar-text-transparent)] hover:text-[var(--topbar-text)] ${activeTab === 'projects' && "text-[var(--topbar-text)] border-b-2 border-[#00a2ff]"}`}>
