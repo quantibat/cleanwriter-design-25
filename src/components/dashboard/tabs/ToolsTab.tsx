@@ -291,7 +291,7 @@ const ToolsTab = () => {
                   <Badge variant="coming">A venir</Badge>
                 </div>
               </div>
-              <CardTitle className="text-xl">Dossier Administratif</CardTitle>
+              <CardTitle className="text-lg">Dossier Administratif</CardTitle>
             </CardHeader>
             <CardContent className='text-gray-300'>
               <p className="line-clamp-3 flex-1 text-gray-400 dark:text-gray-400">
