@@ -137,16 +137,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     }
   };
 
-  return <div className="min-h-screen w-full">
-    {/* bg-[var(--dashboard-background,#0c101b)] */}
-    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 blur-[100px] rounded-full"></div>
-    <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/20 blur-[120px] rounded-full"></div>
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 blur-[150px] rounded-full"></div>
-    
-    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-600/10 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-indigo-600/10 blur-[120px] rounded-full"></div>
-    </div>
+  return <div className="min-h-screen bg-[var(--dashboard-background,#0c101b)] w-full">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-auto w-full">
           <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab} />
