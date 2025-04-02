@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Star, StarOff } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -29,7 +29,10 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
               title='Ajouter au favoris'
               onClick={toggleFavorite}
             >
-              {isFavorite ? <Star size={20} /> : <StarOff size={20} />}
+              <Star 
+                size={20} 
+                fill={isFavorite ? "currentColor" : "none"} 
+              />
             </button>
           </div>
         </div>
