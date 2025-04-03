@@ -36,6 +36,7 @@ import UpgradePlan from './pages/UpgradePlan';
 import EditProject from './pages/EditProject';
 import DeleteProject from './pages/DeleteProject';
 import ViewProject from './pages/ViewProject';
+import Offers from "./pages/Offers";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +84,13 @@ const App = () => (
                   <Contribute />
                 </AuthGuard>
               } />
+
+              <Route path="/offres" element={
+                <AuthGuard>
+                  <Offers />
+                </AuthGuard>
+              } />
+
               <Route path="/create-dce" element={
                 <AuthGuard>
                   <CreateDCE />
