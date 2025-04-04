@@ -4,9 +4,9 @@ import { Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, icon, isComing }) => {
+const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, icon, isComing, url }) => {
   const toggleFavorite = () => {
-    onAddToFavorites({ title, description, icon, isFavorite, isComing });
+    onAddToFavorites({ title, description, icon, isFavorite, isComing, url });
   };
 
   return (
@@ -36,7 +36,7 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
             </button>
           </div>
         </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
+        <CardTitle className="text-lg"><a href={url}>{title}</a></CardTitle>
       </CardHeader>
       <CardContent className='text-gray-300 pb-0'>
         <p className="line-clamp-3 flex-1 text-gray-400 dark:text-gray-400">{description}</p>

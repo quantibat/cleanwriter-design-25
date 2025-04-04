@@ -68,6 +68,7 @@ const ToolsTab = () => {
               isComing={fav.isComing}
               onAddToFavorites={addToFavorites}
               icon={fav.icon}
+              url={fav.url}
             />
           ))}
         </div>
@@ -95,6 +96,7 @@ const ToolsTab = () => {
           isComing={false}
           onAddToFavorites={addToFavorites}
           icon={<Compass size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -104,6 +106,7 @@ const ToolsTab = () => {
           isComing={false}
           onAddToFavorites={addToFavorites}
           icon={<BarChart2 size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -113,6 +116,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<Clock size={40} />}
+          url={"/offres"}
         />
       </div>
     </section>
@@ -140,6 +144,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<FolderOpen size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -149,6 +154,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<FileSpreadsheet size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -158,6 +164,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<Lightbulb size={40} />}
+          url={"/offres"}
         />
       </div>
     </section>
@@ -185,6 +192,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<Ruler size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -194,6 +202,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<Calendar size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -203,6 +212,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<DollarSign size={40} />}
+          url={"/offres"}
         />
       </div>
     </section>
@@ -230,6 +240,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<PenTool size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -239,6 +250,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<ClipboardCheck size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -248,6 +260,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<Send size={40} />}
+          url={"/offres"}
         />
       </div>
     </section>
@@ -275,6 +288,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<FileText size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -284,6 +298,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<MessageSquare size={40} />}
+          url={"/offres"}
         />
         
         <FavoritableCard
@@ -293,6 +308,7 @@ const ToolsTab = () => {
           isComing={true}
           onAddToFavorites={addToFavorites}
           icon={<Clock size={40} />}
+          url={"/offres"}
         />
       </div>
     </section>
