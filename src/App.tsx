@@ -92,7 +92,7 @@ const App = () => (
                 </AuthGuard>
               } />
 
-            <Route path="/offre-detail/:id" element={
+              <Route path="/offre-detail/:id" element={
                 <AuthGuard>
                   <OfferDetail />
                 </AuthGuard>

@@ -60,7 +60,6 @@ const Navbar = () => {
           <a href="./#contact" className="text-sm font-medium transition-colors hover:text-blue-400 flex items-center gap-2">
             <span>Contact</span>
           </a>
-
         </div>
 
         {/* Action Buttons (Right) */}
