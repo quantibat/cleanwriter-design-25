@@ -25,9 +25,12 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
               <Badge variant="coming">A venir</Badge>
             )}
             <button 
-              className="flex justify-center text-gray-400 hover:yellow-500" 
-              title='Ajouter au favoris'
-              onClick={toggleFavorite}
+              className="flex justify-center text-gray-400 hover:text-neon-blue" 
+              title={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent card click event
+                toggleFavorite();
+              }}
             >
               <Star 
                 size={20} 

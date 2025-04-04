@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,12 +10,35 @@ import { BarChart2, Calendar, ClipboardCheck, Clock, Compass, DollarSign, FileSp
 
 const ToolsTab = () => {
   const [favorites, setFavorites] = useState([]);
-
+  const favoritesRef = useRef(null);
+  
   const addToFavorites = (card) => {
     setFavorites((prevFavorites) => {
-      const exists = prevFavorites.some((fav) => fav.title === card.title);
-      return exists ? prevFavorites : [...prevFavorites, card];
+      const existingIndex = prevFavorites.findIndex((fav) => fav.title === card.title);
+      
+      if (existingIndex !== -1 && card.isFavorite) {
+        return prevFavorites.filter((_, index) => index !== existingIndex);
+      }
+      
+      if (existingIndex === -1 && !card.isFavorite) {
+        // Scroll to favorites section after the state update
+        setTimeout(() => {
+          scrollToFavorites();
+        }, 100);
+        return [...prevFavorites, { ...card, isFavorite: true }];
+      }
+      
+      return prevFavorites;
     });
+  };
+  
+  const scrollToFavorites = () => {
+    if (favoritesRef.current && favorites.length > 0) {
+      favoritesRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
   
   const {
@@ -26,7 +49,6 @@ const ToolsTab = () => {
   
   const handleCardClick = (title: string, isSocialMedia: boolean = false) => {
     if (isPremiumUser) {
-      // Redirect to CreateDCE page with parameters
       const params = new URLSearchParams();
       params.append('title', title);
       params.append('isSocialMedia', isSocialMedia.toString());
@@ -45,7 +67,7 @@ const ToolsTab = () => {
 
     {
       favorites && favorites.length > 0 && 
-      <section className='space-y-6'>
+      <section ref={favoritesRef} className='space-y-6'>
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Star size={40} />
