@@ -25,7 +25,7 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
               <Badge variant="coming">A venir</Badge>
             )}
             <button 
-              className="flex justify-center text-gray-400 hover:text-neon-blue" 
+              className="flex justify-center text-gray-400 hover:yellow-500" 
               title='Ajouter au favoris'
               onClick={toggleFavorite}
             >
