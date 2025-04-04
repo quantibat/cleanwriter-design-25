@@ -95,36 +95,40 @@ const SidebarNavigation = ({
           </li>
           
           <li>
-            
+            <Link to="/offres" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/offres' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
+              <PlusCircle className="h-5 w-5" />
+              <span className={open ? "ml-3" : "hidden"}>Appels d'offre</span>
+            </Link>
           </li>
           
-          <li>
-            
-          </li>
           <li>
             <Link to="/projects" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/projects' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
               <Briefcase className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Projets</span>
             </Link>
           </li>
+          
           <li>
             <Link to="/contribute" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/contribute' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")} onClick={() => handleTabChange('contribute')}>
               <Gift className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Contribuer</span>
             </Link>
           </li>
+          
           <li>
             <Link to="/affiliate" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/affiliate' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
               <Users className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Affiliation</span>
             </Link>
           </li>
+          
           <li>
             <Link to="/upgrade-plan" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/upgrade-plan' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
               <Zap className="h-5 w-5" />
               <span className={open ? "ml-3" : "hidden"}>Upgrader son plan</span>
             </Link>
           </li>
+          
           <li>
             <Link to="/account" className={cn("block py-2.5 px-4 rounded-lg transition-colors", "flex items-center", location.pathname === '/account' ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/30 text-sidebar-foreground")}>
               <UserRound className="h-5 w-5" />
