@@ -11,13 +11,13 @@ const Offers = () => {
   const tenders = [
     {
       id: 1,
-      title: "Marché public pour la rénovation d'un bâtiment",
+      title: "Marché public pour la rénovation d’un bâtiment",
       description: "Travaux de rénovation d'un bâtiment public dans le centre-ville.",
       date: "2025-04-03",
       type: "Travaux",
       location: "Paris, Île-de-France",
-      url: "/offer-detail/1",
-      score: 85
+      url: "https://www.example.com/tender/1",  // Lien vers les détails de l'appel d'offre
+      score:85
     },
     {
       id: 2,
@@ -26,8 +26,8 @@ const Offers = () => {
       date: "2025-03-28",
       type: "Fourniture",
       location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "/offer-detail/2",
-      score: 55  
+      url: "https://www.example.com/tender/2",
+      score:55  
     },
     {
       id: 3,
@@ -36,8 +36,8 @@ const Offers = () => {
       date: "2025-03-28",
       type: "Fourniture",
       location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "/offer-detail/3",
-      score: 52  
+      url: "https://www.example.com/tender/2",
+      score:52  
     },
     {
       id: 4,
@@ -46,11 +46,12 @@ const Offers = () => {
       date: "2025-03-28",
       type: "Fourniture",
       location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "/offer-detail/4",
-      score: 50 
+      url: "https://www.example.com/tender/2",
+      score:50 
     },
   ];
   
+
   return (
     <DashboardLayout 
       activeTab="tools" 
