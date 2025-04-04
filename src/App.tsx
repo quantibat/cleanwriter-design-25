@@ -151,7 +151,7 @@ const App = () => (
                   <DeleteProject />
                 </AuthGuard>
               } />
-              <Route path="/view-project/:id" element={
+              <Route path="/view-project" element={
                 <AuthGuard>
                   <ViewProject />
                 </AuthGuard>

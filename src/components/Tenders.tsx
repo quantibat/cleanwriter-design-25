@@ -2,54 +2,76 @@ import { useState } from "react";
 import { Clock, MapPin } from "lucide-react";  // Icônes de react-lucide
 import { Badge } from "./ui/badge";
 import ScoreCircle from "./ui/score";
+import { Button } from "./ui/button";
 
 const FilterPanel = ({ filters, setFilters }) => {
   return (
-    <div className="w-full md:w-1/4">
-      <div className="bg-[#384454] backdrop-blur-md rounded-xl shadow-xl border border-[#384454] p-4 sticky top-0 text-white">
-        <h2 className="text-lg font-semibold mb-4 text-white">
-          🎛️ Filtres
-        </h2>
-        <input
-          type="text"
-          placeholder="Rechercher..."
-          className="w-full p-2 mb-3 rounded-full text-sm text-white bg-[#ffffff12] border border-[#384454] placeholder:text-[#ffffff88] focus:outline-none focus:ring-2 focus:ring-[#384454]"
-          value={filters.search}
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-        />
+    <div className="w-full lg:w-1/4">
+      <div className="space-y-4">
+        <details className="group relative overflow-hidden rounded-xl border bg-[#ffffff12] border-[#384454] border shadow-xl dark:border-[#384454]">
+          <summary className="flex items-center justify-between gap-2 p-3 text-white transition-colors  dark:text-gray-200 dark:hover:text-white [&::-webkit-details-marker]:hidden">
+            <span className="text-md font-medium"> Filtres</span>
+            <span className="transition-transform group-open:-rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </span>
+          </summary>
+          
+          <div className="divide-y divide-gray-300 border-t border-gray-300 bg-[#0f172a]/70 backdrop-blur-md dark:divide-gray-600 dark:border-gray-600 dark:bg-gray-900">
+            <div className="flex items-center justify-between px-3 py-2">
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                className="w-full p-2 rounded-full text-sm text-white bg-[#ffffff12] border border-[#384454] placeholder:text-[#ffffff88] focus:outline-none focus:ring-2 focus:ring-[#384454]"
+                value={filters.search}
+                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+              />
+            </div>
+            
+            <div className="p-3">
+              <h3 className="text-sm font-semibold text-white mb-2">Type de marché</h3>
+              <select
+                className="w-full text-sm text-gray-500 p-2 rounded-full bg-[#ffffff12] text-white border border-[#384454] focus:outline-none focus:ring-2 focus:ring-[#384454]"
+                value={filters.type}
+                onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+              >
+                <option value="">Tous les types</option>
+                <option value="Travaux">Travaux</option>
+                <option value="Fourniture">Fourniture</option>
+              </select>
+            </div>
 
-        <div className="mb-4">
-          <h3 className="text-sm font-semibold text-white mb-2 mt-4">Type de marché</h3>
-          <select
-            className="w-full p-2 rounded-full bg-[#ffffff12] text-white border border-[#384454] focus:outline-none focus:ring-2 focus:ring-[#384454]"
-            value={filters.type}
-            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-          >
-            <option value="">Tous les types</option>
-            <option value="Travaux">Travaux</option>
-            <option value="Fourniture">Fourniture</option>
-          </select>
-        </div>
-
-        <div className="mb-2">
-          <h3 className="text-sm font-semibold text-white mb-2 mt-4">Localisation</h3>
-          <select
-            className="w-full p-2 rounded-full bg-[#ffffff12] text-white border border-[#384454] focus:outline-none focus:ring-2 focus:ring-[#384454]"
-            value={filters.location}
-            onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-          >
-            <option value="">Toutes les localisations</option>
-            <option value="Paris">Paris</option>
-            <option value="Lyon">Lyon</option>
-            <option value="Marseille">Marseille</option>
-          </select>
-        </div>
+            <div className="p-3">
+              <h3 className="text-sm font-semibold text-white mb-2">Localisation</h3>
+              <select
+                className="w-full text-sm text-gray-500 p-2 rounded-full bg-[#ffffff12] text-white border border-[#384454] focus:outline-none focus:ring-2 focus:ring-[#384454]"
+                value={filters.location}
+                onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+              >
+                <option value="">Toutes les localisations</option>
+                <option value="Paris">Paris</option>
+                <option value="Lyon">Lyon</option>
+                <option value="Marseille">Marseille</option>
+              </select>
+            </div>
+            
+            {/* Example of a reset button, similar to the second code's button */}
+            <div className="flex justify-end px-3 py-2">
+              <button
+                type="button"
+                className="text-sm text-white underline transition-colors hover:text-gray-900 dark:text-gray-200 dark:hover:text-white"
+                onClick={() => setFilters({ search: '', type: '', location: '' })}
+              >
+                Réinitialiser
+              </button>
+            </div>
+          </div>
+        </details>
       </div>
     </div>
   );
 };
-
-
 
 
 const PublicTenders = ({ tenders }) => {
@@ -77,15 +99,13 @@ const PublicTenders = ({ tenders }) => {
           </p>
         </div>
       </div>
-
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="flex flex-col lg:flex-row gap-4 mb-8">
         <FilterPanel filters={filters} setFilters={setFilters} />
-
         <div className="w-full md:w-3/4 flex flex-col gap-4">
           {filteredTenders.map((tender) => (
             <div
               key={tender.id}
-              className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 bg-[#384454] flex flex-col gap-3 relative"
+              className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 bg-[#ffffff12] border-[#384454] border flex flex-col gap-3 relative"
             >
               <div className="flex flex-row gap-2 justify-start ">
                 <h3 className="text-2xl font-semibold text-white">
@@ -117,12 +137,14 @@ const PublicTenders = ({ tenders }) => {
                   </div>
                 </div>
                 
-                <a
-                  href={`offre-detail/${tender.id}`}
-                  className="ml-auto flex items-center text-xs bg-blue-500 rounded-full p-2 transition duration-300 text-white"
+                <Button
+                  variant="outline"
+                  className="text-xs border-neon-blue bg-transparent-200 hover:border-none hover:bg-gray-300 hover:text-gray-900 py-0"
+                  onClick={() => window.open(`./offre-detail/${tender.id}`)} 
                 >
-                  <span>Consulter</span>
-                </a>
+                  <span>Consulter</span>  
+                </Button>
+                
               </div>
             </div>
           ))}
@@ -133,3 +155,5 @@ const PublicTenders = ({ tenders }) => {
 };
 
 export default PublicTenders;
+
+

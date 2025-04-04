@@ -1,6 +1,7 @@
 import React from "react";
 import ScoreCircle from "./ui/score";
 import LinearProgressBar from "./ui/linearprogress";
+import { Button } from "./ui/button";
 
 const DetailItem = ({ label, value }) => (
   <div className="mb-6 flex-col justify-center items-center gap-4 bg-transparent w-auto">
@@ -22,7 +23,7 @@ const TenderDetail = ({ tender }) => {
         </div>
     </div>
     <div className="flex flex-col gap-4">
-      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ring-2 ring-[#384454]">
+      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ">
         <dl className=" gap-4 md:grid md:grid-cols-4 sm:grid sm:grid-cols-2 sm:gap-4">
           <div className="flex items-center w-full">
             <DetailItem label="Entreprise sous traitante" value={tender.company} />
@@ -39,7 +40,7 @@ const TenderDetail = ({ tender }) => {
         </dl>
       </div>
 
-      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ring-2 ring-[#384454]">
+      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
         <div className="flex mb-4">
           <h3 className="font-semibold text-2xl">Correspondance</h3>
           <div className="flex justify-self-end items-center ml-auto absolute right-0 top-0 pr-4 pt-4">
@@ -84,13 +85,13 @@ const TenderDetail = ({ tender }) => {
               {tender.attachments.map((file, index) => (
                 <li key={index} className="flex justify-between items-center bg-[#1e293b]/70 p-3 rounded-lg text-sm text-white border border-[#384454]">
                   <span className="truncate">{file.name}</span>
-                  <a
-                    href={file.url}
-                    download
-                    className="px-4 py-1 rounded-full bg-blue-500 text-sm "
-                  >
-                    Télécharger
-                  </a>
+                  <Button
+                  variant="outline"
+                  className="text-xs border-neon-blue bg-transparent-200 hover:border-none hover:bg-gray-300 hover:text-gray-900 py-0"
+                  onClick={() => window.open(file.url, "_blank")} 
+                >
+                  <span>Voir le document</span>  
+                </Button>
                 </li>
               ))}
             </ul>
