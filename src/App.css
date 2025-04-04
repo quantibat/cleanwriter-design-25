@@ -238,3 +238,20 @@
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
 }
+
+
+.neon-title {
+  text-shadow: 0 0 5px #5eead4, 0 0 10px #5eead4, 0 0 15px #5eead4;
+}
+
+.neon-button {
+  background: rgb(27, 72, 197);
+  color: #0f172a;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgb(27, 72, 197), 0 0 10px rgb(27, 72, 197), 0 0 15px rgb(27, 72, 197);
+}
+
+.neon-button:hover {
+  box-shadow: 0 0 10px rgb(27, 72, 197), 0 0 20px rgb(27, 72, 197), 0 0 30px rgb(27, 72, 197);
+  transform: scale(1.05);
+}

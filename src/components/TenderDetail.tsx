@@ -1,68 +1,106 @@
 import React from "react";
+import ScoreCircle from "./ui/score";
+import LinearProgressBar from "./ui/linearprogress";
 
-const DetailItem = ({ label, value, isMultiline }) => (
-    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-      <dt className="text-sm font-medium text-gray-100">{label}</dt>
-      <dd className={`mt-1 text-sm text-gray-100 sm:col-span-2 sm:mt-0 ${isMultiline ? '' : 'truncate'}`}>
-        {value}
-      </dd>
-    </div>
-);
+const DetailItem = ({ label, value }) => (
+  <div className="mb-6 flex-col justify-center items-center gap-4 bg-transparent w-auto">
+    <dt className="text-sm font-semibold text-neon-blue px-2 py-1 rounded-full border border-neon-blue shadow-neon mb-4">
+      {label}
+    </dt>
+    <dd className="text-xs text-gray-300 drop-shadow-neon">
+      {value}
+    </dd>
+  </div>
+)
 
 const TenderDetail = ({ tender }) => {
-  console.log(tender);
   return (
-    <div className="flex flex-col gap-2">
-    <div className="flex flex-col">
-    <div className="py-1">
-      <h2 className="text-3xl font-bold text-white">{tender.title}</h2>
+    <div className="flex-col gap-4">
+    <div className="flex gap-4 w-full ">
+        <div className="py-1">       
+          <h2 className="text-3xl font-bold text-white mb-4">{tender.title}</h2>
+        </div>
     </div>
-  </div>
-    <div className="bg-[#384454] shadow rounded-lg p-6">
-      <div className="mt-6 border-t border-gray-300">
-        <dl className="divide-y divide-gray-300">
-          <DetailItem label="Entreprise sous traitante" value={tender.company} isMultiline={false}/>
-          <DetailItem label="Localisation" value={tender.location} isMultiline={false} />
-          <DetailItem label="Type de contrat" value={tender.contractType} isMultiline={false} />
-          <DetailItem label="Date de publication" value={tender.date} isMultiline={false} />
-          <DetailItem label="Description" value={tender.description} isMultiline />
-          {tender.attachments && tender.attachments.length > 0 && (
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt className="text-sm font-medium text-gray-900">Pièces jointes</dt>
-              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                  {tender.attachments.map((file, index) => (
-                    <li key={index} className="flex items-center justify-between py-4 pr-5 pl-4 text-sm leading-6">
-                      <div className="flex w-0 flex-1 items-center">
-                        <svg className="size-5 shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                          <path
-                            fillRule="evenodd"
-                            d="M15.621 4.379a3 3 0 0 0-4.242 0l-7 7a3 3 0 0 0 4.241 4.243h.001l.497-.5a.75.75 0 0 1 1.064 1.057l-.498.501a4.5 4.5 0 0 1-6.364-6.364l7-7a4.5 4.5 0 0 1 6.368 6.36l-3.455 3.553A2.625 2.625 0 1 1 9.52 9.52l3.45-3.451a.75.75 0 1 1 1.061 1.06l-3.45 3.451a1.125 1.125 0 0 0 1.587 1.595l3.454-3.553a3 3 0 0 0 0-4.242Z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                          <span className="truncate font-medium">{file.name}</span>
-                          <span className="shrink-0 text-gray-400">{file.size}</span>
-                        </div>
-                      </div>
-                      <div className="ml-4 shrink-0">
-                        <a href={file.url} className="font-medium text-indigo-600 hover:text-indigo-500" download>
-                          Télécharger
-                        </a>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-          )}
+    <div className="flex flex-col gap-4">
+      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ring-2 ring-[#384454]">
+        <dl className=" gap-4 md:grid md:grid-cols-4 sm:grid sm:grid-cols-2 sm:gap-4">
+          <div className="flex items-center w-full">
+            <DetailItem label="Entreprise sous traitante" value={tender.company} />
+          </div>
+          <div className="flex items-center w-full">
+            <DetailItem label="Localisation" value={tender.location}/>
+          </div>
+          <div className="flex items-center w-full">
+            <DetailItem label="Type de contrat" value={tender.type}/>
+          </div>
+          <div className="flex items-center w-full">
+            <DetailItem label="A remettre au plus tard" value={tender.date}/>
+          </div>
         </dl>
+      </div>
+
+      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ring-2 ring-[#384454]">
+        <div className="flex mb-4">
+          <h3 className="font-semibold text-2xl">Correspondance</h3>
+          <div className="flex justify-self-end items-center ml-auto absolute right-0 top-0 pr-4 pt-4">
+          <ScoreCircle score={tender.score} size={120}/>
+        </div>
+        </div>
+        <p className="text-sm text-gray-300 mb-4 max-w-[70%] ">
+            Ce marché public correspond parfaitement à votre profil, tant par les compétences recherchées que par les exigences techniques du projet. Votre expérience, vos réalisations passées et votre savoir-faire spécifique vous placent comme un candidat idéal pour répondre aux besoins exprimés dans ce cahier des charges. C’est une opportunité en adéquation avec votre expertise et vos objectifs professionnels.
+        </p>
+        <div className="gap-4 md:grid md:grid-cols-2 sm:grid sm:grid-cols-1 sm:gap-4 items-center max-w-[100%]">
+          <div className="flex flex-col gap-1 ">
+              <p className="text-sm text-gray-300">Secteur d'activité</p>
+              <LinearProgressBar score={"90"} />
+          </div>
+          <div className="flex flex-col  gap-1">
+              <p className="text-sm text-gray-300">Compétences techniques</p>
+              <LinearProgressBar score={"80"} />
+          </div>
+          <div className="flex flex-col gap-1">
+              <p className="text-sm text-gray-300">Secteur d'activité</p>
+              <LinearProgressBar score={"56"} />
+          </div>
+          <div className="flex flex-col  gap-1">
+              <p className="text-sm text-gray-300">Secteur d'activité</p>
+              <LinearProgressBar score={"67"} />
+          </div>
+          <div className="flex flex-col  gap-1">
+              <p className="text-sm text-gray-300">Secteur d'activité</p>
+              <LinearProgressBar score={"30"} />
+          </div>
+        </div>
+      </div>
+      <div className="w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg h-80  flex flex-col justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-white mb-4">Description</h3>
+          <p className="text-sm text-gray-300 whitespace-pre-line">{tender.description}</p>
+        </div>
+        {tender.attachments?.length > 0 && (
+          <div className="mt-6">
+            <h4 className="text-md font-semibold text-white mb-2">Documents</h4>
+            <ul className="space-y-3">
+              {tender.attachments.map((file, index) => (
+                <li key={index} className="flex justify-between items-center bg-[#1e293b]/70 p-3 rounded-lg text-sm text-white border border-[#384454]">
+                  <span className="truncate">{file.name}</span>
+                  <a
+                    href={file.url}
+                    download
+                    className="px-4 py-1 rounded-full bg-blue-500 text-sm "
+                  >
+                    Télécharger
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
     </div>
   );
 };
 
+export default TenderDetail;
 
-export default  TenderDetail;

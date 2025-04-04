@@ -9,15 +9,20 @@ const OfferDetail = () => {
 
   const tenders = [
     {
-      id: 1,
-      title: "Marché public pour la rénovation d’un bâtiment",
-      description: "Travaux de rénovation d'un bâtiment public dans le centre-ville.",
-      date: "2025-04-03",
-      type: "Travaux",
-      location: "Paris, Île-de-France",
-      url: "https://www.example.com/tender/1",  
-      score:85
-    },
+        id: 1,
+        title: "Marché public pour la rénovation d’un bâtiment",
+        description: "Travaux de rénovation d'un bâtiment public dans le centre-ville.",
+        date: "2025-04-03",
+        company: "Société Générale",
+        type: "Travaux",
+        location: "Paris, Île-de-France",
+        url: "https://www.example.com/tender/1",  // Lien vers les détails de l'appel d'offre
+        score:85,
+        attachments: [
+          { name: "CCTP.pdf", url: "https://www.example.com/attachments/cctp.pdf" },
+          { name: "DCE.zip", url: "https://www.example.com/attachments/dce.zip" },
+        ],
+      },
     {
       id: 2,
       title: "Fourniture de matériel informatique",

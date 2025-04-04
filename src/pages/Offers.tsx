@@ -5,6 +5,7 @@ import PublicTenders from '@/components/Tenders';
 
 const Offers = () => {
   const breadcrumbs = [
+    { label: "Veille des appels d'offres", url: "/dashboard" },
     { label: "Appel d'offre" }
   ];
 
@@ -14,10 +15,15 @@ const Offers = () => {
       title: "Marché public pour la rénovation d’un bâtiment",
       description: "Travaux de rénovation d'un bâtiment public dans le centre-ville.",
       date: "2025-04-03",
+      company: "Société Générale",
       type: "Travaux",
       location: "Paris, Île-de-France",
       url: "https://www.example.com/tender/1",  // Lien vers les détails de l'appel d'offre
-      score:85
+      score:85,
+      attachments: [
+        { name: "CCTP.pdf", url: "https://www.example.com/attachments/cctp.pdf" },
+        { name: "DCE.zip", url: "https://www.example.com/attachments/dce.zip" },
+      ],
     },
     {
       id: 2,
@@ -26,6 +32,7 @@ const Offers = () => {
       date: "2025-03-28",
       type: "Fourniture",
       location: "Lyon, Auvergne-Rhône-Alpes",
+      company: "Thales",
       url: "https://www.example.com/tender/2",
       score:55  
     },

@@ -6,7 +6,7 @@ import ScoreCircle from "./ui/score";
 const FilterPanel = ({ filters, setFilters }) => {
   return (
     <div className="w-full md:w-1/4">
-      <div className="bg-[#1a1a1acc] backdrop-blur-md rounded-xl shadow-xl border border-[#384454] p-4 sticky top-0 text-white">
+      <div className="bg-[#384454] backdrop-blur-md rounded-xl shadow-xl border border-[#384454] p-4 sticky top-0 text-white">
         <h2 className="text-lg font-semibold mb-4 text-white">
           🎛️ Filtres
         </h2>
