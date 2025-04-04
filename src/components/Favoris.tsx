@@ -11,7 +11,7 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
 
   return (
     <Card
-      className="cursor-pointer h-[16rem] group relative pb-2 flex flex-col justify-center rounded-2xl bg-gray-200 pl-3 pr-3 shadow-sm ring-0 ring-gray-200 transition-all duration-150 hover:shadow-lg hover:ring-2 hover:ring-white focus:shadow-xl focus:ring-gray-600 dark:bg-gray-700 dark:hover:ring-gray-300 dark:focus:ring-gray-400 bg-[#384454]"
+      className="h-[16rem] group relative pb-2 flex flex-col justify-center rounded-2xl bg-gray-200 pl-3 pr-3 shadow-sm ring-0 ring-gray-200 transition-all duration-150 hover:shadow-lg hover:ring-2 hover:ring-white focus:shadow-xl focus:ring-gray-600 dark:bg-gray-700 dark:hover:ring-gray-300 dark:focus:ring-gray-400 bg-[#384454]"
     >
       <CardHeader className="pb-3 relative pt-0">
         <div className='flex flex-row items-center justify-between mb-3'>
@@ -25,7 +25,7 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
               <Badge variant="coming">A venir</Badge>
             )}
             <button 
-              className="flex justify-center text-gray-400 hover:text-neon-blue" 
+              className="flex justify-center text-gray-400  text-yellow-500" 
               title={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
               onClick={(e) => {
                 e.stopPropagation(); // Prevent card click event
@@ -39,7 +39,7 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
             </button>
           </div>
         </div>
-        <CardTitle className="text-lg"><a href={url}>{title}</a></CardTitle>
+        <CardTitle className="text-lg"><a className='cursor-pointer' href={url}>{title}</a></CardTitle>
       </CardHeader>
       <CardContent className='text-gray-300 pb-0'>
         <p className="line-clamp-3 flex-1 text-gray-400 dark:text-gray-400">{description}</p>

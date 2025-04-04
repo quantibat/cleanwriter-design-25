@@ -37,6 +37,7 @@ import EditProject from './pages/EditProject';
 import DeleteProject from './pages/DeleteProject';
 import ViewProject from './pages/ViewProject';
 import Offers from "./pages/Offers";
+import OfferDetail from "./pages/OfferDetail";
 
 const queryClient = new QueryClient();
 
@@ -88,6 +89,12 @@ const App = () => (
               <Route path="/offres" element={
                 <AuthGuard>
                   <Offers />
+                </AuthGuard>
+              } />
+
+            <Route path="/offre-detail/:id" element={
+                <AuthGuard>
+                  <OfferDetail />
                 </AuthGuard>
               } />
 

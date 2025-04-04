@@ -1,11 +1,10 @@
 
 import React from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
-import PublicTenders from '@/components/Tenders';
-
-const Offers = () => {
+import TenderDetail from '@/components/TenderDetail';
+const OfferDetail = () => {
   const breadcrumbs = [
-    { label: "Appel d'offre" }
+    { label: "Détail de l'appel d'offre" }
   ];
 
   const tenders = [
@@ -16,7 +15,7 @@ const Offers = () => {
       date: "2025-04-03",
       type: "Travaux",
       location: "Paris, Île-de-France",
-      url: "https://www.example.com/tender/1",  // Lien vers les détails de l'appel d'offre
+      url: "https://www.example.com/tender/1",  
       score:85
     },
     {
@@ -29,26 +28,6 @@ const Offers = () => {
       url: "https://www.example.com/tender/2",
       score:55  
     },
-    {
-      id: 3,
-      title: "Fourniture de matériel informatique",
-      description: "Fourniture de PC portables et accessoires pour une administration publique.",
-      date: "2025-03-28",
-      type: "Fourniture",
-      location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "https://www.example.com/tender/2",
-      score:52  
-    },
-    {
-      id: 4,
-      title: "Fourniture de matériel informatique",
-      description: "Fourniture de PC portables et accessoires pour une administration publique.",
-      date: "2025-03-28",
-      type: "Fourniture",
-      location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "https://www.example.com/tender/2",
-      score:50 
-    },
   ];
   
 
@@ -58,10 +37,10 @@ const Offers = () => {
       breadcrumbs={breadcrumbs}
     >
       <div className="w-full grid grid-cols-1 gap-8 pt-4">
-        <PublicTenders tenders={tenders}/>
+        <TenderDetail tender={tenders[0]} />
       </div>
     </DashboardLayout>
   );
 };
 
-export default Offers;
+export default OfferDetail;
