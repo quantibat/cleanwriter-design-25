@@ -10,7 +10,6 @@ const FilterPanel = ({ filters, setFilters }) => {
         <h2 className="text-lg font-semibold mb-4 text-white">
           🎛️ Filtres
         </h2>
-
         <input
           type="text"
           placeholder="Rechercher..."
