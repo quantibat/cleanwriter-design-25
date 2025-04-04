@@ -5,7 +5,9 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, icon, isComing, url }) => {
-  const toggleFavorite = () => {
+  const toggleFavorite = (e) => {
+    e.preventDefault(); // Prevent any navigation
+    e.stopPropagation(); // Prevent card click event
     onAddToFavorites({ title, description, icon, isFavorite, isComing, url });
   };
 
@@ -25,12 +27,10 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
               <Badge variant="coming">A venir</Badge>
             )}
             <button 
-              className="flex justify-center text-gray-400  text-yellow-500" 
+              className={`flex justify-center ${isFavorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}
               title={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent card click event
-                toggleFavorite();
-              }}
+              onClick={toggleFavorite}
+              aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
             >
               <Star 
                 size={20} 
