@@ -142,7 +142,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-auto w-full">
           <div className="flex flex-row">
-            <SidebarNavigation activeTab={activeTab} />
             <div className="flex-1">
               <TopBar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} activeTab={activeTab} />
               <div className="mx-auto w-[85%] p-0">
