@@ -1,105 +1,608 @@
+// import React, { useState } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import { BriefcaseBusiness, Building, Home, Info, User } from "lucide-react";
 
-import React from 'react';
-import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from 'react-router-dom';
 
-const Onboarding = () => {
-  const navigate = useNavigate();
-  
-  const handleGoToDashboard = () => {
-    navigate('/dashboard');
+// const steps = [
+//   "Type d'entreprise",
+//   "Informations entreprise",
+//   "Appels d'offres",
+//   "Création du compte",
+// ];
+
+// const expertiseOptions = ["Bardage", "Étanchéité", "Gros Œuvre", "Second Œuvre"];
+// const chantierTypes = ["Bâtiments Industriels", "Bâtiments Agricoles"];
+// const chantierNatures = ["Construction", "Rénovation", "Extension"];
+
+// export default function OnboardingDCEManager() {
+//   const [step, setStep] = useState(0);
+//   const [formData, setFormData] = useState({
+//     type_entreprise: "",
+//     nom_entreprise: "",
+//     numero_siret: "",
+//     adresse_siege_social: "",
+//     ville: "",
+//     zone_chalandise: "",
+//     domaines_expertises: [],
+//     type_chantiers: [],
+//     Natures_Chantiers: [],
+//     nombre_ao_mensuels: "",
+//     interest: "",
+//     budget_conditions_financieres: "",
+//     nom_prenom_contact: "",
+//     email: "",
+//     password: ""
+//   });
+
+//   const next = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
+//   const back = () => setStep((prev) => Math.max(prev - 1, 0));
+
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleMultiSelect = (key, value) => {
+//     const updated = formData[key].includes(value)
+//       ? formData[key].filter((v) => v !== value)
+//       : [...formData[key], value];
+//     setFormData({ ...formData, [key]: updated });
+//   };
+
+//   const handleCardSelect = (key, value) => {
+//     setFormData({ ...formData, [key]: value });
+//     next();
+//   };
+
+//   const handleSubmit = () => {
+//     console.log("Submitted data:", formData);
+//     // fetch('/api/onboarding', { method: 'POST', body: JSON.stringify(formData) })
+//   };
+
+//   return (
+//     <div className="h-screen my-auto text-white flex flex-col items-center justify-center p-6 w-[85%] mx-auto border border-gray-700 rounded-lg bg-gray-900 mt-10">
+//       <div className="flex space-x-4 h-24 w-full justify-center">
+//         {steps.map((s, i) => (
+//           <div key={i} className="flex items-center space-x-2">
+//             <div
+//               className={`w-8 h-8 flex items-center justify-center rounded-full border-2 ${
+//                 i === step ? "bg-neon-blue text-white border-neon-blue" : "border-gray-500"
+//               }`}
+//             >
+//               {i + 1}
+//             </div>
+//             {i < steps.length - 1 && <div className="w-24 h-0.5 bg-gray-500" />}
+//           </div>
+//         ))}
+//       </div>
+
+//       <div className="mt-8 h-auto justify-center flex flex-col w-full">
+//         <AnimatePresence mode="wait">
+//           <motion.div
+//             key={step}
+//             initial={{ x: 100, opacity: 0 }}
+//             animate={{ x: 0, opacity: 1 }}
+//             exit={{ x: -100, opacity: 0 }}
+//             transition={{ duration: 0.3 }}
+//           >
+//             {step === 0 && (
+//               <div>
+//                 <div className="flex flex-col mb-4 border-1 border p-2">
+//                   <h2 className="text-xl font-semibold mb-1 flex gap-4"> <Building/> <p> Vous etes une </p></h2>
+//                   <p className="text-sm text-gray-400 ">
+//                     Merci de renseigner les informations de base sur votre entreprise, ainsi que vos domaines d'expertise et types de chantiers.
+//                   </p>
+//                 </div>
+               
+//                 <div className="grid grid-cols-2 gap-4">
+//                   <button
+//                     onClick={() => handleCardSelect("type_entreprise", "TPE")}
+//                     className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center "
+//                   >
+//                     <Home className="text-3xl mb-2" />
+//                     <div className="font-bold mb-2">TPE</div>
+//                     <div className="text-sm">Moins de 10 salariés <br/> </div>
+//                   </button>
+//                   <button
+//                     onClick={() => handleCardSelect("type_entreprise", "PME")}
+//                     className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center "
+//                   >
+//                     <BriefcaseBusiness className="text-3xl mb-2" />
+//                     <div className="font-bold mb-2">PME</div>
+//                     <div className="text-sm">De 10 à 250 salariés <br/> </div>
+//                   </button>
+//                 </div>
+//               </div>
+//             )}
+
+//             {step === 1 && (
+//               <div>
+//                 <div className="flex flex-col mb-4 border-1 border p-2">
+//                   <h2 className="text-xl font-semibold mb-1 flex gap-4"> <Building/> <p>Informations sur l'entreprise</p></h2>
+//                   <p className="text-sm text-gray-400 ">
+//                     Merci de renseigner les informations de base sur votre entreprise, ainsi que vos domaines d'expertise et types de chantiers.
+//                   </p>
+//                 </div>
+//                 <fieldset className="grid grid-cols-2 gap-4">
+//                   {[
+//                     ["nom_entreprise", "Nom de l'entreprise"],
+//                     ["numero_siret", "Numéro SIRET"],
+//                     ["adresse_siege_social", "Adresse du siège social"],
+//                     ["ville", "Ville"],
+//                     ["zone_chalandise", "Zone de chalandise"],
+//                   ].map(([name, label]) => (
+//                     <div key={name}>
+//                       <label htmlFor={name} className="block text-sm mb-2">{label}</label>
+//                       <input
+//                         id={name}
+//                         name={name}
+//                         value={formData[name]}
+//                         onChange={handleChange}
+//                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+//                       />
+//                     </div>
+//                   ))}
+
+//                   <div className="col-span-2 mt-4">
+//                     <label className="block text-sm mb-2 ">Domaines d’expertise</label>
+//                     <div className="flex flex-wrap gap-2">
+//                       {expertiseOptions.map((option) => (
+//                         <button
+//                           key={option}
+//                           type="button"
+//                           onClick={() => handleMultiSelect("domaines_expertises", option)}
+//                           className={`px-3 py-1 border rounded-full text-sm ${
+//                             formData.domaines_expertises.includes(option)
+//                               ? "bg-neon-blue border-neon-blue"
+//                               : "border-gray-600"
+//                           }`}
+//                         >
+//                           {option}
+//                         </button>
+//                       ))}
+//                     </div>
+//                   </div>
+
+//                   {["type_chantiers", "Natures_Chantiers"].map((key, idx) => (
+//                     <div key={key} className="col-span-1 mt-4">
+//                       <label className="block text-sm mb-2">
+//                         {key === "type_chantiers" ? "Types de chantiers" : "Natures de chantiers"}
+//                       </label>
+//                       <div className="flex flex-wrap gap-2 text-sm ">
+//                         {(key === "type_chantiers" ? chantierTypes : chantierNatures).map((option) => (
+//                           <button
+//                             key={option}
+//                             type="button"
+//                             onClick={() => handleMultiSelect(key, option)}
+//                             className={`px-3 py-1 border rounded-full text-sm  ${
+//                               formData[key].includes(option)
+//                                 ? "bg-neon-blue border-neon-blue"
+//                                 : "border-gray-600"
+//                             }`}
+//                           >
+//                             {option}
+//                           </button>
+//                         ))}
+//                       </div>
+//                     </div>
+//                   ))}
+//                 </fieldset>
+//                 <div className="flex justify-between mt-6">
+//                   <button onClick={back} className="text-sm text-gray-400">Retour</button>
+//                   <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white">Suivant</button>
+//                 </div>
+//               </div>
+//             )}
+
+
+//             {step === 2 && (
+//               <div>
+//                 <div className="flex flex-col mb-4 border-1 border p-2">
+//                   <h2 className="text-xl font-semibold mb-1 flex gap-4"> <BriefcaseBusiness/> <p>Appels d'offres souhaités</p></h2>
+
+//                   <p className="text-sm text-gray-400 ">
+//                   Indiquez votre volume d'appels d'offres, vos préférences (public/privé), ainsi que vos conditions financières.
+//                   </p>
+//                 </div>
+//                 <div className="grid grid-cols-2 gap-4">
+//                   <div>
+//                     <label className="block text-sm mb-2">Nombre d'appels d'offres mensuels</label>
+//                     <input
+//                       name="nombre_ao_mensuels"
+//                       value={formData.nombre_ao_mensuels}
+//                       onChange={handleChange}
+//                       className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+//                     />
+//                   </div>
+//                   <div>
+//                     <label className="block text-sm mb-2">Intérêt</label>
+//                     <select
+//                       name="interest"
+//                       value={formData.interest}
+//                       onChange={handleChange}
+//                       className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-sm "
+//                     >
+//                       <option value="">Choisissez</option>
+//                       <option value="Privés">Privés</option>
+//                       <option value="Publics">Publics</option>
+//                       <option value="Les deux">Les deux</option>
+//                     </select>
+//                   </div>
+//                   <div className="col-span-2">
+//                     <label className="block text-sm mb-2 " >Budget et conditions financières</label>
+//                     <textarea
+//                       name="budget_conditions_financieres"
+//                       value={formData.budget_conditions_financieres}
+//                       onChange={handleChange}
+//                       className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+//                     />
+//                   </div>
+//                 </div>
+//                 <div className="flex justify-between mt-6">
+//                   <button onClick={back} className="text-sm text-gray-400">Retour</button>
+//                   <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white">Suivant</button>
+//                 </div>
+//               </div>
+//             )}
+
+//             {step === 3 && (
+//               <div>
+//                 <div className="flex flex-col mb-4 border-1 border p-2">
+//                   <h2 className="text-xl font-semibold mb-1 flex gap-4"><User/> Vos informations personnelles</h2>
+//                   <p className="text-sm text-gray-400 ">
+//                       Veuillez entrer vos coordonnées pour finaliser la création du compte.
+//                   </p>
+//                 </div>
+
+//                 <div className="grid grid-cols-2 gap-4">
+//                   <div>
+//                     <label className="block text-sm mb-2">Nom et prénom</label>
+//                     <input
+//                       name="nom_prenom_contact"
+//                       value={formData.nom_prenom_contact}
+//                       onChange={handleChange}
+//                       className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+//                     />
+//                   </div>
+//                   <div>
+//                     <label className="block text-sm mb-2">Email professionnel</label>
+//                     <input
+//                       name="email"
+//                       type="email"
+//                       value={formData.email}
+//                       onChange={handleChange}
+//                       className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+//                     />
+//                   </div>
+//                   <div className="col-span-2">
+//                     <label className="block text-sm mb-2">Mot de passe</label>
+//                     <input
+//                       name="password"
+//                       type="password"
+//                       value={formData.password}
+//                       onChange={handleChange}
+//                       className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+//                     />
+//                   </div>
+//                 </div>
+//                 <div className="flex justify-between mt-6">
+//                   <button onClick={back} className="text-sm text-gray-400">Retour</button>
+//                   <button onClick={handleSubmit} className="bg-neon-blue px-4 py-2 rounded-full text-white">Enregistrer</button>
+//                 </div>
+//               </div>
+//             )}
+//           </motion.div>
+//         </AnimatePresence>
+//       </div>
+//     </div>
+//   );
+// }
+
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { BriefcaseBusiness, Building, Home, Info, User } from "lucide-react";
+
+const steps = [
+  "Type d'entreprise",
+  "Informations entreprise",
+  "Appels d'offres",
+  "Création du compte",
+];
+
+const expertiseOptions = ["Bardage", "Étanchéité", "Gros Œuvre", "Second Œuvre"];
+const chantierTypes = ["Bâtiments Industriels", "Bâtiments Agricoles"];
+const chantierNatures = ["Construction", "Rénovation", "Extension"];
+
+export default function OnboardingDCEManager() {
+  const [step, setStep] = useState(0);
+  const [formData, setFormData] = useState({
+    type_entreprise: "",
+    nom_entreprise: "",
+    numero_siret: "",
+    adresse_siege_social: "",
+    ville: "",
+    zone_chalandise: "",
+    domaines_expertises: [],
+    type_chantiers: [],
+    Natures_Chantiers: [],
+    nombre_ao_mensuels: "",
+    interest: "",
+    budget_conditions_financieres: "",
+    nom_prenom_contact: "",
+    email: "",
+    password: ""
+  });
+
+  const next = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
+  const back = () => setStep((prev) => Math.max(prev - 1, 0));
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleMultiSelect = (key, value) => {
+    const updated = formData[key].includes(value)
+      ? formData[key].filter((v) => v !== value)
+      : [...formData[key], value];
+    setFormData({ ...formData, [key]: updated });
+  };
+
+  const handleCardSelect = (key, value) => {
+    setFormData({ ...formData, [key]: value });
+    next();
+  };
+
+  const handleSubmit = () => {
+    console.log("Submitted data:", formData);
+    // fetch('/api/onboarding', { method: 'POST', body: JSON.stringify(formData) })
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-white/5 p-4">
-        <div className="container mx-auto flex justify-center">
-          <div className="flex items-center gap-2 font-semibold">
-            <span className="text-xl text-foreground">
-              <span className="text-blue-400">DCE</span>Manager
-            </span>
-            <span className="bg-blue-500/20 text-blue-300 text-xs px-2 py-1 rounded-full">ENHANCED</span>
-          </div>
-        </div>
-      </header>
-      
-      <main className="flex-1 py-10 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6">
-            Apprenez à utiliser <span className="text-blue-400">DCEManager</span> à son maximum potentiel en regardant cette courte vidéo
-          </h1>
-          
-          <div className="my-12 rounded-xl overflow-hidden shadow-2xl border border-white/10 relative aspect-video">
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50">
-              <div className="w-20 h-20 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-            </div>
-            <img 
-              src="/public/lovable-uploads/bcaccbea-e0b6-43d6-a3ec-861d78ba2443.png" 
-              alt="Vidéo de démonstration" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          
-          <div className="my-12">
-            <Button 
-              onClick={handleGoToDashboard}
-              variant="blue"
-              className="px-8 py-6 text-lg h-auto rounded-md"
+    <div className="h-screen my-auto text-white flex flex-col items-center justify-center p-6 w-[85%] mx-auto border border-gray-700 rounded-lg bg-gray-900 space-y-16 my-10">
+      <div className="flex space-x-4 h-24 w-full justify-center">
+        {steps.map((s, i) => (
+          <div key={i} className="flex items-center space-x-2">
+            <div
+              className={`w-8 h-8 flex items-center justify-center rounded-full border-2 ${
+                i === step ? "bg-neon-blue text-white border-neon-blue" : "border-gray-500"
+              }`}
             >
-              Accéder à votre compte DCEManager
-            </Button>
+              {i + 1}
+            </div>
+            {i < steps.length - 1 && <div className="w-24 h-0.5 bg-gray-500" />}
           </div>
-          
-          <div className="mt-16 text-center text-blue-100/80">
-            <p className="mb-4">
-              Si vous rencontrez des problèmes en utilisant DCEManager, veuillez nous contacter à <a href="mailto:hello@dcemanager.com" className="text-blue-400 hover:underline">hello@dcemanager.com</a>
-            </p>
-            <p>
-              Notre équipe de support conviviale et compétente sera heureuse de vous aider.
-            </p>
-          </div>
-          
-          <div className="mt-16 flex justify-center space-x-6">
-            <a href="#" className="text-blue-100/60 hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-              </svg>
-            </a>
-            <a href="#" className="text-blue-100/60 hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
-              </svg>
-            </a>
-            <a href="#" className="text-blue-100/60 hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-              </svg>
-            </a>
-          </div>
-          
-          <div className="mt-12 text-sm text-blue-100/60 flex flex-wrap justify-center gap-4">
-            <Link to="/" className="hover:text-blue-400">Accueil</Link>
-            <span>|</span>
-            <Link to="/roadmap" className="hover:text-blue-400">Feuille de route</Link>
-            <span>|</span>
-            <Link to="/signin" className="hover:text-blue-400">Connexion</Link>
-            <span>|</span>
-            <Link to="/affiliate" className="hover:text-blue-400">Affiliation</Link>
-          </div>
-          
-          <div className="mt-8 text-xs text-blue-100/40">
-            <p>DCEManager - Premier outil venant du futur, pas du passé.</p>
-            <p>© 2024 (parce que nous venons du futur) - Tous droits réservés.</p>
-          </div>
-        </div>
-      </main>
+        ))}
+      </div>
+
+      <div className="mt-8 flex flex-col w-full min-h-[500px] justify-center">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="w-full"
+          >
+            {step === 0 && (
+              <div>
+                <div className="flex flex-col mb-4 border-1 border p-2">
+                  <h2 className="text-xl font-semibold mb-1 flex gap-4">
+                    <Building />
+                    <p> Vous êtes une </p>
+                  </h2>
+                  <p className="text-sm text-gray-400 ">
+                    Merci de renseigner les informations de base sur votre entreprise, ainsi que vos domaines d'expertise et types de chantiers.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    onClick={() => handleCardSelect("type_entreprise", "TPE")}
+                    className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center"
+                  >
+                    <Home className="text-3xl mb-2" />
+                    <div className="font-bold mb-2">TPE</div>
+                    <div className="text-sm">Moins de 10 salariés</div>
+                  </button>
+                  <button
+                    onClick={() => handleCardSelect("type_entreprise", "PME")}
+                    className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center"
+                  >
+                    <BriefcaseBusiness className="text-3xl mb-2" />
+                    <div className="font-bold mb-2">PME</div>
+                    <div className="text-sm">De 10 à 250 salariés</div>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {step === 1 && (
+              <div>
+                <div className="flex flex-col mb-4 border-1 border p-2">
+                  <h2 className="text-xl font-semibold mb-1 flex gap-4">
+                    <Building />
+                    <p>Informations sur l'entreprise</p>
+                  </h2>
+                  <p className="text-sm text-gray-400">
+                    Merci de renseigner les informations de base sur votre entreprise, ainsi que vos domaines d'expertise et types de chantiers.
+                  </p>
+                </div>
+                <fieldset className="grid grid-cols-2 gap-4">
+                  {[
+                    ["nom_entreprise", "Nom de l'entreprise"],
+                    ["numero_siret", "Numéro SIRET"],
+                    ["adresse_siege_social", "Adresse du siège social"],
+                    ["ville", "Ville"],
+                    ["zone_chalandise", "Zone de chalandise"],
+                  ].map(([name, label]) => (
+                    <div key={name}>
+                      <label htmlFor={name} className="block text-sm mb-2">{label}</label>
+                      <input
+                        id={name}
+                        name={name}
+                        value={formData[name]}
+                        onChange={handleChange}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                    </div>
+                  ))}
+
+                  <div className="col-span-2 mt-4">
+                    <label className="block text-sm mb-2">Domaines d’expertise</label>
+                    <div className="flex flex-wrap gap-2">
+                      {expertiseOptions.map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() => handleMultiSelect("domaines_expertises", option)}
+                          className={`px-3 py-1 border rounded-full text-sm ${
+                            formData.domaines_expertises.includes(option)
+                              ? "bg-neon-blue border-neon-blue"
+                              : "border-gray-600"
+                          }`}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {["type_chantiers", "Natures_Chantiers"].map((key) => (
+                    <div key={key} className="col-span-1 mt-4">
+                      <label className="block text-sm mb-2">
+                        {key === "type_chantiers" ? "Types de chantiers" : "Natures de chantiers"}
+                      </label>
+                      <div className="flex flex-wrap gap-2 text-sm">
+                        {(key === "type_chantiers" ? chantierTypes : chantierNatures).map((option) => (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => handleMultiSelect(key, option)}
+                            className={`px-3 py-1 border rounded-full text-sm ${
+                              formData[key].includes(option)
+                                ? "bg-neon-blue border-neon-blue"
+                                : "border-gray-600"
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </fieldset>
+                <div className="flex justify-between mt-6">
+                  <button onClick={back} className="text-sm text-gray-400">Retour</button>
+                  <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white">Suivant</button>
+                </div>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div>
+                <div className="flex flex-col mb-4 border-1 border p-2">
+                  <h2 className="text-xl font-semibold mb-1 flex gap-4">
+                    <BriefcaseBusiness />
+                    <p>Appels d'offres souhaités</p>
+                  </h2>
+                  <p className="text-sm text-gray-400">
+                    Indiquez votre volume d'appels d'offres, vos préférences (public/privé), ainsi que vos conditions financières.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm mb-2">Nombre d'appels d'offres mensuels</label>
+                    <input
+                      name="nombre_ao_mensuels"
+                      value={formData.nombre_ao_mensuels}
+                      onChange={handleChange}
+                      className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-2">Intérêt</label>
+                    <select
+                      name="interest"
+                      value={formData.interest}
+                      onChange={handleChange}
+                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-sm"
+                    >
+                      <option value="">Choisissez</option>
+                      <option value="Privés">Privés</option>
+                      <option value="Publics">Publics</option>
+                      <option value="Les deux">Les deux</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm mb-2">Budget et conditions financières</label>
+                    <textarea
+                      name="budget_conditions_financieres"
+                      value={formData.budget_conditions_financieres}
+                      onChange={handleChange}
+                      className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-between mt-6">
+                  <button onClick={back} className="text-sm text-gray-400">Retour</button>
+                  <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white">Suivant</button>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div>
+                <div className="flex flex-col mb-4 border-1 border p-2">
+                  <h2 className="text-xl font-semibold mb-1 flex gap-4">
+                    <User />
+                    Vos informations personnelles
+                  </h2>
+                  <p className="text-sm text-gray-400">
+                    Veuillez entrer vos coordonnées pour finaliser la création du compte.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm mb-2">Nom et prénom</label>
+                    <input
+                      name="nom_prenom_contact"
+                      value={formData.nom_prenom_contact}
+                      onChange={handleChange}
+                      className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-2">Email professionnel</label>
+                    <input
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm mb-2">Mot de passe</label>
+                    <input
+                      name="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-between mt-6">
+                  <button onClick={back} className="text-sm text-gray-400">Retour</button>
+                  <button onClick={handleSubmit} className="bg-neon-blue px-4 py-2 rounded-full text-white">Enregistrer</button>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   );
-};
+}
 
-export default Onboarding;
