@@ -38,6 +38,7 @@ import DeleteProject from './pages/DeleteProject';
 import ViewProject from './pages/ViewProject';
 import Offers from "./pages/Offers";
 import OfferDetail from "./pages/OfferDetail";
+import N8nChat from "./pages/Chat";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
               <Route path="/terms-of-service" element={<MainLayout><TermsOfService /></MainLayout>} />
               <Route path="/onboarding" element={<MainLayout><Onboarding /></MainLayout>} />
               <Route path="/free-trial" element={<MainLayout><FreeTrial /></MainLayout>} />
+              <Route path="/chat" element={<MainLayout><N8nChat /></MainLayout>} />
               
               {/* Protected routes */}
               <Route path="/dashboard" element={
