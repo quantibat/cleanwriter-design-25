@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BriefcaseBusiness, Building, Home, Info, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const steps = [
   "Type d'entreprise",
@@ -25,9 +27,9 @@ export default function OnboardingDCEManager() {
     zone_chalandise: "",
     domaines_expertises: [],
     type_chantiers: [],
-    Natures_Chantiers: [],
+    natures_chantiers: [],
     nombre_ao_mensuels: "",
-    interest: "",
+    // interest: "",
     budget_conditions_financieres: "",
     nom_prenom_contact: "",
     email: "",
@@ -36,6 +38,7 @@ export default function OnboardingDCEManager() {
 
   const next = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
   const back = () => setStep((prev) => Math.max(prev - 1, 0));
+  const { toast } = useToast();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,9 +56,106 @@ export default function OnboardingDCEManager() {
     next();
   };
 
-  const handleSubmit = () => {
-    console.log("Submitted data:", formData);
-    // fetch('/api/onboarding', { method: 'POST', body: JSON.stringify(formData) })
+  const handleSubmit = async () => {
+    try {
+      // Insérer l'entreprise dans la table "entreprises"
+      const { data: entrepriseData, error: entrepriseError } = await supabase
+        .from('entreprises')
+        .insert([
+          {
+            type_entreprise: formData.type_entreprise,
+            nom_entreprise: formData.nom_entreprise,
+            numero_siret: formData.numero_siret,
+            adresse_siege_social: formData.adresse_siege_social,
+            ville: formData.ville,
+            zone_chalandise: formData.zone_chalandise,
+            nombre_ao_mensuels: formData.nombre_ao_mensuels,
+            budget_conditions_financieres: formData.budget_conditions_financieres,
+            nom_prenom_contact: formData.nom_prenom_contact,
+            email: formData.email,
+            password: formData.password,
+          },
+        ])
+        .single(); // Utilise .single() pour obtenir une seule ligne insérée.
+  
+      if (entrepriseError) throw entrepriseError;
+  
+      console.log('Entreprise insérée avec succès:', entrepriseData);
+  
+      // Récupérer les ID des domaines d'expertise, types de chantiers, natures de chantiers
+      const { data: domainesData, error: domainesError } = await supabase
+        .from('domaines_expertises')
+        .select('id')
+        .in('nom', formData.domaines_expertises);
+  
+      if (domainesError) throw domainesError;
+  
+      const { data: typesData, error: typesError } = await supabase
+        .from('types_chantiers')
+        .select('id')
+        .in('nom', formData.type_chantiers);
+  
+      if (typesError) throw typesError;
+  
+      const { data: naturesData, error: naturesError } = await supabase
+        .from('natures_chantiers')
+        .select('id')
+        .in('nom', formData.natures_chantiers);
+  
+      if (naturesError) throw naturesError;
+  
+      // Insérer les relations dans les tables de jointure
+      const entrepriseId = entrepriseData?.id; // ID de l'entreprise insérée
+  
+      const domainesInsert = domainesData.map((domaine) => ({
+        entreprise_id: entrepriseId,
+        domaine_id: domaine.id,
+      }));
+      const typesInsert = typesData.map((type) => ({
+        entreprise_id: entrepriseId,
+        type_id: type.id,
+      }));
+      const naturesInsert = naturesData.map((nature) => ({
+        entreprise_id: entrepriseId,
+        nature_id: nature.id,
+      }));
+  
+      // Insertion dans les tables de jointure
+      const { error: insertDomainesError } = await supabase
+        .from('entreprises_domaines_expertises')
+        .upsert(domainesInsert);
+  
+      if (insertDomainesError) throw insertDomainesError;
+  
+      const { error: insertTypesError } = await supabase
+        .from('entreprises_types_chantiers')
+        .upsert(typesInsert);
+  
+      if (insertTypesError) throw insertTypesError;
+  
+      const { error: insertNaturesError } = await supabase
+        .from('entreprises_natures_chantiers')
+        .upsert(naturesInsert);
+  
+      if (insertNaturesError) throw insertNaturesError;
+  
+      console.log('Relations ajoutées avec succès.');
+  
+      // Réinitialiser les champs ou rediriger l'utilisateur si nécessaire
+  
+    } catch (error) {
+      console.error('Erreur lors de l\'insertion dans Supabase:', error);
+    }
+  };
+  
+  const validateForm = () => {
+    for (const key in formData) {
+      if (formData[key] === "" || (Array.isArray(formData[key]) && formData[key].length === 0)) {
+       
+        return false;
+      }
+    }
+    return true;
   };
 
   return (
@@ -178,7 +278,7 @@ export default function OnboardingDCEManager() {
                     </div>
                   </div>
 
-                  {["type_chantiers", "Natures_Chantiers"].map((key) => (
+                  {["type_chantiers", "natures_chantiers"].map((key) => (
                     <div key={key} className="col-span-1 mt-4">
                       <label className="block text-sm mb-2">
                         {key === "type_chantiers" ? "Types de chantiers" : "Natures de chantiers"}
@@ -317,4 +417,7 @@ export default function OnboardingDCEManager() {
     </div>
   );
 }
+
+
+
 
