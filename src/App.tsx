@@ -77,6 +77,7 @@ const App = () => (
                   <Notifications />
                 </AuthGuard>
               } />
+              
               <Route path="/projects" element={
                 <AuthGuard>
                   <Projects />
