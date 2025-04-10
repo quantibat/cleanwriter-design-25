@@ -1,12 +1,17 @@
+
 import { useEffect } from "react";
 
 const N8nChat = () => {
   useEffect(() => {
     const loadChat = async () => {
-      const module = await import('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js');
-      module.createChat({
-        webhookUrl: 'https://metrr.app.n8n.cloud/webhook/81ecf1cb-27ab-46a8-baf8-ae7e0232fb06/chat'
-      });
+      try {
+        const module = await import('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js');
+        module.createChat({
+          webhookUrl: 'https://metrr.app.n8n.cloud/webhook/81ecf1cb-27ab-46a8-baf8-ae7e0232fb06/chat'
+        });
+      } catch (error) {
+        console.error("Failed to load chat module:", error);
+      }
     };
 
     // Inject the CSS dynamically
@@ -19,13 +24,15 @@ const N8nChat = () => {
 
     // Cleanup: optionally remove the chat and style if needed
     return () => {
-      document.head.removeChild(link);
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
+      }
       const chatContainer = document.querySelector('n8n-chat');
       if (chatContainer) chatContainer.remove();
     };
   }, []);
 
-  return null; // Le chat s'affiche tout seul via le script, pas besoin de HTML ici
+  return null; // The chat displays itself via the script, no HTML needed here
 };
 
 export default N8nChat;
