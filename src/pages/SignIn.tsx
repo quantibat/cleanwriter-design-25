@@ -201,7 +201,7 @@ const SignIn = () => {
           <div className="mt-6 text-center text-sm">
             <span className="text-white/60">Pas encore de compte?</span>
             {" "}
-            <Link to="/signup" className="text-blue-400 hover:underline">
+            <Link to="/onboarding" className="text-blue-400 hover:underline">
               S'inscrire
             </Link>
           </div>

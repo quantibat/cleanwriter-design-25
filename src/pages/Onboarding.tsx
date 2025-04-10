@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BriefcaseBusiness, Building, Home, Info, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const steps = [
   "Type d'entreprise",
@@ -58,7 +59,16 @@ export default function OnboardingDCEManager() {
   };
 
   return (
-    <div className="h-screen my-auto text-white flex flex-col items-center justify-center p-6 w-[85%] mx-auto border border-gray-700 rounded-lg bg-gray-900 space-y-16 my-10">
+    <div className="h-auto my-16 text-white flex flex-col items-center justify-center w-full my-10">
+      <div className="text-center mb-8">
+          <Link to="/" className="inline-block">
+            <h2 className="text-2xl font-bold text-white flex items-center justify-center">
+              <span className="text-blue-400">DCE</span>Manager
+            </h2>
+          </Link>
+          <p className="mt-2 text-white/60">Inscrivez-vous pour recevoir des appel d'offres à jour recueillies depuis le boamp</p>
+      </div>
+      <div className="mx-auto w-[85%] animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 space-y-16 p-6 ">
       <div className="flex space-x-4 h-24 w-full justify-center">
         {steps.map((s, i) => (
           <div key={i} className="flex items-center space-x-2">
@@ -89,10 +99,10 @@ export default function OnboardingDCEManager() {
                 <div className="flex flex-col mb-4 border-1 border p-2">
                   <h2 className="text-xl font-semibold mb-1 flex gap-4">
                     <Building />
-                    <p> Vous êtes une </p>
+                    <p>Type de l'entreprise </p>
                   </h2>
                   <p className="text-sm text-gray-400 ">
-                    Merci de renseigner les informations de base sur votre entreprise, ainsi que vos domaines d'expertise et types de chantiers.
+                    Merci d'indiquer le type d'entreprise que vous représentez. Cela nous aidera à vous fournir des offres adaptées à vos besoins.
                   </p>
                 </div>
 
@@ -121,7 +131,7 @@ export default function OnboardingDCEManager() {
               <div>
                 <div className="flex flex-col mb-4 border-1 border p-2">
                   <h2 className="text-xl font-semibold mb-1 flex gap-4">
-                    <Building />
+                    <Info />
                     <p>Informations sur l'entreprise</p>
                   </h2>
                   <p className="text-sm text-gray-400">
@@ -302,6 +312,7 @@ export default function OnboardingDCEManager() {
             )}
           </motion.div>
         </AnimatePresence>
+      </div>
       </div>
     </div>
   );

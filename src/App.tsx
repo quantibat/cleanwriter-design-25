@@ -61,7 +61,7 @@ const App = () => (
               <Route path="/pricing" element={<MainLayout><CustomPricing /></MainLayout>} />
               <Route path="/privacy-policy" element={<MainLayout><PrivacyPolicy /></MainLayout>} />
               <Route path="/terms-of-service" element={<MainLayout><TermsOfService /></MainLayout>} />
-              <Route path="/onboarding" element={<Onboarding />} />
+              <Route path="/onboarding" element={<MainLayout><Onboarding /></MainLayout>} />
               <Route path="/free-trial" element={<MainLayout><FreeTrial /></MainLayout>} />
               
               {/* Protected routes */}
