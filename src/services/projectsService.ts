@@ -1,5 +1,4 @@
 
-// Import the new utility functions and type
 import { 
   ActiveContent, 
   activeContentToJson, 
@@ -9,6 +8,7 @@ import {
 } from "@/types/contentTypes";
 import { Json } from "@/integrations/supabase/types";
 import { supabase } from "@/integrations/supabase/client";
+import { projectsTable } from "@/utils/supabaseHelpers";
 
 // Export interface for project form data
 export interface ProjectFormData {
@@ -84,18 +84,14 @@ export const createProject = async (projectData: ProjectFormData) => {
       processedData.generated_contents = activeContentArrayToJson(projectData.generatedContents);
     }
     
-    const { data, error } = await supabase
-      .from('projects')
-      .insert(processedData)
-      .select()
-      .single();
+    const { data, error } = await projectsTable.insert(processedData).select();
       
     if (error) throw error;
     
     console.log('Project created successfully:', data);
     
     // Return the newly created project with proper type conversion
-    return mapProjectFromDb(data);
+    return mapProjectFromDb(data[0]);
   } catch (error) {
     console.error('Error creating project:', error);
     throw error;
@@ -117,10 +113,7 @@ export const updateProject = async (projectId: string, data: any) => {
       updatedData.generated_contents = activeContentArrayToJson(updatedData.generated_contents);
     }
     
-    const { error } = await supabase
-      .from('projects')
-      .update(updatedData)
-      .eq('id', projectId);
+    const { error } = await projectsTable.update(updatedData).eq('id', projectId);
       
     if (error) throw error;
     

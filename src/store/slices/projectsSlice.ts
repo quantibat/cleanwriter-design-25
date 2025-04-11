@@ -1,8 +1,10 @@
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { supabase } from '@/integrations/supabase/client';
 import { ProjectFormData } from '@/services/projectsService';
 import { Json } from '@/integrations/supabase/types';
 import { ActiveContent, activeContentToJson, activeContentArrayToJson } from '@/types/contentTypes';
+import { projectsTable } from '@/utils/supabaseHelpers';
 
 interface ProjectsState {
   projects: any[];
@@ -28,10 +30,7 @@ export const fetchProjects = createAsyncThunk(
       }
 
       console.log('Fetching projects from Supabase...');
-      const { data: projects, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('updated_at', { ascending: false });
+      const { data: projects, error } = await projectsTable.select().order('updated_at', { ascending: false });
       
       if (error) {
         console.error('Supabase error fetching projects:', error);
@@ -57,11 +56,7 @@ export const fetchProjectById = createAsyncThunk(
         throw new Error('Vous devez être connecté pour accéder à ce projet');
       }
 
-      const { data: project, error } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('id', id)
-        .single();
+      const { data: project, error } = await projectsTable.select().eq('id', id).single();
       
       if (error) throw error;
       console.log('Project fetched successfully:', project);
@@ -103,11 +98,7 @@ export const createProject = createAsyncThunk(
       };
 
       console.log('Creating project with data:', projectData);
-      const { data: project, error } = await supabase
-        .from('projects')
-        .insert(projectData)
-        .select()
-        .single();
+      const { data: project, error } = await projectsTable.insert(projectData).select().single();
 
       if (error) throw error;
       
@@ -143,12 +134,7 @@ export const updateProject = createAsyncThunk(
       if (data.elements !== undefined) updateData.elements = data.elements;
       
       console.log('Updating project with data:', updateData);
-      const { data: project, error } = await supabase
-        .from('projects')
-        .update(updateData)
-        .eq('id', id)
-        .select()
-        .single();
+      const { data: project, error } = await projectsTable.update(updateData).eq('id', id).select().single();
 
       if (error) throw error;
       
@@ -164,10 +150,7 @@ export const deleteProject = createAsyncThunk(
   'projects/deleteProject',
   async (id: string, { rejectWithValue }) => {
     try {
-      const { error } = await supabase
-        .from('projects')
-        .delete()
-        .eq('id', id);
+      const { error } = await projectsTable.delete().eq('id', id);
 
       if (error) throw error;
       
