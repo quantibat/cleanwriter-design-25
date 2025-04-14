@@ -421,7 +421,7 @@
 
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BriefcaseBusiness, Building, Home, Info, User } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -480,12 +480,31 @@ export default function OnboardingDCEManager() {
   
   const back = () => setStep((prev) => Math.max(prev - 1, 0));
 
+  const [selectedExpertises, setSelectedExpertises] = useState(getValues("domaines_expertises") ||  []);
+  const [selectedChantiers, setSelectedChantiers] = useState(getValues("type_chantiers") ||  []);
+  const [selectedNaturesChantiers, setSelectedNaturesChantiers] = useState(getValues("natures_chantiers") ||  []);
+
   const handleMultiSelect = (key, value) => {
-    const updated = getValues(key).includes(value)
-      ? getValues(key).filter((v) => v !== value)
-      : [...getValues(key), value];
-    setValue(key, updated);
+    const updated = selectedExpertises.includes(value)
+      ? selectedExpertises.filter((v) => v !== value)
+      : [...selectedExpertises, value];
+    setSelectedExpertises(updated);
+    setValue(key, updated); 
+
+    const updatedChantiers = selectedChantiers.includes(value)
+    ? selectedChantiers.filter((v) => v !== value)
+    : [...selectedChantiers, value];
+  setSelectedChantiers(updatedChantiers);
+  setValue(key, updatedChantiers); 
+
+  const updatedNaturesChantiers = selectedNaturesChantiers.includes(value)
+  ? selectedNaturesChantiers.filter((v) => v !== value)
+  : [...selectedNaturesChantiers, value];
+setSelectedNaturesChantiers(updatedNaturesChantiers);
+setValue(key, updatedNaturesChantiers); 
   };
+
+
 
   const handleCardSelect = (key, value) => {
     setValue(key, value);
@@ -585,12 +604,78 @@ export default function OnboardingDCEManager() {
     toast({ title: "Formulaire envoyé", description: "Vos informations ont été envoyées avec succès." });
   };
 
+  const fetchTypesChantiers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('types_chantiers')
+        .select('*'); 
+  
+      if (error) throw error;
+  
+      console.log('Types de Chantiers:', data);
+      return data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des types de chantiers:', error);
+    }
+  };
+  
+  const fetchDomainesChantiers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('domaines_chantiers')
+        .select('*'); 
+  
+      if (error) throw error;
+  
+      console.log('Domaines de Chantiers:', data);
+      return data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des domaines de chantiers:', error);
+    }
+  };
+
+  const fetchNaturesChantiers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('natures_chantiers')
+        .select('*'); 
+  
+      if (error) throw error;
+  
+      console.log('Natures de Chantiers:', data);
+      return data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des natures de chantiers:', error);
+    }
+  };
+
+
+  const [typesChantiers, setTypesChantiers] = useState([]);
+  const [domainesChantiers, setDomainesChantiers] = useState([]);
+  const [naturesChantiers, setNaturesChantiers] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const types = await fetchTypesChantiers();
+      setTypesChantiers(types);
+
+      const domaines = await fetchDomainesChantiers();
+      setDomainesChantiers(domaines);
+
+      const natures = await fetchNaturesChantiers();
+      setNaturesChantiers(natures);
+    };
+
+    loadData();
+  }, []);
+  
+
   return (
     <div className="h-auto my-16 text-white flex flex-col items-center justify-center w-full my-10">
       <div className="text-center mb-8">
         <Link to="/" className="inline-block">
           <h2 className="text-2xl font-bold text-white flex items-center justify-center">
-            <span className="text-blue-400">DCE</span>Manager
+            <span className="text-blue-400">Inscription</span>
           </h2>
         </Link>
         <p className="mt-2 text-white/60">Inscrivez-vous pour recevoir des appels d'offres à jour recueillis depuis le BOAMP</p>
@@ -684,16 +769,16 @@ export default function OnboardingDCEManager() {
                       </div>
                     ))}
   
-                    <div className="col-span-2 mt-4">
+                    {/* <div className="col-span-2 mt-4">
                       <label className="block text-sm mb-2">Domaines d’expertise</label>
                       <div className="flex flex-wrap gap-2">
-                        {expertiseOptions.map((option) => (
+                        {expertiseOptions.map((key,option) => (
                           <button
-                            key={option}
+                            key={key}
                             type="button"
                             onClick={() => handleMultiSelect("domaines_expertises", option)}
                             className={`px-3 py-1 border rounded-full text-sm ${
-                              getValues("domaines_expertises").includes(option)
+                              selectedExpertises.includes(option)
                                 ? "bg-neon-blue border-neon-blue"
                                 : "border-gray-600"
                             }`}
@@ -710,13 +795,13 @@ export default function OnboardingDCEManager() {
                           {key === "type_chantiers" ? "Types de chantiers" : "Natures de chantiers"}
                         </label>
                         <div className="flex flex-wrap gap-2 text-sm">
-                          {(key === "type_chantiers" ? chantierTypes : chantierNatures).map((option) => (
+                          {(key === "type_chantiers" ? typesChantiers : naturesChantiers).map((option) => (
                             <button
                               key={option}
                               type="button"
-                              onClick={() => handleMultiSelect(key, option)}
+                              onClick={() => handleMultiSelect(key === "type_chantiers"? "type_chantiers" : "natures_chantiers" , option)}
                               className={`px-3 py-1 border rounded-full text-sm ${
-                                getValues("type_chantiers").includes(option)
+                               selectedChantiers.includes(option) || selectedNaturesChantiers.includes(option)
                                   ? "bg-neon-blue border-neon-blue"
                                   : "border-gray-600"
                               }`}
@@ -726,7 +811,47 @@ export default function OnboardingDCEManager() {
                           ))}
                         </div>
                       </div>
+                    ))} */}
+                    <div className="col-span-2 mt-4">
+                      <label className="block text-sm mb-2">Domaines d’expertise</label>
+                      <select
+                        name="domaines_expertises"
+                        {...register("domaines_expertises", { required: "Ce champ est requis" })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        multiple
+                      >
+                        {expertiseOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.domaines_expertises && (
+                        <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
+                      )}
+                    </div>
+
+                    {["type_chantiers", "natures_chantiers"].map((key) => (
+                      <div key={key} className="col-span-1 mt-4">
+                        <label className="block text-sm mb-2">
+                          {key === "type_chantiers" ? "Types de chantiers" : "Natures de chantiers"}
+                        </label>
+                        <select
+                          name={key}
+                          {...register(key, { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                          multiple
+                        >
+                          {(key === "type_chantiers" ? typesChantiers : naturesChantiers).map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                        {errors[key] && <span className="text-red-500 text-sm">{errors[key].message}</span>}
+                      </div>
                     ))}
+
                   </fieldset>
                   <div className="flex justify-between mt-6">
                     <button  onClick={back} className="text-sm text-gray-400">Retour</button>
