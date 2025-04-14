@@ -675,7 +675,7 @@ setValue(key, updatedNaturesChantiers);
       <div className="text-center mb-8">
         <Link to="/" className="inline-block">
           <h2 className="text-2xl font-bold text-white flex items-center justify-center">
-            <span className="text-blue-400">Inscription</span>
+            <span className="text-blue-400">DCE</span>Manager
           </h2>
         </Link>
         <p className="mt-2 text-white/60">Inscrivez-vous pour recevoir des appels d'offres à jour recueillis depuis le BOAMP</p>
@@ -750,108 +750,147 @@ setValue(key, updatedNaturesChantiers);
                     </p>
                   </div>
                   <fieldset className="grid grid-cols-2 gap-4">
-                    {[
-                      ["nom_entreprise", "Nom de l'entreprise"],
-                      ["numero_siret", "Numéro SIRET"],
-                      ["adresse_siege_social", "Adresse du siège social"],
-                      ["ville", "Ville"],
-                      ["zone_chalandise", "Zone de chalandise"],
-                    ].map(([name, label]) => (
-                      <div key={name}>
-                        <label htmlFor={name} className="block text-sm mb-2">{label}</label>
+                      {/* Nom de l'entreprise */}
+                      <div>
+                        <label htmlFor="nom_entreprise" className="block text-sm mb-2">
+                          Nom de l'entreprise
+                        </label>
                         <input
-                          id={name}
-                          name={name}
-                          {...register(name, { required: "Ce champ est requis" })}
+                          id="nom_entreprise"
+                          name="nom_entreprise"
+                          type="text"
+                          {...register("nom_entreprise", { required: "Ce champ est requis" })}
                           className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                         />
-                        {errors[name] && <span className="text-red-500 text-sm">{errors[name].message}</span>}
+                        {errors.nom_entreprise && (
+                          <span className="text-red-500 text-sm">{errors.nom_entreprise.message}</span>
+                        )}
                       </div>
-                    ))}
-  
-                    {/* <div className="col-span-2 mt-4">
-                      <label className="block text-sm mb-2">Domaines d’expertise</label>
-                      <div className="flex flex-wrap gap-2">
-                        {expertiseOptions.map((key,option) => (
-                          <button
-                            key={key}
-                            type="button"
-                            onClick={() => handleMultiSelect("domaines_expertises", option)}
-                            className={`px-3 py-1 border rounded-full text-sm ${
-                              selectedExpertises.includes(option)
-                                ? "bg-neon-blue border-neon-blue"
-                                : "border-gray-600"
-                            }`}
-                          >
-                            {option}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
 
-                    {["type_chantiers", "natures_chantiers"].map((key) => (
-                      <div key={key} className="col-span-1 mt-4">
-                        <label className="block text-sm mb-2">
-                          {key === "type_chantiers" ? "Types de chantiers" : "Natures de chantiers"}
+                      {/* Numéro SIRET */}
+                      <div>
+                        <label htmlFor="numero_siret" className="block text-sm mb-2">
+                          Numéro SIRET
                         </label>
-                        <div className="flex flex-wrap gap-2 text-sm">
-                          {(key === "type_chantiers" ? typesChantiers : naturesChantiers).map((option) => (
-                            <button
-                              key={option}
-                              type="button"
-                              onClick={() => handleMultiSelect(key === "type_chantiers"? "type_chantiers" : "natures_chantiers" , option)}
-                              className={`px-3 py-1 border rounded-full text-sm ${
-                               selectedChantiers.includes(option) || selectedNaturesChantiers.includes(option)
-                                  ? "bg-neon-blue border-neon-blue"
-                                  : "border-gray-600"
-                              }`}
-                            >
-                              {option}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))} */}
-                    <div className="col-span-2 mt-4">
-                      <label className="block text-sm mb-2">Domaines d’expertise</label>
-                      <select
-                        name="domaines_expertises"
-                        {...register("domaines_expertises", { required: "Ce champ est requis" })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        multiple
-                      >
-                        {expertiseOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.domaines_expertises && (
-                        <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
-                      )}
-                    </div>
-
-                    {["type_chantiers", "natures_chantiers"].map((key) => (
-                      <div key={key} className="col-span-1 mt-4">
-                        <label className="block text-sm mb-2">
-                          {key === "type_chantiers" ? "Types de chantiers" : "Natures de chantiers"}
-                        </label>
-                        <select
-                          name={key}
-                          {...register(key, { required: "Ce champ est requis" })}
+                        <input
+                          id="numero_siret"
+                          name="numero_siret"
+                          type="text"
+                          {...register("numero_siret", { required: "Ce champ est requis" })}
                           className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                          multiple
+                        />
+                        {errors.numero_siret && (
+                          <span className="text-red-500 text-sm">{errors.numero_siret.message}</span>
+                        )}
+                      </div>
+
+                      {/* Adresse du siège social */}
+                      <div>
+                        <label htmlFor="adresse_siege_social" className="block text-sm mb-2">
+                          Adresse du siège social
+                        </label>
+                        <input
+                          id="adresse_siege_social"
+                          name="adresse_siege_social"
+                          type="text"
+                          {...register("adresse_siege_social", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.adresse_siege_social && (
+                          <span className="text-red-500 text-sm">{errors.adresse_siege_social.message}</span>
+                        )}
+                      </div>
+
+                      {/* Ville */}
+                      <div>
+                        <label htmlFor="ville" className="block text-sm mb-2">
+                          Ville
+                        </label>
+                        <input
+                          id="ville"
+                          name="ville"
+                          type="text"
+                          {...register("ville", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.ville && (
+                          <span className="text-red-500 text-sm">{errors.ville.message}</span>
+                        )}
+                      </div>
+
+                      {/* Zone de chalandise */}
+                      <div>
+                        <label htmlFor="zone_chalandise" className="block text-sm mb-2">
+                          Zone de chalandise
+                        </label>
+                        <input
+                          id="zone_chalandise"
+                          name="zone_chalandise"
+                          type="text"
+                          {...register("zone_chalandise", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.zone_chalandise && (
+                          <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
+                        )}
+                      </div>
+
+                      {/* Domaines d’expertise */}
+                      <div className="col-span-2 mt-4">
+                        <label className="block text-sm mb-2">Domaines d’expertise</label>
+                        <select
+                          name="domaines_expertises"
+                          {...register("domaines_expertises", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                         >
-                          {(key === "type_chantiers" ? typesChantiers : naturesChantiers).map((option) => (
-                            <option key={option} value={option}>
-                              {option}
+                          {domainesChantiers && domainesChantiers.map((option) => (
+                            <option key={option.id} value={option.nom}>
+                            {option.nom}
+                          </option>
+                          ))}
+                        </select>
+                        {errors.domaines_expertises && (
+                          <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
+                        )}
+                      </div>
+
+                      {/* Types de chantiers */}
+                      <div className="col-span-1 mt-4">
+                        <label className="block text-sm mb-2">Types de chantiers</label>
+                        <select
+                          name="type_chantiers"
+                          {...register("type_chantiers", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        >
+                          { typesChantiers && typesChantiers.map((option) => (
+                            <option key={option.id} value={option.nom}>
+                            {option.nom}
+                          </option>
+                          ))}
+                        </select>
+                        {errors.type_chantiers && (
+                          <span className="text-red-500 text-sm">{errors.type_chantiers.message}</span>
+                        )}
+                      </div>
+
+                      {/* Natures de chantiers */}
+                      <div className="col-span-1 mt-4">
+                        <label className="block text-sm mb-2">Natures de chantiers</label>
+                        <select
+                          name="natures_chantiers"
+                          {...register("natures_chantiers", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        >
+                          { naturesChantiers && naturesChantiers.map((option) => (
+                            <option key={option.id} value={option.nom}>
+                              {option.nom}
                             </option>
                           ))}
                         </select>
-                        {errors[key] && <span className="text-red-500 text-sm">{errors[key].message}</span>}
+                        {errors.natures_chantiers && (
+                          <span className="text-red-500 text-sm">{errors.natures_chantiers.message}</span>
+                        )}
                       </div>
-                    ))}
-
                   </fieldset>
                   <div className="flex justify-between mt-6">
                     <button  onClick={back} className="text-sm text-gray-400">Retour</button>
