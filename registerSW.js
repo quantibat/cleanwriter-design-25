@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/cleanwriter-design-25/sw.js', { scope: '/cleanwriter-design-25/' })})}
