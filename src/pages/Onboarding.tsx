@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import {  MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 const steps = [
   "Type d'entreprise",
@@ -21,7 +22,7 @@ export default function OnboardingDCEManager() {
   const navigate = useNavigate();
   
   // Initialisation de useForm
-  const { register, handleSubmit, formState: { errors }, setValue, getValues, trigger, control } = useForm({
+  const { register, handleSubmit, formState: { errors }, setValue,  trigger, control } = useForm({
     defaultValues: {
       type_entreprise: "",
       nom_entreprise: "",
@@ -99,7 +100,6 @@ export default function OnboardingDCEManager() {
   
       if (entrepriseError) throw entrepriseError;
   
-      console.log("Entreprise insérée avec succès:", entrepriseData);
   
       // Étape 3 : Récupération des IDs pour les jointures
       const { data: domainesData, error: domainesError } = await supabase
@@ -158,7 +158,6 @@ export default function OnboardingDCEManager() {
   
       if (insertNaturesError) throw insertNaturesError;
   
-      console.log("Relations ajoutées avec succès.");
     } catch (error) {
       console.error("Erreur lors de l'insertion dans Supabase:", error);
     }
@@ -183,7 +182,6 @@ export default function OnboardingDCEManager() {
   
       if (error) throw error;
   
-      console.log('Types de Chantiers:', data);
       return data;
     } catch (error) {
       console.error('Erreur lors de la récupération des types de chantiers:', error);
@@ -213,7 +211,6 @@ export default function OnboardingDCEManager() {
   
       if (error) throw error;
   
-      console.log('Natures de Chantiers:', data);
       return data;
     } catch (error) {
       console.error('Erreur lors de la récupération des natures de chantiers:', error);
@@ -259,6 +256,60 @@ export default function OnboardingDCEManager() {
     setValue("code_postal", postcode);
     setSuggestions([]);
   };
+
+
+  const [entreprise, setEntreprise] = useState({
+    nom: '',
+    adresse: '',
+    ville: '',
+    codePostal: '',
+    // Ajoute ici d'autres champs selon ce que tu veux remplir
+  });
+
+  const handleSiretChange = async (e) => {
+    const value = e.target.value;
+
+    if (value.length === 14) { 
+      try {
+        const responseData = await fetch('https://api.insee.fr/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            grant_type: 'client_credentials',
+            client_id: '5363c6ac-02c8-4c77-9bca-4d73c00db7b5',
+            client_secret: 'T5cpypP3tavsQhVsAatENDuTwmoyWYF3',
+          }),
+        });
+        
+        const dataAPI = await responseData.json();
+        const response = await axios.get(`https://api.insee.fr/entreprises/sirene/V3/siret/${value}`, {
+          headers: {
+            'Authorization': `Bearer ${dataAPI.access_token}` 
+          }
+        });
+
+        console.log(dataAPI.access_token);
+
+        const entrepriseData = response.data.etablissement;
+
+        // Remplir les champs automatiquement avec les données de l'entreprise
+        setEntreprise({
+          nom: entrepriseData.uniteLegale.denomination,
+          adresse: entrepriseData.adresseEtablissement.libelleVoie,
+          ville: entrepriseData.adresseEtablissement.libelleCommune,
+          codePostal: entrepriseData.adresseEtablissement.codePostal,
+        });
+
+      } catch (err) 
+      {
+        console.log('Numéro SIRET invalide ou entreprise non trouvée.');
+      }
+    }
+  };
+
+  
   
 
   return (
@@ -341,25 +392,8 @@ export default function OnboardingDCEManager() {
                     </p>
                   </div>
                   <fieldset className="grid grid-cols-2 gap-4">
-                      {/* Nom de l'entreprise */}
-                      <div>
-                        <label htmlFor="nom_entreprise" className="block text-sm mb-2">
-                          Nom de l'entreprise
-                        </label>
-                        <input
-                          id="nom_entreprise"
-                          name="nom_entreprise"
-                          type="text"
-                          {...register("nom_entreprise", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.nom_entreprise && (
-                          <span className="text-red-500 text-sm">{errors.nom_entreprise.message}</span>
-                        )}
-                      </div>
-
-                      {/* Numéro SIRET */}
-                      <div>
+                                          {/* Numéro SIRET */}
+                                          <div>
                         <label htmlFor="numero_siret" className="block text-sm mb-2">
                           Numéro SIRET
                         </label>
@@ -369,6 +403,7 @@ export default function OnboardingDCEManager() {
                             name="numero_siret"
                             type="text"
                             inputMode="numeric"
+                            onChange={handleSiretChange}
                             maxLength={14}
                             {...register("numero_siret", {
                               required: "Ce champ est requis",
@@ -387,6 +422,22 @@ export default function OnboardingDCEManager() {
                           <span className="text-red-500 text-sm">{errors.numero_siret.message}</span>
                         )}
                       </div>
+                      {/* Nom de l'entreprise */}
+                      <div>
+                        <label htmlFor="nom_entreprise" className="block text-sm mb-2">
+                          Nom de l'entreprise
+                        </label>
+                        <input
+                          id="nom_entreprise"
+                          name="nom_entreprise"
+                          type="text"
+                          {...register("nom_entreprise", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.nom_entreprise && (
+                          <span className="text-red-500 text-sm">{errors.nom_entreprise.message}</span>
+                        )}
+                      </div>
 
                       {/* Adresse du siège social */}
                       <div>
@@ -397,7 +448,7 @@ export default function OnboardingDCEManager() {
                             id="adresse_siege_social"
                             type="text"
                             {...register("adresse_siege_social", { required: "Ce champ est requis" })}
-                            onChange={(e) => handleAdresseChange(e.target.value)}
+                            onChange={(e) => handleAdresseChange(e.target.value) }
                             className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                             autoComplete="off"
                           />
