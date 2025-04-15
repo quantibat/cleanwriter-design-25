@@ -177,7 +177,7 @@ const MultiSelectDropdown = ({ options, value = [], onChange, label }) => {
         <span className="text-white text-sm ">{selectedLabels}</span>
       </div>
       {isOpen && (
-        <div className="absolute z-1 mt-1 w-full bg-gray-800 border border-gray-800 rounded-md shadow-md max-h-60 overflow-auto">
+        <div className="absolute z-20 mt-1 w-full bg-gray-800 border border-gray-800 rounded-md shadow-md h-60 overflow-auto">
           { options && options.map((option) => (
             <label
               key={option.value}

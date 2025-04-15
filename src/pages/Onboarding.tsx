@@ -196,7 +196,7 @@ setValue(key, updatedNaturesChantiers);
   const fetchDomainesChantiers = async () => {
     try {
       const { data, error } = await supabase
-        .from('domaines_chantiers')
+        .from('domaines_expertises')
         .select('*'); 
   
       if (error) throw error;
