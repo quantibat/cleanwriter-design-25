@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => ({
       }
     })
   ].filter(Boolean),
-  base: "/cleanwriter-design-25/",
+  base: "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

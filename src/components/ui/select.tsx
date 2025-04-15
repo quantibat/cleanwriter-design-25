@@ -144,6 +144,62 @@ const SelectSeparator = React.forwardRef<
 ))
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
+
+const MultiSelectDropdown = ({ options, value = [], onChange, label }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const dropdownRef = React.useRef();
+
+  const toggleOption = (option) => {
+    const exists = value.includes(option);
+    onChange(exists ? value && value.filter((v) => v !== option) : [...value, option]);
+  };
+
+  const handleClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedLabels = options && options.filter((opt) => value.includes(opt.value)).map((opt) => opt.label).join(", ") || "Sélectionner...";
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <label className="block text-sm mb-2 text-white">{label}</label>
+      <div
+        className="border border-gray-700 rounded-sm p-3 bg-gray-800 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="text-white text-sm ">{selectedLabels}</span>
+      </div>
+      {isOpen && (
+        <div className="absolute z-1 mt-1 w-full bg-gray-800 border border-gray-800 rounded-md shadow-md max-h-60 overflow-auto">
+          { options && options.map((option) => (
+            <label
+              key={option.value}
+              className="flex items-center px-4 py-2"
+            >
+              <input
+                type="checkbox"
+                checked={value.includes(option.value)}
+                onChange={() => toggleOption(option.value)}
+                className="mr-2 bg-transparent-200  "
+              />
+              {option.label}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+
 export {
   Select,
   SelectGroup,
@@ -155,4 +211,5 @@ export {
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,
+  MultiSelectDropdown,
 }
