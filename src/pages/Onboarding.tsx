@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Controller, useForm } from "react-hook-form"; 
 import { supabase } from "@/integrations/supabase/client";
 import {  MultiSelectDropdown } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   "Type d'entreprise",
@@ -17,6 +18,7 @@ const steps = [
 export default function OnboardingDCEManager() {
   const [step, setStep] = useState(0);
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   // Initialisation de useForm
   const { register, handleSubmit, formState: { errors }, setValue, getValues, trigger, control } = useForm({
@@ -32,9 +34,11 @@ export default function OnboardingDCEManager() {
       natures_chantiers: [],
       nombre_ao_mensuels: "",
       budget_conditions_financieres: "",
-      nom_prenom_contact: "",
       email: "",
       password: "",
+      prenom: "",
+      nom: "",
+      interest: "",
     }
   });
 
@@ -54,129 +58,122 @@ export default function OnboardingDCEManager() {
   
   const back = () => setStep((prev) => Math.max(prev - 1, 0));
 
-  const [selectedExpertises, setSelectedExpertises] = useState(getValues("domaines_expertises") ||  []);
-  const [selectedChantiers, setSelectedChantiers] = useState(getValues("type_chantiers") ||  []);
-  const [selectedNaturesChantiers, setSelectedNaturesChantiers] = useState(getValues("natures_chantiers") ||  []);
-
-  const handleMultiSelect = (key, value) => {
-    const updated = selectedExpertises.includes(value)
-      ? selectedExpertises.filter((v) => v !== value)
-      : [...selectedExpertises, value];
-    setSelectedExpertises(updated);
-    setValue(key, updated); 
-
-    const updatedChantiers = selectedChantiers.includes(value)
-    ? selectedChantiers.filter((v) => v !== value)
-    : [...selectedChantiers, value];
-  setSelectedChantiers(updatedChantiers);
-  setValue(key, updatedChantiers); 
-
-  const updatedNaturesChantiers = selectedNaturesChantiers.includes(value)
-  ? selectedNaturesChantiers.filter((v) => v !== value)
-  : [...selectedNaturesChantiers, value];
-setSelectedNaturesChantiers(updatedNaturesChantiers);
-setValue(key, updatedNaturesChantiers); 
-  };
-
-
-
   const handleCardSelect = (key, value) => {
     setValue(key, value);
     setStep((prev) => Math.min(prev + 1, steps.length - 1))
   };
 
   const onSubmit = async (data) => {
-    console.log("Form Data Submitted: ", data);
     try {
+      // Étape 1 : Créer l'utilisateur dans Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password
+      });
+  
+      if (authError) throw authError;
+  
+      const userId = authData?.user?.id;
+  
+      // Étape 2 : Enregistrer les infos de l'entreprise avec l'userId
       const { data: entrepriseData, error: entrepriseError } = await supabase
-        .from('entreprises')
+        .from("entreprises")
         .insert([
           {
+            users_id: userId,
             type_entreprise: data.type_entreprise,
             nom_entreprise: data.nom_entreprise,
             numero_siret: data.numero_siret,
             adresse_siege_social: data.adresse_siege_social,
             ville: data.ville,
-            zone_chalandise: data.zone_chalandise,
+            zone_chalandise: data.zone_chalandise || " ",
             nombre_ao_mensuels: data.nombre_ao_mensuels,
             budget_conditions_financieres: data.budget_conditions_financieres,
-            nom_prenom_contact: data.nom_prenom_contact,
+            nom: data.nom,
+            prenom: data.prenom,
             email: data.email,
-            password: data.password,
+            interest: data.interest,
           },
         ])
-        .single(); // Utilise .single() pour obtenir une seule ligne insérée.
+        .single();
   
       if (entrepriseError) throw entrepriseError;
   
-      console.log('Entreprise insérée avec succès:', entrepriseData);
+      console.log("Entreprise insérée avec succès:", entrepriseData);
   
-      // Récupérer les ID des domaines d'expertise, types de chantiers, natures de chantiers
+      // Étape 3 : Récupération des IDs pour les jointures
       const { data: domainesData, error: domainesError } = await supabase
-        .from('domaines_expertises')
-        .select('id')
-        .in('nom', data.domaines_expertises);
+        .from("domaines_expertises")
+        .select("id")
+        .in("nom", data.domaines_expertises);
   
       if (domainesError) throw domainesError;
   
       const { data: typesData, error: typesError } = await supabase
-        .from('types_chantiers')
-        .select('id')
-        .in('nom', data.type_chantiers);
+        .from("types_chantiers")
+        .select("id")
+        .in("nom", data.type_chantiers);
   
       if (typesError) throw typesError;
   
       const { data: naturesData, error: naturesError } = await supabase
-        .from('natures_chantiers')
-        .select('id')
-        .in('nom', data.natures_chantiers);
+        .from("natures_chantiers")
+        .select("id")
+        .in("nom", data.natures_chantiers);
   
       if (naturesError) throw naturesError;
   
-      // Insérer les relations dans les tables de jointure
-      const entrepriseId = entrepriseData?.id; // ID de l'entreprise insérée
+      const entrepriseId = entrepriseData?.id;
   
       const domainesInsert = domainesData.map((domaine) => ({
         entreprise_id: entrepriseId,
         domaine_id: domaine.id,
       }));
+  
       const typesInsert = typesData.map((type) => ({
         entreprise_id: entrepriseId,
         type_id: type.id,
       }));
+  
       const naturesInsert = naturesData.map((nature) => ({
         entreprise_id: entrepriseId,
         nature_id: nature.id,
       }));
   
-      // Insertion dans les tables de jointure
       const { error: insertDomainesError } = await supabase
-        .from('entreprises_domaines_expertises')
+        .from("entreprises_domaines_expertises")
         .upsert(domainesInsert);
   
       if (insertDomainesError) throw insertDomainesError;
   
       const { error: insertTypesError } = await supabase
-        .from('entreprises_types_chantiers')
+        .from("entreprises_types_chantiers")
         .upsert(typesInsert);
   
       if (insertTypesError) throw insertTypesError;
   
       const { error: insertNaturesError } = await supabase
-        .from('entreprises_natures_chantiers')
+        .from("entreprises_natures_chantiers")
         .upsert(naturesInsert);
   
       if (insertNaturesError) throw insertNaturesError;
   
-      console.log('Relations ajoutées avec succès.');
-  
-      // Réinitialiser les champs ou rediriger l'utilisateur si nécessaire
-  
+      console.log("Relations ajoutées avec succès.");
     } catch (error) {
-      console.error('Erreur lors de l\'insertion dans Supabase:', error);
+      console.error("Erreur lors de l'insertion dans Supabase:", error);
     }
-    toast({ title: "Formulaire envoyé", description: "Vos informations ont été envoyées avec succès." });
+  
+    setTimeout(() => {
+      toast({
+        title: "Inscription réussie",
+        description:
+          "Vous êtes maintenant inscrit et prêt à recevoir des appels d'offres.",
+        duration: 500,
+      });
+      navigate("/dashboard");
+    }, 1000);
   };
+  
 
   const fetchTypesChantiers = async () => {
     try {
@@ -227,6 +224,7 @@ setValue(key, updatedNaturesChantiers);
   const [typesChantiers, setTypesChantiers] = useState([]);
   const [domainesChantiers, setDomainesChantiers] = useState([]);
   const [naturesChantiers, setNaturesChantiers] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -242,6 +240,25 @@ setValue(key, updatedNaturesChantiers);
 
     loadData();
   }, []);
+
+  const handleAdresseChange = async (query) => {
+    if (!query) return setSuggestions([]);
+
+    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=20`);
+    const data = await response.json();
+    setSuggestions(data.features || []);
+  };
+
+  const handleSelectAdresse = (suggestion) => {
+    const fullAddress = suggestion.properties.label;
+    const city = suggestion.properties.city;
+    const postcode = suggestion.properties.postcode;
+
+    setValue("adresse_siege_social", fullAddress);
+    setValue("ville", city);
+    setValue("code_postal", postcode);
+    setSuggestions([]);
+  };
   
 
   return (
@@ -347,12 +364,25 @@ setValue(key, updatedNaturesChantiers);
                           Numéro SIRET
                         </label>
                         <input
-                          id="numero_siret"
-                          name="numero_siret"
-                          type="text"
-                          {...register("numero_siret", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
+                            placeholder="Ex: 12345678901234"
+                            id="numero_siret"
+                            name="numero_siret"
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={14}
+                            {...register("numero_siret", {
+                              required: "Ce champ est requis",
+                              pattern: {
+                                value: /^\d{14}$/,
+                                message: "Le numéro SIRET doit contenir exactement 14 chiffres",
+                              },
+                            })}
+                            onInput={(e) => {
+                              e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+                            }}
+                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                          />
+
                         {errors.numero_siret && (
                           <span className="text-red-500 text-sm">{errors.numero_siret.message}</span>
                         )}
@@ -364,15 +394,31 @@ setValue(key, updatedNaturesChantiers);
                           Adresse du siège social
                         </label>
                         <input
-                          id="adresse_siege_social"
-                          name="adresse_siege_social"
-                          type="text"
-                          {...register("adresse_siege_social", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.adresse_siege_social && (
-                          <span className="text-red-500 text-sm">{errors.adresse_siege_social.message}</span>
-                        )}
+                            id="adresse_siege_social"
+                            type="text"
+                            {...register("adresse_siege_social", { required: "Ce champ est requis" })}
+                            onChange={(e) => handleAdresseChange(e.target.value)}
+                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                            autoComplete="off"
+                          />
+                          {errors.adresse_siege_social && (
+                            <span className="text-red-500 text-sm">{errors.adresse_siege_social.message}</span>
+                          )}
+
+                          {/* Suggestions */}
+                          {suggestions.length > 0 && (
+                            <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow">
+                              {suggestions.map((s, index) => (
+                                <li
+                                  key={index}
+                                  onClick={() => handleSelectAdresse(s)}
+                                  className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                >
+                                  {s.properties.label}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                       </div>
 
                       {/* Ville */}
@@ -404,9 +450,9 @@ setValue(key, updatedNaturesChantiers);
                           {...register("zone_chalandise", { required: "Ce champ est requis" })}
                           className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                         />
-                        {errors.zone_chalandise && (
+                        {/* {errors.zone_chalandise && (
                           <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
-                        )}
+                        )} */}
                       </div>
 
                       {/* Domaines d’expertise */}
@@ -496,6 +542,8 @@ setValue(key, updatedNaturesChantiers);
                         name="nombre_ao_mensuels"
                         {...register("nombre_ao_mensuels", { required: "Ce champ est requis" })}
                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        type="number"
+                        min={1}
                       />
                       {errors.nombre_ao_mensuels && <span className="text-red-500 text-sm">{errors.nombre_ao_mensuels.message}</span>}
                     </div>
@@ -518,6 +566,7 @@ setValue(key, updatedNaturesChantiers);
                         name="budget_conditions_financieres"
                         {...register("budget_conditions_financieres", { required: "Ce champ est requis" })}
                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        
                       />
                       {errors.budget_conditions_financieres && <span className="text-red-500 text-sm">{errors.budget_conditions_financieres.message}</span>}
                     </div>
@@ -541,33 +590,66 @@ setValue(key, updatedNaturesChantiers);
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    {[
-                      ["nom", "Nom"],
-                      ["prenom", "Prénom"],
-                      ["email", "Email professionnel"],
-                    ].map(([name, label]) => (
-                      <div key={name}>
-                        <label htmlFor={name} className="block text-sm mb-2">{label}</label>
+                    {/* Champ : Nom */}
+                      <div>
+                        <label htmlFor="nom" className="block text-sm mb-2">Nom</label>
                         <input
-                          id={name}
-                          name={name}
-                          {...register(name, { required: `${label} est requis` })}
+                          type="text"
+                          {...register("nom", {
+                            minLength: { value: 1, message: "Nom trop court" },
+                          })}
                           className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                         />
-                        {errors[name] && <span className="text-red-500 text-sm">{errors[name].message}</span>}
+                        {errors.nom && <span className="text-red-500 text-sm">{errors.nom.message}</span>}
                       </div>
-                    ))}
-                    <div>
-                      <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
-                      <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        {...register("password", { required: "Mot de passe requis" })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                      />
-                      {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
-                    </div>
+
+                      {/* Champ : Prénom */}
+                      <div>
+                        <label htmlFor="prenom" className="block text-sm mb-2">Prénom</label>
+                        <input
+                          id="prenom"
+                          type="text"
+                          {...register("prenom", {
+                            required: "Prénom est requis",
+                            minLength: { value: 1, message: "Prénom trop court" },
+                          })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.prenom && <span className="text-red-500 text-sm">{errors.prenom.message}</span>}
+                      </div>
+
+                      {/* Champ : Email professionnel */}
+                      <div>
+                        <label htmlFor="email" className="block text-sm mb-2">Email professionnel</label>
+                        <input
+                          id="email"
+                          type="email"
+                          {...register("email", {
+                            required: "Email est requis",
+                            pattern: {
+                              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                              message: "Adresse email invalide",
+                            },
+                          })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+                      </div>
+
+                      {/* Champ : Mot de passe */}
+                      <div>
+                        <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
+                        <input
+                          id="password"
+                          type="password"
+                          {...register("password", {
+                            required: "Mot de passe requis",
+                            minLength: { value: 6, message: "Minimum 6 caractères" },
+                          })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
+                      </div>
                   </div>
                   <div className="flex justify-between mt-6">
                     <button onClick={back} className="text-sm text-gray-400">Retour</button>
