@@ -3,6 +3,7 @@ import React from 'react';
 import { Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 
 const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, icon, isComing, url }) => {
   const toggleFavorite = () => {
@@ -39,7 +40,7 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
             </button>
           </div>
         </div>
-        <CardTitle className="text-lg"><a className='cursor-pointer' href={url}>{title}</a></CardTitle>
+        <CardTitle className="text-lg"><Link className='cursor-pointer' to={url}>{title}</Link></CardTitle>
       </CardHeader>
       <CardContent className='text-gray-300 pb-0'>
         <p className="line-clamp-3 flex-1 text-gray-400 dark:text-gray-400">{description}</p>

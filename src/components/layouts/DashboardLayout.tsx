@@ -5,7 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { useLocation } from 'react-router-dom';
 import { Home } from 'lucide-react';
-import SidebarNavigation from '@/components/SidebarNavigation';
+import N8nChat from '@/pages/Chat';
 
 interface BreadcrumbItem {
   label: string;
@@ -178,6 +178,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 )}
                 <div className="w-full">
                   {children}
+                </div>
+                <div className="absolute bottom-[20px] right-[20px] ">
+                  <N8nChat />
                 </div>
               </div>
             </div>

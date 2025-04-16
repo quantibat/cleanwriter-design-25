@@ -83,9 +83,9 @@ const PublicTenders = ({ tenders }) => {
 
   const filteredTenders = tenders.filter((tender) => {
     return (
-      tender.title.toLowerCase().includes(filters.search.toLowerCase()) &&
-      (filters.type ? tender.type === filters.type : true) &&
-      (filters.location ? tender.location === filters.location : true)
+      tender.metadata.Objet_Appel_Offre.toLowerCase().includes(filters.search.toLowerCase()) &&
+      (filters.type ? tender.metadata.Type_Projet === filters.type : true) &&
+      (filters.location ? tender.metadata.Code_Postal === filters.location : true)
     );
   });
 
@@ -109,19 +109,19 @@ const PublicTenders = ({ tenders }) => {
             >
               <div className="flex flex-row gap-2 justify-start ">
                 <h3 className="text-2xl font-semibold text-white">
-                  {tender.title}
+                  {tender.metadata.Objet_Appel_Offre}
                 </h3>
                 <div className="item-center">
-                <Badge variant="outline">{tender.type}</Badge>
+                <Badge variant="outline">{tender.metadata.Type_Projet}</Badge>
                 </div>
                 <div className="text-xs text-gray-300 mb-4 ml-auto flex flex-col gap-2 text-end justify-self-end absolute right-4 top-4">
-                  <ScoreCircle score={tender.score}/>
+                  <ScoreCircle score={20}/>
                 </div>
               </div>
 
               <div className="w-full">
                 <p className="flex-1 text-sm text-gray-300">
-                  {tender.description}
+                  {tender.content}
                 </p>
               </div>
 
@@ -129,11 +129,11 @@ const PublicTenders = ({ tenders }) => {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center">
                     <MapPin className="mr-1 text-gray-300" size={12} />
-                    <span>{tender.location}</span>
+                    <span>{tender.metadata.Code_Postal}</span>
                   </div>
                   <div className="flex items-center" >
                     <Clock className="mr-1 text-gray-300 font-bold"size={12} />
-                    <span className="text-gray-300"> A rendre avant le {new Date(tender.date).toLocaleDateString()}</span>
+                    <span className="text-gray-300"> A rendre avant le {new Date(tender.metadata.EndDate).toLocaleDateString()}</span>
                   </div>
                 </div>
                 

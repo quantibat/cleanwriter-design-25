@@ -1,7 +1,4 @@
 
-import React from 'react';
-import N8nChat from '@/pages/Chat';
-
 const Footer = () => {
   return (
     <footer className="bg-card/50 pt-20 pb-10 px-6 border-t border-white/5 w-full relative">
@@ -53,9 +50,6 @@ const Footer = () => {
         </div>
       </div>
       
-      <div className="absolute bottom-20 right-4 z-50 backdrop-blur-md rounded-full p-2 shadow-lg">
-        <N8nChat />
-      </div>
     </footer>
   );
 };

@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import PublicTenders from '@/components/Tenders';
+import { supabase } from '@/integrations/supabase/client';
 
 const Offers = () => {
   const breadcrumbs = [
@@ -9,54 +10,27 @@ const Offers = () => {
     { label: "Appel d'offre" }
   ];
 
-  const tenders = [
-    {
-      id: 1,
-      title: "Marché public pour la rénovation d’un bâtiment",
-      description: "Travaux de rénovation d'un bâtiment public dans le centre-ville.",
-      date: "2025-04-03",
-      company: "Société Générale",
-      type: "Travaux",
-      location: "Paris, Île-de-France",
-      url: "https://www.example.com/tender/1",  // Lien vers les détails de l'appel d'offre
-      score:85,
-      attachments: [
-        { name: "CCTP.pdf", url: "https://www.example.com/attachments/cctp.pdf" },
-        { name: "DCE.zip", url: "https://www.example.com/attachments/dce.zip" },
-      ],
-    },
-    {
-      id: 2,
-      title: "Fourniture de matériel informatique",
-      description: "Fourniture de PC portables et accessoires pour une administration publique.",
-      date: "2025-03-28",
-      type: "Fourniture",
-      location: "Lyon, Auvergne-Rhône-Alpes",
-      company: "Thales",
-      url: "https://www.example.com/tender/2",
-      score:55  
-    },
-    {
-      id: 3,
-      title: "Fourniture de matériel informatique",
-      description: "Fourniture de PC portables et accessoires pour une administration publique.",
-      date: "2025-03-28",
-      type: "Fourniture",
-      location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "https://www.example.com/tender/2",
-      score:52  
-    },
-    {
-      id: 4,
-      title: "Fourniture de matériel informatique",
-      description: "Fourniture de PC portables et accessoires pour une administration publique.",
-      date: "2025-03-28",
-      type: "Fourniture",
-      location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "https://www.example.com/tender/2",
-      score:50 
-    },
-  ];
+  const [appelsOffres, setAppelsOffres] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Fonction de chargement initial
+  const fetchAppels = async () => {
+    const { data, error } = await supabase
+      .from('appel_offre')
+      .select('*')
+      .order('id', { ascending: false })
+
+    if (error) {
+      console.error('Erreur de chargement des appels :', error)
+    } else {
+      setAppelsOffres(data)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchAppels()
+  }, [])
   
 
   return (
@@ -65,7 +39,7 @@ const Offers = () => {
       breadcrumbs={breadcrumbs}
     >
       <div className="w-full grid grid-cols-1 gap-8 pt-4">
-        <PublicTenders tenders={tenders}/>
+        <PublicTenders tenders={appelsOffres}/>
       </div>
     </DashboardLayout>
   );
