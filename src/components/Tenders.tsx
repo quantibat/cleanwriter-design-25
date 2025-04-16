@@ -107,20 +107,22 @@ const PublicTenders = ({ tenders }) => {
               key={tender.id}
               className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 bg-[#ffffff12] border-[#384454] border flex flex-col gap-3 relative"
             >
-              <div className="flex flex-row gap-2 justify-start ">
-                <h3 className="text-2xl font-semibold text-white">
+              <div className="item-center w-full flex justify-start">
+                  <Badge variant="outline">{tender.metadata.Type_Projet}</Badge>
+              </div>
+              <div className="flex flex-row gap-2 justify-between">
+                <h3 className="text-2xl font-semibold text-white w-4/5">
                   {tender.metadata.Objet_Appel_Offre}
                 </h3>
-                <div className="item-center">
-                <Badge variant="outline">{tender.metadata.Type_Projet}</Badge>
-                </div>
-                <div className="text-xs text-gray-300 mb-4 ml-auto flex flex-col gap-2 text-end justify-self-end absolute right-4 top-4">
-                  <ScoreCircle score={20}/>
+                <div className="flex flex-col gap-2 ml-auto relative w-1/4 justify-self-end">
+                    <div className="text-xs text-gray-300 ml-auto flex flex-col gap-2 text-end justify-self-end ">
+                      <ScoreCircle score={57} size={80}/>
+                    </div>
                 </div>
               </div>
 
               <div className="w-full">
-                <p className="flex-1 text-sm text-gray-300">
+                <p className="flex-1 text-sm text-gray-300 line-clamp-1">
                   {tender.content}
                 </p>
               </div>
