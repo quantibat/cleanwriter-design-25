@@ -31,14 +31,17 @@ export type Database = {
           created_time: string | null
           email: string
           id: string
+          interest: string | null
+          nom: string | null
           nom_entreprise: string
-          nom_prenom_contact: string | null
           nombre_ao_mensuels: number | null
           numero_contact: string | null
           numero_siret: string | null
           password: string
+          prenom: string | null
           presentation_entreprise: string | null
           type_entreprise: string | null
+          user_id: string | null
           ville: string | null
           zone_chalandise: string | null
         }
@@ -48,14 +51,17 @@ export type Database = {
           created_time?: string | null
           email: string
           id?: string
+          interest?: string | null
+          nom?: string | null
           nom_entreprise: string
-          nom_prenom_contact?: string | null
           nombre_ao_mensuels?: number | null
           numero_contact?: string | null
           numero_siret?: string | null
           password: string
+          prenom?: string | null
           presentation_entreprise?: string | null
           type_entreprise?: string | null
+          user_id?: string | null
           ville?: string | null
           zone_chalandise?: string | null
         }
@@ -65,14 +71,17 @@ export type Database = {
           created_time?: string | null
           email?: string
           id?: string
+          interest?: string | null
+          nom?: string | null
           nom_entreprise?: string
-          nom_prenom_contact?: string | null
           nombre_ao_mensuels?: number | null
           numero_contact?: string | null
           numero_siret?: string | null
           password?: string
+          prenom?: string | null
           presentation_entreprise?: string | null
           type_entreprise?: string | null
+          user_id?: string | null
           ville?: string | null
           zone_chalandise?: string | null
         }
