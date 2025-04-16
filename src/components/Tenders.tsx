@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Clock, MapPin, Star } from "lucide-react";  // Add Star icon
+import { useState } from "react";
+import { Clock, MapPin } from "lucide-react";  // Icônes de react-lucide
 import { Badge } from "./ui/badge";
 import ScoreCircle from "./ui/score";
 import { Button } from "./ui/button";
@@ -56,6 +56,7 @@ const FilterPanel = ({ filters, setFilters }) => {
               </select>
             </div>
             
+            {/* Example of a reset button, similar to the second code's button */}
             <div className="flex justify-end px-3 py-2">
               <button
                 type="button"
@@ -79,20 +80,6 @@ const PublicTenders = ({ tenders }) => {
     type: "",
     location: "",
   });
-
-  const [favoriteTenders, setFavoriteTenders] = useState(new Set());
-
-  const toggleFavorite = (tenderId) => {
-    setFavoriteTenders(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(tenderId)) {
-        newFavorites.delete(tenderId);
-      } else {
-        newFavorites.add(tenderId);
-      }
-      return newFavorites;
-    });
-  };
 
   const filteredTenders = tenders.filter((tender) => {
     return (
@@ -120,26 +107,13 @@ const PublicTenders = ({ tenders }) => {
               key={tender.id}
               className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 bg-[#ffffff12] border-[#384454] border flex flex-col gap-3 relative"
             >
-              <div className="flex flex-row gap-2 justify-start items-center">
-                <h3 className="text-2xl font-semibold text-white mr-2">
+              <div className="flex flex-row gap-2 justify-start ">
+                <h3 className="text-2xl font-semibold text-white">
                   {tender.metadata.Objet_Appel_Offre}
                 </h3>
-                
-                <button 
-                  onClick={() => toggleFavorite(tender.id)}
-                  className="text-gray-300 hover:text-yellow-500 transition-colors"
-                  title={favoriteTenders.has(tender.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
-                >
-                  <Star 
-                    size={20} 
-                    fill={favoriteTenders.has(tender.id) ? "currentColor" : "none"}
-                  />
-                </button>
-
                 <div className="item-center">
-                  <Badge variant="outline">{tender.metadata.Type_Projet}</Badge>
+                <Badge variant="outline">{tender.metadata.Type_Projet}</Badge>
                 </div>
-
                 <div className="text-xs text-gray-300 mb-4 ml-auto flex flex-col gap-2 text-end justify-self-end absolute right-4 top-4">
                   <ScoreCircle score={20}/>
                 </div>
@@ -181,3 +155,5 @@ const PublicTenders = ({ tenders }) => {
 };
 
 export default PublicTenders;
+
+
