@@ -1,9 +1,10 @@
 
 import React from 'react';
+import N8nChat from '@/pages/Chat';
 
 const Footer = () => {
   return (
-    <footer className="bg-card/50 pt-20 pb-10 px-6 border-t border-white/5 w-full">
+    <footer className="bg-card/50 pt-20 pb-10 px-6 border-t border-white/5 w-full relative">
       <div className="w-[85%] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
@@ -50,6 +51,10 @@ const Footer = () => {
             © {new Date().getFullYear()} DCE Manager. Tous droits réservés.
           </p>
         </div>
+      </div>
+      
+      <div className="absolute bottom-4 right-4 z-50">
+        <N8nChat />
       </div>
     </footer>
   );
