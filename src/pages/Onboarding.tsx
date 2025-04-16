@@ -125,6 +125,8 @@ export default function OnboardingDCEManager() {
       if (naturesError) throw naturesError;
   
       const entrepriseId = entrepriseData?.[0]?.id;
+
+      console.log("Entreprise ID:", entrepriseId);
   
       // Prepare data for insertion
       const domainesInsert = domainesData.map((domaine) => ({
