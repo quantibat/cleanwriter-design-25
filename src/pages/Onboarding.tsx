@@ -392,8 +392,8 @@ export default function OnboardingDCEManager() {
                     </p>
                   </div>
                   <fieldset className="grid grid-cols-2 gap-4">
-                                          {/* Numéro SIRET */}
-                                          <div>
+                    {/* Numéro SIRET */}
+                      <div>
                         <label htmlFor="numero_siret" className="block text-sm mb-2">
                           Numéro SIRET
                         </label>
