@@ -1,48 +1,53 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import TenderDetail from '@/components/TenderDetail';
+import { supabase } from '@/integrations/supabase/client';
+import { useParams } from 'react-router-dom';
+
 const OfferDetail = () => {
   const breadcrumbs = [
     { label: "Détail de l'appel d'offre" }
   ];
 
-  const tenders = [
-    {
-        id: 1,
-        title: "Marché public pour la rénovation d’un bâtiment",
-        description: "Travaux de rénovation d'un bâtiment public dans le centre-ville.",
-        date: "2025-04-03",
-        company: "Société Générale",
-        type: "Travaux",
-        location: "Paris, Île-de-France",
-        url: "https://www.example.com/tender/1",  // Lien vers les détails de l'appel d'offre
-        score:85,
-        attachments: [
-          { name: "CCTP.pdf", url: "https://www.example.com/attachments/cctp.pdf" },
-          { name: "DCE.zip", url: "https://www.example.com/attachments/dce.zip" },
-        ],
-      },
-    {
-      id: 2,
-      title: "Fourniture de matériel informatique",
-      description: "Fourniture de PC portables et accessoires pour une administration publique.",
-      date: "2025-03-28",
-      type: "Fourniture",
-      location: "Lyon, Auvergne-Rhône-Alpes",
-      url: "https://www.example.com/tender/2",
-      score:55  
-    },
-  ];
-  
+  const { id } = useParams(); // ✅ Corrigé ici
+
+  const [tender, setTender] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTenderById = async () => {
+      if (!id) return;
+
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from('appel_offre') 
+        .select('*')
+        .eq('id', id) // si `id` est un UUID ou une string en BDD
+        .single();
+
+      if (error) {
+        console.error('Erreur de chargement:', error);
+      } else {
+        setTender(data);
+      }
+
+      setLoading(false);
+    };
+
+    fetchTenderById();
+  }, [id]);
 
   return (
-    <DashboardLayout 
-      activeTab="tools" 
-      breadcrumbs={breadcrumbs}
-    >
+    <DashboardLayout activeTab="tools" breadcrumbs={breadcrumbs}>
       <div className="w-full grid grid-cols-1 gap-8 pt-4">
-        <TenderDetail tender={tenders[0]} />
+        {loading ? (
+          <p className="text-gray-300">Chargement...</p>
+        ) : tender ? (
+          <TenderDetail tender={tender} />
+        ) : (
+          <p className="text-red-500">Aucun appel d'offre trouvé.</p>
+        )}
       </div>
     </DashboardLayout>
   );
