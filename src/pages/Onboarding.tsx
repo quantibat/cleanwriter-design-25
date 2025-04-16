@@ -424,6 +424,7 @@ export default function OnboardingDCEManager() {
                     </p>
                   </div>
                   <fieldset className="grid grid-cols-2 gap-4">
+<<<<<<< HEAD
                     <div>
                       <label htmlFor="numero_siret" className="block text-sm mb-2">
                         Numéro SIRET
@@ -527,6 +528,146 @@ export default function OnboardingDCEManager() {
                       )}
                     </div>
                     <div className="col-span-2 mt-4">
+=======
+                                          {/* Numéro SIRET */}
+                                          <div>
+                        <label htmlFor="numero_siret" className="block text-sm mb-2">
+                          Numéro SIRET
+                        </label>
+                        <input
+                            placeholder="Ex: 12345678901234"
+                            id="numero_siret"
+                            name="numero_siret"
+                            type="text"
+                            inputMode="numeric"
+                            onChange={handleSiretChange}
+                            maxLength={14}
+                            {...register("numero_siret", {
+                              required: "Ce champ est requis",
+                              pattern: {
+                                value: /^\d{14}$/,
+                                message: "Le numéro SIRET doit contenir exactement 14 chiffres",
+                              },
+                            })}
+                            onInput={(e) => {
+                              e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+                            }}
+                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                          />
+
+                        {errors.numero_siret && (
+                          <span className="text-red-500 text-sm">{errors.numero_siret.message}</span>
+                        )}
+                      </div>
+                      {/* Nom de l'entreprise */}
+                      <div>
+                        <label htmlFor="nom_entreprise" className="block text-sm mb-2">
+                          Nom de l'entreprise
+                        </label>
+                        <input
+                          id="nom_entreprise"
+                          name="nom_entreprise"
+                          type="text"
+                          {...register("nom_entreprise", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.nom_entreprise && (
+                          <span className="text-red-500 text-sm">{errors.nom_entreprise.message}</span>
+                        )}
+                      </div>
+
+                      {/* Adresse du siège social */}
+                      <div>
+                        <label htmlFor="adresse_siege_social" className="block text-sm mb-2">
+                          Adresse du siège social
+                        </label>
+                        <input
+                            id="adresse_siege_social"
+                            type="text"
+                            {...register("adresse_siege_social", { required: "Ce champ est requis" })}
+                            onChange={(e) => handleAdresseChange(e.target.value) }
+                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                            autoComplete="off"
+                          />
+                          {errors.adresse_siege_social && (
+                            <span className="text-red-500 text-sm">{errors.adresse_siege_social.message}</span>
+                          )}
+
+                          {/* Suggestions */}
+                          {suggestions.length > 0 && (
+                            <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow">
+                              {suggestions.map((s, index) => (
+                                <li
+                                  key={index}
+                                  onClick={() => handleSelectAdresse(s)}
+                                  className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                >
+                                  {s.properties.label}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                      </div>
+
+                      {/* Ville */}
+                      <div>
+                        <label htmlFor="ville" className="block text-sm mb-2">
+                          Ville
+                        </label>
+                        <input
+                          id="ville"
+                          name="ville"
+                          type="text"
+                          {...register("ville", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {errors.ville && (
+                          <span className="text-red-500 text-sm">{errors.ville.message}</span>
+                        )}
+                      </div>
+
+                      {/* Zone de chalandise */}
+                      <div>
+                        <label htmlFor="zone_chalandise" className="block text-sm mb-2">
+                          Zone de chalandise
+                        </label>
+                        <input
+                          id="zone_chalandise"
+                          name="zone_chalandise"
+                          type="text"
+                          {...register("zone_chalandise", { required: "Ce champ est requis" })}
+                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        />
+                        {/* {errors.zone_chalandise && (
+                          <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
+                        )} */}
+                      </div>
+
+                      {/* Domaines d’expertise */}
+                      <div className="col-span-2 mt-4">
+                        <Controller
+                          control={control}
+                          name="domaines_expertises"
+                          rules={{ required: "Ce champ est requis" }}
+                          render={({ field }) => (
+                            <MultiSelectDropdown
+                              label="Domaines d’expertise"
+                              options={ domainesChantiers && domainesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
+                              value={field.value || []}
+                              onChange={field.onChange}
+                            />
+                          )}
+                        />
+                        {errors.domaines_expertises && (
+                          <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
+                        )}
+                      </div>
+
+
+
+                      {/* Types de chantiers */}
+                      <div className="col-span-1 mt-4">
+>>>>>>> parent of d09e1f4 (Correction)
                       <Controller
                         control={control}
                         name="domaines_expertises"
