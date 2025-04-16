@@ -1,14 +1,12 @@
-
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BriefcaseBusiness, Building, Home, Info, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast"; 
-import { Controller, useForm } from "react-hook-form"; 
+import { useToast } from "@/hooks/use-toast";
+import { Controller, useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import { createClient } from "@supabase/supabase-js";
 
 const steps = [
   "Type d'entreprise",
@@ -66,17 +64,40 @@ export default function OnboardingDCEManager() {
 
   const onSubmit = async (data) => {
     try {
-      // Register the user with Supabase Auth
+      // Step 1: Register the user with Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
-        password: data.password
+        password: data.password,
+        options: {
+          data: {
+            full_name: `${data.prenom} ${data.nom}`.trim(),
+          },
+        },
       });
-  
-      if (authError) throw authError;
-  
+
+      if (authError) {
+        if (authError.message.includes("password")) {
+          toast({
+            title: "Erreur de mot de passe",
+            description: "Le mot de passe doit contenir au moins 6 caractères, une majuscule, une minuscule et un chiffre",
+            variant: "destructive",
+            duration: 5000,
+          });
+        } else {
+          toast({
+            title: "Erreur d'inscription",
+            description: authError.message,
+            variant: "destructive",
+            duration: 3000,
+          });
+        }
+        return;
+      }
+
       const userId = authData?.user?.id;
-  
-      // Insert the enterprise data
+      if (!userId) throw new Error("User ID not found");
+
+      // Step 2: Insert the enterprise data
       const { data: entrepriseData, error: entrepriseError } = await supabase
         .from("entreprises")
         .insert([
@@ -87,107 +108,106 @@ export default function OnboardingDCEManager() {
             numero_siret: data.numero_siret,
             adresse_siege_social: data.adresse_siege_social,
             ville: data.ville,
-            zone_chalandise: data.zone_chalandise || " ",
+            zone_chalandise: data.zone_chalandise || "",
             nombre_ao_mensuels: data.nombre_ao_mensuels,
             budget_conditions_financieres: data.budget_conditions_financieres,
             nom: data.nom,
             prenom: data.prenom,
             email: data.email,
             interest: data.interest,
+            password: data.password,
           },
         ])
         .select();
-  
+
       if (entrepriseError) throw entrepriseError;
-  
-      // Fetch domain expertise IDs
-      const { data: domainesData, error: domainesError } = await supabase
-        .from("domaines_expertises")
-        .select("id")
-        .in("nom", data.domaines_expertises);
-  
-      if (domainesError) throw domainesError;
-  
-      // Fetch types of construction sites IDs
-      const { data: typesData, error: typesError } = await supabase
-        .from("types_chantiers")
-        .select("id")
-        .in("nom", data.type_chantiers);
-  
-      if (typesError) throw typesError;
-  
-      // Fetch natures of construction sites IDs
-      const { data: naturesData, error: naturesError } = await supabase
-        .from("natures_chantiers")
-        .select("id")
-        .in("nom", data.natures_chantiers);
-  
-      if (naturesError) throw naturesError;
-  
+
       const entrepriseId = entrepriseData?.[0]?.id;
 
-      console.log("Entreprise ID:", entrepriseId);
-  
-      // Prepare data for insertion
-      const domainesInsert = domainesData.map((domaine) => ({
-        entreprise_id: entrepriseId,
-        domaine_id: domaine.id,
-      }));
-  
-      const typesInsert = typesData.map((type) => ({
-        entreprise_id: entrepriseId,
-        type_id: type.id,
-      }));
-  
-      const naturesInsert = naturesData.map((nature) => ({
-        entreprise_id: entrepriseId,
-        nature_id: nature.id,
-      }));
-  
-      // Insert domain expertise relationships
-      const { error: insertDomainesError } = await supabase
-        .from("entreprises_domaines_expertises")
-        .upsert(domainesInsert);
-  
-      if (insertDomainesError) throw insertDomainesError;
-  
-      // Insert types of construction sites relationships
-      const { error: insertTypesError } = await supabase
-        .from("entreprises_types_chantiers")
-        .upsert(typesInsert);
-  
-      if (insertTypesError) throw insertTypesError;
-  
-      // Insert natures of construction sites relationships
-      const { error: insertNaturesError } = await supabase
-        .from("entreprises_natures_chantiers")
-        .upsert(naturesInsert);
-  
-      if (insertNaturesError) throw insertNaturesError;
-  
+      // Step 3: Insert relations for domaines, types, and natures
+      if (data.domaines_expertises?.length > 0) {
+        const { error: domainesError } = await supabase
+          .from("entreprises_domaines_expertises")
+          .insert(
+            data.domaines_expertises.map(domaine => ({
+              entreprise_id: entrepriseId,
+              domaine_id: domaine.id,
+            }))
+          );
+        if (domainesError) throw domainesError;
+      }
+
+      if (data.type_chantiers?.length > 0) {
+        const { error: typesError } = await supabase
+          .from("entreprises_types_chantiers")
+          .insert(
+            data.type_chantiers.map(type => ({
+              entreprise_id: entrepriseId,
+              type_id: type.id,
+            }))
+          );
+        if (typesError) throw typesError;
+      }
+
+      if (data.natures_chantiers?.length > 0) {
+        const { error: naturesError } = await supabase
+          .from("entreprises_natures_chantiers")
+          .insert(
+            data.natures_chantiers.map(nature => ({
+              entreprise_id: entrepriseId,
+              nature_id: nature.id,
+            }))
+          );
+        if (naturesError) throw naturesError;
+      }
+
+      // Show success message
+      toast({
+        title: "Inscription réussie",
+        description: "Votre compte a été créé. Un email de confirmation vous a été envoyé.",
+        duration: 5000,
+      });
+
+      // Redirect to dashboard
+      navigate("/dashboard");
+
     } catch (error) {
-      console.error("Erreur lors de l'insertion dans Supabase:", error);
+      console.error("Erreur lors de l'inscription:", error);
       toast({
         title: "Erreur lors de l'inscription",
-        description: "Une erreur est survenue. Veuillez réessayer plus tard.",
+        description: error.message || "Une erreur est survenue",
         variant: "destructive",
-        duration: 3000,
+        duration: 5000,
       });
-      return;
     }
-  
-    // Show success message and redirect
-    toast({
-      title: "Inscription réussie",
-      description: "Vous êtes maintenant inscrit et prêt à recevoir des appels d'offres.",
-      duration: 3000,
-    });
-    
-    // Redirect after a short delay
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1500);
   };
+
+  const passwordValidation = {
+    required: "Le mot de passe est requis",
+    minLength: {
+      value: 6,
+      message: "Le mot de passe doit contenir au moins 6 caractères"
+    },
+    pattern: {
+      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+      message: "Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre"
+    }
+  };
+
+  const passwordField = (
+    <div>
+      <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
+      <input
+        id="password"
+        type="password"
+        {...register("password", passwordValidation)}
+        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+      />
+      {errors.password && (
+        <span className="text-red-500 text-sm">{errors.password.message}</span>
+      )}
+    </div>
+  );
 
   // Fetch data for dropdowns
   const fetchTypesChantiers = async () => {
@@ -690,17 +710,7 @@ export default function OnboardingDCEManager() {
                       {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
                     </div>
                     <div>
-                      <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
-                      <input
-                        id="password"
-                        type="password"
-                        {...register("password", {
-                          required: "Mot de passe requis",
-                          minLength: { value: 6, message: "Minimum 6 caractères" },
-                        })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                      />
-                      {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
+                      {passwordField}
                     </div>
                   </div>
                   <div className="flex justify-between mt-6">
