@@ -1,1 +1,3 @@
 project_id = "gdjfwuaevdfxegcyoirw"
+[functions.insee-siret]
+verify_jwt = false

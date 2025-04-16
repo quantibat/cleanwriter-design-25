@@ -8,7 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import { createClient } from "@supabase/supabase-js";
 
 const steps = [
   "Type d'entreprise",
@@ -280,50 +280,30 @@ export default function OnboardingDCEManager() {
     const value = e.target.value;
 
     if (value.length === 14) { 
+
       try {
-        // Step 1: Get the access token from INSEE API
-        const tokenResponse = await fetch('https://api.insee.fr/token', {
-          method: 'POST',
+        const res = await fetch("https://gdjfwuaevdfxegcyoirw.supabase.co/functions/v1/insee-siret", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/json"
           },
-          body: new URLSearchParams({
-            grant_type: 'client_credentials',
-            client_id: '5363c6ac-02c8-4c77-9bca-4d73c00db7b5',
-            client_secret: 'T5cpypP3tavsQhVsAatENDuTwmoyWYF3',
-          }),
+          body: JSON.stringify({ siret: value })
         });
-        
-        if (!tokenResponse.ok) {
-          throw new Error('Échec de récupération du token INSEE');
-        }
-        
-        const tokenData = await tokenResponse.json();
-        
-        // Step 2: Use the token to fetch company data by SIRET
-        const companyResponse = await axios.get(
-          `https://api.insee.fr/entreprises/sirene/V3/siret/${value}`, 
-          {
-            headers: {
-              'Authorization': `Bearer ${tokenData.access_token}` 
-            }
-          }
-        );
-
-        const entrepriseData = companyResponse.data.etablissement;
-
-        // Step 3: Set form values with the fetched data
-        setValue("nom_entreprise", entrepriseData.uniteLegale.denominationUniteLegale || '');
-        
+        const data = await res.json();
+  
+        console.log(data)
+        setValue("nom_entreprise", data.etablissement.uniteLegale.denominationUniteLegale || "");
+        setValue("ville", data.etablissement.adresseEtablissement.libelleCommuneEtablissement || "");
+        setValue("numero_siret", value);
+  
         // Construct address from available components
-        const numeroVoie = entrepriseData.adresseEtablissement.numeroVoieEtablissement || '';
-        const typeVoie = entrepriseData.adresseEtablissement.typeVoieEtablissement || '';
-        const libelleVoie = entrepriseData.adresseEtablissement.libelleVoieEtablissement || '';
+        const numeroVoie = data.etablissement.adresseEtablissement.numeroVoieEtablissement || '';
+        const typeVoie = data.etablissement.adresseEtablissement.typeVoieEtablissement || '';
+        const libelleVoie = data.etablissement.adresseEtablissement.libelleVoieEtablissement || '';
         const adresseComplete = `${numeroVoie} ${typeVoie} ${libelleVoie}`.trim();
         
         setValue("adresse_siege_social", adresseComplete);
-        setValue("ville", entrepriseData.adresseEtablissement.libelleCommuneEtablissement || '');
-        setValue("numero_siret", value);
+ 
 
         // Show success notification
         toast({
@@ -332,17 +312,17 @@ export default function OnboardingDCEManager() {
           duration: 3000,
         });
 
-      } catch (err) {
-        console.error('Erreur lors de la récupération des données:', err);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des informations SIRET:", error);
         toast({
           title: "Erreur",
-          description: "Impossible de récupérer les informations de l'entreprise. Veuillez vérifier le numéro SIRET.",
+          description: "Une erreur est survenue lors de la récupération des informations.",
           variant: "destructive",
           duration: 3000,
         });
       }
     }
-  };
+  }
 
   return (
     <div className="h-auto my-16 text-white flex flex-col items-center justify-center w-full my-10">
@@ -443,10 +423,11 @@ export default function OnboardingDCEManager() {
                                 value: /^\d{14}$/,
                                 message: "Le numéro SIRET doit contenir exactement 14 chiffres",
                               },
+                              onChange: (e) => {
+                                e.target.value = e.target.value.replace(/\D/g, "");
+                                handleSiretChange(e);
+                              },
                             })}
-                            onInput={(e) => {
-                              e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
-                            }}
                             className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                           />
 
@@ -557,28 +538,6 @@ export default function OnboardingDCEManager() {
                           <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
                         )}
                       </div>
-
-
-
-                      {/* Types de chantiers */}
-                      <div className="col-span-1 mt-4">
-                      <Controller
-                        control={control}
-                        name="domaines_expertises"
-                        rules={{ required: "Ce champ est requis" }}
-                        render={({ field }) => (
-                          <MultiSelectDropdown
-                            label="Domaines d'expertise"
-                            options={ domainesChantiers && domainesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
-                            value={field.value || []}
-                            onChange={field.onChange}
-                          />
-                        )}
-                      />
-                      {errors.domaines_expertises && (
-                        <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
-                      )}
-                    </div>
                     <div className="col-span-1 mt-4">
                       <Controller
                         control={control}
