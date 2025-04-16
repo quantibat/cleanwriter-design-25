@@ -303,7 +303,7 @@ export default function OnboardingDCEManager() {
   const handleSelectAdresse = (suggestion) => {
     const fullAddress = suggestion.properties.label;
     const city = suggestion.properties.city;
-    const postcode = suggestion.properties.postcode;
+    // const postcode = suggestion.properties.postcode;
 
     setValue("adresse_siege_social", fullAddress);
     setValue("ville", city);
