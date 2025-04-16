@@ -8,7 +8,6 @@ import { Controller, useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import { createClient } from "@supabase/supabase-js";
 
 const steps = [
   "Type d'entreprise",
@@ -94,6 +93,7 @@ export default function OnboardingDCEManager() {
             prenom: data.prenom,
             email: data.email,
             interest: data.interest,
+            password: data.password,
           },
         ])
         .select();
@@ -178,14 +178,14 @@ export default function OnboardingDCEManager() {
   
     // Show success message and redirect
     toast({
-      title: "Inscription réussie",
-      description: "Vous êtes maintenant inscrit et prêt à recevoir des appels d'offres.",
-      duration: 3000,
+      title: "Inscription réussie, vueillez confirmez votre adresse email",
+      description: "Vous êtes maintenant inscrit et prêt à recevoir des appels d'offres. Vueillez confirmer votre adresse email.",
+      duration: 1500,
     });
     
     // Redirect after a short delay
     setTimeout(() => {
-      navigate("/dashboard");
+      navigate("/email-confirmation");
     }, 1500);
   };
 
