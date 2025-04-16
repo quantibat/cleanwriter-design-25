@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
@@ -144,7 +145,6 @@ const SelectSeparator = React.forwardRef<
 ))
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
-
 const MultiSelectDropdown = ({ options, value = [], onChange, label }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef();
@@ -174,22 +174,22 @@ const MultiSelectDropdown = ({ options, value = [], onChange, label }) => {
         className="border border-gray-700 rounded-sm p-3 bg-gray-800 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-white text-sm ">{selectedLabels}</span>
+        <span className="text-white text-sm truncate block">{selectedLabels}</span>
       </div>
       {isOpen && (
-        <div className="absolute z-20 mt-1 w-full bg-gray-800 border border-gray-800 rounded-md shadow-md h-60 overflow-auto">
-          { options && options.map((option) => (
+        <div className="absolute z-50 mt-1 w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg max-h-[300px] overflow-y-auto">
+          {options && options.map((option) => (
             <label
               key={option.value}
-              className="flex items-center px-4 py-2"
+              className="flex items-center px-4 py-2.5 hover:bg-gray-700 cursor-pointer text-white"
             >
               <input
                 type="checkbox"
                 checked={value.includes(option.value)}
                 onChange={() => toggleOption(option.value)}
-                className="mr-2 bg-transparent-200  "
+                className="mr-3 bg-gray-900 border-gray-600"
               />
-              {option.label}
+              <span className="text-sm">{option.label}</span>
             </label>
           ))}
         </div>
@@ -197,8 +197,6 @@ const MultiSelectDropdown = ({ options, value = [], onChange, label }) => {
     </div>
   );
 };
-
-
 
 export {
   Select,
