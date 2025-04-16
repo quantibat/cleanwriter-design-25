@@ -21,7 +21,6 @@ export default function OnboardingDCEManager() {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  // Initialisation de useForm
   const { register, handleSubmit, formState: { errors }, setValue,  trigger, control } = useForm({
     defaultValues: {
       type_entreprise: "",
@@ -66,7 +65,6 @@ export default function OnboardingDCEManager() {
 
   const onSubmit = async (data) => {
     try {
-      // Étape 1 : Créer l'utilisateur dans Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password
@@ -76,7 +74,6 @@ export default function OnboardingDCEManager() {
   
       const userId = authData?.user?.id;
   
-      // Étape 2 : Enregistrer les infos de l'entreprise avec l'userId
       const { data: entrepriseData, error: entrepriseError } = await supabase
         .from("entreprises")
         .insert([
@@ -101,7 +98,6 @@ export default function OnboardingDCEManager() {
       if (entrepriseError) throw entrepriseError;
   
   
-      // Étape 3 : Récupération des IDs pour les jointures
       const { data: domainesData, error: domainesError } = await supabase
         .from("domaines_expertises")
         .select("id")
@@ -172,7 +168,6 @@ export default function OnboardingDCEManager() {
       navigate("/dashboard");
     }, 1000);
   };
-  
 
   const fetchTypesChantiers = async () => {
     try {
@@ -217,7 +212,6 @@ export default function OnboardingDCEManager() {
     }
   };
 
-
   const [typesChantiers, setTypesChantiers] = useState([]);
   const [domainesChantiers, setDomainesChantiers] = useState([]);
   const [naturesChantiers, setNaturesChantiers] = useState([]);
@@ -257,13 +251,11 @@ export default function OnboardingDCEManager() {
     setSuggestions([]);
   };
 
-
   const [entreprise, setEntreprise] = useState({
     nom: '',
     adresse: '',
     ville: '',
     codePostal: '',
-    // Ajoute ici d'autres champs selon ce que tu veux remplir
   });
 
   const handleSiretChange = async (e) => {
@@ -290,27 +282,30 @@ export default function OnboardingDCEManager() {
           }
         });
 
-        console.log(dataAPI.access_token);
-
         const entrepriseData = response.data.etablissement;
 
-        // Remplir les champs automatiquement avec les données de l'entreprise
-        setEntreprise({
-          nom: entrepriseData.uniteLegale.denomination,
-          adresse: entrepriseData.adresseEtablissement.libelleVoie,
-          ville: entrepriseData.adresseEtablissement.libelleCommune,
-          codePostal: entrepriseData.adresseEtablissement.codePostal,
+        setValue("nom_entreprise", entrepriseData.uniteLegale.denominationUniteLegale);
+        setValue("adresse_siege_social", `${entrepriseData.adresseEtablissement.numeroVoieEtablissement || ''} ${entrepriseData.adresseEtablissement.typeVoieEtablissement || ''} ${entrepriseData.adresseEtablissement.libelleVoieEtablissement || ''}`);
+        setValue("ville", entrepriseData.adresseEtablissement.libelleCommuneEtablissement);
+        setValue("numero_siret", value);
+
+        toast({
+          title: "Informations récupérées",
+          description: "Les informations de l'entreprise ont été automatiquement remplies.",
+          duration: 3000,
         });
 
-      } catch (err) 
-      {
-        console.log('Numéro SIRET invalide ou entreprise non trouvée.');
+      } catch (err) {
+        console.error('Erreur lors de la récupération des données:', err);
+        toast({
+          title: "Erreur",
+          description: "Impossible de récupérer les informations de l'entreprise. Veuillez vérifier le numéro SIRET.",
+          variant: "destructive",
+          duration: 3000,
+        });
       }
     }
   };
-
-  
-  
 
   return (
     <div className="h-auto my-16 text-white flex flex-col items-center justify-center w-full my-10">
@@ -392,184 +387,165 @@ export default function OnboardingDCEManager() {
                     </p>
                   </div>
                   <fieldset className="grid grid-cols-2 gap-4">
-                                          {/* Numéro SIRET */}
-                                          <div>
-                        <label htmlFor="numero_siret" className="block text-sm mb-2">
-                          Numéro SIRET
-                        </label>
-                        <input
-                            placeholder="Ex: 12345678901234"
-                            id="numero_siret"
-                            name="numero_siret"
-                            type="text"
-                            inputMode="numeric"
-                            onChange={handleSiretChange}
-                            maxLength={14}
-                            {...register("numero_siret", {
-                              required: "Ce champ est requis",
-                              pattern: {
-                                value: /^\d{14}$/,
-                                message: "Le numéro SIRET doit contenir exactement 14 chiffres",
-                              },
-                            })}
-                            onInput={(e) => {
-                              e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
-                            }}
-                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                          />
-
-                        {errors.numero_siret && (
-                          <span className="text-red-500 text-sm">{errors.numero_siret.message}</span>
-                        )}
-                      </div>
-                      {/* Nom de l'entreprise */}
-                      <div>
-                        <label htmlFor="nom_entreprise" className="block text-sm mb-2">
-                          Nom de l'entreprise
-                        </label>
-                        <input
-                          id="nom_entreprise"
-                          name="nom_entreprise"
-                          type="text"
-                          {...register("nom_entreprise", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.nom_entreprise && (
-                          <span className="text-red-500 text-sm">{errors.nom_entreprise.message}</span>
-                        )}
-                      </div>
-
-                      {/* Adresse du siège social */}
-                      <div>
-                        <label htmlFor="adresse_siege_social" className="block text-sm mb-2">
-                          Adresse du siège social
-                        </label>
-                        <input
-                            id="adresse_siege_social"
-                            type="text"
-                            {...register("adresse_siege_social", { required: "Ce champ est requis" })}
-                            onChange={(e) => handleAdresseChange(e.target.value) }
-                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                            autoComplete="off"
-                          />
-                          {errors.adresse_siege_social && (
-                            <span className="text-red-500 text-sm">{errors.adresse_siege_social.message}</span>
-                          )}
-
-                          {/* Suggestions */}
-                          {suggestions.length > 0 && (
-                            <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow">
-                              {suggestions.map((s, index) => (
-                                <li
-                                  key={index}
-                                  onClick={() => handleSelectAdresse(s)}
-                                  className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-                                >
-                                  {s.properties.label}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                      </div>
-
-                      {/* Ville */}
-                      <div>
-                        <label htmlFor="ville" className="block text-sm mb-2">
-                          Ville
-                        </label>
-                        <input
-                          id="ville"
-                          name="ville"
-                          type="text"
-                          {...register("ville", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.ville && (
-                          <span className="text-red-500 text-sm">{errors.ville.message}</span>
-                        )}
-                      </div>
-
-                      {/* Zone de chalandise */}
-                      <div>
-                        <label htmlFor="zone_chalandise" className="block text-sm mb-2">
-                          Zone de chalandise
-                        </label>
-                        <input
-                          id="zone_chalandise"
-                          name="zone_chalandise"
-                          type="text"
-                          {...register("zone_chalandise", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {/* {errors.zone_chalandise && (
-                          <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
-                        )} */}
-                      </div>
-
-                      {/* Domaines d’expertise */}
-                      <div className="col-span-2 mt-4">
-                        <Controller
-                          control={control}
-                          name="domaines_expertises"
-                          rules={{ required: "Ce champ est requis" }}
-                          render={({ field }) => (
-                            <MultiSelectDropdown
-                              label="Domaines d’expertise"
-                              options={ domainesChantiers && domainesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
-                              value={field.value || []}
-                              onChange={field.onChange}
-                            />
-                          )}
-                        />
-                        {errors.domaines_expertises && (
-                          <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
-                        )}
-                      </div>
-
-
-
-                      {/* Types de chantiers */}
-                      <div className="col-span-1 mt-4">
+                    <div>
+                      <label htmlFor="numero_siret" className="block text-sm mb-2">
+                        Numéro SIRET
+                      </label>
+                      <input
+                        placeholder="Ex: 12345678901234"
+                        id="numero_siret"
+                        name="numero_siret"
+                        type="text"
+                        inputMode="numeric"
+                        onChange={handleSiretChange}
+                        maxLength={14}
+                        {...register("numero_siret", {
+                          required: "Ce champ est requis",
+                          pattern: {
+                            value: /^\d{14}$/,
+                            message: "Le numéro SIRET doit contenir exactement 14 chiffres",
+                          },
+                        })}
+                        onInput={(e) => {
+                          e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+                        }}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.numero_siret && (
+                        <span className="text-red-500 text-sm">{errors.numero_siret.message}</span>
+                      )}
+                    </div>
+                    <div>
+                      <label htmlFor="nom_entreprise" className="block text-sm mb-2">
+                        Nom de l'entreprise
+                      </label>
+                      <input
+                        id="nom_entreprise"
+                        name="nom_entreprise"
+                        type="text"
+                        {...register("nom_entreprise", { required: "Ce champ est requis" })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.nom_entreprise && (
+                        <span className="text-red-500 text-sm">{errors.nom_entreprise.message}</span>
+                      )}
+                    </div>
+                    <div>
+                      <label htmlFor="adresse_siege_social" className="block text-sm mb-2">
+                        Adresse du siège social
+                      </label>
+                      <input
+                        id="adresse_siege_social"
+                        type="text"
+                        {...register("adresse_siege_social", { required: "Ce champ est requis" })}
+                        onChange={(e) => handleAdresseChange(e.target.value) }
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        autoComplete="off"
+                      />
+                      {errors.adresse_siege_social && (
+                        <span className="text-red-500 text-sm">{errors.adresse_siege_social.message}</span>
+                      )}
+                      {suggestions.length > 0 && (
+                        <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow">
+                          {suggestions.map((s, index) => (
+                            <li
+                              key={index}
+                              onClick={() => handleSelectAdresse(s)}
+                              className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                            >
+                              {s.properties.label}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                    <div>
+                      <label htmlFor="ville" className="block text-sm mb-2">
+                        Ville
+                      </label>
+                      <input
+                        id="ville"
+                        name="ville"
+                        type="text"
+                        {...register("ville", { required: "Ce champ est requis" })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.ville && (
+                        <span className="text-red-500 text-sm">{errors.ville.message}</span>
+                      )}
+                    </div>
+                    <div>
+                      <label htmlFor="zone_chalandise" className="block text-sm mb-2">
+                        Zone de chalandise
+                      </label>
+                      <input
+                        id="zone_chalandise"
+                        name="zone_chalandise"
+                        type="text"
+                        {...register("zone_chalandise", { required: "Ce champ est requis" })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {/* {errors.zone_chalandise && (
+                        <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
+                      )} */}
+                    </div>
+                    <div className="col-span-2 mt-4">
                       <Controller
-                          control={control}
-                          name="type_chantiers"
-                          rules={{ required: "Ce champ est requis" }}
-                          render={({ field }) => (
-                            <MultiSelectDropdown
-                              label="Types de chantiers"
-                              options={ typesChantiers && typesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
-                              value={field.value || []}
-                              onChange={field.onChange}
-                            />
-                          )}
-                        />                        
-                        {errors.type_chantiers && (
-                          <span className="text-red-500 text-sm">{errors.type_chantiers.message}</span>
+                        control={control}
+                        name="domaines_expertises"
+                        rules={{ required: "Ce champ est requis" }}
+                        render={({ field }) => (
+                          <MultiSelectDropdown
+                            label="Domaines d’expertise"
+                            options={ domainesChantiers && domainesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
+                            value={field.value || []}
+                            onChange={field.onChange}
+                          />
                         )}
-                      </div>
-
-                      {/* Natures de chantiers */}
-                      <div className="col-span-1 mt-4">
+                      />
+                      {errors.domaines_expertises && (
+                        <span className="text-red-500 text-sm">{errors.domaines_expertises.message}</span>
+                      )}
+                    </div>
+                    <div className="col-span-1 mt-4">
                       <Controller
-                          control={control}
-                          name="natures_chantiers"
-                          rules={{ required: "Ce champ est requis" }}
-                          render={({ field }) => (
-                            <MultiSelectDropdown
-                              label="Natures de chantiers"
-                              options={ naturesChantiers && naturesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
-                              value={field.value || []}
-                              onChange={field.onChange}
-                            />
-                          )}
-                        />  
-                        {errors.natures_chantiers && (
-                          <span className="text-red-500 text-sm">{errors.natures_chantiers.message}</span>
+                        control={control}
+                        name="type_chantiers"
+                        rules={{ required: "Ce champ est requis" }}
+                        render={({ field }) => (
+                          <MultiSelectDropdown
+                            label="Types de chantiers"
+                            options={ typesChantiers && typesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
+                            value={field.value || []}
+                            onChange={field.onChange}
+                          />
                         )}
-                      </div>
+                      />
+                      {errors.type_chantiers && (
+                        <span className="text-red-500 text-sm">{errors.type_chantiers.message}</span>
+                      )}
+                    </div>
+                    <div className="col-span-1 mt-4">
+                      <Controller
+                        control={control}
+                        name="natures_chantiers"
+                        rules={{ required: "Ce champ est requis" }}
+                        render={({ field }) => (
+                          <MultiSelectDropdown
+                            label="Natures de chantiers"
+                            options={ naturesChantiers && naturesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
+                            value={field.value || []}
+                            onChange={field.onChange}
+                          />
+                        )}
+                      />
+                      {errors.natures_chantiers && (
+                        <span className="text-red-500 text-sm">{errors.natures_chantiers.message}</span>
+                      )}
+                    </div>
                   </fieldset>
                   <div className="flex justify-between mt-6">
-                    <button  onClick={back} className="text-sm text-gray-400">Retour</button>
+                    <button onClick={back} className="text-sm text-gray-400">Retour</button>
                     <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white">Suivant</button>
                   </div>
                 </div>
@@ -617,7 +593,6 @@ export default function OnboardingDCEManager() {
                         name="budget_conditions_financieres"
                         {...register("budget_conditions_financieres", { required: "Ce champ est requis" })}
                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        
                       />
                       {errors.budget_conditions_financieres && <span className="text-red-500 text-sm">{errors.budget_conditions_financieres.message}</span>}
                     </div>
@@ -641,66 +616,59 @@ export default function OnboardingDCEManager() {
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    {/* Champ : Nom */}
-                      <div>
-                        <label htmlFor="nom" className="block text-sm mb-2">Nom</label>
-                        <input
-                          type="text"
-                          {...register("nom", {
-                            minLength: { value: 1, message: "Nom trop court" },
-                          })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.nom && <span className="text-red-500 text-sm">{errors.nom.message}</span>}
-                      </div>
-
-                      {/* Champ : Prénom */}
-                      <div>
-                        <label htmlFor="prenom" className="block text-sm mb-2">Prénom</label>
-                        <input
-                          id="prenom"
-                          type="text"
-                          {...register("prenom", {
-                            required: "Prénom est requis",
-                            minLength: { value: 1, message: "Prénom trop court" },
-                          })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.prenom && <span className="text-red-500 text-sm">{errors.prenom.message}</span>}
-                      </div>
-
-                      {/* Champ : Email professionnel */}
-                      <div>
-                        <label htmlFor="email" className="block text-sm mb-2">Email professionnel</label>
-                        <input
-                          id="email"
-                          type="email"
-                          {...register("email", {
-                            required: "Email est requis",
-                            pattern: {
-                              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                              message: "Adresse email invalide",
-                            },
-                          })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
-                      </div>
-
-                      {/* Champ : Mot de passe */}
-                      <div>
-                        <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
-                        <input
-                          id="password"
-                          type="password"
-                          {...register("password", {
-                            required: "Mot de passe requis",
-                            minLength: { value: 6, message: "Minimum 6 caractères" },
-                          })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-                        />
-                        {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
-                      </div>
+                    <div>
+                      <label htmlFor="nom" className="block text-sm mb-2">Nom</label>
+                      <input
+                        type="text"
+                        {...register("nom", {
+                          minLength: { value: 1, message: "Nom trop court" },
+                        })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.nom && <span className="text-red-500 text-sm">{errors.nom.message}</span>}
+                    </div>
+                    <div>
+                      <label htmlFor="prenom" className="block text-sm mb-2">Prénom</label>
+                      <input
+                        id="prenom"
+                        type="text"
+                        {...register("prenom", {
+                          required: "Prénom est requis",
+                          minLength: { value: 1, message: "Prénom trop court" },
+                        })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.prenom && <span className="text-red-500 text-sm">{errors.prenom.message}</span>}
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm mb-2">Email professionnel</label>
+                      <input
+                        id="email"
+                        type="email"
+                        {...register("email", {
+                          required: "Email est requis",
+                          pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Adresse email invalide",
+                          },
+                        })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+                    </div>
+                    <div>
+                      <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
+                      <input
+                        id="password"
+                        type="password"
+                        {...register("password", {
+                          required: "Mot de passe requis",
+                          minLength: { value: 6, message: "Minimum 6 caractères" },
+                        })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
+                    </div>
                   </div>
                   <div className="flex justify-between mt-6">
                     <button onClick={back} className="text-sm text-gray-400">Retour</button>
@@ -714,7 +682,4 @@ export default function OnboardingDCEManager() {
       </div>
     </div>
   );
-  
-
-
 }
