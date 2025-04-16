@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BriefcaseBusiness, Building, Home, Info, User } from "lucide-react";
@@ -5,9 +6,9 @@ import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast"; 
 import { Controller, useForm } from "react-hook-form"; 
 import { supabase } from "@/integrations/supabase/client";
-import {  MultiSelectDropdown } from "@/components/ui/select";
+import { MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios'
+import axios from 'axios';
 
 const steps = [
   "Type d'entreprise",
@@ -21,7 +22,7 @@ export default function OnboardingDCEManager() {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  const { register, handleSubmit, formState: { errors }, setValue,  trigger, control } = useForm({
+  const { register, handleSubmit, formState: { errors }, setValue, trigger, control } = useForm({
     defaultValues: {
       type_entreprise: "",
       nom_entreprise: "",
@@ -43,7 +44,7 @@ export default function OnboardingDCEManager() {
   });
 
   const next = async () => {
-    const isValid = await trigger()
+    const isValid = await trigger();
     if (isValid) {
       setStep((prev) => Math.min(prev + 1, steps.length - 1));
     } else {
@@ -60,11 +61,12 @@ export default function OnboardingDCEManager() {
 
   const handleCardSelect = (key, value) => {
     setValue(key, value);
-    setStep((prev) => Math.min(prev + 1, steps.length - 1))
+    setStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
   const onSubmit = async (data) => {
     try {
+      // Register the user with Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password
@@ -74,11 +76,12 @@ export default function OnboardingDCEManager() {
   
       const userId = authData?.user?.id;
   
+      // Insert the enterprise data
       const { data: entrepriseData, error: entrepriseError } = await supabase
         .from("entreprises")
         .insert([
           {
-            users_id: userId,
+            user_id: userId,
             type_entreprise: data.type_entreprise,
             nom_entreprise: data.nom_entreprise,
             numero_siret: data.numero_siret,
@@ -93,11 +96,11 @@ export default function OnboardingDCEManager() {
             interest: data.interest,
           },
         ])
-        .single();
+        .select();
   
       if (entrepriseError) throw entrepriseError;
   
-  
+      // Fetch domain expertise IDs
       const { data: domainesData, error: domainesError } = await supabase
         .from("domaines_expertises")
         .select("id")
@@ -105,6 +108,7 @@ export default function OnboardingDCEManager() {
   
       if (domainesError) throw domainesError;
   
+      // Fetch types of construction sites IDs
       const { data: typesData, error: typesError } = await supabase
         .from("types_chantiers")
         .select("id")
@@ -112,6 +116,7 @@ export default function OnboardingDCEManager() {
   
       if (typesError) throw typesError;
   
+      // Fetch natures of construction sites IDs
       const { data: naturesData, error: naturesError } = await supabase
         .from("natures_chantiers")
         .select("id")
@@ -119,8 +124,9 @@ export default function OnboardingDCEManager() {
   
       if (naturesError) throw naturesError;
   
-      const entrepriseId = entrepriseData?.id;
+      const entrepriseId = entrepriseData?.[0]?.id;
   
+      // Prepare data for insertion
       const domainesInsert = domainesData.map((domaine) => ({
         entreprise_id: entrepriseId,
         domaine_id: domaine.id,
@@ -136,18 +142,21 @@ export default function OnboardingDCEManager() {
         nature_id: nature.id,
       }));
   
+      // Insert domain expertise relationships
       const { error: insertDomainesError } = await supabase
         .from("entreprises_domaines_expertises")
         .upsert(domainesInsert);
   
       if (insertDomainesError) throw insertDomainesError;
   
+      // Insert types of construction sites relationships
       const { error: insertTypesError } = await supabase
         .from("entreprises_types_chantiers")
         .upsert(typesInsert);
   
       if (insertTypesError) throw insertTypesError;
   
+      // Insert natures of construction sites relationships
       const { error: insertNaturesError } = await supabase
         .from("entreprises_natures_chantiers")
         .upsert(naturesInsert);
@@ -156,19 +165,29 @@ export default function OnboardingDCEManager() {
   
     } catch (error) {
       console.error("Erreur lors de l'insertion dans Supabase:", error);
+      toast({
+        title: "Erreur lors de l'inscription",
+        description: "Une erreur est survenue. Veuillez réessayer plus tard.",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
     }
   
+    // Show success message and redirect
+    toast({
+      title: "Inscription réussie",
+      description: "Vous êtes maintenant inscrit et prêt à recevoir des appels d'offres.",
+      duration: 3000,
+    });
+    
+    // Redirect after a short delay
     setTimeout(() => {
-      toast({
-        title: "Inscription réussie",
-        description:
-          "Vous êtes maintenant inscrit et prêt à recevoir des appels d'offres.",
-        duration: 500,
-      });
       navigate("/dashboard");
-    }, 1000);
+    }, 1500);
   };
 
+  // Fetch data for dropdowns
   const fetchTypesChantiers = async () => {
     try {
       const { data, error } = await supabase
@@ -176,10 +195,10 @@ export default function OnboardingDCEManager() {
         .select('*'); 
   
       if (error) throw error;
-  
       return data;
     } catch (error) {
       console.error('Erreur lors de la récupération des types de chantiers:', error);
+      return [];
     }
   };
   
@@ -190,11 +209,10 @@ export default function OnboardingDCEManager() {
         .select('*'); 
   
       if (error) throw error;
-  
-      console.log('Domaines de Chantiers:', data);
       return data;
     } catch (error) {
       console.error('Erreur lors de la récupération des domaines de chantiers:', error);
+      return [];
     }
   };
 
@@ -205,10 +223,10 @@ export default function OnboardingDCEManager() {
         .select('*'); 
   
       if (error) throw error;
-  
       return data;
     } catch (error) {
       console.error('Erreur lors de la récupération des natures de chantiers:', error);
+      return [];
     }
   };
 
@@ -220,24 +238,30 @@ export default function OnboardingDCEManager() {
   useEffect(() => {
     const loadData = async () => {
       const types = await fetchTypesChantiers();
-      setTypesChantiers(types);
+      setTypesChantiers(types || []);
 
       const domaines = await fetchDomainesChantiers();
-      setDomainesChantiers(domaines);
+      setDomainesChantiers(domaines || []);
 
       const natures = await fetchNaturesChantiers();
-      setNaturesChantiers(natures);
+      setNaturesChantiers(natures || []);
     };
 
     loadData();
   }, []);
 
+  // Address search functionality
   const handleAdresseChange = async (query) => {
     if (!query) return setSuggestions([]);
 
-    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=20`);
-    const data = await response.json();
-    setSuggestions(data.features || []);
+    try {
+      const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=20`);
+      const data = await response.json();
+      setSuggestions(data.features || []);
+    } catch (error) {
+      console.error('Erreur lors de la recherche d\'adresse:', error);
+      setSuggestions([]);
+    }
   };
 
   const handleSelectAdresse = (suggestion) => {
@@ -251,19 +275,14 @@ export default function OnboardingDCEManager() {
     setSuggestions([]);
   };
 
-  const [entreprise, setEntreprise] = useState({
-    nom: '',
-    adresse: '',
-    ville: '',
-    codePostal: '',
-  });
-
+  // SIRET data retrieval functionality
   const handleSiretChange = async (e) => {
     const value = e.target.value;
 
     if (value.length === 14) { 
       try {
-        const responseData = await fetch('https://api.insee.fr/token', {
+        // Step 1: Get the access token from INSEE API
+        const tokenResponse = await fetch('https://api.insee.fr/token', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -275,20 +294,38 @@ export default function OnboardingDCEManager() {
           }),
         });
         
-        const dataAPI = await responseData.json();
-        const response = await axios.get(`https://api.insee.fr/entreprises/sirene/V3/siret/${value}`, {
-          headers: {
-            'Authorization': `Bearer ${dataAPI.access_token}` 
+        if (!tokenResponse.ok) {
+          throw new Error('Échec de récupération du token INSEE');
+        }
+        
+        const tokenData = await tokenResponse.json();
+        
+        // Step 2: Use the token to fetch company data by SIRET
+        const companyResponse = await axios.get(
+          `https://api.insee.fr/entreprises/sirene/V3/siret/${value}`, 
+          {
+            headers: {
+              'Authorization': `Bearer ${tokenData.access_token}` 
+            }
           }
-        });
+        );
 
-        const entrepriseData = response.data.etablissement;
+        const entrepriseData = companyResponse.data.etablissement;
 
-        setValue("nom_entreprise", entrepriseData.uniteLegale.denominationUniteLegale);
-        setValue("adresse_siege_social", `${entrepriseData.adresseEtablissement.numeroVoieEtablissement || ''} ${entrepriseData.adresseEtablissement.typeVoieEtablissement || ''} ${entrepriseData.adresseEtablissement.libelleVoieEtablissement || ''}`);
-        setValue("ville", entrepriseData.adresseEtablissement.libelleCommuneEtablissement);
+        // Step 3: Set form values with the fetched data
+        setValue("nom_entreprise", entrepriseData.uniteLegale.denominationUniteLegale || '');
+        
+        // Construct address from available components
+        const numeroVoie = entrepriseData.adresseEtablissement.numeroVoieEtablissement || '';
+        const typeVoie = entrepriseData.adresseEtablissement.typeVoieEtablissement || '';
+        const libelleVoie = entrepriseData.adresseEtablissement.libelleVoieEtablissement || '';
+        const adresseComplete = `${numeroVoie} ${typeVoie} ${libelleVoie}`.trim();
+        
+        setValue("adresse_siege_social", adresseComplete);
+        setValue("ville", entrepriseData.adresseEtablissement.libelleCommuneEtablissement || '');
         setValue("numero_siret", value);
 
+        // Show success notification
         toast({
           title: "Informations récupérées",
           description: "Les informations de l'entreprise ont été automatiquement remplies.",
@@ -446,7 +483,7 @@ export default function OnboardingDCEManager() {
                         <span className="text-red-500 text-sm">{errors.adresse_siege_social.message}</span>
                       )}
                       {suggestions.length > 0 && (
-                        <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow">
+                        <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow max-h-48 overflow-y-auto">
                           {suggestions.map((s, index) => (
                             <li
                               key={index}
@@ -485,9 +522,9 @@ export default function OnboardingDCEManager() {
                         {...register("zone_chalandise", { required: "Ce champ est requis" })}
                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                       />
-                      {/* {errors.zone_chalandise && (
+                      {errors.zone_chalandise && (
                         <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
-                      )} */}
+                      )}
                     </div>
                     <div className="col-span-2 mt-4">
                       <Controller
@@ -496,7 +533,7 @@ export default function OnboardingDCEManager() {
                         rules={{ required: "Ce champ est requis" }}
                         render={({ field }) => (
                           <MultiSelectDropdown
-                            label="Domaines d’expertise"
+                            label="Domaines d'expertise"
                             options={ domainesChantiers && domainesChantiers.map(d => ({ value: d.nom, label: d.nom }))}
                             value={field.value || []}
                             onChange={field.onChange}
