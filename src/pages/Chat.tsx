@@ -18,7 +18,15 @@ const N8nChat = () => {
           // When script is loaded, initialize the chat
           if (window.createChat) {
             window.createChat({
-              webhookUrl: 'https://metrr.app.n8n.cloud/webhook/81ecf1cb-27ab-46a8-baf8-ae7e0232fb06/chat'
+              webhookUrl: 'https://metrr.app.n8n.cloud/webhook/81ecf1cb-27ab-46a8-baf8-ae7e0232fb06/chat',
+              containerStyle: {
+                position: 'fixed',
+                bottom: '1rem',
+                right: '1rem',
+                width: '320px',
+                maxHeight: '500px',
+                zIndex: 1000
+              }
             });
             chatInitializedRef.current = true;
           }
