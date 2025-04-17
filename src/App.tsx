@@ -53,18 +53,18 @@ const App = () => (
             <Routes>
               {/* Public pages with MainLayout */}
               <Route path="/" element={<MainLayout><Index /></MainLayout>} />
-              <Route path="/signin" element={<MainLayout><SignIn /></MainLayout>} />
+              <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<MainLayout><SignUp /></MainLayout>} />
-              <Route path="/forgot-password" element={<MainLayout><ForgotPassword /></MainLayout>} />
-              <Route path="/reset-password" element={<MainLayout><ResetPassword /></MainLayout>} />
-              <Route path="/email-confirmation" element={<MainLayout><EmailConfirmation /></MainLayout>} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/email-confirmation" element={<EmailConfirmation />} />
               <Route path="/affiliate" element={<MainLayout><Affiliate /></MainLayout>} />
               <Route path="/pricing" element={<MainLayout><CustomPricing /></MainLayout>} />
               <Route path="/privacy-policy" element={<MainLayout><PrivacyPolicy /></MainLayout>} />
               <Route path="/terms-of-service" element={<MainLayout><TermsOfService /></MainLayout>} />
-              <Route path="/onboarding" element={<MainLayout><Onboarding /></MainLayout>} />
+              <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/free-trial" element={<MainLayout><FreeTrial /></MainLayout>} />
-              <Route path="/chat" element={<MainLayout><N8nChat /></MainLayout>} />
+              {/* <Route path="/chat" element={<MainLayout><N8nChat /></MainLayout>} /> */}
               
               {/* Protected routes */}
               <Route path="/dashboard" element={

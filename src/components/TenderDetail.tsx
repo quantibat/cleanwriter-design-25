@@ -51,7 +51,7 @@ const TenderDetail = ({ tender }) => {
             Ce marché public correspond parfaitement à votre profil, tant par les compétences recherchées que par les exigences techniques du projet. Votre expérience, vos réalisations passées et votre savoir-faire spécifique vous placent comme un candidat idéal pour répondre aux besoins exprimés dans ce cahier des charges. C’est une opportunité en adéquation avec votre expertise et vos objectifs professionnels.
         </p>
         <div className="gap-4 md:grid md:grid-cols-2 sm:grid sm:grid-cols-1 sm:gap-4 items-center max-w-[100%]">
-          <div className="flex flex-col gap-1 ">
+          <div className="flex flex-col gap-1">
               <p className="text-sm text-gray-300">Secteur d'activité</p>
               <LinearProgressBar score={"90"} />
           </div>

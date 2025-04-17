@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import bcrypt from "bcryptjs";
 
 const steps = [
   "Type d'entreprise",
@@ -16,11 +17,23 @@ const steps = [
 ];
 
 export default function OnboardingDCEManager() {
+
   const [step, setStep] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
-  
-  const { register, handleSubmit, formState: { errors }, setValue, trigger, control } = useForm({
+  const [typesChantiers, setTypesChantiers] = useState([]);
+  const [domainesChantiers, setDomainesChantiers] = useState([]);
+  const [naturesChantiers, setNaturesChantiers] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    trigger,
+    control,
+  } = useForm({
     defaultValues: {
       type_entreprise: "",
       nom_entreprise: "",
@@ -38,7 +51,7 @@ export default function OnboardingDCEManager() {
       prenom: "",
       nom: "",
       interest: "",
-    }
+    },
   });
 
   const next = async () => {
@@ -46,7 +59,7 @@ export default function OnboardingDCEManager() {
     if (isValid) {
       setStep((prev) => Math.min(prev + 1, steps.length - 1));
     } else {
-      const errorFields = Object.keys(errors); 
+      const errorFields = Object.keys(errors);
       errorFields.forEach((field) => {
         if (errors[field]) {
           console.log(`Erreur dans le champ ${field}: ${errors[field]?.message}`);
@@ -54,7 +67,7 @@ export default function OnboardingDCEManager() {
       });
     }
   };
-  
+
   const back = () => setStep((prev) => Math.max(prev - 1, 0));
 
   const handleCardSelect = (key, value) => {
@@ -62,9 +75,69 @@ export default function OnboardingDCEManager() {
     setStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
+  const handleSiretChange = async (e) => {
+    const value = e.target.value;
+
+    if (value.length === 14) {
+      try {
+        const res = await fetch("https://gdjfwuaevdfxegcyoirw.supabase.co/functions/v1/insee-siret", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ siret: value }),
+        });
+        const data = await res.json();
+
+        setValue("nom_entreprise", data.etablissement.uniteLegale.denominationUniteLegale || "");
+        setValue("ville", data.etablissement.adresseEtablissement.libelleCommuneEtablissement || "");
+        setValue("numero_siret", value);
+        const numeroVoie = data.etablissement.adresseEtablissement.numeroVoieEtablissement || '';
+        const typeVoie = data.etablissement.adresseEtablissement.typeVoieEtablissement || '';
+        const libelleVoie = data.etablissement.adresseEtablissement.libelleVoieEtablissement || '';
+        const adresseComplete = `${numeroVoie} ${typeVoie} ${libelleVoie}`.trim();
+
+        setValue("adresse_siege_social", adresseComplete);
+
+        toast({
+          title: "Informations récupérées",
+          description: "Les informations de l'entreprise ont été automatiquement remplies.",
+          duration: 3000,
+        });
+      } catch (error) {
+        console.error("Erreur lors de la récupération des informations SIRET:", error);
+        toast({
+          title: "Erreur",
+          description: "Une erreur est survenue lors de la récupération des informations.",
+          variant: "destructive",
+          duration: 3000,
+        });
+      }
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
-      // Step 1: Register the user with Supabase Auth
+      data.nom = data.nom.toUpperCase();
+      data.prenom = data.prenom.toUpperCase();
+
+      const { error: emailCheckError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (!emailCheckError) {
+        toast({
+          title: "Email déjà utilisé",
+          description: "Un compte existe déjà avec cet email.",
+          variant: "destructive",
+          duration: 3000,
+        });
+        return;
+      }
+
+      // const hashedPassword = await bcrypt.hash(data.password, 10);
+
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -97,7 +170,6 @@ export default function OnboardingDCEManager() {
       const userId = authData?.user?.id;
       if (!userId) throw new Error("User ID not found");
 
-      // Step 2: Insert the enterprise data
       const { data: entrepriseData, error: entrepriseError } = await supabase
         .from("entreprises")
         .insert([
@@ -115,7 +187,6 @@ export default function OnboardingDCEManager() {
             prenom: data.prenom,
             email: data.email,
             interest: data.interest,
-            password: data.password,
           },
         ])
         .select();
@@ -124,12 +195,11 @@ export default function OnboardingDCEManager() {
 
       const entrepriseId = entrepriseData?.[0]?.id;
 
-      // Step 3: Insert relations for domaines, types, and natures
-      if (data.domaines_expertises?.length > 0) {
+      if (entrepriseData?.[0]?.domaines_expertises?.length > 0) {
         const { error: domainesError } = await supabase
           .from("entreprises_domaines_expertises")
           .insert(
-            data.domaines_expertises.map(domaine => ({
+            entrepriseData?.[0]?.domaines_expertises.map((domaine) => ({
               entreprise_id: entrepriseId,
               domaine_id: domaine.id,
             }))
@@ -137,11 +207,11 @@ export default function OnboardingDCEManager() {
         if (domainesError) throw domainesError;
       }
 
-      if (data.type_chantiers?.length > 0) {
+      if (entrepriseData?.[0]?.type_chantiers?.length > 0) {
         const { error: typesError } = await supabase
           .from("entreprises_types_chantiers")
           .insert(
-            data.type_chantiers.map(type => ({
+            entrepriseData?.[0]?.type_chantiers.map((type) => ({
               entreprise_id: entrepriseId,
               type_id: type.id,
             }))
@@ -149,11 +219,11 @@ export default function OnboardingDCEManager() {
         if (typesError) throw typesError;
       }
 
-      if (data.natures_chantiers?.length > 0) {
+      if (entrepriseData?.[0]?.natures_chantiers?.length > 0) {
         const { error: naturesError } = await supabase
           .from("entreprises_natures_chantiers")
           .insert(
-            data.natures_chantiers.map(nature => ({
+            entrepriseData?.[0]?.natures_chantiers.map((nature) => ({
               entreprise_id: entrepriseId,
               nature_id: nature.id,
             }))
@@ -161,16 +231,15 @@ export default function OnboardingDCEManager() {
         if (naturesError) throw naturesError;
       }
 
-      // Show success message
       toast({
         title: "Inscription réussie",
         description: "Votre compte a été créé. Un email de confirmation vous a été envoyé.",
         duration: 5000,
       });
 
-      // Redirect to dashboard
-      navigate("/dashboard");
-
+      setTimeout(() => {
+        navigate("/email-confirmation");
+      }, 1500);
     } catch (error) {
       console.error("Erreur lors de l'inscription:", error);
       toast({
@@ -179,97 +248,64 @@ export default function OnboardingDCEManager() {
         variant: "destructive",
         duration: 5000,
       });
-      return;
     }
-  
-    // Show success message and redirect
-    toast({
-      title: "Inscription réussie, vueillez confirmez votre adresse email",
-      description: "Vous êtes maintenant inscrit et prêt à recevoir des appels d'offres. Vueillez confirmer votre adresse email.",
-      duration: 1500,
-    });
-    
-    // Redirect after a short delay
-    setTimeout(() => {
-      navigate("/email-confirmation");
-    }, 1500);
   };
-
 
   const passwordValidation = {
-    required: "Le mot de passe est requis",
     minLength: {
       value: 6,
-      message: "Le mot de passe doit contenir au moins 6 caractères"
+      message: "Le mot de passe doit contenir au moins 6 caractères",
     },
     pattern: {
-      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
-      message: "Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre"
+      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+      message: "Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre",
+    },
+  };
+
+  const handleZoneChalandiseChange = async (query) => {
+    if (!query) return setSuggestions([]);
+    try {
+      const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=10`);
+      const data = await response.json();
+      setSuggestions(data.features || []);
+    } catch (error) {
+      console.error("Erreur zone chalandise:", error);
+      setSuggestions([]);
     }
   };
 
-  const passwordField = (
-    <div>
-      <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
-      <input
-        id="password"
-        type="password"
-        {...register("password", passwordValidation)}
-        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
-      />
-      {errors.password && (
-        <span className="text-red-500 text-sm">{errors.password.message}</span>
-      )}
-    </div>
-  );
-
-  // Fetch data for dropdowns
   const fetchTypesChantiers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('types_chantiers')
-        .select('*'); 
-  
+      const { data, error } = await supabase.from("types_chantiers").select("*");
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Erreur lors de la récupération des types de chantiers:', error);
+      console.error("Erreur lors de la récupération des types de chantiers:", error);
       return [];
     }
   };
-  
+
   const fetchDomainesChantiers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('domaines_expertises')
-        .select('*'); 
-  
+      const { data, error } = await supabase.from("domaines_expertises").select("*");
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Erreur lors de la récupération des domaines de chantiers:', error);
+      console.error("Erreur lors de la récupération des domaines de chantiers:", error);
       return [];
     }
   };
 
   const fetchNaturesChantiers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('natures_chantiers')
-        .select('*'); 
-  
+      const { data, error } = await supabase.from("natures_chantiers").select("*");
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Erreur lors de la récupération des natures de chantiers:', error);
+      console.error("Erreur lors de la récupération des natures de chantiers:", error);
       return [];
     }
   };
-
-  const [typesChantiers, setTypesChantiers] = useState([]);
-  const [domainesChantiers, setDomainesChantiers] = useState([]);
-  const [naturesChantiers, setNaturesChantiers] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -285,80 +321,6 @@ export default function OnboardingDCEManager() {
 
     loadData();
   }, []);
-
-  // Address search functionality
-  const handleAdresseChange = async (query) => {
-    if (!query) return setSuggestions([]);
-
-    try {
-      const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=20`);
-      const data = await response.json();
-      setSuggestions(data.features || []);
-    } catch (error) {
-      console.error('Erreur lors de la recherche d\'adresse:', error);
-      setSuggestions([]);
-    }
-  };
-
-  const handleSelectAdresse = (suggestion) => {
-    const fullAddress = suggestion.properties.label;
-    const city = suggestion.properties.city;
-    // const postcode = suggestion.properties.postcode;
-
-    setValue("adresse_siege_social", fullAddress);
-    setValue("ville", city);
-    // setValue("code_postal", postcode);
-    setSuggestions([]);
-  };
-
-  // SIRET data retrieval functionality
-  const handleSiretChange = async (e) => {
-    const value = e.target.value;
-
-    if (value.length === 14) { 
-
-      try {
-        const res = await fetch("https://gdjfwuaevdfxegcyoirw.supabase.co/functions/v1/insee-siret", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ siret: value })
-        });
-        const data = await res.json();
-  
-        console.log(data)
-        setValue("nom_entreprise", data.etablissement.uniteLegale.denominationUniteLegale || "");
-        setValue("ville", data.etablissement.adresseEtablissement.libelleCommuneEtablissement || "");
-        setValue("numero_siret", value);
-  
-        // Construct address from available components
-        const numeroVoie = data.etablissement.adresseEtablissement.numeroVoieEtablissement || '';
-        const typeVoie = data.etablissement.adresseEtablissement.typeVoieEtablissement || '';
-        const libelleVoie = data.etablissement.adresseEtablissement.libelleVoieEtablissement || '';
-        const adresseComplete = `${numeroVoie} ${typeVoie} ${libelleVoie}`.trim();
-        
-        setValue("adresse_siege_social", adresseComplete);
- 
-
-        // Show success notification
-        toast({
-          title: "Informations récupérées",
-          description: "Les informations de l'entreprise ont été automatiquement remplies.",
-          duration: 3000,
-        });
-
-      } catch (error) {
-        console.error("Erreur lors de la récupération des informations SIRET:", error);
-        toast({
-          title: "Erreur",
-          description: "Une erreur est survenue lors de la récupération des informations.",
-          variant: "destructive",
-          duration: 3000,
-        });
-      }
-    }
-  }
 
   return (
     <div className="h-auto my-16 text-white flex flex-col items-center justify-center w-full my-10">
@@ -440,7 +402,6 @@ export default function OnboardingDCEManager() {
                     </p>
                   </div>
                   <fieldset className="grid grid-cols-2 gap-4">
-                    {/* Numéro SIRET */}
                     <div>
                         <label htmlFor="numero_siret" className="block text-sm mb-2">
                           Numéro SIRET
@@ -497,7 +458,7 @@ export default function OnboardingDCEManager() {
                             id="adresse_siege_social"
                             type="text"
                             {...register("adresse_siege_social", { required: "Ce champ est requis" })}
-                            onChange={(e) => handleAdresseChange(e.target.value) }
+                            onChange={(e) => handleZoneChalandiseChange(e.target.value) }
                             className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                             autoComplete="off"
                           />
@@ -511,7 +472,7 @@ export default function OnboardingDCEManager() {
                               {suggestions.map((s, index) => (
                                 <li
                                   key={index}
-                                  onClick={() => handleSelectAdresse(s)}
+                                  onClick={() => handleZoneChalandiseChange(s)}
                                   className="px-4 py-2 cursor-pointer hover:bg-gray-200"
                                 >
                                   {s.properties.label}
@@ -550,9 +511,23 @@ export default function OnboardingDCEManager() {
                           {...register("zone_chalandise", { required: "Ce champ est requis" })}
                           className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                         />
-                        {/* {errors.zone_chalandise && (
+                        {errors.zone_chalandise && (
                           <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
-                        )} */}
+                        )}
+                        {/* Suggestions */}
+                        {suggestions.length > 0 && (
+                            <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow">
+                              {suggestions.map((s, index) => (
+                                <li
+                                  key={index}
+                                  onClick={() => handleZoneChalandiseChange(s)}
+                                  className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                >
+                                  {s.properties.label}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                       </div>
 
                       {/* Domaines d’expertise */}
@@ -613,7 +588,7 @@ export default function OnboardingDCEManager() {
                   </fieldset>
                   <div className="flex justify-between mt-6">
                     <button onClick={back} className="text-sm text-gray-400">Retour</button>
-                    <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white">Suivant</button>
+                    <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white text-sm">Suivant</button>
                   </div>
                 </div>
               )}
@@ -666,7 +641,7 @@ export default function OnboardingDCEManager() {
                   </div>
                   <div className="flex justify-between mt-6">
                     <button onClick={back} className="text-sm text-gray-400">Retour</button>
-                    <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white">Suivant</button>
+                    <button onClick={next} className="bg-neon-blue px-4 py-2 rounded-full text-white text-sm">Suivant</button>
                   </div>
                 </div>
               )}
@@ -688,7 +663,7 @@ export default function OnboardingDCEManager() {
                       <input
                         type="text"
                         {...register("nom", {
-                          minLength: { value: 1, message: "Nom trop court" },
+                          minLength: { value: 2, message: "Nom trop court" },
                         })}
                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                       />
@@ -701,7 +676,7 @@ export default function OnboardingDCEManager() {
                         type="text"
                         {...register("prenom", {
                           required: "Prénom est requis",
-                          minLength: { value: 1, message: "Prénom trop court" },
+                          minLength: { value: 2, message: "Prénom trop court" },
                         })}
                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                       />
@@ -724,7 +699,17 @@ export default function OnboardingDCEManager() {
                       {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
                     </div>
                     <div>
-                      {passwordField}
+                      <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
+                      <input
+                        id="password"
+                        type="password"
+                        {...register("password", {
+                          required: "Mot de passe est requis",
+                          ...passwordValidation,
+                        })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                      />
+                      {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
                     </div>
                   </div>
                   <div className="flex justify-between mt-6">

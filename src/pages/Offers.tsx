@@ -19,20 +19,71 @@ const Offers = () => {
   const fetchAppels = async (page = 1) => {
     setLoading(true);
 
-    const from = (page - 1) * OFFRES_PAR_PAGE;
-    const to = from + OFFRES_PAR_PAGE - 1;
+    try {
+      const from = (page - 1) * OFFRES_PAR_PAGE;
+      const to = from + OFFRES_PAR_PAGE - 1;
 
-    const { data, error, count } = await supabase
-      .from('appel_offre')
-      .select('*', { count: 'exact' }) // pour récupérer le total
-      .range(from, to)
-      .order('id', { ascending: false });
+      // Étape 1 : identification de l'utilisateur
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-    if (error) {
-      console.error('Erreur de chargement des appels :', error);
-    } else {
-      setAppelsOffres(data);
-      setTotalPages(Math.ceil((count ?? 0) / OFFRES_PAR_PAGE));
+      if (userError || !user) {
+        console.error("Erreur utilisateur :", userError);
+        return;
+      }
+
+      // Étape 2 : récupération de l'entreprise liée à cet utilisateur
+      const { data: entreprise, error: entrepriseError } = await supabase
+        .from('entreprises')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (entrepriseError || !entreprise) {
+        console.error("Erreur récupération entreprise :", entrepriseError);
+        return;
+      }
+
+      const idEntreprise = entreprise.id;
+
+      // Étape 3 : récupération des IDs des AO liés à cette entreprise
+      const { data: scoringData, error: scoringError } = await supabase
+        .from('AO_Public_Scoring')
+        .select('ao_id')
+        .eq('id_entreprise', idEntreprise);
+
+      if (scoringError) {
+        console.error("Erreur récupération AO_Public_Scoring :", scoringError);
+        return;
+      }
+
+      const aoIds = scoringData.map(item => item.ao_id);
+
+      if (aoIds.length === 0) {
+        setAppelsOffres([]);
+        setTotalPages(1);
+        setLoading(false);
+        return;
+      }
+
+      // Étape 4 : récupération des AO correspondants
+      const { data, error, count } = await supabase
+        .from('appel_offre')
+        .select('*', { count: 'exact' })
+        .in('id', aoIds)
+        .range(from, to)
+        .order('id', { ascending: false });
+
+      if (error) {
+        console.error('Erreur de chargement des AO :', error);
+      } else {
+        setAppelsOffres(data);
+        setTotalPages(Math.ceil((count ?? 0) / OFFRES_PAR_PAGE));
+      }
+    } catch (err) {
+      console.error('Erreur inattendue :', err);
     }
 
     setLoading(false);
@@ -50,6 +101,8 @@ const Offers = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
 
+  console.log('appelsOffres', appelsOffres);
+
   return (
     <DashboardLayout 
       activeTab="tools" 
@@ -57,7 +110,13 @@ const Offers = () => {
     >
       <div className="w-full grid grid-cols-1 gap-4 pt-4 mb-8">
         <PublicTenders tenders={appelsOffres}/>
-        
+
+        {appelsOffres.length === 0 && !loading && (
+          <div className="text-center text-sm text-gray-400">
+            Aucun appel d'offre correspondant à votre entreprise.
+          </div>
+        )}
+
         <div className="flex justify-end items-center gap-4">
           <button 
             onClick={handlePrevious}
@@ -67,7 +126,7 @@ const Offers = () => {
             Précédent
           </button>
 
-          <span className="text-sm text-gray-300 text-sm">
+          <span className="text-sm text-gray-300">
             Page {currentPage} sur {totalPages}
           </span>
 
