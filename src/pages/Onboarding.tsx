@@ -369,7 +369,7 @@ export default function OnboardingDCEManager() {
                     </p>
                   </div>
   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <button
                       onClick={() => handleCardSelect("type_entreprise", "TPE")}
                       className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center"
@@ -385,6 +385,15 @@ export default function OnboardingDCEManager() {
                       <BriefcaseBusiness className="text-3xl mb-2" />
                       <div className="font-bold mb-2">PME</div>
                       <div className="text-sm">De 10 à 250 salariés</div>
+                    </button>
+
+                    <button
+                      onClick={() => handleCardSelect("type_entreprise", "GE")}
+                      className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center"
+                    >
+                      <BriefcaseBusiness className="text-3xl mb-2" />
+                      <div className="font-bold mb-2">GE</div>
+                      <div className="text-sm">Plus de 250 salariés</div>
                     </button>
                   </div>
                 </div>

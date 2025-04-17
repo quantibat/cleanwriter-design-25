@@ -1,42 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import TenderDetail from '@/components/TenderDetail';
-import { supabase } from '@/integrations/supabase/client';
 import { useParams } from 'react-router-dom';
+import { useAppelOffreById } from '@/hooks/useAppelOfferById';
 
 const OfferDetail = () => {
   const breadcrumbs = [
     { label: "Détail de l'appel d'offre" }
   ];
 
-  const { id } = useParams(); // ✅ Corrigé ici
+  const { id } = useParams(); 
 
-  const [tender, setTender] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { tender, loading } = useAppelOffreById(id);
 
-  useEffect(() => {
-    const fetchTenderById = async () => {
-      if (!id) return;
-
-      setLoading(true);
-
-      const { data, error } = await supabase
-        .from('appel_offre') 
-        .select('*')
-        .eq('id', id) // si `id` est un UUID ou une string en BDD
-        .single();
-
-      if (error) {
-        console.error('Erreur de chargement:', error);
-      } else {
-        setTender(data);
-      }
-
-      setLoading(false);
-    };
-
-    fetchTenderById();
-  }, [id]);
+  console.log(tender);
 
   return (
     <DashboardLayout activeTab="tools" breadcrumbs={breadcrumbs}>

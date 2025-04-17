@@ -1,13 +1,14 @@
 import React from "react";
 
-const getColor = (score) => {
-  if (score >= 80) return "#00FFAB"; // vert néon
-  if (score >= 50) return "#FFD700"; // jaune néon
-  return "#FF4C4C"; // rouge néon
+const getColor = (percentage) => {
+  if (percentage >= 80) return "#00FFAB";   
+  if (percentage >= 50) return "#FFD700";   
+  return "#FF4C4C";                         
 };
 
 const LinearProgressBar = ({ score }) => {
-  const color = getColor(score);
+  const percentage = (score *100) / 5;
+  const color = getColor(percentage);
 
   return (
     <div className="w-full mt-4">
@@ -15,12 +16,14 @@ const LinearProgressBar = ({ score }) => {
         <div
           className="h-full transition-all duration-500 ease-in-out"
           style={{
-            width: `${score}%`,
+            width: `${percentage}%`,
             backgroundColor: color,
           }}
         />
       </div>
-      
+      <p className="text-sm text-gray-400 mt-1 text-right">
+        {(percentage)}%
+      </p>
     </div>
   );
 };

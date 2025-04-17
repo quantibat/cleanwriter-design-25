@@ -179,9 +179,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 <div className="w-full">
                   {children}
                 </div>
-                <div className="absolute bottom-[20px] right-[20px] ">
-                  <N8nChat />
-                </div>
               </div>
             </div>
           </div>
