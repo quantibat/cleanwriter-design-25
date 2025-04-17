@@ -25,6 +25,7 @@ export default function OnboardingDCEManager() {
   const [domainesChantiers, setDomainesChantiers] = useState([]);
   const [naturesChantiers, setNaturesChantiers] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const [suggestionsZone, setSuggestionsZone] = useState([]);
 
   const {
     register,
@@ -51,6 +52,9 @@ export default function OnboardingDCEManager() {
       prenom: "",
       nom: "",
       interest: "",
+      budget_cible: "",
+      politique_tarifaire:"",
+      conditions_paiement: ""
     },
   });
 
@@ -182,11 +186,14 @@ export default function OnboardingDCEManager() {
             ville: data.ville,
             zone_chalandise: data.zone_chalandise || "",
             nombre_ao_mensuels: data.nombre_ao_mensuels,
-            budget_conditions_financieres: data.budget_conditions_financieres,
+            budget_conditions_financieres: { budget_cible: data.budget_cible, 
+              politique_tarifaire: data.politique_tarifaire, 
+              conditions_paiement: data.conditions_paiement },
             nom: data.nom,
             prenom: data.prenom,
             email: data.email,
             interest: data.interest,
+
           },
         ])
         .select();
@@ -262,7 +269,7 @@ export default function OnboardingDCEManager() {
     },
   };
 
-  const handleZoneChalandiseChange = async (query) => {
+  const handleAdresseChange= async (query) => {
     if (!query) return setSuggestions([]);
     try {
       const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=10`);
@@ -271,6 +278,19 @@ export default function OnboardingDCEManager() {
     } catch (error) {
       console.error("Erreur zone chalandise:", error);
       setSuggestions([]);
+    }
+  };
+
+
+  const handleZoneChalandiseChange = async (query) => {
+    if (!query) return setSuggestions([]);
+    try {
+      const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=10`);
+      const data = await response.json();
+      setSuggestionsZone(data.features || []);
+    } catch (error) {
+      console.error("Erreur zone chalandise:", error);
+      setSuggestionsZone([]);
     }
   };
 
@@ -467,7 +487,7 @@ export default function OnboardingDCEManager() {
                             id="adresse_siege_social"
                             type="text"
                             {...register("adresse_siege_social", { required: "Ce champ est requis" })}
-                            onChange={(e) => handleZoneChalandiseChange(e.target.value) }
+                            onChange={(e) => handleAdresseChange(e.target.value) }
                             className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                             autoComplete="off"
                           />
@@ -481,7 +501,7 @@ export default function OnboardingDCEManager() {
                               {suggestions.map((s, index) => (
                                 <li
                                   key={index}
-                                  onClick={() => handleZoneChalandiseChange(s)}
+                                  onClick={() => handleAdresseChange(s)}
                                   className="px-4 py-2 cursor-pointer hover:bg-gray-200"
                                 >
                                   {s.properties.label}
@@ -524,9 +544,9 @@ export default function OnboardingDCEManager() {
                           <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
                         )}
                         {/* Suggestions */}
-                        {suggestions.length > 0 && (
+                        {suggestionsZone.length > 0 && (
                             <ul className="absolute z-10 bg-white text-black w-full border mt-1 rounded shadow">
-                              {suggestions.map((s, index) => (
+                              {suggestionsZone.map((s, index) => (
                                 <li
                                   key={index}
                                   onClick={() => handleZoneChalandiseChange(s)}
@@ -638,14 +658,37 @@ export default function OnboardingDCEManager() {
                       </select>
                       {errors.interest && <span className="text-red-500 text-sm">{errors.interest.message}</span>}
                     </div>
+                    <div>
+                      <label className="block text-sm mb-2">Politique tarifaire</label>
+                      <input
+                        name="politique_tarifaire"
+                        {...register("politique_tarifaire", { required: "Ce champ est requis" })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        type="text"
+                      />
+                      {errors.politique_tarifaire && <span className="text-red-500 text-sm">{errors.politique_tarifaire.message}</span>}
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-2">Budget cible</label>
+                      <select
+                        {...register("budget_cible", { required: "Ce champ est requis" })}
+                        className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-sm"
+                      >
+                        <option value="">Choisissez</option>
+                        <option value="5000 £ -10000 £">5000 £ -10000 £</option>
+                        <option value="10000 £ -20000 £">10000 £ -20000 £</option>
+                        <option value="30000 £ -50000 £">30000 £ -50000 £</option>
+                      </select>
+                      {errors.budget_cible && <span className="text-red-500 text-sm">{errors.budget_cible.message}</span>}
+                    </div>
                     <div className="col-span-2">
-                      <label className="block text-sm mb-2">Budget et conditions financières</label>
+                      <label className="block text-sm mb-2">Condition de paiement</label>
                       <textarea
-                        name="budget_conditions_financieres"
-                        {...register("budget_conditions_financieres", { required: "Ce champ est requis" })}
+                        name="conditions_paiement"
+                        {...register("conditions_paiement", { required: "Ce champ est requis" })}
                         className="w-full p-3 rounded bg-gray-800 border border-gray-700"
                       />
-                      {errors.budget_conditions_financieres && <span className="text-red-500 text-sm">{errors.budget_conditions_financieres.message}</span>}
+                      {errors.conditions_paiement && <span className="text-red-500 text-sm">{errors.conditions_paiement.message}</span>}
                     </div>
                   </div>
                   <div className="flex justify-between mt-6">

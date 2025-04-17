@@ -84,6 +84,8 @@ const PublicTenders = ({ tenders }) => {
   });
 
 
+
+
   const filteredTenders = tenders.filter((tender) => {
     return (
       tender.appel_offre.metadata.Objet_Appel_Offre.toLowerCase().includes(filters.search.toLowerCase()) &&
@@ -91,6 +93,8 @@ const PublicTenders = ({ tenders }) => {
       (filters.location ? tender.appel_offre.metadata.Code_Postal === filters.location : true)
     );
   });
+
+  console.log(filteredTenders)
 
   return (
     <div className="flex flex-col gap-2">
@@ -105,7 +109,8 @@ const PublicTenders = ({ tenders }) => {
       <div className="flex flex-col lg:flex-row gap-4 mb-8">
         <FilterPanel filters={filters} setFilters={setFilters} />
         <div className="w-full md:w-3/4 flex flex-col gap-4">
-          {filteredTenders.map((tender) => (
+          {filteredTenders && filteredTenders.length >0 ? 
+          filteredTenders.map((tender) => (
             <div
               key={tender.id}
               className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 bg-[#ffffff12] border-[#384454] border flex flex-col gap-3 relative"
@@ -152,7 +157,14 @@ const PublicTenders = ({ tenders }) => {
                 
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="w-full bg-[#0f172a]/70  p-6 rounded-2xl shadow-lg border border-[#384454] h-48"> 
+            <div className="flex flex-col gap-4 items-center justify-center h-full">
+              <p className="text-sm text-gray-300 text-center">Aucun appel d'offre ne correspond à votre profil</p>  
+              </div>
+              </div>
+          )
+            }
         </div>
       </div>
     </div>

@@ -31,10 +31,11 @@ const Offers = () => {
 
   return (
     <DashboardLayout activeTab="tools" breadcrumbs={breadcrumbs}>
-      <div className="w-full grid grid-cols-1 gap-4 pt-4 mb-8">
+      <div className="w-full grid grid-cols-1 gap-4 pt-4 mb-8 relative">
         <PublicTenders tenders={appelsOffres} />
         
-        <div className="flex justify-end items-center gap-4">
+        {appelsOffres && appelsOffres.length > 0 && (
+          <div className="flex justify-end items-center gap-4">
           <button 
             onClick={handlePrevious}
             disabled={currentPage === 1}
@@ -54,7 +55,8 @@ const Offers = () => {
           >
             Suivant
           </button>
-        </div>
+        </div>)
+        }
       </div>
     </DashboardLayout>
   );
