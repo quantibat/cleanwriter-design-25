@@ -40,7 +40,7 @@ const TenderDetail = ({ tender }) => {
         </dl>
       </div>
 
-      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+      <div className="w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
         <div className="flex mb-4">
           <h3 className="font-semibold text-2xl">Correspondance</h3>
           <div className="flex justify-self-end items-center ml-auto absolute right-0 top-0 pr-4 pt-4">
