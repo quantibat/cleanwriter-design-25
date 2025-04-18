@@ -138,7 +138,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[var(--dashboard-background,#0c101b)] w-full">
+    <div className="min-h-screen bg-[var(--dashboard-background,#0c101b)] w-full relative">
       <SidebarProvider defaultOpen={true}>
         <div className="flex flex-col h-screen overflow-auto w-full">
           <div className="flex flex-row">
@@ -180,6 +180,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   {children}
                 </div>
               </div>
+              <footer className="bg-[var(--dashboard-background,#0c101b)] text-white text-center py-4 border-t border-gray/50 mt-8">
+                <p className="text-sm text-gray-600">© 2025 DCE Manager — Tous droits réservés</p>
+              </footer>
             </div>
           </div>
         </div>

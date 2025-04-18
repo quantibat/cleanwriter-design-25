@@ -7,7 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import bcrypt from "bcryptjs";
 
 const steps = [
   "Type d'entreprise",
