@@ -4,6 +4,7 @@ import { Badge } from "./ui/badge";
 import ScoreCircle from "./ui/score";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
+import { DetailItem } from "./TenderDetail";
 
 const PublicTenders = ({ tenders }) => {
 
@@ -17,8 +18,11 @@ const PublicTenders = ({ tenders }) => {
               key={tender.id}
               className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 bg-[#ffffff12] border-[#384454] border flex flex-col gap-3 relative"
             >
-              <div className="item-center w-full flex justify-start">
+              <div className="item-center w-full flex justify-start gap-4">
                   <Badge variant="outline">{tender.appel_offre.metadata.Type_Projet}</Badge>
+                  <div className="flex items-center" >
+                    <span className="text-gray-100"> Date limite de réponse le {new Date(tender.appel_offre.metadata.EndDate).toLocaleDateString()}</span>
+                  </div>
               </div>
               <div className="flex flex-row gap-2 justify-between">
                 <h3 className="text-2xl font-semibold text-white w-4/5">
@@ -26,7 +30,7 @@ const PublicTenders = ({ tenders }) => {
                 </h3>
                 <div className="flex flex-col gap-2 ml-auto relative w-1/4 justify-self-end">
                     <div className="text-xs text-gray-300 ml-auto flex flex-col gap-2 text-end justify-self-end ">
-                      <ScoreCircle score={tender.score_final} size={80}/>
+                      <ScoreCircle score={tender.score_final} size={80} taille={"text-sm"}/>
                     </div>
                 </div>
               </div>
@@ -43,10 +47,7 @@ const PublicTenders = ({ tenders }) => {
                     <MapPin className="mr-1 text-gray-300" size={12} />
                     <span>{tender.appel_offre.metadata.Code_Postal}</span>
                   </div>
-                  <div className="flex items-center" >
-                    <Clock className="mr-1 text-gray-300 font-bold"size={12} />
-                    <span className="text-gray-300"> A rendre avant le {new Date(tender.appel_offre.metadata.EndDate).toLocaleDateString()}</span>
-                  </div>
+
                 </div>
                 
                 <Button

@@ -12,7 +12,7 @@ const getGlow = (score) => {
   return "0 0 8px #FF4C4C, 0 0 12px #FF4C4C";
 };
 
-const ScoreCircle = ({ score, size = 64, fontSize = '0.75rem' }) => {
+const ScoreCircle = ({ score, size = 64, taille }) => {
   const percent = (score / 5) * 100; // conversion en %
   const radius = (size / 2) - 8;
   const strokeDasharray = 2 * Math.PI * radius;
@@ -50,8 +50,8 @@ const ScoreCircle = ({ score, size = 64, fontSize = '0.75rem' }) => {
         />
       </svg>
       <div
-        className="absolute inset-0 flex items-center justify-center font-bold text-white"
-        style={{ textShadow: glow, fontSize }}
+        className={`absolute inset-0 flex items-center justify-center font-bold text-white  ${taille}` }
+        style={{ textShadow: glow }}
       >
         {Math.round(percent)}%
       </div>

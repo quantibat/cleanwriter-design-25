@@ -3,7 +3,7 @@ import ScoreCircle from "./ui/score";
 import LinearProgressBar from "./ui/linearprogress";
 import { Button } from "./ui/button";
 
-const DetailItem = ({ label, value }) => (
+export const DetailItem = ({ label, value }) => (
   <div className="mb-6 flex-col justify-center items-center gap-4 bg-transparent w-auto">
     <dt className="text-sm font-semibold text-neon-blue px-2 py-1 rounded-full border border-neon-blue shadow-neon mb-4">
       {label}
@@ -19,14 +19,14 @@ const TenderDetail = ({ tender }) => {
     <div className="flex-col gap-4">
     <div className="flex gap-4 w-full ">
         <div className="py-1">       
-          <h2 className="text-3xl font-bold text-white mb-4">{ tender && tender.appel_offre.metadata?.Objet_Appel_Offre}</h2>
+          <h2 className="text-3xl font-bold text-white mb-4"> {tender && tender.appel_offre.metadata?.Objet_Appel_Offre} </h2>
         </div>
     </div>
     <div className="flex flex-col gap-4">
       <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ">
         <dl className=" gap-4 md:grid md:grid-cols-4 sm:grid sm:grid-cols-2 sm:gap-4">
           <div className="flex items-center w-full">
-            <DetailItem label="Entreprise sous traitante" value={"ESSAI"} />
+            <DetailItem label="Acheteur" value={"ESSAI"} />
           </div>
           <div className="flex items-center w-full">
             <DetailItem label="Localisation" value={tender && tender.appel_offre.metadata?.Code_Postal}/>
@@ -44,7 +44,7 @@ const TenderDetail = ({ tender }) => {
         <div className="flex mb-4">
           <h3 className="font-semibold text-2xl">Correspondance</h3>
           <div className="flex justify-self-end items-center ml-auto absolute right-0 top-0 pr-4 pt-4">
-          <ScoreCircle score={tender && tender.score_final} size={120}/>
+          <ScoreCircle score={tender && tender.score_final} size={120} taille={"text-2xl"}/>
         </div>
         </div>
         <p className="text-sm text-gray-300 mb-4 max-w-[70%] ">
@@ -54,7 +54,7 @@ const TenderDetail = ({ tender }) => {
           {tender && tender.Scoring.map((item, index) => (
             <div key={index} className="flex flex-col gap-1">
               <b className="text-sm text-gray-300">{item.Critère}</b>
-              <LinearProgressBar score={item.Note} />
+              <LinearProgressBar score={item.Note}/>
             </div>
           ))}
         </div>

@@ -5,7 +5,10 @@ import { useParams } from 'react-router-dom';
 import { useAppelOffreById } from '@/hooks/useAppelOfferById';
 
 const OfferDetail = () => {
+
   const breadcrumbs = [
+    { label: "Actions rapides", path: "/dashboard" },
+    { label: "Veille des appels d'offres", path: "/offres" },
     { label: "Détail de l'appel d'offre" }
   ];
 

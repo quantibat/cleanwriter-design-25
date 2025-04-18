@@ -6,7 +6,7 @@ const getColor = (percentage) => {
   return "#FF4C4C";                         
 };
 
-const LinearProgressBar = ({ score }) => {
+const LinearProgressBar = ({ score}) => {
   const percentage = (score *100) / 5;
   const color = getColor(percentage);
 
@@ -21,8 +21,8 @@ const LinearProgressBar = ({ score }) => {
           }}
         />
       </div>
-      <p className="text-sm text-gray-400 mt-1 text-right">
-        {(percentage)}%
+      <p className={`text-gray-400 mt-1 text-right text-xs`}>
+          {(percentage)}%
       </p>
     </div>
   );
