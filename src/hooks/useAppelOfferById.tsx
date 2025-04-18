@@ -42,7 +42,6 @@ export const useAppelOffreById = (idweb) => {
         const { data: scoringData, error: scoringError } = await supabase
           .from('AO_Public_Scoring')
           .select('*')
-          .eq('id_entreprise', idEntreprise)
           .eq('ao_id', idweb)
           .single();
   
@@ -56,8 +55,7 @@ export const useAppelOffreById = (idweb) => {
         const { data: aoData, error: aoError } = await supabase
           .from('appel_offre')
           .select('*')
-          .eq('metadata->>idweb', idweb)
-          .single();
+          .eq('metadata->>idweb', idweb);
   
         if (aoError) {
           console.error("Erreur récupération AO :", aoError);
@@ -67,7 +65,7 @@ export const useAppelOffreById = (idweb) => {
   
         setTender({
           ...scoringData,
-          appel_offre: aoData,
+          appel_offre: aoData[0],
         });
   
         setLoading(false);

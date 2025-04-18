@@ -74,7 +74,7 @@ const ToolsTab = () => {
               Favoris
             </h2>
           </div>
-          <p className="text-gray-300 text-base w-full">
+          <p className="text-gray-400 text-base w-full">
             Vos actions favoris
           </p>
         </div>
@@ -104,7 +104,7 @@ const ToolsTab = () => {
             Repérez vos futurs chantiers
           </h2>
         </div>
-        <p className="text-gray-300 text-base w-full">
+        <p className="text-gray-400 text-base w-full">
           Optimisez vos recherches, économisez du temps et de l'argent en ciblant les appels d'offres les plus pertinents.
         </p>
       </div>
@@ -152,7 +152,7 @@ const ToolsTab = () => {
             Organisez clairement vos documents
           </h2>
         </div>
-        <p className="text-gray-300 text-base w-full">
+        <p className="text-gray-400 text-base w-full">
           Vos documents classés, votre dossier enrichi, vos échanges simplifiés
         </p>
       </div>
@@ -200,7 +200,7 @@ const ToolsTab = () => {
             Affinez précisément vos quantités, coûts et plannings
           </h2>
         </div>
-        <p className="text-gray-300 text-base max-w-3xl">
+        <p className="text-gray-400 text-base w-full">
           Des métrés fiables, des chiffrages précis, des plannings réalistes
         </p>
       </div>
@@ -248,7 +248,7 @@ const ToolsTab = () => {
             Formalisez une offre percutante
           </h2>
         </div>
-        <p className="text-gray-300 text-base w-full">
+        <p className="text-gray-400 text-base w-full">
           Votre mémoire technique sur-mesure, votre administratif simplifié
         </p>
       </div>
@@ -296,7 +296,7 @@ const ToolsTab = () => {
             Concluez efficacement pour remporter vos marchés
           </h2>
         </div>
-        <p className="text-gray-300 text-base max-w-3xl">
+        <p className="text-gray-400 text-base w-full">
           Finalisez avec confiance, ajustez avec facilité, décrochez sereinement
         </p>
       </div>

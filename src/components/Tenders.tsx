@@ -3,11 +3,7 @@ import { Clock, MapPin } from "lucide-react";  // Icônes de react-lucide
 import { Badge } from "./ui/badge";
 import ScoreCircle from "./ui/score";
 import { Button } from "./ui/button";
-
-
-
-
-
+import { Link } from "react-router-dom";
 
 const PublicTenders = ({ tenders }) => {
 
@@ -56,9 +52,8 @@ const PublicTenders = ({ tenders }) => {
                 <Button
                   variant="outline"
                   className="text-xs border-neon-blue bg-transparent-200 hover:border-none hover:bg-gray-300 hover:text-gray-900 py-0"
-                  onClick={() => window.open(`./offre-detail/${tender.appel_offre.metadata.idweb}`)} 
                 >
-                  <span>Consulter</span>  
+                    <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>Consulter</Link>
                 </Button>
                 
               </div>

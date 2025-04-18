@@ -13,8 +13,6 @@ const OfferDetail = () => {
 
   const { tender, loading } = useAppelOffreById(id);
 
-  console.log(tender);
-
   return (
     <DashboardLayout activeTab="tools" breadcrumbs={breadcrumbs}>
       <div className="w-full grid grid-cols-1 gap-8 pt-4">

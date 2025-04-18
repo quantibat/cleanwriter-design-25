@@ -65,14 +65,13 @@ const TenderDetail = ({ tender }) => {
           <p className="text-sm text-gray-300 whitespace-pre-line">{tender && tender.appel_offre.content}</p>
         </div>
         <div className="mt-6">
-            <h4 className="text-md font-semibold text-white mb-2">Documents</h4>
             <ul className="space-y-3">
             <li className="flex justify-between items-center bg-[#1e293b]/70 p-3 rounded-lg text-sm text-white border border-[#384454]">
                   <span className="truncate">{"Document"}</span>
                   <Button
                   variant="outline"
                   className="text-xs border-neon-blue bg-transparent-200 hover:border-none hover:bg-gray-300 hover:text-gray-900 py-0"
-                  onClick={() => window.open(tender && tender.appel_offre.url_ao, "_blank")} 
+                  onClick={() => window.open(tender && tender.url_ao, "_blank")} 
                 >
                   <span>Voir le document</span>  
                 </Button>

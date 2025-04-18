@@ -40,7 +40,7 @@ const Dashboard = () => {
   };
 
   const breadcrumbs = [
-    { label: activeTab === 'tools' ? 'Outils' : activeTab === 'projects' ? 'Projets' : 'Contribuer' }
+    { label: activeTab === 'tools' ? 'Actions rapides' : activeTab === 'projects' ? 'Projets' : 'Contribuer' }
   ];
 
   return (

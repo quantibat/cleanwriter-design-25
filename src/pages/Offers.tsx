@@ -8,8 +8,8 @@ import { Calendar, CalendarDays, History } from 'lucide-react';
 
 const Offers = () => {
   const breadcrumbs = [
-    { label: "Veille des appels d'offres", path: "/dashboard" },
-    { label: "Appel d'offre" }
+    { label: "Actions rapides", path: "/dashboard" },
+    { label: "Veille des appels d'offres" }
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,11 +24,15 @@ const Offers = () => {
     const thisWeek: any[] = [];
     const lastWeekOffers: any[] = [];
 
-    console.log('appelsOffres', appelsOffres);
-
-    appelsOffres && appelsOffres?.forEach((offer) => {
+    const sorted = [...(appelsOffres || [])].sort((a, b) => {
+      const scoreA = a?.score_final || 0;
+      const scoreB = b?.score_final || 0;
+      return scoreB - scoreA; 
+    });
+  
+    sorted.forEach((offer) => {
       if (!offer?.appel_offre.metadata.startDate) return;
-      const date = parseISO(offer?.appel_offre.metadata.startDate);
+      const date = parseISO(offer.appel_offre.metadata.startDate);
       if (isToday(date)) {
         today.push(offer);
       } else if (isThisWeek(date, { weekStartsOn: 1 })) {
@@ -37,9 +41,11 @@ const Offers = () => {
         lastWeekOffers.push(offer);
       }
     });
-
+  
     return { today, thisWeek, lastWeekOffers };
   }, [appelsOffres]);
+
+  
 
   const getTenders = () => {
     switch (activeTab) {
