@@ -62,7 +62,7 @@ const ProfileForm = () => {
   };
 
   return (
-    <Card className='border border-gray/10 rounded-lg mb-8'>
+    <Card className='w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454]'>
       <CardHeader className='flex flex-col gap-3 border-b border-gray/10 p-4'>
         <CardTitle className='flex flex-row items-center gap-2'> <User size={30} className=' border border-white/10 rounded-full p-1'/> Informations personnelles</CardTitle>
         <CardDescription>Gérez vos informations personnelles et votre adresse</CardDescription>
@@ -95,14 +95,14 @@ const ProfileForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField control={form.control} name="firstName" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prénom</FormLabel>
+                  <FormLabel className='font-medium text-sm text-gray-400'>Prénom</FormLabel>
                   <FormControl><Input {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
               <FormField control={form.control} name="lastName" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nom</FormLabel>
+                  <FormLabel className='font-medium text-sm text-gray-400'>Nom</FormLabel>
                   <FormControl><Input {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -110,14 +110,14 @@ const ProfileForm = () => {
             </div>
             <FormField control={form.control} name="email" render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className='font-medium text-sm text-gray-400'>Email</FormLabel>
                 <FormControl><Input {...field} readOnly /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
             <FormField control={form.control} name="address" render={({ field }) => (
               <FormItem>
-                <FormLabel>Adresse</FormLabel>
+                <FormLabel className='font-medium text-sm text-gray-400'>Adresse</FormLabel>
                 <FormControl><Input {...field} /></FormControl>
                 <FormMessage />
               </FormItem>

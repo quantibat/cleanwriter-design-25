@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FireExtinguisher } from 'lucide-react';
 
@@ -21,7 +20,6 @@ const passwordSchema = z.object({
 });
 
 const SecurityForm = () => {
-  const { user } = useAuth();
   const form = useForm({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -53,7 +51,7 @@ const SecurityForm = () => {
   };
 
   return (
-    <Card className='border border-gray/10 rounded-lg mb-8'>
+    <Card className='w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454]'>
     <CardHeader className='flex flex-col gap-3 border-b border-gray/10 p-4'>
       <CardTitle className='flex flex-row items-center gap-2'> <FireExtinguisher size={30} className=' border border-white/10 rounded-full p-1'/> <CardTitle>Sécurité</CardTitle></CardTitle>
       <CardDescription>Modifiez votre mot de passe</CardDescription>
