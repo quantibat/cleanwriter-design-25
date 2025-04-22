@@ -12,7 +12,7 @@ const LinearProgressBar = ({ score}) => {
 
   return (
     <div className="w-full mt-4">
-      <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
         <div
           className="h-full transition-all duration-500 ease-in-out"
           style={{

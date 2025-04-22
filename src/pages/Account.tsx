@@ -11,7 +11,7 @@ const Account = () => {
   return (
     <DashboardLayout activeTab="account" breadcrumbs={[{ label: 'Mon Compte', path:'/account' }, { label: activeTab === 'profile' ? 'Informations personnelles' : activeTab === 'enterprise' ? 'Entreprise' : 'Sécurité' }]} toolType="account">
       <div className="flex flex-col w-full mt-4">
-        <div className='w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454] mb-8'>
+        <div className='w-full bg-gray-700 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454] mb-8'>
           <h1 className="text-2xl font-bold mb-2">Mon Compte</h1>
           <p className='text-sm text-gray-400'>Gérez ici vos informations personnelles, votre entreprise et la sécurité de votre compte.</p>
         </div>
@@ -21,8 +21,8 @@ const Account = () => {
               <button
                 onClick={() => setActiveTab('profile')}
                 className={cn(
-                  "w-full text-left px-4 py-2 rounded-md transition- border border-gray/20 text-sm",
-                  activeTab === 'profile' ? "bg-[#0f172a]/70 font-semibold" : "hover:bg-accent"
+                  "w-full text-left px-4 py-2 rounded-md transition- border border-gray/20 bg-gray-700 text-sm",
+                  activeTab === 'profile' ? "bg-blue-600 font-semibold" : "hover:bg-accent"
                 )}
               >
                 Informations personnelles
@@ -30,8 +30,8 @@ const Account = () => {
               <button
                 onClick={() => setActiveTab('enterprise')}
                 className={cn(
-                  "w-full text-left px-4 py-2 rounded-md transition-colors border border-gray/20 text-sm",
-                  activeTab === 'enterprise' ? "bg-[#0f172a]/70 font-semibold" : "hover:bg-accent"
+                  "w-full text-left px-4 py-2 rounded-md transition-colors border border-gray/20 bg-gray-700 text-sm",
+                  activeTab === 'enterprise' ? "bg-blue-600 font-semibold" : "hover:bg-accent"
                 )}
               >
                 Entreprise
@@ -39,8 +39,8 @@ const Account = () => {
               <button
                 onClick={() => setActiveTab('security')}
                 className={cn(
-                  "w-full text-left px-4 py-2 rounded-md transition-colors border border-gray/20 text-sm ",
-                  activeTab === 'security' ? "bg-[#0f172a]/70 font-semibold" : "hover:bg-accent"
+                  "w-full text-left px-4 py-2 rounded-md transition-colors border border-gray/20 bg-gray-700 text-sm ",
+                  activeTab === 'security' ? "bg-blue-600 font-semibold" : "hover:bg-accent"
                 )}
               >
                 Sécurité

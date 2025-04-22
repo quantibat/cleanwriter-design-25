@@ -19,11 +19,11 @@ const TenderDetail = ({ tender }) => {
     <div className="flex-col gap-4">
     <div className="flex gap-4 w-full ">
         <div className="py-1">       
-          <h2 className="text-3xl font-bold text-white mb-4"> {tender && tender.appel_offre.metadata?.Objet_Appel_Offre} </h2>
+          <h2 className="text-3xl font-bold text-white mb-4"> Avis {tender && tender.appel_offre.metadata?.idweb} :  {tender && tender.appel_offre.metadata?.Objet_Appel_Offre} </h2>
         </div>
     </div>
     <div className="flex flex-col gap-4">
-      <div className=" w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ">
+      <div className=" w-full bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ">
         <dl className=" gap-4 md:grid md:grid-cols-4 sm:grid sm:grid-cols-2 sm:gap-4">
           <div className="flex items-center w-full">
             <DetailItem label="Acheteur" value={"ESSAI"} />
@@ -40,7 +40,7 @@ const TenderDetail = ({ tender }) => {
         </dl>
       </div>
 
-      <div className="w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+      <div className="w-full bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
         <div className="flex mb-4">
           <h3 className="font-semibold text-2xl">Correspondance</h3>
           <div className="flex justify-self-end items-center ml-auto absolute right-0 top-0 pr-4 pt-4">
@@ -59,7 +59,7 @@ const TenderDetail = ({ tender }) => {
           ))}
         </div>
       </div>
-      <div className="w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-2xl shadow-lg h-auto  flex flex-col justify-between mb-20">
+      <div className="w-full bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg h-auto  flex flex-col justify-between mb-20">
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">Description</h3>
           <p className="text-sm text-gray-300 whitespace-pre-line">{tender && tender.appel_offre.content}</p>

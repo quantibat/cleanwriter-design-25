@@ -12,7 +12,7 @@ const FavoritableCard = ({ title, description, onAddToFavorites, isFavorite, ico
 
   return (
     <Card
-      className="border border-[#384454] h-[16rem] group relative pb-2 flex flex-col justify-center rounded-2xl bg-gray-200 pl-3 pr-3 shadow-sm ring-0 ring-gray-200 transition-all duration-150 hover:shadow-lg hover:ring-2 hover:ring-white focus:shadow-xl focus:ring-gray-600 dark:bg-gray-700 dark:hover:ring-gray-300 dark:focus:ring-gray-400 bg-[#0f172a]/70 "
+      className="border border-[#384454] h-[16rem] group relative pb-2 flex flex-col justify-center rounded-2xl bg-gray-700 pl-3 pr-3 shadow-sm ring-0 ring-gray-200 transition-all duration-150 hover:shadow-lg hover:ring-2 hover:ring-white focus:shadow-xl focus:ring-gray-600 dark:bg-gray-700 dark:hover:ring-gray-300 dark:focus:ring-gray-400"
     >
       <CardHeader className="pb-3 relative pt-0">
         <div className='flex flex-row items-center justify-between mb-3'>

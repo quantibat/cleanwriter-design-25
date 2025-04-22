@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
-import { FolderPlus, Edit, Eye, Trash2, Database, Clock, FileText as FileTextIcon, File as FileIcon, Youtube as YoutubeIcon, RefreshCw } from "lucide-react";
+import { FolderPlus, RefreshCw } from "lucide-react";
 import { useProjects } from '@/hooks/useProjects';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FolderCard } from '@/components/FolderCard';
@@ -14,9 +14,6 @@ const ProjectsTab = () => {
     isLoading, 
     error,
     getUserProjects, 
-    viewProject, 
-    editProject, 
-    deleteProjectNavigate, 
     goToCreateProject 
   } = useProjects();
 

@@ -69,10 +69,12 @@ const Offers = () => {
   return (
     <DashboardLayout activeTab="tools" breadcrumbs={breadcrumbs}>
       <div className="w-full flex flex-col gap-6 pt-4 mb-8">
-        <div className="w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454] mb-4">
+        <div className="w-full bg-gray-700 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454] mb-4">
           <h2 className="text-3xl font-bold">Appels d'offres</h2>
           <p className="text-muted-foreground py-2 text-sm">
-            {appelsOffres?.length
+            {appelsOffres?.length > 0 && appelsOffres.length === 1
+              ? `Un appel d'offre correspond à votre profil`
+              : appelsOffres?.length > 1
               ? `${appelsOffres.length} appels d'offres correspondent à votre profil`
               : `Aucun appel d'offre ne correspond à votre profil`}
           </p>

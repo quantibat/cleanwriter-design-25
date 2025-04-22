@@ -104,8 +104,8 @@ const EnterpriseForm = () => {
   };
 
   return (
-    <Card className='w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454]'>
-      <CardHeader className="flex flex-col gap-3 border-b border-gray/10 p-4">
+    <Card className='w-full bg-gray-700 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454]'>
+      <CardHeader className="flex flex-col gap-3 border-b border-gray-500 p-4">
         <CardTitle className="flex flex-row items-center gap-2">
           <BriefcaseBusiness size={30} className="border border-white/10 rounded-full p-1" />
           <CardTitle>Informations entreprise</CardTitle>
@@ -141,7 +141,7 @@ const EnterpriseForm = () => {
                 
                 <FormControl>
                   {f.type === 'select' ? (
-                    <select {...field} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base">
+                    <select {...field} className="flex h-10 w-full rounded-md border border-gray-500 bg-transparent px-3 py-2 text-base">
                       <option value="">Sélectionner</option>
                       {f.options.map((option) => (
                         <option key={option} value={option}>

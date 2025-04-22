@@ -51,8 +51,8 @@ const SecurityForm = () => {
   };
 
   return (
-    <Card className='w-full bg-[#0f172a]/70 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454]'>
-    <CardHeader className='flex flex-col gap-3 border-b border-gray/10 p-4'>
+    <Card className='w-full bg-gray-700 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454]'>
+    <CardHeader className='flex flex-col gap-3 border-b border-gray-500 p-4'>
       <CardTitle className='flex flex-row items-center gap-2'> <FireExtinguisher size={30} className=' border border-white/10 rounded-full p-1'/> <CardTitle>Sécurité</CardTitle></CardTitle>
       <CardDescription>Modifiez votre mot de passe</CardDescription>
       </CardHeader>
@@ -63,7 +63,7 @@ const SecurityForm = () => {
             {['currentPassword', 'newPassword', 'confirmPassword'].map((field, i) => (
               <FormField key={i} control={form.control} name={field} render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{
+                  <FormLabel className='text-gray-400'>{
                     field.name === 'currentPassword' ? 'Mot de passe actuel' :
                     field.name === 'newPassword' ? 'Nouveau mot de passe' :
                     'Confirmer le mot de passe'
