@@ -110,7 +110,7 @@ const SignIn = () => {
           <p className="mt-2 text-white/60">Connectez-vous à votre compte</p>
         </div>
         
-        <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
+        <div className="animated-border-glow bg-gray-700 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Connexion</h1>
           
           <div className="mb-8">
@@ -157,7 +157,7 @@ const SignIn = () => {
                     <FormControl>
                       <div className="relative form-input-animated">
                         <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                        <Input className=" bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="votre@email.com" {...field} />
+                        <Input className="pl-10 bg-transparent border-white/10 text-white focus-visible:ring-blue-500" placeholder="votre@email.com" {...field} />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -174,7 +174,7 @@ const SignIn = () => {
                         <Lock className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
                         <Input 
                           type="password" 
-                          className="bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                          className="pl-10 bg-transparent border-white/10 text-white focus-visible:ring-blue-500" 
                           placeholder="••••••••" 
                           {...field} 
                           showPasswordToggle={true} 

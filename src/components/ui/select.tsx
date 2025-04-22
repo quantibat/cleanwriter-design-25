@@ -171,13 +171,13 @@ const MultiSelectDropdown = ({ options, value = [], onChange, label }) => {
     <div className="relative" ref={dropdownRef}>
       <label className="block text-sm mb-2 text-white">{label}</label>
       <div
-        className="border border-gray-700 rounded-sm p-3 bg-gray-800 cursor-pointer"
+        className="border border-gray-600 rounded-sm p-3 bg-transparent cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-white text-sm truncate block">{selectedLabels}</span>
       </div>
       {isOpen && (
-        <div className="absolute z-50 mt-1 w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg max-h-[300px] overflow-y-auto">
+        <div className="absolute z-50 mt-1 w-full bg-gray-700 border border-gray-600 rounded-md shadow-lg max-h-[300px] overflow-y-auto">
           {options && options.map((option) => (
             <label
               key={option.value}

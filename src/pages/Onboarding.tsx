@@ -352,7 +352,7 @@ export default function OnboardingDCEManager() {
         <p className="mt-2 text-white/60">Inscrivez-vous pour recevoir des appels d'offres à jour recueillis depuis le BOAMP</p>
       </div>
       
-      <div className="mx-auto w-[85%] animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 space-y-16 p-6">
+      <div className="mx-auto w-[85%] animated-border-glow  bg-gray-700 backdrop-blur-md rounded-lg border border-white/5 space-y-16 p-6">
         <div className="flex space-x-4 h-24 w-full justify-center">
           {steps.map((s, i) => (
             <div key={i} className="flex items-center space-x-2">
@@ -378,7 +378,7 @@ export default function OnboardingDCEManager() {
             >
               {step === 0 && (
                 <div>
-                  <div className="flex flex-col mb-4 border-1 border p-2">
+                  <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4 p-2">
                     <h2 className="text-xl font-semibold mb-1 flex gap-4">
                       <Building />
                       <p>Type de l'entreprise</p>
@@ -420,7 +420,7 @@ export default function OnboardingDCEManager() {
   
               {step === 1 && (
                 <div>
-                  <div className="flex flex-col mb-4 border-1 border p-2">
+                  <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4  p-2">
                     <h2 className="text-xl font-semibold mb-1 flex gap-4">
                       <Info />
                       <p>Informations sur l'entreprise</p>
@@ -453,7 +453,7 @@ export default function OnboardingDCEManager() {
                                 handleSiretChange(e);
                               },
                             })}
-                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                            className="w-full p-3 rounded bg-transparent border border-gray-600"
                           />
 
                         {errors.numero_siret && (
@@ -470,7 +470,7 @@ export default function OnboardingDCEManager() {
                           name="nom_entreprise"
                           type="text"
                           {...register("nom_entreprise", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                          className="w-full p-3 rounded bg-transparent border border-gray-600"
                         />
                         {errors.nom_entreprise && (
                           <span className="text-red-500 text-sm">{errors.nom_entreprise.message}</span>
@@ -487,7 +487,7 @@ export default function OnboardingDCEManager() {
                             type="text"
                             {...register("adresse_siege_social", { required: "Ce champ est requis" })}
                             onChange={(e) => handleAdresseChange(e.target.value) }
-                            className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                            className="w-full p-3 rounded bg-transparent border border-gray-600"
                             autoComplete="off"
                           />
                           {errors.adresse_siege_social && (
@@ -520,7 +520,7 @@ export default function OnboardingDCEManager() {
                           name="ville"
                           type="text"
                           {...register("ville", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                          className="w-full p-3 rounded bg-transparent border border-gray-600"
                         />
                         {errors.ville && (
                           <span className="text-red-500 text-sm">{errors.ville.message}</span>
@@ -537,7 +537,7 @@ export default function OnboardingDCEManager() {
                           name="zone_chalandise"
                           type="text"
                           {...register("zone_chalandise", { required: "Ce champ est requis" })}
-                          className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                          className="w-full p-3 rounded bg-transparent border border-gray-600"
                         />
                         {errors.zone_chalandise && (
                           <span className="text-red-500 text-sm">{errors.zone_chalandise.message}</span>
@@ -623,7 +623,7 @@ export default function OnboardingDCEManager() {
   
               {step === 2 && (
                 <div>
-                  <div className="flex flex-col mb-4 border-1 border p-2">
+                  <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4 p-2">
                     <h2 className="text-xl font-semibold mb-1 flex gap-4">
                       <BriefcaseBusiness />
                       <p>Appels d'offres souhaités</p>
@@ -638,7 +638,7 @@ export default function OnboardingDCEManager() {
                       <input
                         name="nombre_ao_mensuels"
                         {...register("nombre_ao_mensuels", { required: "Ce champ est requis" })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600"
                         type="number"
                         min={1}
                       />
@@ -648,7 +648,7 @@ export default function OnboardingDCEManager() {
                       <label className="block text-sm mb-2">Intérêt</label>
                       <select
                         {...register("interest", { required: "Ce champ est requis" })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-sm"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600 text-sm"
                       >
                         <option value="">Choisissez</option>
                         <option value="Privés">Privés</option>
@@ -662,7 +662,7 @@ export default function OnboardingDCEManager() {
                       <input
                         name="politique_tarifaire"
                         {...register("politique_tarifaire", { required: "Ce champ est requis" })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600"
                         type="text"
                       />
                       {errors.politique_tarifaire && <span className="text-red-500 text-sm">{errors.politique_tarifaire.message}</span>}
@@ -671,7 +671,7 @@ export default function OnboardingDCEManager() {
                       <label className="block text-sm mb-2">Budget cible</label>
                       <select
                         {...register("budget_cible", { required: "Ce champ est requis" })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-sm"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600 text-sm"
                       >
                         <option value="">Choisissez</option>
                         <option value="5000 £ -10000 £">5000 £ -10000 £</option>
@@ -685,7 +685,7 @@ export default function OnboardingDCEManager() {
                       <textarea
                         name="conditions_paiement"
                         {...register("conditions_paiement", { required: "Ce champ est requis" })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600"
                       />
                       {errors.conditions_paiement && <span className="text-red-500 text-sm">{errors.conditions_paiement.message}</span>}
                     </div>
@@ -699,7 +699,7 @@ export default function OnboardingDCEManager() {
   
               {step === 3 && (
                 <div>
-                  <div className="flex flex-col mb-4 border-1 border p-2">
+                  <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4 p-2">
                     <h2 className="text-xl font-semibold mb-1 flex gap-4">
                       <User />
                       Vos informations personnelles
@@ -716,7 +716,7 @@ export default function OnboardingDCEManager() {
                         {...register("nom", {
                           minLength: { value: 2, message: "Nom trop court" },
                         })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600"
                       />
                       {errors.nom && <span className="text-red-500 text-sm">{errors.nom.message}</span>}
                     </div>
@@ -729,7 +729,7 @@ export default function OnboardingDCEManager() {
                           required: "Prénom est requis",
                           minLength: { value: 2, message: "Prénom trop court" },
                         })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600"
                       />
                       {errors.prenom && <span className="text-red-500 text-sm">{errors.prenom.message}</span>}
                     </div>
@@ -745,7 +745,7 @@ export default function OnboardingDCEManager() {
                             message: "Adresse email invalide",
                           },
                         })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600"
                       />
                       {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
                     </div>
@@ -758,7 +758,7 @@ export default function OnboardingDCEManager() {
                           required: "Mot de passe est requis",
                           ...passwordValidation,
                         })}
-                        className="w-full p-3 rounded bg-gray-800 border border-gray-700"
+                        className="w-full p-3 rounded bg-transparent border border-gray-600"
                       />
                       {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
                     </div>
