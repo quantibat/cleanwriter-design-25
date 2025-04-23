@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export const DetailItem = ({ label, value, icon: Icon }) => (
-  <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-800/50">
+  <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-700">
     <div className="p-2 rounded-full bg-blue-500/10">
       <Icon className="w-5 h-5 text-blue-400" />
     </div>
