@@ -20,7 +20,7 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({
   const percentage = (score / 5) * 100;
   const radius = (size / 2) - 10;
   const circumference = 2 * Math.PI * radius;
-  const progress = ((100 - percentage) / 100) * circumference;
+  const strokeDashoffset = ((100 - percentage) / 100) * circumference;
   
   const getColor = (percent: number) => {
     if (percent >= 80) return "#22C55E"; // Green
@@ -54,34 +54,36 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({
         </TooltipProvider>
       </div>
       
-      <div className="relative w-full max-w-[200px]">
+      <div className="relative w-full flex justify-center">
         <svg
           width={size}
           height={size / 2}
           viewBox={`0 0 ${size} ${size / 2}`}
-          className="transform -rotate-180"
         >
+          {/* Background track */}
           <path
-            d="M 10 ${size / 2} A ${radius} ${radius} 0 0 1 ${size - 10} ${size / 2}"
+            d={`M 10 ${size / 2} A ${radius} ${radius} 0 0 1 ${size - 10} ${size / 2}`}
             fill="none"
             stroke="#E5E7EB"
             strokeWidth="20"
             strokeLinecap="round"
           />
+          {/* Progress arc */}
           <path
-            d="M 10 ${size / 2} A ${radius} ${radius} 0 0 1 ${size - 10} ${size / 2}"
+            d={`M 10 ${size / 2} A ${radius} ${radius} 0 0 1 ${size - 10} ${size / 2}`}
             fill="none"
             stroke={getColor(percentage)}
             strokeWidth="20"
             strokeLinecap="round"
             strokeDasharray={circumference}
-            strokeDashoffset={progress}
-            className="transition-all duration-1000 ease-out"
+            strokeDashoffset={strokeDashoffset}
+            className="transform -rotate-180 origin-center transition-all duration-1000 ease-out"
+            transform={`rotate(-180 ${size/2} ${size/2})`}
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center pt-4">
           <div className="text-xl font-bold">{getLabel(percentage)}</div>
-          <div className="text-2xl font-bold">{score}/5</div>
+          <div className="text-2xl font-bold">{score.toFixed(1)}/5</div>
         </div>
       </div>
     </div>
