@@ -1,4 +1,5 @@
-import { MapPin, Building2 } from "lucide-react";
+
+import { MapPin, Building2, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
