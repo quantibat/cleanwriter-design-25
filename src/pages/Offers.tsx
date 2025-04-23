@@ -4,7 +4,7 @@ import PublicTenders from '@/components/Tenders';
 import { useAppelsOffres } from '@/hooks/useAppelOffers';
 import { isToday, isThisWeek, isSameWeek, parseISO, subWeeks } from 'date-fns';
 import clsx from 'clsx';
-import { Calendar, CalendarDays, History } from 'lucide-react';
+import { Calendar, CalendarDays, History, Star } from 'lucide-react';
 
 const Offers = () => {
   const breadcrumbs = [
@@ -13,16 +13,22 @@ const Offers = () => {
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState<'today' | 'thisWeek' | 'lastWeek'>('today');
+  const [activeTab, setActiveTab] = useState<'today' | 'thisWeek' | 'lastWeek' | 'favorites'>('today');
   const { appelsOffres, totalPages } = useAppelsOffres(currentPage);
+  
+  const [favorites] = useState(() => {
+    const savedFavorites = localStorage.getItem('favoriteOffers');
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
 
   const now = new Date();
   const lastWeek = subWeeks(now, 1);
 
-  const { today, thisWeek, lastWeekOffers } = useMemo(() => {
+  const { today, thisWeek, lastWeekOffers, favoriteOffers } = useMemo(() => {
     const today: any[] = [];
     const thisWeek: any[] = [];
     const lastWeekOffers: any[] = [];
+    const favoriteOffers: any[] = [];
 
     const sorted = [...(appelsOffres || [])].sort((a, b) => {
       const scoreA = a?.score_final || 0;
@@ -32,7 +38,13 @@ const Offers = () => {
   
     sorted.forEach((offer) => {
       if (!offer?.appel_offre.metadata.startDate) return;
+      
       const date = parseISO(offer.appel_offre.metadata.startDate);
+      
+      if (favorites.includes(offer.appel_offre.metadata.idweb)) {
+        favoriteOffers.push(offer);
+      }
+      
       if (isToday(date)) {
         today.push(offer);
       } else if (isThisWeek(date, { weekStartsOn: 1 })) {
@@ -42,10 +54,8 @@ const Offers = () => {
       }
     });
   
-    return { today, thisWeek, lastWeekOffers };
-  }, [appelsOffres]);
-
-  
+    return { today, thisWeek, lastWeekOffers, favoriteOffers };
+  }, [appelsOffres, favorites]);
 
   const getTenders = () => {
     switch (activeTab) {
@@ -55,6 +65,8 @@ const Offers = () => {
         return thisWeek;
       case 'lastWeek':
         return lastWeekOffers;
+      case 'favorites':
+        return favoriteOffers;
       default:
         return [];
     }
@@ -64,6 +76,7 @@ const Offers = () => {
     { key: 'today', label: `Aujourd'hui (${today.length})`, icon: <Calendar size={16} /> },
     { key: 'thisWeek', label: `Cette semaine (${thisWeek.length})`, icon: <CalendarDays size={16} /> },
     { key: 'lastWeek', label: `Semaine dernière (${lastWeekOffers.length})`, icon: <History size={16} /> },
+    { key: 'favorites', label: `Favoris (${favoriteOffers.length})`, icon: <Star size={16} /> },
   ];
 
   return (
@@ -80,7 +93,6 @@ const Offers = () => {
           </p>
         </div>
 
-        {/* Onglets horizontaux alignés à droite */}
         <div className="flex justify-end mb-2">
           <div className="flex gap-4">
             {tabList.map((tab) => (
@@ -101,10 +113,8 @@ const Offers = () => {
           </div>
         </div>
 
-        {/* Contenu de l'onglet actif */}
         <PublicTenders tenders={getTenders()} />
 
-        {/* Pagination */}
         {appelsOffres && appelsOffres.length > 0 && (
           <div className="flex justify-end items-center gap-4 mt-6">
             <button
