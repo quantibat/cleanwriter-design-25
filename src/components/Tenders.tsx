@@ -1,4 +1,5 @@
-import { MapPin, Building2, Star, CalendarClock } from "lucide-react";
+
+import { MapPin, Building2, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
@@ -111,6 +112,10 @@ const PublicTenders = ({ tenders }) => {
                     <p className="text-gray-300 mt-4">
                       {truncateText(tender.appel_offre.content, 40)}
                     </p>
+
+                    <div className="text-gray-300 mt-4">
+                      <span className="font-medium">Date limite:</span> {formatDate(tender.appel_offre.metadata.EndDate)}
+                    </div>
                   </div>
                   
                   <div className="flex flex-col gap-4 w-full lg:w-1/4 min-w-[250px]">
@@ -125,17 +130,6 @@ const PublicTenders = ({ tenders }) => {
                       </Link>
                     </Button>
                   </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4 mt-4">
-                <div className="flex items-center gap-2 text-gray-300">
-                  <CalendarClock size={16} className="text-neon-blue" />
-                  <span 
-                    className="font-semibold text-sm bg-neon-orange/20 text-neon-orange px-2 py-1 rounded-full"
-                  >
-                    Date limite : {formatDate(tender.appel_offre.metadata.EndDate)}
-                  </span>
                 </div>
               </div>
             </div>
