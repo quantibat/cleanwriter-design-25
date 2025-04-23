@@ -14,7 +14,10 @@ export const DetailItem = ({ label, value }) => (
   </div>
 )
 
+
+
 const TenderDetail = ({ tender }) => {
+  console.log("tender", tender);
   return (
     <div className="flex-col gap-4">
     <div className="flex gap-4 w-full ">

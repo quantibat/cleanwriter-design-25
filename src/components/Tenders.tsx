@@ -79,11 +79,11 @@ const PublicTenders = ({ tenders }) => {
                   border-t-[50px] border-l-[50px] 
                   border-t-blue-600 border-l-transparent">
                   <button 
-                    className="absolute top-[-45px] right-[5px] text-white hover:scale-110 transition-transform"
+                    className="absolute top-[5px] right-[5px] text-white hover:scale-110 transition-transform"
                     onClick={() => toggleFavorite(tender.appel_offre.metadata.idweb)}
                   >
                     <Star 
-                      size={24} 
+                      size={20} 
                       fill={favorites.includes(tender.appel_offre.metadata.idweb) ? "white" : "none"}
                       className="text-white"
                     />
@@ -113,7 +113,7 @@ const PublicTenders = ({ tenders }) => {
                       {truncateText(tender.appel_offre.content, 40)}
                     </p>
 
-                    <div className="text-gray-300 mt-4">
+                    <div className="text-gray-400 mt-4">
                       <span className="font-medium">Date limite:</span> {formatDate(tender.appel_offre.metadata.EndDate)}
                     </div>
                   </div>
@@ -125,8 +125,8 @@ const PublicTenders = ({ tenders }) => {
                       size="sm"
                       className="w-full border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-white transition-colors"
                     >
-                      <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>
-                        Voir l'offre
+                      <Link to={`/offre-detail/${tender && tender?.appel_offre?.metadata?.idweb}`}>
+                        Voir l'offre 
                       </Link>
                     </Button>
                   </div>
@@ -135,7 +135,7 @@ const PublicTenders = ({ tenders }) => {
             </div>
           ))
         ) : (
-          <div className="w-full bg-gray-700 p-8 rounded-xl shadow-lg border border-[#384454] flex items-center justify-center">
+          <div className="w-full bg-gray-700 p-8 rounded-xl shadow-lg border border-[#384454] flex items-center justify-center h-24">
             <p className="text-gray-300 text-center">Aucun appel d'offre ne correspond à votre profil</p>
           </div>
         )}

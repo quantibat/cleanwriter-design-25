@@ -22,7 +22,7 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center gap-2 mb-2 text-xl font-bold">
+      <div className="flex items-center gap-2  text-xl font-bold">
         Indice de compatibilité
         <TooltipProvider>
           <Tooltip>
@@ -71,7 +71,7 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
             }
           }}
         />
-        <div className="text-center mt-2 font-medium text-lg">
+        <div className="text-center font-medium text-lg">
           {getLabel(score)}
         </div>
       </div>
