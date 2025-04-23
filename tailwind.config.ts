@@ -77,6 +77,9 @@ export default {
 					yellow: '#FBBF24',
 				}
 			},
+			boxShadow: {
+				neon: '0 0 10px #00ffcc, 0 0 20px #00ffcc',
+			  },
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
