@@ -1,5 +1,6 @@
 
 import React from "react";
+import {GaugeComponent} from 'react-gauge-component';
 import {
   Tooltip,
   TooltipContent,
@@ -10,63 +11,14 @@ import { Info } from "lucide-react";
 
 interface CompatibilityGaugeProps {
   score: number;
-  size?: number;
 }
 
-const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({
-  score,
-  size = 200,
-}) => {
-  const percentage = (score / 5) * 100;
-  
-  const getColor = (percent: number) => {
-    if (percent >= 80) return "#4CAF50"; // Vert
-    if (percent >= 50) return "#FFC107"; // Jaune/Orange
-    return "#FF5722"; // Rouge
-  };
-
-  const getLabel = (percent: number) => {
-    if (percent >= 80) return "Bonne opportunité";
-    if (percent >= 50) return "Compatibilité moyenne";
+const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
+  const getLabel = (value: number) => {
+    if (value >= 4) return "Bonne opportunité";
+    if (value >= 2) return "Compatibilité moyenne";
     return "Compatibilité faible";
   };
-
-  // Configuration pour le demi-cercle
-  const strokeWidth = 20;
-  const radius = (size / 2) - (strokeWidth / 2);
-  const centerX = size / 2;
-  const centerY = size / 2;
-  const startAngle = 180;
-  const endAngle = 0;
-  
-  // Calcul des points pour le path
-  const polarToCartesian = (centerX: number, centerY: number, radius: number, angleInDegrees: number) => {
-    const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
-    return {
-      x: centerX + (radius * Math.cos(angleInRadians)),
-      y: centerY + (radius * Math.sin(angleInRadians)),
-    };
-  };
-
-  const describeArc = (x: number, y: number, radius: number, startAngle: number, endAngle: number) => {
-    const start = polarToCartesian(x, y, radius, endAngle);
-    const end = polarToCartesian(x, y, radius, startAngle);
-    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-    
-    return [
-      "M", start.x, start.y, 
-      "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
-    ].join(" ");
-  };
-
-  // Path pour le fond de la jauge
-  const backgroundPath = describeArc(centerX, centerY, radius, startAngle, endAngle);
-  
-  // Calcul de l'angle pour le score actuel
-  const scoreAngle = startAngle - ((percentage / 100) * (startAngle - endAngle));
-  
-  // Path pour la partie colorée de la jauge
-  const scorePath = describeArc(centerX, centerY, radius, startAngle, scoreAngle);
 
   return (
     <div className="flex flex-col items-center">
@@ -89,47 +41,44 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({
           </Tooltip>
         </TooltipProvider>
       </div>
-      
-      <div className="relative w-full" style={{ maxWidth: `${size}px` }}>
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          {/* Demi-cercle gris (background) */}
-          <path
-            d={backgroundPath}
-            fill="none"
-            stroke="#E5E7EB"
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-          />
-          
-          {/* Portions colorées selon le score */}
-          <path
-            d={scorePath}
-            fill="none"
-            stroke={getColor(percentage)}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-          />
-          
-          {/* Points d'extrémité arrondis */}
-          <circle 
-            cx={polarToCartesian(centerX, centerY, radius, startAngle).x}
-            cy={polarToCartesian(centerX, centerY, radius, startAngle).y}
-            r={strokeWidth / 2}
-            fill={percentage <= 20 ? getColor(percentage) : "#E5E7EB"}
-          />
-          
-          <circle 
-            cx={polarToCartesian(centerX, centerY, radius, endAngle).x}
-            cy={polarToCartesian(centerX, centerY, radius, endAngle).y}
-            r={strokeWidth / 2}
-            fill={percentage >= 90 ? getColor(percentage) : "#E5E7EB"}
-          />
-        </svg>
-        
-        {/* Texte au centre */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <div className="text-2xl font-bold">{getLabel(percentage)}</div>
-          <div className="text-3xl font-bold">{score.toFixed(1).replace('.', ',')}/5</div>
+
+      <div className="relative w-full">
+        <GaugeComponent
+          type="semicircle"
+          arc={{
+            colorArray: ['#FF2121', '#00FF15'],
+            padding: 0.02,
+            subArcs: [
+              { limit: 40 },
+              { limit: 60 },
+              { limit: 70 },
+              {},
+              {},
+              {},
+              {}
+            ]
+          }}
+          pointer={{type: "blob", animationDelay: 0}}
+          value={score * 20} // Convert score from 0-5 to 0-100
+          labels={{
+            valueLabel: {
+              formatTextValue: (value) => `${(value/20).toFixed(1)}/5`,
+              style: { fontSize: '24px', fontWeight: 'bold' },
+            },
+            tickLabels: {
+              type: "inner",
+              ticks: [
+                { value: 20 },
+                { value: 40 },
+                { value: 60 },
+                { value: 80 },
+                { value: 100 }
+              ]
+            }
+          }}
+        />
+        <div className="text-center mt-2 font-medium text-lg">
+          {getLabel(score)}
         </div>
       </div>
     </div>

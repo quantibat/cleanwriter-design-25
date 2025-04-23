@@ -109,25 +109,7 @@ const PublicTenders = ({ tenders }) => {
                   </div>
                   
                   <div className="lg:w-[300px]">
-                  <GaugeComponent
-                      type="semicircle"
-                      arc={{
-                        colorArray: ['#FF2121', '#00FF15'],
-                        padding: 0.02,
-                        subArcs:
-                          [
-                            { limit: 40 },
-                            { limit: 60 },
-                            { limit: 70 },
-                            {},
-                            {},
-                            {},
-                            {}
-                          ]
-                      }}
-                      pointer={{type: "blob", animationDelay: 0 }}
-                      value={tender.score_final*100/5}
-                    />
+                    <CompatibilityGauge score={tender.score_final} />
                   </div>
                 </div>
 
