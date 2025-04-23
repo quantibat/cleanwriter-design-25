@@ -59,7 +59,17 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
             ]
           }}
           pointer={{type: "blob", animationDelay: 0}}
-          value={score * 20} 
+          value={score * 20}
+          labels={{
+            valueLabel: {
+              formatTextValue: (value) => `${(value/20).toFixed(1)}/5`,
+              style: { fontSize: '24px', fontWeight: 'bold' },
+            },
+            tickLabels: {
+              type: "inner",
+              ticks: []
+            }
+          }}
         />
         <div className="text-center mt-2 font-medium text-lg">
           {getLabel(score)}
