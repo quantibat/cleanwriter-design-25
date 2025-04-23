@@ -1,6 +1,6 @@
 
 import React from "react";
-import ScoreCircle from "./ui/score";
+import CompatibilityGauge from "./ui/CompatibilityGauge";
 import LinearProgressBar from "./ui/linearprogress";
 import { Button } from "./ui/button";
 import { MapPin, Building2, CalendarClock, User, Briefcase, Hammer, FileDown } from "lucide-react";
@@ -95,7 +95,7 @@ const TenderDetail = ({ tender }) => {
               Survolez chaque critère pour plus de détails.
             </p>
           </div>
-          <ScoreCircle score={tender?.score_final} size={120} taille={"text-2xl"}/>
+          <CompatibilityGauge score={tender?.score_final} />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
