@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import CompatibilityGauge from "./ui/CompatibilityGauge";
+import {GaugeComponent} from 'react-gauge-component';
+
 
 const PublicTenders = ({ tenders }) => {
   const [villes, setVilles] = useState({});
@@ -75,7 +77,25 @@ const PublicTenders = ({ tenders }) => {
                   </div>
                   
                   <div className="lg:w-[300px]">
-                    <CompatibilityGauge score={tender.score_final} />
+                  <GaugeComponent
+                      type="semicircle"
+                      arc={{
+                        colorArray: ['#FF2121', '#00FF15'],
+                        padding: 0.02,
+                        subArcs:
+                          [
+                            { limit: 40 },
+                            { limit: 60 },
+                            { limit: 70 },
+                            {},
+                            {},
+                            {},
+                            {}
+                          ]
+                      }}
+                      pointer={{type: "blob", animationDelay: 0 }}
+                      value={tender.score_final*100/5}
+                    />
                   </div>
                 </div>
 
