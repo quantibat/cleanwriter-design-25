@@ -106,31 +106,31 @@ const PublicTenders = ({ tenders }) => {
                     <div className="text-gray-300 mt-1">
                       {tender?.appel_offre?.metadata?.Nom_Acheteur || "Entreprise dans le secteur du BTP"}
                     </div>
+                    
+                    <p className="text-gray-300 mt-4">
+                      {truncateText(tender.appel_offre.content, 40)}
+                    </p>
+
+                    <div className="flex justify-between items-center mt-4">
+                      <div className="text-gray-300">
+                        <span className="font-medium">Date limite:</span> {formatDate(tender.appel_offre.metadata.EndDate)}
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-white transition-colors"
+                      >
+                        <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>
+                          Voir l'offre
+                        </Link>
+                      </Button>
+                    </div>
                   </div>
                   
-                  <div className="lg:w-[300px]">
+                  <div className="w-full lg:w-1/4 min-w-[250px]">
                     <CompatibilityGauge score={tender.score_final} />
                   </div>
-                </div>
-
-                <p className="text-gray-300">
-                  {truncateText(tender.appel_offre.content, 40)}
-                </p>
-
-                <div className="flex justify-between items-center mt-2">
-                  <div className="text-gray-300">
-                    <span className="font-medium">Date limite:</span> {formatDate(tender.appel_offre.metadata.EndDate)}
-                  </div>
-                  
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-white transition-colors"
-                  >
-                    <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>
-                      Voir l'offre
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </div>
