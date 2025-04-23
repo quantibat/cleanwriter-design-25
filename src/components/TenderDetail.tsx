@@ -1,91 +1,133 @@
+
 import React from "react";
 import ScoreCircle from "./ui/score";
 import LinearProgressBar from "./ui/linearprogress";
 import { Button } from "./ui/button";
+import { MapPin, Building2, CalendarClock, User, Briefcase, Hammer, FileDown } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-export const DetailItem = ({ label, value }) => (
-  <div className="mb-6 flex-col justify-center items-center gap-4 bg-transparent w-auto">
-    <dt className="text-sm font-semibold text-neon-blue px-2 py-1 rounded-full border border-neon-blue shadow-neon mb-4">
-      {label}
-    </dt>
-    <dd className="text-xs text-gray-300 drop-shadow-neon">
-      {value}
-    </dd>
+export const DetailItem = ({ label, value, icon: Icon }) => (
+  <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-800/50">
+    <div className="p-2 rounded-full bg-blue-500/10">
+      <Icon className="w-5 h-5 text-blue-400" />
+    </div>
+    <div>
+      <dt className="text-sm font-medium text-gray-400">{label}</dt>
+      <dd className="text-sm font-semibold text-white mt-1">{value || "Non spécifié"}</dd>
+    </div>
   </div>
-)
-
-
+);
 
 const TenderDetail = ({ tender }) => {
-  console.log("tender", tender);
+  const getDepartement = (codePostal) => {
+    if (!codePostal) return "";
+    return `(${codePostal.substring(0, 2)})`;
+  };
+
   return (
-    <div className="flex-col gap-4">
-    <div className="flex gap-4 w-full ">
-        <div className="py-1">       
-          <h2 className="text-3xl font-bold text-white mb-4"> Avis {tender && tender.appel_offre.metadata?.idweb} :  {tender && tender.appel_offre.metadata?.Objet_Appel_Offre} </h2>
+    <div className="flex-col gap-6 space-y-6">
+      {/* Header Section */}
+      <div className="bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white mb-2">
+              {tender?.appel_offre.metadata?.Objet_Appel_Offre}
+            </h1>
+            <div className="flex items-center gap-2 text-gray-300">
+              <MapPin className="w-4 h-4" />
+              <span>
+                {tender?.appel_offre.metadata?.Ville} {getDepartement(tender?.appel_offre.metadata?.Code_Postal)}
+              </span>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            className="flex items-center gap-2"
+            onClick={() => window.open(tender?.url_ao, "_blank")}
+          >
+            <FileDown className="w-4 h-4" />
+            Télécharger le DCE
+          </Button>
         </div>
-    </div>
-    <div className="flex flex-col gap-4">
-      <div className=" w-full bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454] ">
-        <dl className=" gap-4 md:grid md:grid-cols-4 sm:grid sm:grid-cols-2 sm:gap-4">
-          <div className="flex items-center w-full">
-            <DetailItem label="Acheteur" value={"ESSAI"} />
-          </div>
-          <div className="flex items-center w-full">
-            <DetailItem label="Localisation" value={tender && tender.appel_offre.metadata?.Code_Postal}/>
-          </div>
-          <div className="flex items-center w-full">
-            <DetailItem label="Type de contrat" value={tender && tender.appel_offre.metadata?.Type_Projet}/>
-          </div>
-          <div className="flex items-center w-full">
-            <DetailItem label="A remettre au plus tard" value={tender && tender.appel_offre.metadata?.EndDate}/>
-          </div>
-        </dl>
       </div>
 
-      <div className="w-full bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
-        <div className="flex mb-4">
-          <h3 className="font-semibold text-2xl">Correspondance</h3>
-          <div className="flex justify-self-end items-center ml-auto absolute right-0 top-0 pr-4 pt-4">
-          <ScoreCircle score={tender && tender.score_final} size={120} taille={"text-2xl"}/>
+      {/* Main Info Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <DetailItem 
+          icon={Building2}
+          label="Maître d'ouvrage" 
+          value={tender?.appel_offre.metadata?.Nom_Acheteur}
+        />
+        <DetailItem 
+          icon={User}
+          label="Maître d'œuvre" 
+          value={tender?.appel_offre.metadata?.Maitre_Oeuvre}
+        />
+        <DetailItem 
+          icon={CalendarClock}
+          label="Date limite de réponse" 
+          value={tender?.appel_offre.metadata?.EndDate}
+        />
+        <DetailItem 
+          icon={Briefcase}
+          label="Type de projet" 
+          value={tender?.appel_offre.metadata?.Type_Projet}
+        />
+        <DetailItem 
+          icon={Hammer}
+          label="Type de travaux" 
+          value={tender?.appel_offre.metadata?.Type_Travaux}
+        />
+      </div>
+
+      {/* Correspondance Section */}
+      <div className="bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Correspondance avec votre profil</h2>
+            <p className="text-sm text-gray-300 max-w-[70%]">
+              Ce marché public correspond à vos critères selon l'analyse de nos algorithmes. 
+              Survolez chaque critère pour plus de détails.
+            </p>
+          </div>
+          <ScoreCircle score={tender?.score_final} size={120} taille={"text-2xl"}/>
         </div>
-        </div>
-        <p className="text-sm text-gray-300 mb-4 max-w-[70%] ">
-            Ce marché public correspond parfaitement à votre profil, tant par les compétences recherchées que par les exigences techniques du projet. Votre expérience, vos réalisations passées et votre savoir-faire spécifique vous placent comme un candidat idéal pour répondre aux besoins exprimés dans ce cahier des charges. C’est une opportunité en adéquation avec votre expertise et vos objectifs professionnels.
-        </p>
-        <div className="gap-4 md:grid md:grid-cols-2 sm:grid sm:grid-cols-1 sm:gap-4 items-center max-w-[100%]">
-          {tender && tender.Scoring.map((item, index) => (
-            <div key={index} className="flex flex-col gap-1">
-              <b className="text-sm text-gray-300">{item.Critère}</b>
-              <LinearProgressBar score={item.Note}/>
-            </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {tender?.Scoring.map((item, index) => (
+            <TooltipProvider key={index}>
+              <Tooltip>
+                <TooltipTrigger className="w-full">
+                  <div className="flex flex-col gap-2 p-3 rounded-lg bg-gray-800/50">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-300">{item.Critère}</span>
+                    </div>
+                    <LinearProgressBar score={item.Note}/>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-sm">{item.Raisonnement || "Score basé sur l'analyse de votre profil"}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ))}
         </div>
       </div>
-      <div className="w-full bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg h-auto  flex flex-col justify-between mb-20">
-        <div>
-          <h3 className="text-xl font-semibold text-white mb-4">Description</h3>
-          <p className="text-sm text-gray-300 whitespace-pre-line">{tender && tender.appel_offre.content}</p>
-        </div>
-        <div className="mt-6">
-            <ul className="space-y-3">
-            <li className="flex justify-between items-center bg-[#1e293b]/70 p-3 rounded-lg text-sm text-white border border-[#384454]">
-                  <span className="truncate">{"Document"}</span>
-                  <Button
-                  variant="outline"
-                  className="text-xs border-neon-blue bg-transparent-200 hover:border-none hover:bg-gray-300 hover:text-gray-900 py-0"
-                  onClick={() => window.open(tender && tender.url_ao, "_blank")} 
-                >
-                  <span>Voir le document</span>  
-                </Button>
-                </li>
-            </ul>
-          </div>
+
+      {/* Description Section */}
+      <div className="bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+        <h2 className="text-xl font-semibold mb-4">Description détaillée</h2>
+        <p className="text-sm text-gray-300 whitespace-pre-line">
+          {tender?.appel_offre.content}
+        </p>
       </div>
-    </div>
     </div>
   );
 };
 
 export default TenderDetail;
-
