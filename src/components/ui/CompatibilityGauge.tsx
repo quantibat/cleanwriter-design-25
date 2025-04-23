@@ -1,6 +1,6 @@
 
 import React from "react";
-import {GaugeComponent} from 'react-gauge-component';
+import { GaugeComponent } from 'react-gauge-component';
 import {
   Tooltip,
   TooltipContent,
@@ -46,7 +46,7 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
         <GaugeComponent
           type="semicircle"
           arc={{
-            colorArray: ['#FF2121', '#00FF15'],
+            colorArray: ['#FF2121', '#FFA500', '#FFD700', '#00FF15'],
             padding: 0.02,
             subArcs: [
               { limit: 40 },
