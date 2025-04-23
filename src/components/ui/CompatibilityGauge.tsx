@@ -1,6 +1,6 @@
 
 import React from "react";
-import {GaugeComponent} from 'react-gauge-component';
+import { GaugeComponent } from 'react-gauge-component';
 import {
   Tooltip,
   TooltipContent,
@@ -62,8 +62,8 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
           value={score * 20} // Convert score from 0-5 to 0-100
           labels={{
             valueLabel: {
-              formatTextValue: (value) => `${(value/20).toFixed(1)}/5`,
-              style: { fontSize: '24px', fontWeight: 'bold' },
+              formatTextValue: () => getLabel(score),
+              style: { fontSize: '16px', fontWeight: 'bold', color: 'white' },
             },
             tickLabels: {
               type: "inner",
@@ -77,12 +77,10 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
             }
           }}
         />
-        <div className="text-center mt-2 font-medium text-lg">
-          {getLabel(score)}
-        </div>
       </div>
     </div>
   );
 };
 
 export default CompatibilityGauge;
+
