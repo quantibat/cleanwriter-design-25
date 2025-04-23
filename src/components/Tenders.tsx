@@ -6,6 +6,10 @@ import CompatibilityGauge from "./ui/CompatibilityGauge";
 
 const PublicTenders = ({ tenders }) => {
   const [villes, setVilles] = useState({});
+  const [favorites, setFavorites] = useState(() => {
+    const savedFavorites = localStorage.getItem('favoriteOffers');
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
 
   useEffect(() => {
     async function fetchVilles() {
@@ -49,6 +53,17 @@ const PublicTenders = ({ tenders }) => {
     return text;
   };
 
+  const toggleFavorite = (tenderId) => {
+    setFavorites(prevFavorites => {
+      const newFavorites = prevFavorites.includes(tenderId)
+        ? prevFavorites.filter(id => id !== tenderId)
+        : [...prevFavorites, tenderId];
+      
+      localStorage.setItem('favoriteOffers', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-6">
@@ -58,6 +73,20 @@ const PublicTenders = ({ tenders }) => {
               key={tender.id}
               className="group relative p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-gray-700 to-gray-800 border-[#384454] border"
             >
+              <div className="absolute top-0 right-0">
+                <div className="w-0 h-0 border-t-[50px] border-l-[50px] border-t-neon-blue border-l-transparent">
+                  <button 
+                    className="absolute top-[-45px] right-[5px] text-white hover:scale-110 transition-transform"
+                    onClick={() => toggleFavorite(tender.appel_offre.metadata.idweb)}
+                  >
+                    <Star 
+                      size={24} 
+                      fill={favorites.includes(tender.appel_offre.metadata.idweb) ? "currentColor" : "none"}
+                    />
+                  </button>
+                </div>
+              </div>
+
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
                   <div className="flex-1">
