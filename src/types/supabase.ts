@@ -121,19 +121,19 @@ export interface Database extends GeneratedDatabase {
     };
     Views: {
       // Include all views from the generated types
-      ...GeneratedDatabase['public']['Views']
+      ...GeneratedDatabase['public']['Views'];
     };
     Functions: {
       // Include all functions from the generated types
-      ...GeneratedDatabase['public']['Functions']
+      ...GeneratedDatabase['public']['Functions'];
     };
     Enums: {
       // Include all enums from the generated types
-      ...GeneratedDatabase['public']['Enums']
+      ...GeneratedDatabase['public']['Enums'];
     };
     CompositeTypes: {
       // Include all composite types from the generated types
-      ...GeneratedDatabase['public']['CompositeTypes']
+      ...GeneratedDatabase['public']['CompositeTypes'];
     };
   };
 }

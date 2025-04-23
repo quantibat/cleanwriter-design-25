@@ -1,4 +1,5 @@
-import { MapPin, Star } from "lucide-react";  
+
+import { MapPin, Building2, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
@@ -97,12 +98,15 @@ const PublicTenders = ({ tenders }) => {
                         onClick={() => window.open(`/offre-detail/${tender.appel_offre.metadata.idweb}`, "_blank")}>
                       {truncateText(tender.appel_offre.metadata.Objet_Appel_Offre, 10)}
                     </h3>
-                    <div className="flex items-center gap-2 mt-2 text-gray-300">
-                      <MapPin size={16} className="text-neon-blue" />
-                      <span>{villes[tender.appel_offre.metadata.idweb]}</span>
-                    </div>
-                    <div className="text-gray-300 mt-1">
-                      {tender?.appel_offre?.metadata?.Nom_Acheteur || "Entreprise dans le secteur du BTP"}
+                    <div className="flex flex-wrap items-center gap-4 mt-2">
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <MapPin size={16} className="text-neon-blue" />
+                        <span>{villes[tender.appel_offre.metadata.idweb]}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <Building2 size={16} className="text-neon-blue" />
+                        <span>{tender?.appel_offre?.metadata?.Nom_Acheteur || "Entreprise dans le secteur du BTP"}</span>
+                      </div>
                     </div>
                     
                     <p className="text-gray-300 mt-4">
