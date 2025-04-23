@@ -74,14 +74,17 @@ const PublicTenders = ({ tenders }) => {
               className="group relative p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-gray-700 to-gray-800 border-[#384454] border"
             >
               <div className="absolute top-0 right-0">
-                <div className="w-0 h-0 border-t-[50px] border-l-[50px] border-t-neon-blue border-l-transparent">
+                <div className="w-0 h-0 
+                  border-t-[50px] border-l-[50px] 
+                  border-t-blue-600 border-l-transparent">
                   <button 
                     className="absolute top-[-45px] right-[5px] text-white hover:scale-110 transition-transform"
                     onClick={() => toggleFavorite(tender.appel_offre.metadata.idweb)}
                   >
                     <Star 
                       size={24} 
-                      fill={favorites.includes(tender.appel_offre.metadata.idweb) ? "currentColor" : "none"}
+                      fill={favorites.includes(tender.appel_offre.metadata.idweb) ? "white" : "none"}
+                      className="text-white"
                     />
                   </button>
                 </div>
