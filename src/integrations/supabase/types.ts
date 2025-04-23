@@ -9,6 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      AO_Public_Scoring: {
+        Row: {
+          ao_id: string | null
+          created_at: string | null
+          id: number
+          id_entreprise: string | null
+          Raisonnement: string | null
+          score_final: number | null
+          Scoring: Json[] | null
+          url_ao: string | null
+        }
+        Insert: {
+          ao_id?: string | null
+          created_at?: string | null
+          id?: number
+          id_entreprise?: string | null
+          Raisonnement?: string | null
+          score_final?: number | null
+          Scoring?: Json[] | null
+          url_ao?: string | null
+        }
+        Update: {
+          ao_id?: string | null
+          created_at?: string | null
+          id?: number
+          id_entreprise?: string | null
+          Raisonnement?: string | null
+          score_final?: number | null
+          Scoring?: Json[] | null
+          url_ao?: string | null
+        }
+        Relationships: []
+      }
       appel_offre: {
         Row: {
           content: string | null
@@ -49,6 +82,7 @@ export type Database = {
         Row: {
           adresse_siege_social: string | null
           budget_conditions_financieres: string | null
+          certifications: string | null
           created_time: string | null
           email: string
           id: string
@@ -58,7 +92,6 @@ export type Database = {
           nombre_ao_mensuels: number | null
           numero_contact: string | null
           numero_siret: string | null
-          password: string
           prenom: string | null
           presentation_entreprise: string | null
           type_entreprise: string | null
@@ -69,6 +102,7 @@ export type Database = {
         Insert: {
           adresse_siege_social?: string | null
           budget_conditions_financieres?: string | null
+          certifications?: string | null
           created_time?: string | null
           email: string
           id?: string
@@ -78,7 +112,6 @@ export type Database = {
           nombre_ao_mensuels?: number | null
           numero_contact?: string | null
           numero_siret?: string | null
-          password: string
           prenom?: string | null
           presentation_entreprise?: string | null
           type_entreprise?: string | null
@@ -89,6 +122,7 @@ export type Database = {
         Update: {
           adresse_siege_social?: string | null
           budget_conditions_financieres?: string | null
+          certifications?: string | null
           created_time?: string | null
           email?: string
           id?: string
@@ -98,7 +132,6 @@ export type Database = {
           nombre_ao_mensuels?: number | null
           numero_contact?: string | null
           numero_siret?: string | null
-          password?: string
           prenom?: string | null
           presentation_entreprise?: string | null
           type_entreprise?: string | null

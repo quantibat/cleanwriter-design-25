@@ -5,8 +5,7 @@ import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 
 const PublicTenders = ({ tenders }) => {
-
-const [villes, setVilles] = useState({});
+  const [villes, setVilles] = useState({});
 
   useEffect(() => {
     async function fetchVilles() {
@@ -37,76 +36,69 @@ const [villes, setVilles] = useState({});
     }
   }, [tenders]);
 
-  console.log("Villes:", villes);
-
-
-  
-
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-col lg:flex-row gap-4 mb-8">
-        <div className="w-full flex flex-col gap-4">
-          {tenders && tenders.length >0 ? 
-          tenders.map((tender) => (
-            <div
-              key={tender.id}
-              className=" relative p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 bg-gray-700 border-[#384454] border flex flex-col gap-3 relative"
-            >
-              {/* <div className="item-center w-full flex justify-start gap-4">
-                  <Badge variant="outline">{tender.appel_offre.metadata.Type_Projet}</Badge>
-                  <div className="flex items-center" >
-                    <span className="text-gray-100"> Avis n° {tender.appel_offre.metadata.idweb} Date limite de réponse le {new Date(tender.appel_offre.metadata.EndDate).toLocaleDateString()}</span>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="w-full flex flex-col gap-6">
+          {tenders && tenders.length > 0 ? (
+            tenders.map((tender) => (
+              <div
+                key={tender.id}
+                className="group relative p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-gray-700 to-gray-800 border-[#384454] border flex flex-col gap-4"
+              >
+                <div className="flex flex-row items-start justify-between">
+                  <h3 className="text-2xl font-semibold text-white w-4/5 hover:text-blue-400 transition-colors cursor-pointer" 
+                      onClick={() => window.open(`/offre-detail/${tender.appel_offre.metadata.idweb}`, "_blank")}>
+                    {tender.appel_offre.metadata.Objet_Appel_Offre}
+                  </h3>
+                  <div className="flex flex-col items-end gap-2">
+                    <Star 
+                      size={24} 
+                      className="cursor-pointer text-gray-400 hover:text-yellow-400 transition-colors"
+                    />
+                    <ScoreCircle score={tender.score_final} size={80} taille={"text-lg"}/>
                   </div>
-              </div> */}
-              <div className="flex flex-row gap-2 justify-between">
-                <h3 className="text-2xl font-semibold text-white w-4/5 underline cursor-pointer " onClick={() => window.open(`/offre-detail/${tender.appel_offre.metadata.idweb}`, "_blank")}>
-                  {tender.appel_offre.metadata.Objet_Appel_Offre} - { villes[tender.appel_offre.metadata.idweb]} - { tender && tender?.appel_offre?.metadata?.Nom_Acheteur === undefined ? "Entreprise dans le secteur du BTP" : tender?.appel_offre?.metadata?.Nom_Acheteur} 
-                </h3>
-                <div className="flex flex-col gap-2 ml-auto relative w-1/4 justify-self-end">
-                  <div className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-yellow-400 z-10">
-                    <Star size={20} />
-                  </div>
-                    
                 </div>
-              </div>
 
-              <div className="w-full gap-y-1 ">
-              <p className="flex-1 text-sm text-gray-300 line-clamp-1 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <MapPin size={16} className="text-neon-blue" />
+                    <span className="text-sm">
+                      {villes[tender.appel_offre.metadata.idweb]}
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-300">
+                    {tender?.appel_offre?.metadata?.Nom_Acheteur === undefined 
+                      ? "Entreprise dans le secteur du BTP" 
+                      : tender?.appel_offre?.metadata?.Nom_Acheteur}
+                  </div>
+                  <div className="text-sm text-gray-300">
+                    Date limite: {new Date(tender.appel_offre.metadata.EndDate).toLocaleDateString()}
+                  </div>
+                </div>
+
+                <p className="text-sm text-gray-400 line-clamp-2 mt-2">
                   {tender.appel_offre.content}
-              </p>
-              <div className="mt-3 text-gray-300 text-xs w-full">
-              <span className="text-gray-200 "> 
-                <p className="text-sm">Date limite le {new Date(tender.appel_offre.metadata.EndDate).toLocaleDateString()} à 00h00</p></span>
-                <div className="flex justify-between items-center">
-                  <ScoreCircle score={tender.score_final} size={100} taille={"text-lg"}/>
-                  <div className="flex justify-end items-center text-gray-300 text-xs w-full">
-                <Button
-                  variant="blue"
-                  className="text-xs border-neon-blue bg-transparent-200 hover:border-none hover:bg-gray-300 hover:text-gray-900 py-0"
-                >
-                    <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>Voir l'offre {tender.appel_offre.metadata.idweb }</Link>
-                </Button>
-                </div>
+                </p>
+
+                <div className="flex justify-end mt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-white transition-colors"
+                  >
+                    <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>
+                      Voir l'offre {tender.appel_offre.metadata.idweb}
+                    </Link>
+                  </Button>
                 </div>
               </div>
-              {/* <div className="flex justify-end items-center text-gray-300 text-xs w-full">
-                <Button
-                  variant="outline"
-                  className="text-xs border-neon-blue bg-transparent-200 hover:border-none hover:bg-gray-300 hover:text-gray-900 py-0"
-                >
-                    <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>Voir l'offre {tender.appel_offre.metadata.idweb }</Link>
-                </Button>
-                </div> */}
-              </div>
+            ))
+          ) : (
+            <div className="w-full bg-gray-700 p-8 rounded-xl shadow-lg border border-[#384454] flex items-center justify-center"> 
+              <p className="text-gray-300 text-center">Aucun appel d'offre ne correspond à votre profil</p>  
             </div>
-          )) : (
-            <div className="w-full bg-gray-700  p-6 rounded-lg shadow-lg border border-[#384454] h-48"> 
-            <div className="flex flex-col gap-4 items-center justify-center h-full">
-              <p className="text-sm text-gray-300 text-center">Aucun appel d'offre ne correspond à votre profil</p>  
-              </div>
-              </div>
-          )
-            }
+          )}
         </div>
       </div>
     </div>
@@ -114,5 +106,3 @@ const [villes, setVilles] = useState({});
 };
 
 export default PublicTenders;
-
-
