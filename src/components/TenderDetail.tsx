@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CompatibilityGauge from "./ui/CompatibilityGauge";
 import LinearProgressBar from "./ui/linearprogress";
 import { Button } from "./ui/button";
@@ -24,10 +24,27 @@ export const DetailItem = ({ label, value, icon: Icon }) => (
 );
 
 const TenderDetail = ({ tender }) => {
-  const getDepartement = (codePostal) => {
-    if (!codePostal) return "";
-    return `(${codePostal.substring(0, 2)})`;
-  };
+  const [villes, setVilles] = useState({});
+
+  useEffect(() => {
+    async function fetchVilles() {
+      const nouvellesVilles = {};
+      const code = tender.appel_offre.metadata.Code_Postal;
+      const res = await fetch(`https://geo.api.gouv.fr/communes?codePostal=${code}&fields=nom&format=json`);
+      const data = await res.json();
+
+
+       
+      if (data.length > 0) {
+        nouvellesVilles[tender.appel_offre.metadata.idweb] = `${data[0].nom} (${code})`;
+      } else {
+        nouvellesVilles[tender.appel_offre.metadata.idweb] = `Code inconnu (${code})`;
+      }
+
+      setVilles(nouvellesVilles);
+    }
+    fetchVilles();
+  }, [tender]);
 
   return (
     <div className="flex-col gap-6 space-y-6">
@@ -38,10 +55,10 @@ const TenderDetail = ({ tender }) => {
             <h1 className="text-2xl font-bold text-white mb-2">
               {tender?.appel_offre.metadata?.Objet_Appel_Offre}
             </h1>
-            <div className="flex items-center gap-2 text-gray-300">
+            <div className="flex items-center gap-2 text-gray-300 text-sm">
               <MapPin className="w-4 h-4" />
               <span>
-                {tender?.appel_offre.metadata?.Ville} {getDepartement(tender?.appel_offre.metadata?.Code_Postal)}
+                 {tender && villes[tender?.appel_offre?.metadata?.idweb]}
               </span>
             </div>
           </div>
