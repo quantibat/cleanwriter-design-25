@@ -59,7 +59,7 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
             ]
           }}
           pointer={{type: "blob", animationDelay: 0}}
-          value={score * 20} // Convert score from 0-5 to 0-100
+          value={score * 20}
           labels={{
             valueLabel: {
               formatTextValue: (value) => `${(value/20).toFixed(1)}/5`,
@@ -67,13 +67,7 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
             },
             tickLabels: {
               type: "inner",
-              ticks: [
-                { value: 20 },
-                { value: 40 },
-                { value: 60 },
-                { value: 80 },
-                { value: 100 }
-              ]
+              ticks: []
             }
           }}
         />

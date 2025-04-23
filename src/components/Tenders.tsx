@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import CompatibilityGauge from "./ui/CompatibilityGauge";
-import {GaugeComponent} from 'react-gauge-component';
-
 
 const PublicTenders = ({ tenders }) => {
   const [villes, setVilles] = useState({});
@@ -111,25 +109,22 @@ const PublicTenders = ({ tenders }) => {
                       {truncateText(tender.appel_offre.content, 40)}
                     </p>
 
-                    <div className="flex justify-between items-center mt-4">
-                      <div className="text-gray-300">
-                        <span className="font-medium">Date limite:</span> {formatDate(tender.appel_offre.metadata.EndDate)}
-                      </div>
-                      
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-white transition-colors"
-                      >
-                        <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>
-                          Voir l'offre
-                        </Link>
-                      </Button>
+                    <div className="text-gray-300 mt-4">
+                      <span className="font-medium">Date limite:</span> {formatDate(tender.appel_offre.metadata.EndDate)}
                     </div>
                   </div>
                   
-                  <div className="w-full lg:w-1/4 min-w-[250px]">
+                  <div className="flex flex-col gap-4 w-full lg:w-1/4 min-w-[250px]">
                     <CompatibilityGauge score={tender.score_final} />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full border-neon-blue text-neon-blue hover:bg-neon-blue hover:text-white transition-colors"
+                    >
+                      <Link to={`/offre-detail/${tender.appel_offre.metadata.idweb}`}>
+                        Voir l'offre
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </div>
