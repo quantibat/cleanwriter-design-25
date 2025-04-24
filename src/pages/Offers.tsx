@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useMemo } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import PublicTenders from '@/components/Tenders';
 import { useAppelsOffres } from '@/hooks/useAppelOffers';
@@ -7,8 +8,9 @@ import clsx from 'clsx';
 import { Calendar, CalendarDays, History, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { FiltersSidebar } from '@/components/tender/FiltersSidebar';
-import { useIsMobile } from '@/hooks/useIsMobile';
-import { Button, X } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 const Offers = () => {
   const breadcrumbs = [
