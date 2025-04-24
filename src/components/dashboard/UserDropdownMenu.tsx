@@ -108,11 +108,9 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <p className="font-medium">Nouveaux AO</p>
-              {newTendersCount > 0 && (
-                <Badge variant="secondary" className="bg-blue-500 text-white">
-                  {newTendersCount}
-                </Badge>
-              )}
+              <Badge variant="secondary" className="bg-blue-500 text-white">
+                {newTendersCount}
+              </Badge>
             </div>
           </Link>
 
