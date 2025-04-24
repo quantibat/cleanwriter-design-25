@@ -188,7 +188,7 @@ const SignIn = () => {
                 </Link>
               </div>
               
-              <Button type="submit" className="w-full blue-shimmer-button text-white font-medium bg-transparent" disabled={isLoading}>
+              <Button variant='default' type="submit" className="w-full  text-white font-medium bg-transparent" disabled={isLoading}>
                 {isLoading ? "Connexion en cours..." : "Se connecter"}
               </Button>
             </form>

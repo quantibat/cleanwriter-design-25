@@ -57,7 +57,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
+    <div className="min-h-screen bg-gray-700 flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block">

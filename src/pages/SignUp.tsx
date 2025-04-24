@@ -240,7 +240,7 @@ const SignUp = () => {
                     </div>
                   </FormItem>} />
               
-              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium" disabled={isLoading}>
+              <Button type="submit"  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium" disabled={isLoading}>
                 {isLoading ? "Inscription en cours..." : "Créer mon compte"}
               </Button>
             </form>

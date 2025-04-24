@@ -80,13 +80,15 @@ const ResetPassword = () => {
     }
   }
 
-  return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
+  return <div className="min-h-screen bg-gray-700 flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-block">
-            <h2 className="text-2xl font-bold text-white flex items-center justify-center">
-              <span className="text-blue-400">AI</span>Writer
-            </h2>
+        <Link to="/" className="inline-block">
+            <img 
+              src="/lovable-uploads/87d822bd-dd26-494f-a6d1-9d7e353735ad.png" 
+              alt="DCE Manager"
+              className="h-16 mx-auto mb-4"
+            />
           </Link>
           <p className="mt-2 text-white/60">Réinitialisation de mot de passe</p>
         </div>
@@ -138,7 +140,7 @@ const ResetPassword = () => {
                         <FormMessage />
                       </FormItem>} />
                   
-                  <Button type="submit" disabled={isLoading} className="w-full blue-shimmer-button text-white font-medium bg-transparent">
+                  <Button variant='default' type="submit" disabled={isLoading} className="w-full  text-white font-medium bg-transparent">
                     {isLoading ? "Mise à jour en cours..." : "Réinitialiser le mot de passe"}
                   </Button>
                 </form>
