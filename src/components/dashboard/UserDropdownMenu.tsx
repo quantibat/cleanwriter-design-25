@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { User, BarChart2, CreditCard, LayoutDashboard } from "lucide-react";
+import { User, LayoutDashboard } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
 
 interface UserDropdownMenuProps {
@@ -16,9 +15,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
   onSignOut,
   showUserInfo = false
 }) => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
 
   // Get avatar URL from user metadata
   const getAvatarUrl = () => {
@@ -40,7 +37,8 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
     return "U";
   };
 
-  return <div className="flex items-center gap-3">
+  return (
+    <div className="flex items-center gap-3">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">
@@ -76,21 +74,12 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
             </div>
           </Link>
 
-          <Link to="/usage" className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent cursor-pointer">
-            <div className="bg-purple-500/10 p-2 rounded-md">
-              <BarChart2 className="h-4 w-4 text-purple-500" />
+          <Link to="/offres" className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent cursor-pointer">
+            <div className="bg-blue-500/10 p-2 rounded-md">
+              <LayoutDashboard className="h-4 w-4 text-blue-500" />
             </div>
             <div>
-              <p className="font-medium">Utilisabilite</p>
-            </div>
-          </Link>
-
-          <Link to="/billing" className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent cursor-pointer">
-            <div className="bg-green-500/10 p-2 rounded-md">
-              <CreditCard className="h-4 w-4 text-green-500" />
-            </div>
-            <div>
-              <p className="font-medium">Facturations</p>
+              <p className="font-medium">Nouveaux AO</p>
             </div>
           </Link>
 
@@ -101,7 +90,8 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>;
+    </div>
+  );
 };
 
 export default UserDropdownMenu;

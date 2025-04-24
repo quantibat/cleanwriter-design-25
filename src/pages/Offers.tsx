@@ -15,9 +15,9 @@ const Offers = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState<'favorites' | 'today' | 'thisWeek' | 'lastWeek'>('favorites');
-  const [refreshTrigger, setRefreshTrigger] = useState(0); // 🆕 trigger de refresh
+  const [refreshTrigger, setRefreshTrigger] = useState(0); 
 
-  const { appelsOffres, totalPages } = useAppelsOffres(currentPage, refreshTrigger); // 🆕 on passe le trigger
+  const { appelsOffres, totalPages } = useAppelsOffres(currentPage, refreshTrigger); 
 
   const toggleFavorite = async (id: string, currentStatus: boolean) => {
     console.log(`Toggling favorite for id: ${id}, current status: ${currentStatus}`);

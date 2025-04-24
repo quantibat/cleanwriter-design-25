@@ -11,11 +11,12 @@ export const useAppelOffreById = (idweb) => {
 
       setLoading(true);
 
-      // Étape 1 : Récupérer l'utilisateur
       const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();
+
+      console.log("User data:", user);
 
       if (userError) {
         console.error("Erreur utilisateur :", userError);
