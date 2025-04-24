@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, Zap, Grid, FolderArchive, UsersRound } from "lucide-react";
@@ -38,8 +37,12 @@ const Navbar = () => {
       <div className="mx-auto w-[85%] flex items-center justify-between">
         {/* Logo (Left) */}
         <div className="flex items-center">
-          <Link to="/" className="text-xl font-bold text-foreground flex items-center">
-            <span className="text-blue-400">DCE</span>Manager
+          <Link to="/" className="flex items-center gap-3">
+            <img 
+              src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
+              alt="DCE Manager Logo"
+              className="h-8 w-auto"
+            />
           </Link>
         </div>
 

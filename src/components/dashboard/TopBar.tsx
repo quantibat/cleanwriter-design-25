@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Sun, Moon,  Globe,  Grid, FolderArchive, UsersRound } from "lucide-react";
@@ -122,16 +121,17 @@ const TopBar = ({
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-  return <div className="flex flex-col w-full border-b ">
-      {/* Top div with logo and user controls */}
+  return <div className="flex flex-col w-full border-b">
       <Container className="py-3 px-0">
         <div className="flex items-center justify-between mx-auto w-[85%]">
           {/* Left: Logo */}
           <div className="flex items-center">
-            <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="text-[var(--topbar-text)] font-semibold text-xl">
-                DCE<span className="text-[#00a2ff]">Manager</span>
-              </div>
+            <Link to="/dashboard" className="flex items-center gap-3">
+              <img 
+                src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
+                alt="DCE Manager Logo"
+                className="h-8 w-auto"
+              />
             </Link>
           </div>
 
@@ -140,7 +140,7 @@ const TopBar = ({
             {/* Theme Toggle */}
             {/* <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
               {isDarkMode ? <Sun className="h-5 w-5 text-[var(--topbar-text-transparent)]" /> : <Moon className="h-5 w-5 text-[var(--topbar-text-transparent)]" />}
-            </Button> */}
+            </Button> */
 
             {/* Language Selector */}
             <DropdownMenu>

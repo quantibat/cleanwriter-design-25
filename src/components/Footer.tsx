@@ -5,9 +5,13 @@ const Footer = () => {
       <div className="w-[85%] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
-            <a href="#" className="text-xl font-bold text-foreground inline-block mb-4">
-              <span className="text-blue-400">DCE</span>Manager
-            </a>
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
+                alt="DCE Manager Logo"
+                className="h-8 w-auto"
+              />
+            </div>
             <p className="text-blue-100/70 mb-4">
               La solution complète pour la gestion de vos dossiers de consultation des entreprises.
             </p>
@@ -49,7 +53,6 @@ const Footer = () => {
           </p>
         </div>
       </div>
-      
     </footer>
   );
 };
