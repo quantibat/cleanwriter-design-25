@@ -15,6 +15,7 @@ export type Database = {
           created_at: string | null
           id: number
           id_entreprise: string | null
+          isFavorite: boolean | null
           Raisonnement: string | null
           score_final: number | null
           Scoring: Json[] | null
@@ -25,6 +26,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           id_entreprise?: string | null
+          isFavorite?: boolean | null
           Raisonnement?: string | null
           score_final?: number | null
           Scoring?: Json[] | null
@@ -35,6 +37,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           id_entreprise?: string | null
+          isFavorite?: boolean | null
           Raisonnement?: string | null
           score_final?: number | null
           Scoring?: Json[] | null

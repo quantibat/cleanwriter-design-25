@@ -5,6 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { User, LayoutDashboard } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from "@/integrations/supabase/client";
+import { Badge } from "@/components/ui/badge";
 
 interface UserDropdownMenuProps {
   onSignOut: () => void;
@@ -16,6 +19,31 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
   showUserInfo = false
 }) => {
   const { user } = useAuth();
+
+  const { data: newTendersCount = 0 } = useQuery({
+    queryKey: ['newTendersCount'],
+    queryFn: async () => {
+      // Get the user's last sign in date
+      const { data: { users }, error: userError } = await supabase.auth.admin.listUsers();
+      if (userError) throw userError;
+      
+      const currentUser = users.find(u => u.id === user?.id);
+      const lastSignIn = currentUser?.last_sign_in_at;
+      
+      if (!lastSignIn) return 0;
+
+      // Get tenders added since last sign in
+      const { data: tenders, error: tendersError } = await supabase
+        .from('appel_offre')
+        .select('metadata')
+        .gte('metadata->>startDate', lastSignIn);
+
+      if (tendersError) throw tendersError;
+      
+      return tenders?.length || 0;
+    },
+    enabled: !!user
+  });
 
   // Get avatar URL from user metadata
   const getAvatarUrl = () => {
@@ -78,8 +106,13 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
             <div className="bg-blue-500/10 p-2 rounded-md">
               <LayoutDashboard className="h-4 w-4 text-blue-500" />
             </div>
-            <div>
+            <div className="flex items-center gap-2">
               <p className="font-medium">Nouveaux AO</p>
+              {newTendersCount > 0 && (
+                <Badge variant="secondary" className="bg-blue-500 text-white">
+                  {newTendersCount}
+                </Badge>
+              )}
             </div>
           </Link>
 
