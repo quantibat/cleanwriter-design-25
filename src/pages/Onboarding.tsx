@@ -7,6 +7,8 @@ import { Controller, useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { MultiSelectDropdown } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const steps = [
   "Type d'entreprise",
@@ -278,7 +280,6 @@ export default function OnboardingDCEManager() {
     }
   };
 
-
   const handleZoneChalandiseChange = async (query) => {
     if (!query) return setSuggestions([]);
     try {
@@ -340,7 +341,7 @@ export default function OnboardingDCEManager() {
   }, []);
 
   return (
-    <div className="h-auto my-16 text-white flex flex-col items-center justify-center w-full my-10">
+    <div className="min-h-screen bg-[#0F172A] text-white flex flex-col items-center justify-center w-full py-8 px-4">
       <div className="text-center mb-8">
         <Link to="/" className="inline-block">
           <img 
@@ -349,77 +350,91 @@ export default function OnboardingDCEManager() {
             className="h-16 mx-auto mb-4"
           />
         </Link>
-        <p className="mt-2 text-white/60">Inscrivez-vous pour recevoir des appels d'offres à jour recueillis depuis le BOAMP</p>
+        <p className="mt-2 text-gray-400">Inscrivez-vous pour recevoir des appels d'offres à jour recueillis depuis le BOAMP</p>
       </div>
-      
-      <div className="mx-auto w-[85%] animated-border-glow  bg-gray-700 backdrop-blur-md rounded-lg border border-white/5 space-y-16 p-6">
-        <div className="flex space-x-4 h-24 w-full justify-center">
+
+      <div className="w-full max-w-4xl animated-border-glow bg-[#1E293B]/80 backdrop-blur-md rounded-xl border border-[#384454] space-y-8 p-8">
+        <div className="flex items-center justify-center space-x-4 mb-8">
           {steps.map((s, i) => (
-            <div key={i} className="flex items-center space-x-2">
-              <div
-                className={`w-8 h-8 flex items-center justify-center rounded-full border-2 ${i === step ? "bg-neon-blue text-white border-neon-blue" : "border-gray-500"}`}
+            <div key={i} className="flex items-center">
+              <div 
+                className={`
+                  w-10 h-10 rounded-full flex items-center justify-center
+                  transition-all duration-300
+                  ${i === step ? 'bg-blue-600 text-white scale-110' : 'bg-gray-800 text-gray-400'}
+                  ${i < step ? 'bg-green-600 text-white' : ''}
+                `}
               >
-                {i + 1}
+                {i < step ? '✓' : i + 1}
               </div>
-              {i < steps.length - 1 && <div className="w-24 h-0.5 bg-gray-500" />}
+              {i < steps.length - 1 && (
+                <div className={`w-16 h-0.5 mx-2 ${i < step ? 'bg-green-600' : 'bg-gray-700'}`} />
+              )}
             </div>
           ))}
         </div>
-  
-        <div className="mt-8 flex flex-col w-full min-h-[500px] justify-center">
+
+        <div className="min-h-[500px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              initial={{ x: 100, opacity: 0 }}
+              initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -100, opacity: 0 }}
+              exit={{ x: -20, opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="w-full"
             >
               {step === 0 && (
-                <div>
-                  <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4 p-2">
-                    <h2 className="text-xl font-semibold mb-1 flex gap-4">
-                      <Building />
-                      <p>Type de l'entreprise</p>
+                <div className="space-y-6">
+                  <div className="p-4 border border-[#384454] rounded-lg bg-[#1E293B]/50">
+                    <h2 className="text-xl font-semibold flex items-center gap-3 mb-2">
+                      <Building className="text-blue-500" />
+                      Type de l'entreprise
                     </h2>
-                    <p className="text-sm text-gray-400">
-                      Merci d'indiquer le type d'entreprise que vous représentez. Cela nous aidera à vous fournir des offres adaptées à vos besoins.
+                    <p className="text-gray-400 text-sm">
+                      Merci d'indiquer le type d'entreprise que vous représentez.
                     </p>
                   </div>
-  
-                  <div className="grid grid-cols-3 gap-4">
-                    <button
-                      onClick={() => handleCardSelect("type_entreprise", "TPE")}
-                      className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center"
-                    >
-                      <Home className="text-3xl mb-2" />
-                      <div className="font-bold mb-2">TPE</div>
-                      <div className="text-sm">Moins de 10 salariés</div>
-                    </button>
-                    <button
-                      onClick={() => handleCardSelect("type_entreprise", "PME")}
-                      className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center"
-                    >
-                      <BriefcaseBusiness className="text-3xl mb-2" />
-                      <div className="font-bold mb-2">PME</div>
-                      <div className="text-sm">De 10 à 250 salariés</div>
-                    </button>
 
-                    <button
-                      onClick={() => handleCardSelect("type_entreprise", "GE")}
-                      className="p-6 border border-gray-600 rounded-lg hover:border-neon-blue flex flex-col items-center justify-center"
-                    >
-                      <BriefcaseBusiness className="text-3xl mb-2" />
-                      <div className="font-bold mb-2">GE</div>
-                      <div className="text-sm">Plus de 250 salariés</div>
-                    </button>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[
+                      {
+                        type: "TPE",
+                        desc: "Moins de 10 salariés",
+                        icon: Home
+                      },
+                      {
+                        type: "PME",
+                        desc: "De 10 à 250 salariés",
+                        icon: BriefcaseBusiness
+                      },
+                      {
+                        type: "GE",
+                        desc: "Plus de 250 salariés",
+                        icon: Building
+                      }
+                    ].map((item) => (
+                      <button
+                        key={item.type}
+                        onClick={() => handleCardSelect("type_entreprise", item.type)}
+                        className={`
+                          p-6 rounded-lg transition-all duration-300
+                          border border-[#384454] hover:border-blue-500
+                          bg-[#1E293B]/50 hover:bg-[#1E293B]/80
+                          flex flex-col items-center justify-center gap-3
+                        `}
+                      >
+                        <item.icon className="w-8 h-8 text-blue-500" />
+                        <div className="font-bold text-lg">{item.type}</div>
+                        <div className="text-sm text-gray-400">{item.desc}</div>
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
-  
+
               {step === 1 && (
-                <div>
+                <div className="space-y-6">
                   <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4  p-2">
                     <h2 className="text-xl font-semibold mb-1 flex gap-4">
                       <Info />
@@ -620,9 +635,9 @@ export default function OnboardingDCEManager() {
                   </div>
                 </div>
               )}
-  
+
               {step === 2 && (
-                <div>
+                <div className="space-y-6">
                   <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4 p-2">
                     <h2 className="text-xl font-semibold mb-1 flex gap-4">
                       <BriefcaseBusiness />
@@ -696,9 +711,9 @@ export default function OnboardingDCEManager() {
                   </div>
                 </div>
               )}
-  
+
               {step === 3 && (
-                <div>
+                <div className="space-y-6">
                   <div className="flex flex-col mb-4 border border-gray-500 rounded-lg mb-4 p-2">
                     <h2 className="text-xl font-semibold mb-1 flex gap-4">
                       <User />
@@ -711,7 +726,7 @@ export default function OnboardingDCEManager() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="nom" className="block text-sm mb-2">Nom</label>
-                      <input
+                      <Input
                         type="text"
                         {...register("nom", {
                           minLength: { value: 2, message: "Nom trop court" },
@@ -722,7 +737,7 @@ export default function OnboardingDCEManager() {
                     </div>
                     <div>
                       <label htmlFor="prenom" className="block text-sm mb-2">Prénom</label>
-                      <input
+                      <Input
                         id="prenom"
                         type="text"
                         {...register("prenom", {
@@ -735,7 +750,7 @@ export default function OnboardingDCEManager() {
                     </div>
                     <div>
                       <label htmlFor="email" className="block text-sm mb-2">Email professionnel</label>
-                      <input
+                      <Input
                         id="email"
                         type="email"
                         {...register("email", {
@@ -751,7 +766,7 @@ export default function OnboardingDCEManager() {
                     </div>
                     <div>
                       <label htmlFor="password" className="block text-sm mb-2">Mot de passe</label>
-                      <input
+                      <Input
                         id="password"
                         type="password"
                         {...register("password", {
