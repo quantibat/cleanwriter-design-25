@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import DashboardLayout from '@/components/layouts/DashboardLayout';
 import PublicTenders from '@/components/Tenders';
@@ -18,9 +19,9 @@ const Offers = () => {
   const [activeTab, setActiveTab] = useState<'favorites' | 'today' | 'thisWeek' | 'lastWeek'>('favorites');
   const [refreshTrigger, setRefreshTrigger] = useState(0); 
   const [scoreMin, setScoreMin] = useState(0);
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState("all_cities");
   const [dateLimit, setDateLimit] = useState<Date>();
-  const [workType, setWorkType] = useState("");
+  const [workType, setWorkType] = useState("all_types");
 
   const { appelsOffres, totalPages } = useAppelsOffres(currentPage, refreshTrigger);
 
@@ -74,7 +75,7 @@ const Offers = () => {
       const score = offer?.score_final || 0;
       if (score < scoreMin) return false;
 
-      if (selectedCity && offer?.appel_offre?.metadata?.Ville) {
+      if (selectedCity !== "all_cities" && offer?.appel_offre?.metadata?.Ville) {
         const offerCity = `${offer.appel_offre.metadata.Ville} (${offer.appel_offre.metadata.Code_Postal})`;
         if (offerCity !== selectedCity) return false;
       }
@@ -84,7 +85,7 @@ const Offers = () => {
         if (endDate > dateLimit) return false;
       }
 
-      if (workType && offer?.appel_offre?.metadata?.Type_Travaux) {
+      if (workType !== "all_types" && offer?.appel_offre?.metadata?.Type_Travaux) {
         if (offer.appel_offre.metadata.Type_Travaux !== workType) return false;
       }
 
@@ -96,9 +97,9 @@ const Offers = () => {
 
   const resetFilters = () => {
     setScoreMin(0);
-    setSelectedCity("");
+    setSelectedCity("all_cities");
     setDateLimit(undefined);
-    setWorkType("");
+    setWorkType("all_types");
   };
 
   const { today, thisWeek, lastWeekOffers, favoriteOffers } = useMemo(() => {

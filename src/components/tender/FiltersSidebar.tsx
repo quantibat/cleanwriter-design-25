@@ -82,7 +82,7 @@ export const FiltersSidebar: React.FC<FiltersProps> = ({
                 <SelectValue placeholder="Toutes les villes" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les villes</SelectItem>
+                <SelectItem value="all_cities">Toutes les villes</SelectItem>
                 {cities.map((city) => (
                   <SelectItem key={city} value={city}>
                     {city}
@@ -130,7 +130,7 @@ export const FiltersSidebar: React.FC<FiltersProps> = ({
                 <SelectValue placeholder="Tous les types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Tous les types</SelectItem>
+                <SelectItem value="all_types">Tous les types</SelectItem>
                 {workTypes.map((type) => (
                   <SelectItem key={type} value={type}>
                     {type}
