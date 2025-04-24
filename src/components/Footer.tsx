@@ -1,4 +1,3 @@
-
 const Footer = () => {
   return (
     <footer className="bg-card/50 pt-20 pb-10 px-6 border-t border-white/5 w-full relative">
@@ -9,7 +8,7 @@ const Footer = () => {
               <img 
                 src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
                 alt="DCE Manager Logo"
-                className="h-8 w-auto"
+                className="h-12 w-auto"
               />
             </div>
             <p className="text-blue-100/70 mb-4">

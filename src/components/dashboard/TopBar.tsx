@@ -7,6 +7,7 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import UserDropdownMenu from './UserDropdownMenu';
 import { Container } from "@/components/ui/container";
+
 interface TopBarProps {
   onThemeToggle: () => void;
   isDarkMode: boolean;
@@ -120,13 +121,18 @@ const TopBar = ({
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-  return <div className="flex flex-col w-full border-b">
+  return (
+    <div className="flex flex-col w-full border-b">
       <Container className="py-3 px-0">
         <div className="flex items-center justify-between mx-auto w-[85%]">
           {/* Left: Logo */}
           <div className="flex items-center">
             <Link to="/dashboard" className="flex items-center gap-3">
-              <img src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" alt="DCE Manager Logo" className="h-8 w-auto object-fill" />
+              <img 
+                src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
+                alt="DCE Manager Logo"
+                className="h-12 w-auto" // Increased from h-8 to h-12
+              />
             </Link>
           </div>
 
@@ -190,6 +196,7 @@ const TopBar = ({
           </div>
         </div>
       </Container>
-    </div>;
+    </div>
+  );
 };
 export default TopBar;
