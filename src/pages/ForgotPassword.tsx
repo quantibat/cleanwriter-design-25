@@ -57,7 +57,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] flex items-center justify-center px-4 relative">
+    <div className="min-h-screen bg-[#121824]  flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block">
@@ -70,7 +70,7 @@ const ForgotPassword = () => {
           <p className="mt-2 text-white/60">Réinitialisation de mot de passe</p>
         </div>
         
-        <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
+        <div className="bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           {!submitted ? <>
               <h1 className="text-2xl font-bold text-white mb-6 text-center">Mot de passe oublié</h1>
               <p className="text-white/70 mb-6">
@@ -86,13 +86,13 @@ const ForgotPassword = () => {
                         <FormControl>
                           <div className="relative form-input-animated">
                             <Mail className="absolute left-3 top-2.5 h-5 w-5 text-white/40" />
-                            <Input className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" placeholder="votre@email.com" {...field} />
+                            <Input className="pl-10 border-white/10 text-white focus-visible:ring-blue-500" placeholder="votre@email.com" {...field} />
                           </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>} />
                   
-                  <Button type="submit" disabled={isLoading} className="w-full blue-shimmer-button text-white font-medium bg-transparent">
+                  <Button type="submit" disabled={isLoading} className="w-full  text-white font-medium bg-blue-500">
                     {isLoading ? "Envoi en cours..." : "Envoyer le lien"}
                   </Button>
                 </form>
@@ -111,7 +111,7 @@ const ForgotPassword = () => {
               <p className="text-white/70 mb-6">
                 Nous avons envoyé un lien de réinitialisation à votre adresse e-mail.
               </p>
-              <Button className="mt-4  bg-blue-500 hover:bg-blue-600" asChild>
+              <Button variant='default' className="mt-4 bg-blue-500 hover:bg-blue-600" asChild>
                 <Link to="/signin">Retour à la connexion</Link>
               </Button>
             </div>}

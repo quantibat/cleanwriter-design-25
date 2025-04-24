@@ -80,7 +80,7 @@ const ResetPassword = () => {
     }
   }
 
-  return <div className="min-h-screen bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] flex items-center justify-center px-4 relative">
+  return <div className="min-h-screen bg-[#121824] flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
         <Link to="/" className="inline-block">
@@ -93,7 +93,7 @@ const ResetPassword = () => {
           <p className="mt-2 text-white/60">Réinitialisation de mot de passe</p>
         </div>
         
-        <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
+        <div className="bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           {!success ? <>
               <h1 className="text-2xl font-bold text-white mb-6 text-center">Créer un nouveau mot de passe</h1>
               <p className="text-white/70 mb-6">
@@ -112,7 +112,7 @@ const ResetPassword = () => {
                             <Input 
                               type="password" 
                               showPasswordToggle={true}
-                              className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                              className="pl-10  border-white/10 text-white focus-visible:ring-blue-500" 
                               placeholder="••••••••" 
                               {...field} 
                             />
@@ -131,7 +131,7 @@ const ResetPassword = () => {
                             <Input 
                               type="password" 
                               showPasswordToggle={true}
-                              className="pl-10 bg-[#141B2A] border-white/10 text-white focus-visible:ring-blue-500" 
+                              className="pl-10  border-white/10 text-white focus-visible:ring-blue-500" 
                               placeholder="••••••••" 
                               {...field} 
                             />
@@ -140,7 +140,7 @@ const ResetPassword = () => {
                         <FormMessage />
                       </FormItem>} />
                   
-                  <Button variant='default' type="submit" disabled={isLoading} className="w-full  text-white font-medium bg-transparent">
+                  <Button type="submit" disabled={isLoading} className="w-full  text-white font-medium bg-blue-500">
                     {isLoading ? "Mise à jour en cours..." : "Réinitialiser le mot de passe"}
                   </Button>
                 </form>
