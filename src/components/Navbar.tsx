@@ -41,11 +41,7 @@ const Navbar = () => {
             <img 
               src="/lovable-uploads/c6620e4e-76f1-43fd-85a6-0a5d37ca796e.png" 
               alt="DCE Manager Logo"
-<<<<<<< HEAD
-              className="w-auto" 
-=======
               className="w-28 h-auto"
->>>>>>> 33f455b17ebafb7278fea236d8a1e4ec77dc488c
             />
           </Link>
         </div>
