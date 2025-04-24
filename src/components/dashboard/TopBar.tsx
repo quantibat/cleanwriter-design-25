@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Sun, Moon, Globe, Grid, FolderArchive, UsersRound } from "lucide-react";
@@ -13,6 +14,7 @@ interface TopBarProps {
   isDarkMode: boolean;
   activeTab: string;
 }
+
 const TopBar = ({
   onThemeToggle,
   isDarkMode,
@@ -41,13 +43,16 @@ const TopBar = ({
   const usedCredits = 5000; // Example: 5000 credits used
   const remainingCredits = totalCredits - usedCredits;
   const percentUsed = Math.round(usedCredits / totalCredits * 100);
+  
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
+  
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
+  
   const handleThemeChange = () => {
     if (isDarkMode) {
       // Apply light theme
@@ -116,11 +121,13 @@ const TopBar = ({
     }
     onThemeToggle();
   };
+  
   const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
     setLanguage(newLanguage);
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
+  
   return (
     <div className="flex flex-col w-full border-b">
       <Container className="py-3 px-0">
@@ -141,7 +148,7 @@ const TopBar = ({
             {/* Theme Toggle */}
             {/* <Button variant="ghost" size="icon" className="rounded-full" onClick={handleThemeChange}>
               {isDarkMode ? <Sun className="h-5 w-5 text-[var(--topbar-text-transparent)]" /> : <Moon className="h-5 w-5 text-[var(--topbar-text-transparent)]" />}
-             </Button> */
+             </Button> */}
 
             {/* Language Selector */}
             <DropdownMenu>
@@ -199,4 +206,5 @@ const TopBar = ({
     </div>
   );
 };
+
 export default TopBar;
