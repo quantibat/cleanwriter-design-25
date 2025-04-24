@@ -18,8 +18,31 @@ const Offers = () => {
   const [activeTab, setActiveTab] = useState<'favorites' | 'today' | 'thisWeek' | 'lastWeek'>('favorites');
   const [refreshTrigger, setRefreshTrigger] = useState(0); 
   const [scoreMin, setScoreMin] = useState(0);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [dateLimit, setDateLimit] = useState<Date>();
+  const [workType, setWorkType] = useState("");
 
-  const { appelsOffres, totalPages } = useAppelsOffres(currentPage, refreshTrigger); 
+  const { appelsOffres, totalPages } = useAppelsOffres(currentPage, refreshTrigger);
+
+  const cities = useMemo(() => {
+    const uniqueCities = new Set(
+      appelsOffres?.map(offer => 
+        offer?.appel_offre?.metadata?.Code_Postal ? 
+        `${offer?.appel_offre?.metadata?.Ville} (${offer?.appel_offre?.metadata?.Code_Postal})` : 
+        null
+      ).filter(Boolean)
+    );
+    return Array.from(uniqueCities);
+  }, [appelsOffres]);
+
+  const workTypes = useMemo(() => {
+    const uniqueTypes = new Set(
+      appelsOffres?.map(offer => 
+        offer?.appel_offre?.metadata?.Type_Travaux
+      ).filter(Boolean)
+    );
+    return Array.from(uniqueTypes);
+  }, [appelsOffres]);
 
   const toggleFavorite = async (id: string, currentStatus: boolean) => {
     console.log(`Toggling favorite for id: ${id}, current status: ${currentStatus}`);
@@ -40,42 +63,72 @@ const Offers = () => {
   const now = new Date();
   const lastWeek = subWeeks(now, 1);
 
+  const filteredOffers = useMemo(() => {
+    let filtered = [...(appelsOffres || [])].sort((a, b) => {
+      const scoreA = a?.score_final || 0;
+      const scoreB = b?.score_final || 0;
+      return scoreB - scoreA;
+    });
+
+    filtered = filtered.filter(offer => {
+      const score = offer?.score_final || 0;
+      if (score < scoreMin) return false;
+
+      if (selectedCity && offer?.appel_offre?.metadata?.Ville) {
+        const offerCity = `${offer.appel_offre.metadata.Ville} (${offer.appel_offre.metadata.Code_Postal})`;
+        if (offerCity !== selectedCity) return false;
+      }
+
+      if (dateLimit && offer?.appel_offre?.metadata?.EndDate) {
+        const endDate = new Date(offer.appel_offre.metadata.EndDate);
+        if (endDate > dateLimit) return false;
+      }
+
+      if (workType && offer?.appel_offre?.metadata?.Type_Travaux) {
+        if (offer.appel_offre.metadata.Type_Travaux !== workType) return false;
+      }
+
+      return true;
+    });
+
+    return filtered;
+  }, [appelsOffres, scoreMin, selectedCity, dateLimit, workType]);
+
+  const resetFilters = () => {
+    setScoreMin(0);
+    setSelectedCity("");
+    setDateLimit(undefined);
+    setWorkType("");
+  };
+
   const { today, thisWeek, lastWeekOffers, favoriteOffers } = useMemo(() => {
     const today: any[] = [];
     const thisWeek: any[] = [];
     const lastWeekOffers: any[] = [];
     const favoriteOffers: any[] = [];
 
-    const sorted = [...(appelsOffres || [])].sort((a, b) => {
-      const scoreA = a?.score_final || 0;
-      const scoreB = b?.score_final || 0;
-      return scoreB - scoreA;
-    });
+    filteredOffers.forEach((offer) => {
+      if (!offer?.appel_offre.metadata.startDate) return;
 
-    sorted
-      .filter(offer => (offer?.score_final || 0) >= scoreMin)
-      .forEach((offer) => {
-        if (!offer?.appel_offre.metadata.startDate) return;
+      const date = parseISO(offer.appel_offre.metadata.startDate);
+      const isFavorite = offer.isFavorite;
 
-        const date = parseISO(offer.appel_offre.metadata.startDate);
-        const isFavorite = offer.isFavorite;
-
-        if (isFavorite) {
-          favoriteOffers.push(offer);
+      if (isFavorite) {
+        favoriteOffers.push(offer);
+      }
+      if (!isFavorite) {
+        if (isToday(date)) {
+          today.push(offer);
+        } else if (isThisWeek(date, { weekStartsOn: 1 })) {
+          thisWeek.push(offer);
+        } else if (isSameWeek(date, lastWeek, { weekStartsOn: 1 })) {
+          lastWeekOffers.push(offer);
         }
-        if (!isFavorite) {
-          if (isToday(date)) {
-            today.push(offer);
-          } else if (isThisWeek(date, { weekStartsOn: 1 })) {
-            thisWeek.push(offer);
-          } else if (isSameWeek(date, lastWeek, { weekStartsOn: 1 })) {
-            lastWeekOffers.push(offer);
-          }
-        }
+      }
     });
 
     return { today, thisWeek, lastWeekOffers, favoriteOffers };
-  }, [appelsOffres, scoreMin]);
+  }, [filteredOffers]);
 
   const getTenders = () => {
     switch (activeTab) {
@@ -105,10 +158,10 @@ const Offers = () => {
         <div className="w-full bg-gray-700 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454] mb-4">
           <h2 className="text-3xl font-bold">Appels d'offres</h2>
           <p className="text-muted-foreground py-2 text-sm">
-            {appelsOffres?.length > 0 && appelsOffres.length === 1
+            {filteredOffers.length > 0 && filteredOffers.length === 1
               ? `Un appel d'offre correspond à votre profil`
-              : appelsOffres?.length > 1
-                ? `${appelsOffres.length} appels d'offres correspondent à votre profil`
+              : filteredOffers.length > 1
+                ? `${filteredOffers.length} appels d'offres correspondent à votre profil`
                 : `Aucun appel d'offre ne correspond à votre profil`}
           </p>
         </div>
@@ -117,7 +170,15 @@ const Offers = () => {
           <FiltersSidebar
             scoreMin={scoreMin}
             setScoreMin={setScoreMin}
-            onReset={() => setScoreMin(0)}
+            selectedCity={selectedCity}
+            setSelectedCity={setSelectedCity}
+            dateLimit={dateLimit}
+            setDateLimit={setDateLimit}
+            workType={workType}
+            setWorkType={setWorkType}
+            cities={cities}
+            workTypes={workTypes}
+            onReset={resetFilters}
           />
           
           <div className="flex-1">

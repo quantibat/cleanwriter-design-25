@@ -1,14 +1,15 @@
+
 import React from "react";
 
-const getColor = (percentage) => {
-  if (percentage >= 80) return "#00FFAB";   
-  if (percentage >= 50) return "#FFD700";   
+const getColor = (score) => {
+  if (score >= 4) return "#00FFAB";   
+  if (score >= 2.5) return "#FFD700";   
   return "#FF4C4C";                         
 };
 
-const LinearProgressBar = ({ score}) => {
-  const percentage = (score *100) / 5;
-  const color = getColor(percentage);
+const LinearProgressBar = ({ score }) => {
+  const percentage = (score * 20); // Convert score to percentage (5 -> 100%)
+  const color = getColor(score);
 
   return (
     <div className="w-full mt-4">
@@ -21,8 +22,8 @@ const LinearProgressBar = ({ score}) => {
           }}
         />
       </div>
-      <p className={`text-gray-400 mt-1 text-right text-xs`}>
-          {(percentage)}%
+      <p className="text-gray-400 mt-1 text-right text-xs">
+        {score.toFixed(1)}/5
       </p>
     </div>
   );
