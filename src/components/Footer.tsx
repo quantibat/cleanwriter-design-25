@@ -6,9 +6,9 @@ const Footer = () => {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <img 
-                src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
+                src="/lovable-uploads/c6620e4e-76f1-43fd-85a6-0a5d37ca796e.png" 
                 alt="DCE Manager Logo"
-                className="h-12 w-auto"
+                className="w-28 h-auto"
               />
             </div>
             <p className="text-blue-100/70 mb-4">

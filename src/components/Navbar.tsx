@@ -39,9 +39,9 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link to="/" className="flex items-center gap-3">
             <img 
-              src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
+              src="/lovable-uploads/c6620e4e-76f1-43fd-85a6-0a5d37ca796e.png" 
               alt="DCE Manager Logo"
-              className="h-12 w-auto" // Increased from h-8 to h-12
+              className="w-28 h-auto"
             />
           </Link>
         </div>
