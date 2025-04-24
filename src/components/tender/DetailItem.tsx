@@ -9,7 +9,7 @@ interface DetailItemProps {
 }
 
 export const DetailItem: React.FC<DetailItemProps> = ({ icon: Icon, label, value }) => (
-  <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-700/50">
+  <div className="flex items-start gap-3 p-4 rounded-lg bg-gray-700/50 border border-blue-500">
     <div className="p-2 rounded-full bg-blue-500/10">
       <Icon className="w-5 h-5 text-blue-400" />
     </div>

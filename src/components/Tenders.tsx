@@ -110,7 +110,7 @@ const PublicTenders = ({ tenders, onToggleFavorite }) => {
                     </div>
                     
                     <p className="text-gray-300 mt-4">
-                      {truncateText(tender.appel_offre.content, 40)}
+                      { tender.appel_offre.metadata?.Resume_Appel_Offre ? tender.appel_offre.metadata?.Resume_Appel_Offre : truncateText(tender.appel_offre.content, 40)}
                     </p>
 
                     <div className="text-gray-400 mt-4">

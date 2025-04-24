@@ -58,7 +58,7 @@ const TenderDetail = ({ tender }) => {
             </div>
           </div>
           <Button
-            variant="outline"
+            variant="default"
             className="flex items-center gap-2"
             onClick={() => window.open(tender?.url_ao, "_blank")}
           >
@@ -103,22 +103,10 @@ const TenderDetail = ({ tender }) => {
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-semibold">Correspondance avec votre profil</h2>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/10">
-                      <Info className="h-4 w-4 text-blue-400" />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-[300px]">
-                    <p>Score basé sur l'analyse de plusieurs critères adaptés à votre profil d'entreprise</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
             </div>
             <p className="text-sm text-gray-300 max-w-[70%] mt-2">
-              Ce marché correspond à vos critères selon notre analyse. 
-              Survolez chaque critère pour plus de détails.
+              {tender?.Raisonnement ? tender?.Raisonnement : " Ce marché correspond à vos critères selon notre analyse. Survolez chaque critère pour plus de détails. "}
+             
             </p>
           </div>
           <CompatibilityGauge score={tender?.score_final} />
@@ -149,7 +137,7 @@ const TenderDetail = ({ tender }) => {
       <div className="bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
         <h2 className="text-xl font-semibold mb-4">Description détaillée</h2>
         <p className="text-sm text-gray-300 whitespace-pre-line">
-          {tender?.appel_offre.content}
+          {tender?.appel_offre.metadata?.Resume_Appel_Offre || "Aucune description disponible"}
         </p>
       </div>
     </div>
