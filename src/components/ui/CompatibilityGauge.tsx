@@ -66,8 +66,8 @@ const CompatibilityGauge: React.FC<CompatibilityGaugeProps> = ({ score }) => {
               style: { fontSize: '24px', fontWeight: 'bold' },
             },
             tickLabels: {
-              type: "inner",
-              ticks: []
+              ticks: [],
+              hideMinMax: true,
             }
           }}
         />
