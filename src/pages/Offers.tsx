@@ -8,6 +8,9 @@ import clsx from 'clsx';
 import { Calendar, CalendarDays, History, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { FiltersSidebar } from '@/components/tender/FiltersSidebar';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 const Offers = () => {
   const breadcrumbs = [
@@ -22,6 +25,8 @@ const Offers = () => {
   const [selectedCity, setSelectedCity] = useState("all_cities");
   const [dateLimit, setDateLimit] = useState<Date>();
   const [workType, setWorkType] = useState("all_types");
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const { appelsOffres, totalPages } = useAppelsOffres(currentPage, refreshTrigger);
 
@@ -157,40 +162,73 @@ const Offers = () => {
     <DashboardLayout activeTab="tools" breadcrumbs={breadcrumbs}>
       <div className="w-full flex flex-col gap-6 pt-4 mb-8">
         <div className="w-full bg-gray-700 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454] mb-4">
-          <h2 className="text-3xl font-bold">Appels d'offres</h2>
-          <p className="text-muted-foreground py-2 text-sm">
-            {filteredOffers.length > 0 && filteredOffers.length === 1
-              ? `Un appel d'offre correspond à votre profil`
-              : filteredOffers.length > 1
-                ? `${filteredOffers.length} appels d'offres correspondent à votre profil`
-                : `Aucun appel d'offre ne correspond à votre profil`}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold">Appels d'offres</h2>
+              <p className="text-muted-foreground py-2 text-sm">
+                {filteredOffers.length > 0 && filteredOffers.length === 1
+                  ? `Un appel d'offre correspond à votre profil`
+                  : filteredOffers.length > 1
+                    ? `${filteredOffers.length} appels d'offres correspondent à votre profil`
+                    : `Aucun appel d'offre ne correspond à votre profil`}
+              </p>
+            </div>
+            {isMobile && (
+              <Button 
+                variant="outline" 
+                onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+                className="lg:hidden"
+              >
+                Filtres
+              </Button>
+            )}
+          </div>
         </div>
 
-        <div className="flex gap-6">
-          <FiltersSidebar
-            scoreMin={scoreMin}
-            setScoreMin={setScoreMin}
-            selectedCity={selectedCity}
-            setSelectedCity={setSelectedCity}
-            dateLimit={dateLimit}
-            setDateLimit={setDateLimit}
-            workType={workType}
-            setWorkType={setWorkType}
-            cities={cities}
-            workTypes={workTypes}
-            onReset={resetFilters}
-          />
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className={`
+            lg:block
+            ${isMobile ? (isMobileFiltersOpen ? 'block' : 'hidden') : 'block'}
+            lg:relative fixed top-0 right-0 z-50 
+            lg:w-auto w-full lg:h-auto h-screen
+            lg:bg-transparent bg-background/95 backdrop-blur-md
+          `}>
+            {isMobile && isMobileFiltersOpen && (
+              <div className="flex items-center justify-between p-4 border-b">
+                <h3 className="font-semibold">Filtres</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsMobileFiltersOpen(false)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+            <FiltersSidebar
+              scoreMin={scoreMin}
+              setScoreMin={setScoreMin}
+              selectedCity={selectedCity}
+              setSelectedCity={setSelectedCity}
+              dateLimit={dateLimit}
+              setDateLimit={setDateLimit}
+              workType={workType}
+              setWorkType={setWorkType}
+              cities={cities}
+              workTypes={workTypes}
+              onReset={resetFilters}
+            />
+          </div>
           
           <div className="flex-1">
             <div className="flex justify-end mb-2">
-              <div className="flex gap-4">
+              <div className="flex gap-4 overflow-x-auto pb-2">
                 {tabList.map((tab) => (
                   <button
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key as any)}
                     className={clsx(
-                      'flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-md transition-all',
+                      'flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-md transition-all whitespace-nowrap',
                       activeTab === tab.key
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700'

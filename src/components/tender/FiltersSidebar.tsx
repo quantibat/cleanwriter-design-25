@@ -12,6 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FiltersProps {
   scoreMin: number;
@@ -40,8 +41,13 @@ export const FiltersSidebar: React.FC<FiltersProps> = ({
   workTypes,
   onReset
 }) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="w-[280px] flex-shrink-0 mr-6">
+    <div className={cn(
+      "lg:w-[280px] w-full flex-shrink-0",
+      isMobile ? "px-4" : "mr-6"
+    )}>
       <Card className="p-4 bg-gray-800 border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
