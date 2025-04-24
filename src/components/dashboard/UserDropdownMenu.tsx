@@ -78,7 +78,7 @@ const UserDropdownMenu: React.FC<UserDropdownMenuProps> = ({
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[240px] p-2">
+        <DropdownMenuContent align="end" className="w-[240px] p-2 bg-gray-700 border border-gray-700">
           <div className="mb-4">
             <p className="text-base font-medium mb-0.5">{user?.user_metadata?.full_name || 'Utilisateur'}</p>
             <p className="text-sm text-muted-foreground">{user?.email}</p>
