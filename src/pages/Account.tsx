@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import ProfileForm from '@/components/AccountProfileForm';
 import SecurityForm from '@/components/AccountSecurityForm';
 import EnterpriseForm from '@/components/AccountEntrepriseForm';
-import { cn } from "@/lib/utils"; // optionnel si tu utilises une utilitaire comme `clsx` ou `cn`
+import { cn } from "@/lib/utils";
 
 const Account = () => {
   const [activeTab, setActiveTab] = useState<'profile' | 'enterprise' | 'security'>('profile');
@@ -21,13 +22,37 @@ const Account = () => {
         
         <div className='flex flex-col md:flex-row gap-8 w-full'>
           <aside className="w-full md:w-64 space-y-2 pr-4">
-            <button onClick={() => setActiveTab('profile')} className={cn("w-full text-left px-4 py-2 rounded-md transition border border-gray/20 bg-gradient-to-b from-gray-700 to-gray-800 text-sm", activeTab === 'profile' ? "bg-blue-600 font-semibold" : "hover:bg-accent")}>
+            <button 
+              onClick={() => setActiveTab('profile')} 
+              className={cn(
+                "w-full text-left px-4 py-2 rounded-md transition duration-300 ease-in-out",
+                activeTab === 'profile' 
+                  ? "bg-gradient-to-r from-[#7E69AB] to-[#6E59A5] text-white font-semibold" 
+                  : "bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 hover:from-[#8E9196] hover:to-[#403E43]"
+              )}
+            >
               Informations personnelles
             </button>
-            <button onClick={() => setActiveTab('enterprise')} className={cn("w-full text-left px-4 py-2 rounded-md transition border border-gray/20 bg-gradient-to-b from-gray-700 to-gray-800 text-sm", activeTab === 'enterprise' ? "bg-blue-600 font-semibold" : "hover:bg-accent")}>
+            <button 
+              onClick={() => setActiveTab('enterprise')} 
+              className={cn(
+                "w-full text-left px-4 py-2 rounded-md transition duration-300 ease-in-out",
+                activeTab === 'enterprise' 
+                  ? "bg-gradient-to-r from-[#7E69AB] to-[#6E59A5] text-white font-semibold" 
+                  : "bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 hover:from-[#8E9196] hover:to-[#403E43]"
+              )}
+            >
               Entreprise
             </button>
-            <button onClick={() => setActiveTab('security')} className={cn("w-full text-left px-4 py-2 rounded-md transition border border-gray/20 bg-gradient-to-b from-gray-700 to-gray-800 text-sm", activeTab === 'security' ? "bg-blue-600 font-semibold" : "hover:bg-accent")}>
+            <button 
+              onClick={() => setActiveTab('security')} 
+              className={cn(
+                "w-full text-left px-4 py-2 rounded-md transition duration-300 ease-in-out",
+                activeTab === 'security' 
+                  ? "bg-gradient-to-r from-[#7E69AB] to-[#6E59A5] text-white font-semibold" 
+                  : "bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 hover:from-[#8E9196] hover:to-[#403E43]"
+              )}
+            >
               Sécurité
             </button>
           </aside>
