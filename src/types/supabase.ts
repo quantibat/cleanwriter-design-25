@@ -5,8 +5,6 @@ import { Json } from '@/integrations/supabase/types';
 export interface Database extends GeneratedDatabase {
   public: {
     Tables: {
-      ...GeneratedDatabase['public']['Tables'],
-      
       projects: {
         Row: {
           id: string;
@@ -71,14 +69,7 @@ export interface Database extends GeneratedDatabase {
           used_credits?: number;
           elements?: number;
         };
-        Relationships: {
-          foreignKeyName: "projects_user_id_fkey";
-          columns: ["user_id"];
-          referencedRelation: "users";
-          referencedColumns: ["id"];
-        }[];
       };
-      
       users: {
         Row: {
           id: string;
@@ -104,12 +95,6 @@ export interface Database extends GeneratedDatabase {
           enterprise?: string;
           siret?: string;
         };
-        Relationships: {
-          foreignKeyName: "users_id_fkey";
-          columns: ["id"];
-          referencedRelation: "users";
-          referencedColumns: ["id"];
-        }[];
       };
     };
     Views: GeneratedDatabase['public']['Views'];

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -62,7 +63,7 @@ const ProfileForm = () => {
   };
 
   return (
-    <Card className='w-full bg-gray-700 backdrop-blur-lg p-6 rounded-lg shadow-lg border border-[#384454]'>
+    <Card className='w-full bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-md p-6 rounded-lg shadow-lg'>
       <CardHeader className='flex flex-col gap-3 border-b border-gray-500 p-4'>
         <CardTitle className='flex flex-row items-center gap-2'> <User size={30} className=' border border-white/10 rounded-full p-1'/> Informations personnelles</CardTitle>
         <CardDescription>Gérez vos informations personnelles et votre adresse</CardDescription>
