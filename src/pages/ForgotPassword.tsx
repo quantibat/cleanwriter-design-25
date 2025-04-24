@@ -57,7 +57,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-700 flex items-center justify-center px-4 relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block">
@@ -111,7 +111,7 @@ const ForgotPassword = () => {
               <p className="text-white/70 mb-6">
                 Nous avons envoyé un lien de réinitialisation à votre adresse e-mail.
               </p>
-              <Button className="mt-4 blue-shimmer-button bg-blue-500 hover:bg-blue-600" asChild>
+              <Button className="mt-4  bg-blue-500 hover:bg-blue-600" asChild>
                 <Link to="/signin">Retour à la connexion</Link>
               </Button>
             </div>}

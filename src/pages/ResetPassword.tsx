@@ -80,7 +80,7 @@ const ResetPassword = () => {
     }
   }
 
-  return <div className="min-h-screen bg-gray-700 flex items-center justify-center px-4 relative">
+  return <div className="min-h-screen bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] flex items-center justify-center px-4 relative">
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
         <Link to="/" className="inline-block">

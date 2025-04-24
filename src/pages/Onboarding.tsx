@@ -341,7 +341,7 @@ export default function OnboardingDCEManager() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0F172A] text-white flex flex-col items-center justify-center w-full py-8 px-4">
+    <div className="min-h-screen bg-[#121824]text-white flex flex-col items-center justify-center w-full py-8 px-4">
       <div className="text-center mb-8">
         <Link to="/" className="inline-block">
           <img 
@@ -353,7 +353,7 @@ export default function OnboardingDCEManager() {
         <p className="mt-2 text-gray-400">Inscrivez-vous pour recevoir des appels d'offres à jour recueillis depuis le BOAMP</p>
       </div>
 
-      <div className="w-full max-w-4xl animated-border-glow bg-[#1E293B]/80 backdrop-blur-md rounded-xl border border-[#384454] space-y-8 p-8">
+      <div className="w-full max-w-4xl animated-border-glow bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-md rounded-xl border border-[#384454] space-y-8 p-8">
         <div className="flex items-center justify-center space-x-4 mb-8">
           {steps.map((s, i) => (
             <div key={i} className="flex items-center">
@@ -361,14 +361,14 @@ export default function OnboardingDCEManager() {
                 className={`
                   w-10 h-10 rounded-full flex items-center justify-center
                   transition-all duration-300
-                  ${i === step ? 'bg-blue-600 text-white scale-110' : 'bg-gray-800 text-gray-400'}
-                  ${i < step ? 'bg-green-600 text-white' : ''}
+                  ${i === step ? 'bg-blue-600 text-white scale-110' : 'bg-gray-600 text-gray-400'}
+                  ${i < step ? 'bg-blue-600 text-white' : ''}
                 `}
               >
                 {i < step ? '✓' : i + 1}
               </div>
               {i < steps.length - 1 && (
-                <div className={`w-16 h-0.5 mx-2 ${i < step ? 'bg-green-600' : 'bg-gray-700'}`} />
+                <div className={`w-16 h-0.5 mx-2 ${i < step ? 'bg-blue-600' : 'bg-gray-500'}`} />
               )}
             </div>
           ))}
@@ -386,7 +386,7 @@ export default function OnboardingDCEManager() {
             >
               {step === 0 && (
                 <div className="space-y-6">
-                  <div className="p-4 border border-[#384454] rounded-lg bg-[#1E293B]/50">
+                  <div className="p-4 border border-[#384454] rounded-lg ">
                     <h2 className="text-xl font-semibold flex items-center gap-3 mb-2">
                       <Building className="text-blue-500" />
                       Type de l'entreprise
@@ -420,7 +420,7 @@ export default function OnboardingDCEManager() {
                         className={`
                           p-6 rounded-lg transition-all duration-300
                           border border-[#384454] hover:border-blue-500
-                          bg-[#1E293B]/50 hover:bg-[#1E293B]/80
+                          
                           flex flex-col items-center justify-center gap-3
                         `}
                       >

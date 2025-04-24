@@ -106,7 +106,7 @@ const SignIn = () => {
           <p className="mt-2 text-white/60">Connectez-vous à votre compte</p>
         </div>
         
-        <div className="animated-border-glow bg-gray-700 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
+        <div className="animated-border-glow bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">Connexion</h1>
           
           <div className="mb-8">
@@ -188,7 +188,7 @@ const SignIn = () => {
                 </Link>
               </div>
               
-              <Button variant='default' type="submit" className="w-full  text-white font-medium bg-transparent" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-blue-500 text-white font-medium " disabled={isLoading}>
                 {isLoading ? "Connexion en cours..." : "Se connecter"}
               </Button>
             </form>

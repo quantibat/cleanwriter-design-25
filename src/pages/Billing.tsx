@@ -3,7 +3,7 @@ import React from 'react';
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { CreditCard, CheckCircle, AlertCircle } from 'lucide-react';
+import { CreditCard,  AlertCircle } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { useNavigate } from 'react-router-dom';
 

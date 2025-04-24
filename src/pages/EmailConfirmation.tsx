@@ -26,7 +26,7 @@ const EmailConfirmation = () => {
           <p className="mt-2 text-white/60">Confirmation d'email</p>
         </div>
         
-        <div className="animated-border-glow cosmic-card bg-[#1E2532]/80 backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
+        <div className="animated-border-glow cosmic-card bg-gradient-to-b from-gray-700 to-gray-800 border-[#384454] backdrop-blur-md rounded-lg border border-white/5 p-8 shadow-xl">
           <div className="text-center py-6">
             <div className="mx-auto w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mb-4">
               <Mail className="h-8 w-8 text-blue-400" />

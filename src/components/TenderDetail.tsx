@@ -46,7 +46,7 @@ const TenderDetail = ({ tender }) => {
   return (
     <div className="flex-col gap-6 space-y-6">
       {/* En-tête */}
-      <div className="bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+      <div className="bg-gradient-to-r from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
         <div className="flex items-start justify-between">
           <div className="space-y-4">
             <h1 className="text-2xl font-bold text-white">
@@ -98,7 +98,7 @@ const TenderDetail = ({ tender }) => {
       </div>
 
       {/* Section Correspondance */}
-      <div className="bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+      <div className="bg-gradient-to-r from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
         <div className="flex items-start justify-between mb-6">
           <div>
             <div className="flex items-center gap-2">
@@ -134,7 +134,7 @@ const TenderDetail = ({ tender }) => {
       </div>
 
       {/* Description détaillée */}
-      <div className="bg-gray-700 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
+      <div className="bg-gradient-to-r from-gray-700 to-gray-800 border-[#384454] border backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-[#384454]">
         <h2 className="text-xl font-semibold mb-4">Description détaillée</h2>
         <p className="text-sm text-gray-300 whitespace-pre-line">
           {tender?.appel_offre.metadata?.Resume_Appel_Offre || "Aucune description disponible"}

@@ -190,7 +190,7 @@ const TopBar = ({
 
           {/* Right: Credits Info and Upgrade Button */}
           <div className="flex items-center space-x-4">
-            <Button size="sm" variant="blue" onClick={handleUpgrade} className="mt-2 text-xs py-1 h-8 bg-transparent">
+            <Button size="sm" variant="default" onClick={handleUpgrade} className="mt-2 text-xs py-1 h-8">
               Mettre à niveau
             </Button>
           </div>
