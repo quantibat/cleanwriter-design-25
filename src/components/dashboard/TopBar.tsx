@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Sun, Moon, Globe, Grid, FolderArchive, UsersRound } from "lucide-react";
@@ -14,7 +13,6 @@ interface TopBarProps {
   isDarkMode: boolean;
   activeTab: string;
 }
-
 const TopBar = ({
   onThemeToggle,
   isDarkMode,
@@ -43,16 +41,13 @@ const TopBar = ({
   const usedCredits = 5000; // Example: 5000 credits used
   const remainingCredits = totalCredits - usedCredits;
   const percentUsed = Math.round(usedCredits / totalCredits * 100);
-  
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
-  
   const handleUpgrade = () => {
     navigate('/upgrade-plan');
   };
-  
   const handleThemeChange = () => {
     if (isDarkMode) {
       // Apply light theme
@@ -121,13 +116,11 @@ const TopBar = ({
     }
     onThemeToggle();
   };
-  
   const handleLanguageChange = (newLanguage: 'fr' | 'en') => {
     setLanguage(newLanguage);
     console.log(`Language changed to: ${newLanguage}`);
     // Here you would implement the actual language change logic
   };
-  
   return (
     <div className="flex flex-col w-full border-b">
       <Container className="py-3 px-0">
@@ -136,13 +129,9 @@ const TopBar = ({
           <div className="flex items-center">
             <Link to="/dashboard" className="flex items-center gap-3">
               <img 
-                src="/lovable-uploads/c6620e4e-76f1-43fd-85a6-0a5d37ca796e.png" 
+                src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
                 alt="DCE Manager Logo"
-<<<<<<< HEAD
                 className="w-28" 
-=======
-                className="w-28 h-auto"
->>>>>>> 33f455b17ebafb7278fea236d8a1e4ec77dc488c
               />
             </Link>
           </div>
@@ -210,5 +199,4 @@ const TopBar = ({
     </div>
   );
 };
-
 export default TopBar;
