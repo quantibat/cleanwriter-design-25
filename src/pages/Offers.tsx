@@ -5,6 +5,7 @@ import { useAppelsOffres } from '@/hooks/useAppelOffers';
 import { isToday, isThisWeek, isSameWeek, parseISO, subWeeks } from 'date-fns';
 import clsx from 'clsx';
 import { Calendar, CalendarDays, History, Star } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const Offers = () => {
   const breadcrumbs = [
@@ -13,13 +14,26 @@ const Offers = () => {
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [activeTab, setActiveTab] = useState<'today' | 'thisWeek' | 'lastWeek' | 'favorites'>('today');
-  const { appelsOffres, totalPages } = useAppelsOffres(currentPage);
-  
-  const [favorites] = useState(() => {
-    const savedFavorites = localStorage.getItem('favoriteOffers');
-    return savedFavorites ? JSON.parse(savedFavorites) : [];
-  });
+  const [activeTab, setActiveTab] = useState<'favorites' | 'today' | 'thisWeek' | 'lastWeek'>('favorites');
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // 🆕 trigger de refresh
+
+  const { appelsOffres, totalPages } = useAppelsOffres(currentPage, refreshTrigger); // 🆕 on passe le trigger
+
+  const toggleFavorite = async (id: string, currentStatus: boolean) => {
+    console.log(`Toggling favorite for id: ${id}, current status: ${currentStatus}`);
+
+    const { error } = await supabase
+      .from('AO_Public_Scoring')
+      .update({ isFavorite: !currentStatus })
+      .eq('ao_id', id);
+
+    if (error) {
+      console.error('Erreur lors de la mise à jour du favori', error);
+    } else {
+      console.log(`Favori mis à jour pour l'appel d'offre ${id}`);
+      setRefreshTrigger(prev => prev + 1); // 🆕 force le refresh
+    }
+  };
 
   const now = new Date();
   const lastWeek = subWeeks(now, 1);
@@ -33,50 +47,54 @@ const Offers = () => {
     const sorted = [...(appelsOffres || [])].sort((a, b) => {
       const scoreA = a?.score_final || 0;
       const scoreB = b?.score_final || 0;
-      return scoreB - scoreA; 
+      return scoreB - scoreA;
     });
-  
+
     sorted.forEach((offer) => {
       if (!offer?.appel_offre.metadata.startDate) return;
-      
+
       const date = parseISO(offer.appel_offre.metadata.startDate);
-      
-      if (favorites.includes(offer.appel_offre.metadata.idweb)) {
+      const isFavorite = offer.isFavorite;
+
+      if (isFavorite) {
         favoriteOffers.push(offer);
       }
-      
-      if (isToday(date)) {
-        today.push(offer);
-      } else if (isThisWeek(date, { weekStartsOn: 1 })) {
-        thisWeek.push(offer);
-      } else if (isSameWeek(date, lastWeek, { weekStartsOn: 1 })) {
-        lastWeekOffers.push(offer);
+      if(!isFavorite) {
+        if (isToday(date)) {
+          today.push(offer);
+        } else if (isThisWeek(date, { weekStartsOn: 1 })) {
+          thisWeek.push(offer);
+        } else if (isSameWeek(date, lastWeek, { weekStartsOn: 1 })) {
+          lastWeekOffers.push(offer);
+        }
+
       }
+
     });
-  
+
     return { today, thisWeek, lastWeekOffers, favoriteOffers };
-  }, [appelsOffres, favorites]);
+  }, [appelsOffres]);
 
   const getTenders = () => {
     switch (activeTab) {
+      case 'favorites':
+        return favoriteOffers;
       case 'today':
         return today;
       case 'thisWeek':
         return thisWeek;
       case 'lastWeek':
         return lastWeekOffers;
-      case 'favorites':
-        return favoriteOffers;
       default:
         return [];
     }
   };
 
   const tabList = [
+    { key: 'favorites', label: `Favoris (${favoriteOffers.length})`, icon: <Star size={16} /> },
     { key: 'today', label: `Aujourd'hui (${today.length})`, icon: <Calendar size={16} /> },
     { key: 'thisWeek', label: `Cette semaine (${thisWeek.length})`, icon: <CalendarDays size={16} /> },
     { key: 'lastWeek', label: `Semaine dernière (${lastWeekOffers.length})`, icon: <History size={16} /> },
-    { key: 'favorites', label: `Favoris (${favoriteOffers.length})`, icon: <Star size={16} /> },
   ];
 
   return (
@@ -88,8 +106,8 @@ const Offers = () => {
             {appelsOffres?.length > 0 && appelsOffres.length === 1
               ? `Un appel d'offre correspond à votre profil`
               : appelsOffres?.length > 1
-              ? `${appelsOffres.length} appels d'offres correspondent à votre profil`
-              : `Aucun appel d'offre ne correspond à votre profil`}
+                ? `${appelsOffres.length} appels d'offres correspondent à votre profil`
+                : `Aucun appel d'offre ne correspond à votre profil`}
           </p>
         </div>
 
@@ -113,7 +131,10 @@ const Offers = () => {
           </div>
         </div>
 
-        <PublicTenders tenders={getTenders()} />
+        <PublicTenders
+          tenders={getTenders()}
+          onToggleFavorite={(id, isFav) => toggleFavorite(id, isFav)}
+        />
 
         {appelsOffres && appelsOffres.length > 0 && (
           <div className="flex justify-end items-center gap-4 mt-6">

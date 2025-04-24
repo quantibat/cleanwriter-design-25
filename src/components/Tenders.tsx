@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import CompatibilityGauge from "./ui/CompatibilityGauge";
 
-const PublicTenders = ({ tenders }) => {
+const PublicTenders = ({ tenders, onToggleFavorite }) => {
   const [villes, setVilles] = useState({});
   const [favorites, setFavorites] = useState(() => {
     const savedFavorites = localStorage.getItem('favoriteOffers');
@@ -54,16 +54,6 @@ const PublicTenders = ({ tenders }) => {
     return text;
   };
 
-  const toggleFavorite = (tenderId) => {
-    setFavorites(prevFavorites => {
-      const newFavorites = prevFavorites.includes(tenderId)
-        ? prevFavorites.filter(id => id !== tenderId)
-        : [...prevFavorites, tenderId];
-      
-      localStorage.setItem('favoriteOffers', JSON.stringify(newFavorites));
-      return newFavorites;
-    });
-  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -80,11 +70,21 @@ const PublicTenders = ({ tenders }) => {
                   border-t-blue-600 border-l-transparent">
                   <button 
                     className="absolute top-[5px] right-[5px] text-white hover:scale-110 transition-transform"
-                    onClick={() => toggleFavorite(tender.appel_offre.metadata.idweb)}
+                    onClick={() => {
+                      const id = tender.appel_offre.metadata.idweb;
+                      const isFavorite = favorites.includes(id);
+                      const updatedFavorites = isFavorite
+                        ? favorites.filter(fav => fav !== id)
+                        : [...favorites, id];
+                      setFavorites(updatedFavorites);
+                      localStorage.setItem('favoriteOffers', JSON.stringify(updatedFavorites));
+                      onToggleFavorite?.(id, !isFavorite);
+                    }}
+                    
                   >
                     <Star 
                       size={20} 
-                      fill={favorites.includes(tender.appel_offre.metadata.idweb) ? "white" : "none"}
+                      fill={tender.isFavorite ? "white" : "none"}
                       className="text-white"
                     />
                   </button>
