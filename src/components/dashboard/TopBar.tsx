@@ -131,7 +131,7 @@ const TopBar = ({
               <img 
                 src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
                 alt="DCE Manager Logo"
-                className="h-12 w-auto" // Increased from h-8 to h-12
+                className="w-28" 
               />
             </Link>
           </div>
