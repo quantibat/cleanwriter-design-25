@@ -66,7 +66,7 @@ const ToolsTab = () => {
 
     {
       favorites && favorites.length > 0 && 
-      <section ref={favoritesRef} className='space-y-6'>
+      <section ref={favoritesRef} className='space-y-6 mb-16'>
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Star size={40} />
@@ -96,7 +96,7 @@ const ToolsTab = () => {
       </section>
     }
 
-    <section className='space-y-6'>
+    <section className='space-y-6 mb-16'>
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <Search size={40} />
@@ -142,7 +142,7 @@ const ToolsTab = () => {
       </div>
     </section>
     
-    <section className='space-y-6'>
+    <section className='space-y-6 my-16'>
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-full px-0 py-0">
@@ -190,7 +190,7 @@ const ToolsTab = () => {
       </div>
     </section>
     
-    <section className='space-y-6'>
+    <section className='space-y-6 my-16'>
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-full px-0 py-0">
@@ -238,7 +238,7 @@ const ToolsTab = () => {
       </div>
     </section>
     
-    <section className='space-y-6'>
+    <section className='space-y-6 my-16'>
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-full py-0 px-0">
@@ -286,7 +286,7 @@ const ToolsTab = () => {
       </div>
     </section>
     
-    <section className='space-y-6'>
+    <section className='space-y-6 my-16'>
       <div className="space-y-3">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-full px-0 py-0">
