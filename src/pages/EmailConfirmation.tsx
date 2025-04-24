@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -18,9 +17,11 @@ const EmailConfirmation = () => {
       <div className="w-full max-w-md py-12 space-y-6 relative z-10">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block">
-            <h2 className="text-2xl font-bold text-white flex items-center justify-center">
-              <span className="text-blue-400">DCE</span>Manager
-            </h2>
+            <img 
+              src="/lovable-uploads/87d822bd-dd26-494f-a6d1-9d7e353735ad.png" 
+              alt="DCE Manager"
+              className="h-16 mx-auto mb-4"
+            />
           </Link>
           <p className="mt-2 text-white/60">Confirmation d'email</p>
         </div>

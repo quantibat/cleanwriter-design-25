@@ -139,8 +139,6 @@ export default function OnboardingDCEManager() {
         return;
       }
 
-      // const hashedPassword = await bcrypt.hash(data.password, 10);
-
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -345,9 +343,11 @@ export default function OnboardingDCEManager() {
     <div className="h-auto my-16 text-white flex flex-col items-center justify-center w-full my-10">
       <div className="text-center mb-8">
         <Link to="/" className="inline-block">
-          <h2 className="text-2xl font-bold text-white flex items-center justify-center">
-            <span className="text-blue-400">DCE</span>Manager
-          </h2>
+          <img 
+            src="/lovable-uploads/87d822bd-dd26-494f-a6d1-9d7e353735ad.png" 
+            alt="DCE Manager"
+            className="h-16 mx-auto mb-4"
+          />
         </Link>
         <p className="mt-2 text-white/60">Inscrivez-vous pour recevoir des appels d'offres à jour recueillis depuis le BOAMP</p>
       </div>
