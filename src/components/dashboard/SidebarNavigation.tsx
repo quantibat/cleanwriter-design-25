@@ -49,11 +49,11 @@ const SidebarNavigation = ({
     <div className={cn("h-screen border-r border-sidebar-border z-30 bg-sidebar/95 backdrop-blur-md", "transition-all duration-300 ease-in-out flex flex-col", open ? "w-64" : "w-16")}>
       {/* Brand logo */}
       <div className="flex items-center justify-center h-16 border-b border-sidebar-border shrink-0">
-        <Link to="/" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-2 font-semibold">
           <img 
-            src="/lovable-uploads/924fcfc3-6408-45d7-bda1-adf074245eb7.png" 
+            src="/lovable-uploads/c6620e4e-76f1-43fd-85a6-0a5d37ca796e.png" 
             alt="DCE Manager Logo"
-            className="h-12 w-auto"
+            className="w-28 h-auto"
           />
         </Link>
       </div>
